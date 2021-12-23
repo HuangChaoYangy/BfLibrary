@@ -282,8 +282,7 @@ class Test_Report10(object):
         '''
         apiRes = IncorrectBackend(mysql_info,mongo_info).getBackendUserWinLose(inData=inBody, isDetail=False)
         sqlRes = MysqlQuery(mysql_info, mongo_info).getBackendUserWinLose_sql(expData=expData, isDetail=False)
-        # print(apiRes)
-        # print(sqlRes)
+
         self.cm.check_live_bet_report_new(apiRes, sqlRes)
 
 
