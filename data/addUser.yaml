@@ -1,0 +1,263 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/11/13 09:33
+# @Author  : liyang
+# @FileName: d.py.py
+# @Software: PyCharm
+
+-
+  url: /user/addUser
+  method: POST
+
+- #test_01用例
+  describe: 账号不存在,新增账号成功
+  data:
+    account: "Liuser25"
+    password: "Bfty123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: 0
+    message: "OK"
+- #test_02用例
+  describe: 新增账号成功,类型为测试
+  data:
+    account: "Liuser25"
+    password: "Bfty123456"
+    agentAccount: ""
+    userType: "测试"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: 0
+    message: "OK"
+- #test_03用例
+  describe: 账号存在,新增账号失败
+  data:
+    account: "Liuser23"
+    password: "Bfty123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3001
+    message: "用户名已存在"
+- #test_04用例
+  describe: 账号格式错误,只含小写字母+数字
+  data:
+    account: "liuser23"
+    password: "Bfty123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3009
+    message: "请输入5-18位字母+数字组合的用户名"
+- #test_05用例
+  describe: 账号格式错误,未只含数字
+  data:
+    account: "111111123"
+    password: "Bfty123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3009
+    message: "请输入5-18位字母+数字组合的用户名"
+- #test_06用例
+  describe: 账号格式错误,未只含大写字母+数字
+  data:
+    account: "LIUSER23"
+    password: "Bfty123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3009
+    message: "请输入5-18位字母+数字组合的用户名"
+- #test_07用例
+  describe: 账号格式错误,长度小于5位
+  data:
+    account: "Lis3"
+    password: "Bfty123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3009
+    message: "请输入5-18位字母+数字组合的用户名"
+- #test_08用例
+  describe: 账号格式错误,长度大于20位
+  data:
+    account: "Liuser23111111111111111"
+    password: "Bfty123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3009
+    message: "请输入5-18位字母+数字组合的用户名"
+- #test_09用例
+  describe: 账号格式错误,包含特殊符号
+  data:
+    account: "Liuser23！@%%"
+    password: "Bfty123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3009
+    message: "请输入5-18位字母+数字组合的用户名"
+- #test_10用例
+  describe: 账号格式错误,包含空格
+  data:
+    account: "Liuse r23"
+    password: "Bfty123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3009
+    message: "请输入5-18位字母+数字组合的用户名"
+- #test_11用例
+  describe: 账号格式错误,包含中文字符
+  data:
+    account: "Liuser23都是发"
+    password: "Bfty123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3009
+    message: "请输入5-18位字母+数字组合的用户名"
+- #test_12用例
+  describe: 账号为空
+  data:
+    account: ""
+    password: "Bfty123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3009
+    message: "请输入5-18位字母+数字组合的用户名"
+- #test_13用例
+  describe: 密码格式错误,只含小写字母+数字
+  data:
+    account: "Liuser02"
+    password: "bfty123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3008
+    message: "请输入6-16位，字母+数字组合的密码"
+- #test_14用例
+  describe: 密码格式错误,未只含数字
+  data:
+    account: "Liuser02"
+    password: "11222123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3008
+    message: "请输入6-16位，字母+数字组合的密码"
+- #test_15用例
+  describe: 密码格式错误,未只含大写字母+数字
+  data:
+    account: "Liuser02"
+    password: "BSAS123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3008
+    message: "请输入6-16位，字母+数字组合的密码"
+- #test_16用例
+  describe: 密码格式错误,长度小于5位
+  data:
+    account: "Liuser02"
+    password: "B226"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3008
+    message: "请输入6-16位，字母+数字组合的密码"
+- #test_17用例
+  describe: 密码格式错误,长度大于20位
+  data:
+    account: "Liuser02"
+    password: "Bfty12sasssssss113456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3008
+    message: "请输入6-16位，字母+数字组合的密码"
+- #test_18用例
+  describe: 密码格式错误,包含特殊符号
+  data:
+    account: "Liuser02"
+    password: "Bfty3456*&^%"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3008
+    message: "请输入6-16位，字母+数字组合的密码"
+- #test_19用例
+  describe: 密码格式错误,包含空格
+  data:
+    account: "Liuser02"
+    password: "Bfty 123456"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3008
+    message: "请输入6-16位，字母+数字组合的密码"
+- #test_20用例
+  describe: 密码格式错误,包含中文字符
+  data:
+    account: "Liuser02"
+    password: "Bfty1234撒旦法"
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3008
+    message: "请输入6-16位，字母+数字组合的密码"
+- #test_21用例
+  describe: 密码为空
+  data:
+    account: "Liuser02"
+    password: ""
+    agentAccount: ""
+    userType: "正式"
+    vipLevel: ""
+    ownerId: "1457296695330123778"
+  resp:
+    code: -3008
+    message: "请输入6-16位，字母+数字组合的密码"
+

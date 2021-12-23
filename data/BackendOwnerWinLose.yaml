@@ -1,0 +1,315 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/12/3 14:07
+# @Author  : liyang
+# @FileName: test_Report.py.py
+# @Software: PyCharm
+
+
+-
+  url: /ownerWinLose/getOwnerWinLose
+  method: POST
+
+- #test_01用例
+  describe: 总台-业主盈亏报表-列表,默认查询近7日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""
+  resp:
+    dateoffset: "7"
+    owner_account: ""
+    sortIndex: ""
+    sortParameter: ""
+    currency: ""
+- #test_02用例
+  describe: 总台-业主盈亏报表-列表,默认查询近6日数据,根据业主名称查询数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+    ownerAccount: "TestAgent01"
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""
+  resp:
+    dateoffset: "7"
+    owner_account: "TestAgent01"
+    sortIndex: ""
+    sortParameter: ""
+    currency: ""
+- #test_03用例
+  describe: 总台-业主盈亏报表-列表,默认查询近5日数据,根据货币类型查询数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+    ownerAccount: ""
+    currency: "RMB"
+    sortIndex: ""
+    sortParameter: ""
+  resp:
+    dateoffset: "7"
+    owner_account: ""
+    sortIndex: ""
+    sortParameter: ""
+    currency: "RMB"
+- #test_04用例
+  describe: 总台-业主盈亏报表-列表,根据时间区间查询近6天的数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "6"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""
+  resp:
+    dateoffset: "6"
+    owner_account: ""
+    sortIndex: ""
+    sortParameter: ""
+    currency: ""
+- #test_05用例
+  describe: 总台-业主盈亏报表-列表,根据时间区间查询近5天的数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "5"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""
+  resp:
+    dateoffset: "5"
+    owner_account: ""
+    sortIndex: ""
+    sortParameter: ""
+    currency: ""
+- #test_06用例
+  describe: 总台-业主盈亏报表-列表,根据时间区间查询近4天的数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "4"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""
+  resp:
+    dateoffset: "4"
+    owner_account: ""
+    sortIndex: ""
+    sortParameter: ""
+    currency: ""
+- #test_07用例
+  describe: 总台-业主盈亏报表-列表,根据时间区间查询近3天的数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "3"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""
+  resp:
+    dateoffset: "3"
+    owner_account: ""
+    sortIndex: ""
+    sortParameter: ""
+    currency: ""
+- #test_08用例
+  describe: 总台-业主盈亏报表-列表,根据时间区间查询近2天的数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "2"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""
+  resp:
+    dateoffset: "2"
+    owner_account: ""
+    sortIndex: ""
+    sortParameter: ""
+    currency: ""
+- #test_09用例
+  describe: 总台-业主盈亏报表-列表,根据时间区间查询近1天的数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "1"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""
+  resp:
+    dateoffset: "1"
+    owner_account: ""
+    sortIndex: ""
+    sortParameter: ""
+    currency: ""
+- #test_10用例
+  describe: 总台-业主盈亏报表-列表,默认查询近7日数据,根据"投注人数"倒序查询数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: "descending"
+    sortParameter: "betPeopleNum"
+  resp:
+    dateoffset: "7"
+    owner_account: ""
+    sortIndex: "DESC"
+    sortParameter: "bet_user"
+    currency: ""
+- #test_11用例
+  describe: 总台-业主盈亏报表-列表,默认查询近7日数据,根据"投注人数"升序查询数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: "ascending"
+    sortParameter: "betPeopleNum"
+  resp:
+    dateoffset: "7"
+    owner_account: ""
+    sortIndex: "ASC"
+    sortParameter: "bet_user"
+    currency: ""
+- #test_12用例
+  describe: 总台-业主盈亏报表-列表,默认查询近7日数据,根据"投注量"倒序查询数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: "descending"
+    sortParameter: "betNum"
+  resp:
+    dateoffset: "7"
+    owner_account: ""
+    sortIndex: "DESC"
+    sortParameter: "bet_num"
+    currency: ""
+- #test_13用例
+  describe: 总台-业主盈亏报表-列表,默认查询近7日数据,根据"投注量"升序查询数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: "ascending"
+    sortParameter: "betNum"
+  resp:
+    dateoffset: "7"
+    owner_account: ""
+    sortIndex: "ASC"
+    sortParameter: "bet_num"
+    currency: ""
+- #test_14用例
+  describe: 总台-业主盈亏报表-列表,默认查询近7日数据,根据"投注金额"倒序查询数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: "descending"
+    sortParameter: "betAmount"
+  resp:
+    dateoffset: "7"
+    owner_account: ""
+    sortIndex: "DESC"
+    sortParameter: "bet_amount"
+    currency: ""
+- #test_15用例
+  describe: 总台-业主盈亏报表-列表,默认查询近7日数据,根据"投注金额"升序查询数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: "ascending"
+    sortParameter: "betAmount"
+  resp:
+    dateoffset: "7"
+    owner_account: ""
+    sortIndex: "ASC"
+    sortParameter: "bet_amount"
+    currency: ""
+- #test_16用例
+  describe: 总台-业主盈亏报表-列表,默认查询近7日数据,根据"有效投注"倒序查询数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: "descending"
+    sortParameter: "effectiveBetAmount"
+  resp:
+    dateoffset: "7"
+    owner_account: ""
+    sortIndex: "DESC"
+    sortParameter: "effectiveAmount"
+    currency: ""
+- #test_17用例
+  describe: 总台-业主盈亏报表-列表,默认查询近7日数据,根据"有效投注"升序查询数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: "ascending"
+    sortParameter: "effectiveBetAmount"
+  resp:
+    dateoffset: "7"
+    owner_account: ""
+    sortIndex: "ASC"
+    sortParameter: "effectiveAmount"
+    currency: ""
+- #test_18用例
+  describe: 总台-业主盈亏报表-列表,默认查询近7日数据,根据"投注盈亏"倒序查询数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: "descending"
+    sortParameter: "betWinLose"
+  resp:
+    dateoffset: "7"
+    owner_account: ""
+    sortIndex: "DESC"
+    sortParameter: "win_or_lose"
+    currency: ""
+- #test_19用例
+  describe: 总台-业主盈亏报表-列表,默认查询近7日数据,根据"投注盈亏"升序查询数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+    ownerAccount: ""
+    currency: ""
+    sortIndex: "ascending"
+    sortParameter: "betWinLose"
+  resp:
+    dateoffset: "7"
+    owner_account: ""
+    sortIndex: "ASC"
+    sortParameter: "win_or_lose"
+    currency: ""

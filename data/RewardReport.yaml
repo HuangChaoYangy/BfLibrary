@@ -1,0 +1,73 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/12/20 09:47
+# @Author  : liyang
+# @FileName: test_Report.py.py
+# @Software: PyCharm
+
+-
+  url: /dailyWinAndLoss/getRewardReport
+  method: POST
+
+- #test_01用例
+  describe: 活动优惠报表,默认查询近7日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    owner_id: "1469495292033343489"
+- #test_02用例
+  describe: 活动优惠报表,默认查询近6日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "6"
+  resp:
+    dateoffset: "6"
+    owner_id: "1469495292033343489"
+- #test_03用例
+  describe: 活动优惠报表,默认查询近5日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "5"
+  resp:
+    dateoffset: "5"
+    owner_id: "1469495292033343489"
+- #test_04用例
+  describe: 活动优惠报表,默认查询近4日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "4"
+  resp:
+    dateoffset: "4"
+    owner_id: "1469495292033343489"
+- #test_05用例
+  describe: 活动优惠报表,默认查询近3日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "3"
+  resp:
+    dateoffset: "3"
+    owner_id: "1469495292033343489"
+- #test_06用例
+  describe: 活动优惠报表,默认查询近2日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "2"
+  resp:
+    dateoffset: "2"
+    owner_id: "1469495292033343489"
+- #test_07用例
+  describe: 活动优惠报表,默认查询近1日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "1"
+  resp:
+    dateoffset: "1"
+    owner_id: "1469495292033343489"

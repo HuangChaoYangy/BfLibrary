@@ -1,0 +1,335 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/12/18 19:15
+# @Author  : liyang
+# @FileName: test_Report.py.py
+# @Software: PyCharm
+
+-
+  url: /dailyWinAndLoss/getDailyWinAndLoss
+  method: POST
+
+- #test_01用例
+  describe: 每日输赢统计,根据日期倒序,默认查询近7日数据
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "DESC"
+    sortParameter: "a.`day`"
+    owner_id: "1469495292033343489"
+- #test_02用例
+  describe: 每日输赢统计,根据日期倒序,默认查询近6日数据
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "6"
+  resp:
+    dateoffset: "6"
+    sortIndex: "DESC"
+    sortParameter: "a.`day`"
+    owner_id: "1469495292033343489"
+- #test_03用例
+  describe: 每日输赢统计,根据日期倒序,默认查询近5日数据
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "5"
+  resp:
+    dateoffset: "5"
+    sortIndex: "DESC"
+    sortParameter: "a.`day`"
+    owner_id: "1469495292033343489"
+- #test_04用例
+  describe: 每日输赢统计,根据日期倒序,默认查询近4日数据
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "5"
+  resp:
+    dateoffset: "5"
+    sortIndex: "DESC"
+    sortParameter: "a.`day`"
+    owner_id: "1469495292033343489"
+- #test_05用例
+  describe: 每日输赢统计,根据日期倒序,默认查询近3日数据
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "3"
+  resp:
+    dateoffset: "3"
+    sortIndex: "DESC"
+    sortParameter: "a.`day`"
+    owner_id: "1469495292033343489"
+- #test_06用例
+  describe: 每日输赢统计,根据日期倒序,默认查询近2日数据
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "2"
+  resp:
+    dateoffset: "2"
+    sortIndex: "DESC"
+    sortParameter: "a.`day`"
+    owner_id: "1469495292033343489"
+- #test_07用例
+  describe: 每日输赢统计,根据日期倒序,默认查询近1日数据
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "1"
+  resp:
+    dateoffset: "1"
+    sortIndex: "DESC"
+    sortParameter: "a.`day`"
+    owner_id: "1469495292033343489"
+- #test_08用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"投注人数"进行倒序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "DESC"
+    sortParameter: "bet_user"
+    owner_id: "1469495292033343489"
+- #test_09用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"投注人数"进行升序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "ASC"
+    sortParameter: "bet_user"
+    owner_id: "1469495292033343489"
+- #test_10用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"投注量"进行倒序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "DESC"
+    sortParameter: "bet_num"
+    owner_id: "1469495292033343489"
+- #test_11用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"投注量"进行升序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "ASC"
+    sortParameter: "bet_num"
+    owner_id: "1469495292033343489"
+- #test_12用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"投注金额"进行倒序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "DESC"
+    sortParameter: "bet_amount"
+    owner_id: "1469495292033343489"
+- #test_13用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"投注金额"进行升序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "ASC"
+    sortParameter: "bet_amount"
+    owner_id: "1469495292033343489"
+- #test_14用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"有效投注"进行倒序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "DESC"
+    sortParameter: "effectiveAmount"
+    owner_id: "1469495292033343489"
+- #test_15用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"有效投注"进行升序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "ASC"
+    sortParameter: "effectiveAmount"
+    owner_id: "1469495292033343489"
+- #test_16用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"投注盈亏"进行倒序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "DESC"
+    sortParameter: "win_or_lose"
+    owner_id: "1469495292033343489"
+- #test_17用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"投注盈亏"进行升序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "ASC"
+    sortParameter: "win_or_lose"
+    owner_id: "1469495292033343489"
+- #test_18用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"佣金"进行倒序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "DESC"
+    sortParameter: "commission"
+    owner_id: "1469495292033343489"
+- #test_19用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"佣金"进行升序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "ASC"
+    sortParameter: "commission"
+    owner_id: "1469495292033343489"
+- #test_20用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"手续费"进行倒序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "DESC"
+    sortParameter: "handlingAmount"
+    owner_id: "1469495292033343489"
+- #test_21用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"手续费"进行升序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "ASC"
+    sortParameter: "handlingAmount"
+    owner_id: "1469495292033343489"
+- #test_22用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"优惠"进行倒序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "DESC"
+    sortParameter: "promotions"
+    owner_id: "1469495292033343489"
+- #test_23用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"优惠"进行升序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "ASC"
+    sortParameter: "promotions"
+    owner_id: "1469495292033343489"
+- #test_24用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"净盈亏"进行倒序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "DESC"
+    sortParameter: "totol_win_or_lose"
+    owner_id: "1469495292033343489"
+- #test_25用例
+  describe: 每日输赢统计,默认查询近7日数据,根据字段"净盈亏"进行升序
+  data:
+    page: 1
+    limit: 50
+    sortIndex: ""
+    sortParameter: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    sortIndex: "ASC"
+    sortParameter: "totol_win_or_lose"
+    owner_id: "1469495292033343489"

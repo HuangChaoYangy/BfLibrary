@@ -1,0 +1,70 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/11/10 14:29
+# @Author  : liyang
+# @FileName: d.py.py
+# @Software: PyCharm
+
+-
+  url: /system/accountLogin
+  method: POST
+
+- #test_01用例
+  describe: 账号与密码都正确
+  data:
+    account: "Liuser01"
+    password: "Bfty123456"
+    deviceVersion: "111111"
+    loginTerminal: 2
+    loginUrl: "http://192.168.10.120:94"
+    terminalDeviceNum: ""
+  resp:
+    code: 0
+    message: "OK"
+- #test_02用例
+  describe: 账号正确,密码错误
+  data:
+    account: "Liuser01"
+    password: "Bfty000000"
+    deviceVersion: "111111"
+    loginTerminal: 2
+    loginUrl: "http://192.168.10.120:94"
+    terminalDeviceNum: ""
+  resp:
+    code: -3007
+    message: "用户名或密码错误"
+- #test_03用例
+  describe: 账号错误,密码正确
+  data:
+    account: "Liuser01545"
+    password: "Bfty123456"
+    deviceVersion: "111111"
+    loginTerminal: 2
+    loginUrl: "http://192.168.10.120:94"
+    terminalDeviceNum: ""
+  resp:
+    code: -3007
+    message: "用户名或密码错误"
+- #test_04用例
+  describe: 账号为空,密码正确
+  data:
+    account: ""
+    password: "Bfty123456"
+    deviceVersion: "111111"
+    loginTerminal: 2
+    loginUrl: "http://192.168.10.120:94"
+    terminalDeviceNum: ""
+  resp:
+    code: -17
+    message: "会员账号不能为空"
+- #test_05用例
+  describe: 账号正确,密码为空
+  data:
+    account: "Liuser01"
+    password: ""
+    deviceVersion: "111111"
+    loginTerminal: 2
+    loginUrl: "http://192.168.10.120:94"
+    terminalDeviceNum: ""
+  resp:
+    code: -3007
+    message: "用户名或密码错误"

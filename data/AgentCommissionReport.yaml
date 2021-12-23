@@ -1,0 +1,244 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/12/3 09:47
+# @Author  : liyang
+# @FileName: test_Report.py.py
+# @Software: PyCharm
+
+-
+  url: /dailyWinAndLoss/getAgentCommissionReport
+  method: POST
+
+- #test_01用例
+  describe: 代理佣金统计,默认查询近7日数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: ""
+    userType: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    owner_id: "1469495292033343489"
+    member_account: ""
+    member_type: ""
+- #test_02用例
+  describe: 代理佣金统计,默认查询近6日数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: ""
+    userType: ""
+    dateoffset: "6"
+  resp:
+    dateoffset: "6"
+    owner_id: "1469495292033343489"
+    member_account: ""
+    member_type: ""
+- #test_03用例
+  describe: 代理佣金统计,默认查询近5日数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: ""
+    userType: ""
+    dateoffset: "5"
+  resp:
+    dateoffset: "5"
+    owner_id: "1469495292033343489"
+    member_account: ""
+    member_type: ""
+- #test_04用例
+  describe: 代理佣金统计,默认查询近4日数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: ""
+    userType: ""
+    dateoffset: "4"
+  resp:
+    dateoffset: "4"
+    owner_id: "1469495292033343489"
+    member_account: ""
+    member_type: ""
+- #test_05用例
+  describe: 代理佣金统计,默认查询近3日数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: ""
+    userType: ""
+    dateoffset: "3"
+  resp:
+    dateoffset: "3"
+    owner_id: "1469495292033343489"
+    member_account: ""
+    member_type: ""
+- #test_06用例
+  describe: 代理佣金统计,默认查询近2日数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: ""
+    userType: ""
+    dateoffset: "2"
+  resp:
+    dateoffset: "2"
+    owner_id: "1469495292033343489"
+    member_account: ""
+    member_type: ""
+- #test_07用例
+  describe: 代理佣金统计,默认查询近1日数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: ""
+    userType: ""
+    dateoffset: "1"
+  resp:
+    dateoffset: "1"
+    owner_id: "1469495292033343489"
+    member_account: ""
+    member_type: ""
+- #test_08用例
+  describe: 代理佣金统计,根据会员账号查询数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: "testuser0041"
+    userType: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    owner_id: "1469495292033343489"
+    member_account: "testuser0041"
+    member_type: ""
+- #test_09用例
+  describe: 代理佣金统计,根据会员账号查询数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: "testuser0042"
+    userType: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    owner_id: "1469495292033343489"
+    member_account: "testuser0042"
+    member_type: ""
+- #test_10用例
+  describe: 代理佣金统计,根据会员账号查询数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: "testuser0043"
+    userType: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    owner_id: "1469495292033343489"
+    member_account: "testuser0043"
+    member_type: ""
+- #test_11用例
+  describe: 代理佣金统计,根据会员账号查询数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: "testuser0044"
+    userType: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    owner_id: "1469495292033343489"
+    member_account: "testuser0044"
+    member_type: ""
+- #test_12用例
+  describe: 代理佣金统计,根据会员账号查询数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: "testuser0045"
+    userType: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    owner_id: "1469495292033343489"
+    member_account: "testuser0045"
+    member_type: ""
+- #test_13用例
+  describe: 代理佣金统计,根据会员账号查询数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: "testuser0046"
+    userType: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    owner_id: "1469495292033343489"
+    member_account: "testuser0046"
+    member_type: ""
+- #test_14用例
+  describe: 代理佣金统计,根据会员账号查询数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: "testuser0047"
+    userType: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    owner_id: "1469495292033343489"
+    member_account: "testuser0047"
+    member_type: ""
+- #test_15用例
+  describe: 代理佣金统计,根据会员账号查询数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: "testuser0048"
+    userType: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    owner_id: "1469495292033343489"
+    member_account: "testuser0048"
+    member_type: ""
+- #test_16用例
+  describe: 代理佣金统计,根据会员账号查询数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: "testuser0049"
+    userType: ""
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    owner_id: "1469495292033343489"
+    member_account: "testuser0049"
+    member_type: ""
+- #test_17用例
+  describe: 代理佣金统计,根据账号类型查询数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: ""
+    userType: "3"
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    owner_id: "1469495292033343489"
+    member_account: ""
+    member_type: "正式"
+- #test_18用例
+  describe: 代理佣金统计,根据账号类型查询数据
+  data:
+    page: 1
+    limit: 50
+    userAccount: ""
+    userType: "4"
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    owner_id: "1469495292033343489"
+    member_account: ""
+    member_type: "测试"

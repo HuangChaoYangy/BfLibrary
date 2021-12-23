@@ -1,0 +1,102 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/12/3 14:07
+# @Author  : liyang
+# @FileName: test_Report.py.py
+# @Software: PyCharm
+
+
+-
+  url: /ownerWinLose/getOwnerWinLoseDetails
+  method: POST
+
+- #test_01用例
+  describe: 总台-业主盈亏报表-详情,默认查询该业主近7日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "7"
+    ownerId: "1469495292033343489"
+  resp:
+    dateoffset: "7"
+    owner_account: "TestAgent01"
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""
+- #test_02用例
+  describe: 总台-业主盈亏报表-详情,默认查询该业主近6日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "6"
+    ownerId: "1469495292033343489"
+  resp:
+    dateoffset: "6"
+    owner_account: "TestAgent01"
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""
+- #test_03用例
+  describe: 总台-业主盈亏报表-详情,默认查询该业主近5日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "5"
+    ownerId: "1469495292033343489"
+  resp:
+    dateoffset: "5"
+    owner_account: "TestAgent01"
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""
+- #test_04用例
+  describe: 总台-业主盈亏报表-详情,默认查询该业主近4日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "4"
+    ownerId: "1469495292033343489"
+  resp:
+    dateoffset: "4"
+    owner_account: "TestAgent01"
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""
+- #test_05用例
+  describe: 总台-业主盈亏报表-详情,默认查询该业主近3日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "3"
+    ownerId: "1469495292033343489"
+  resp:
+    dateoffset: "3"
+    owner_account: "TestAgent01"
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""
+- #test_06用例
+  describe: 总台-业主盈亏报表-详情,默认查询该业主近2日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "2"
+    ownerId: "1469495292033343489"
+  resp:
+    dateoffset: "2"
+    owner_account: "TestAgent01"
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""
+- #test_07用例
+  describe: 总台-业主盈亏报表-详情,默认查询该业主近1日数据
+  data:
+    page: 1
+    limit: 50
+    dateoffset: "1"
+    ownerId: "1469495292033343489"
+  resp:
+    dateoffset: "1"
+    owner_account: "TestAgent01"
+    currency: ""
+    sortIndex: ""
+    sortParameter: ""

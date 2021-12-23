@@ -1,0 +1,48 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/12/15 14:07
+# @Author  : liyang
+# @FileName: test_Report.py.py
+# @Software: PyCharm
+
+
+-
+  url: /user/getUserList
+  method: POST
+
+- #test_01用例
+  describe: 总台-会员管理,默认查询所有数据
+  data:
+    page: 1
+    limit: 50
+    account: ""
+    id: ""
+    agentAccount: ""
+    ownerId: ""
+    currency: ""
+    userType: []
+    status: ""
+    registerTerminal: ""
+    vipLevelMin: ""
+    vipLevelMax: ""
+    RechargeTime: ""
+    LastLoginTime: ""
+    FirstRechargeTime: ""
+    sortIndex: ""
+    sortParameter: ""
+  resp:
+    account: ""
+    user_id: ""
+    agent_account: ""
+    owner_account: ""
+    currency: ""
+    user_type: ""
+    status: ""
+    register_terminal: ""
+    vip_levelMin: ""
+    vip_levelMax: ""
+    RechargeTime: ""
+    LastLoginTime: ""
+    FirstRechargeTime: ""
+    sortIndex: ""
+    sortParameter: ""
+

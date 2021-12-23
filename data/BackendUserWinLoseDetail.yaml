@@ -1,0 +1,319 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/12/14 19:14
+# @Author  : liyang
+# @FileName: test_Report.py.py
+# @Software: PyCharm
+
+
+-
+  url: /userWinLose/getUserWinLoseDetails
+  method: POST
+
+- #test_01用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近7日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568825971298306"
+    dateoffset: "7"
+  resp:
+    account: "testuser002"
+    owner_account: "TestAgent01"
+    dateoffset: "7"
+- #test_02用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近6日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568825971298306"
+    dateoffset: "6"
+  resp:
+    account: "testuser002"
+    owner_account: "TestAgent01"
+    dateoffset: "6"
+- #test_03用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近5日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568825971298306"
+    dateoffset: "5"
+  resp:
+    account: "testuser002"
+    owner_account: "TestAgent01"
+    dateoffset: "5"
+- #test_04用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近4日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568825971298306"
+    dateoffset: "4"
+  resp:
+    account: "testuser002"
+    owner_account: "TestAgent01"
+    dateoffset: "4"
+- #test_05用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近3日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568825971298306"
+    dateoffset: "3"
+  resp:
+    account: "testuser002"
+    owner_account: "TestAgent01"
+    dateoffset: "3"
+- #test_06用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近2日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568825971298306"
+    dateoffset: "2"
+  resp:
+    account: "testuser002"
+    owner_account: "TestAgent01"
+    dateoffset: "2"
+- #test_07用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近1日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568825971298306"
+    dateoffset: "1"
+  resp:
+    account: "testuser002"
+    owner_account: "TestAgent01"
+    dateoffset: "1"
+- #test_08用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近7日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568895252811777"
+    dateoffset: "7"
+  resp:
+    account: "testuser0021"
+    owner_account: "TestAgent01"
+    dateoffset: "7"
+- #test_09用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近6日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568895252811777"
+    dateoffset: "6"
+  resp:
+    account: "testuser0021"
+    owner_account: "TestAgent01"
+    dateoffset: "6"
+- #test_10用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近5日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568895252811777"
+    dateoffset: "5"
+  resp:
+    account: "testuser0021"
+    owner_account: "TestAgent01"
+    dateoffset: "5"
+- #test_11用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近4日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568895252811777"
+    dateoffset: "4"
+  resp:
+    account: "testuser0021"
+    owner_account: "TestAgent01"
+    dateoffset: "4"
+- #test_12用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近3日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568895252811777"
+    dateoffset: "3"
+  resp:
+    account: "testuser0021"
+    owner_account: "TestAgent01"
+    dateoffset: "3"
+- #test_13用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近2日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568895252811777"
+    dateoffset: "2"
+  resp:
+    account: "testuser0021"
+    owner_account: "TestAgent01"
+    dateoffset: "2"
+- #test_14用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近1日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568895252811777"
+    dateoffset: "1"
+  resp:
+    account: "testuser0021"
+    owner_account: "TestAgent01"
+    dateoffset: "1"
+- #test_15用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近7日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568941620842498"
+    dateoffset: "7"
+  resp:
+    account: "testuser0022"
+    owner_account: "TestAgent01"
+    dateoffset: "7"
+- #test_16用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近6日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568941620842498"
+    dateoffset: "6"
+  resp:
+    account: "testuser0022"
+    owner_account: "TestAgent01"
+    dateoffset: "6"
+- #test_17用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近5日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568941620842498"
+    dateoffset: "5"
+  resp:
+    account: "testuser0022"
+    owner_account: "TestAgent01"
+    dateoffset: "5"
+- #test_18用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近4日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568941620842498"
+    dateoffset: "4"
+  resp:
+    account: "testuser0022"
+    owner_account: "TestAgent01"
+    dateoffset: "4"
+- #test_19用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近3日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568941620842498"
+    dateoffset: "3"
+  resp:
+    account: "testuser0022"
+    owner_account: "TestAgent01"
+    dateoffset: "3"
+- #test_20用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近2日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568941620842498"
+    dateoffset: "2"
+  resp:
+    account: "testuser0022"
+    owner_account: "TestAgent01"
+    dateoffset: "2"
+- #test_21用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近1日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469568941620842498"
+    dateoffset: "1"
+  resp:
+    account: "testuser0022"
+    owner_account: "TestAgent01"
+    dateoffset: "1"
+- #test_22用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近7日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469569070201425922"
+    dateoffset: "7"
+  resp:
+    account: "testuser0023"
+    owner_account: "TestAgent01"
+    dateoffset: "7"
+- #test_23用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近6日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469569070201425922"
+    dateoffset: "6"
+  resp:
+    account: "testuser0023"
+    owner_account: "TestAgent01"
+    dateoffset: "6"
+- #test_24用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近5日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469569070201425922"
+    dateoffset: "5"
+  resp:
+    account: "testuser0023"
+    owner_account: "TestAgent01"
+    dateoffset: "5"
+- #test_25用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近4日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469569070201425922"
+    dateoffset: "4"
+  resp:
+    account: "testuser0023"
+    owner_account: "TestAgent01"
+    dateoffset: "4"
+- #test_26用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近3日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469569070201425922"
+    dateoffset: "3"
+  resp:
+    account: "testuser0023"
+    owner_account: "TestAgent01"
+    dateoffset: "3"
+- #test_27用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近2日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469569070201425922"
+    dateoffset: "2"
+  resp:
+    account: "testuser0023"
+    owner_account: "TestAgent01"
+    dateoffset: "2"
+- #test_28用例
+  describe: 总台-会员盈亏报表-详情,默认查询会员近1日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1469569070201425922"
+    dateoffset: "1"
+  resp:
+    account: "testuser0023"
+    owner_account: "TestAgent01"
+    dateoffset: "1"

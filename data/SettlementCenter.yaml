@@ -1,0 +1,29 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/12/15 14:07
+# @Author  : liyang
+# @FileName: test_Report.py.py
+# @Software: PyCharm
+
+
+-
+  url: /settlementCenter/getPage
+  method: POST
+
+- #test_01用例
+  describe: 总台-赛事列表,默认查询所有数据
+  data:
+    page: 1
+    limit: 50
+    matchId: ""
+    dateoffset: ""
+    teamName: ""
+    tournamentId: ""
+    sortIndex: ""
+    sortParameter: ""
+    status: ""
+  resp:
+    match_id: ""
+    tournament_name: ""
+    teamName: ""
+    sortIndex: ""
+    sortParameter: ""

@@ -1,0 +1,59 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/12/15 14:07
+# @Author  : liyang
+# @FileName: test_Report.py.py
+# @Software: PyCharm
+
+
+-
+  url: /ownerManage/getPage
+  method: POST
+
+- #test_01用例
+  describe: 总台-业主管理,默认查询所有数据
+  data:
+    page: 1
+    limit: 50
+    userName: ""
+    name: ""
+    currency: ""
+  resp:
+    user_name: ""
+    name: ""
+    currency: ""
+- #test_02用例
+  describe: 总台-业主管理,根据业主名称查询数据
+  data:
+    page: 1
+    limit: 50
+    userName: ""
+    name: "李扬业主"
+    currency: ""
+  resp:
+    user_name: ""
+    name: "李扬业主"
+    currency: ""
+- #test_03用例
+  describe: 总台-业主管理,根据业主名称查询数据
+  data:
+    page: 1
+    limit: 50
+    userName: "TestAgent01"
+    name: ""
+    currency: ""
+  resp:
+    user_name: "TestAgent01"
+    name: ""
+    currency: ""
+- #test_04用例
+  describe: 总台-业主管理,根据业主名称查询数据
+  data:
+    page: 1
+    limit: 50
+    userName: ""
+    name: ""
+    currency: "RMB"
+  resp:
+    user_name: ""
+    name: ""
+    currency: "RMB"

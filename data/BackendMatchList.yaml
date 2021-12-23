@@ -1,0 +1,139 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/12/15 14:07
+# @Author  : liyang
+# @FileName: test_Report.py.py
+# @Software: PyCharm
+
+
+-
+  url: /match/page
+  method: POST
+
+- #test_01用例
+  describe: 总台-赛事列表,默认升序查询200条数据
+  data:
+    page: 1
+    limit: 200
+    matchId: ""
+    sortBy: "ascending"
+    teamName: ""
+    tournamentId: ""
+  resp:
+    limit: 200
+    match_id: ""
+    tournament_id: ""
+    teamName: ""
+    sortIndex: "ASC"
+    sortParameter: "a.begin_time"
+- #test_02用例
+  describe: 总台-赛事列表,默认降序查询200条数据
+  data:
+    page: 1
+    limit: 200
+    matchId: ""
+    sortBy: "descending"
+    teamName: ""
+    tournamentId: ""
+  resp:
+    limit: 200
+    match_id: ""
+    tournament_id: ""
+    teamName: ""
+    sortIndex: "DESC"
+    sortParameter: "a.begin_time"
+- #test_03用例
+  describe: 总台-赛事列表,默认升序根据赛事ID查询数据
+  data:
+    page: 1
+    limit: 200
+    matchId: "sr:match:29655532"
+    sortBy: "ascending"
+    teamName: ""
+    tournamentId: ""
+  resp:
+    limit:
+    match_id: "sr:match:29655532"
+    tournament_id: ""
+    teamName: ""
+    sortIndex: "ASC"
+    sortParameter: "a.begin_time"
+- #test_04用例
+  describe: 总台-赛事列表,默认升序根据赛事ID查询数据
+  data:
+    page: 1
+    limit: 200
+    matchId: "sr:match:29655538"
+    sortBy: "ascending"
+    teamName: ""
+    tournamentId: ""
+  resp:
+    limit:
+    match_id: "sr:match:29655538"
+    tournament_id: ""
+    teamName: ""
+    sortIndex: "ASC"
+    sortParameter: "a.begin_time"
+- #test_05用例
+  describe: 总台-赛事列表,默认升序根据联赛ID查询数据
+  data:
+    page: 1
+    limit: 200
+    matchId: ""
+    sortBy: "ascending"
+    teamName: ""
+    tournamentId: "sr:tournament:23979"
+  resp:
+    limit:
+    match_id: ""
+    tournament_id: "sr:tournament:23979"
+    teamName: ""
+    sortIndex: "ASC"
+    sortParameter: "a.begin_time"
+- #test_06用例
+  describe: 总台-赛事列表,默认升序根据联赛ID查询数据
+  data:
+    page: 1
+    limit: 200
+    matchId: ""
+    sortBy: "ascending"
+    teamName: ""
+    tournamentId: "sr:tournament:9"
+  resp:
+    limit:
+    match_id: ""
+    tournament_id: "sr:tournament:9"
+    teamName: ""
+    sortIndex: "ASC"
+    sortParameter: "a.begin_time"
+- #test_07用例
+  describe: 总台-赛事列表,默认升序根据比赛队伍名称查询数据
+  data:
+    page: 1
+    limit: 200
+    matchId: ""
+    sortBy: "ascending"
+    teamName: "锡塔德福图纳"
+    tournamentId: ""
+  resp:
+    limit:
+    match_id: ""
+    tournament_id: ""
+    teamName: "锡塔德福图纳"
+    sortIndex: "ASC"
+    sortParameter: "a.begin_time"
+- #test_08用例
+  describe: 总台-赛事列表,默认升序根据比赛队伍名称查询数据
+  data:
+    page: 1
+    limit: 200
+    matchId: ""
+    sortBy: "ascending"
+    teamName: "托德拉"
+    tournamentId: ""
+  resp:
+    limit:
+    match_id: ""
+    tournament_id: ""
+    teamName: "托德拉"
+    sortIndex: "ASC"
+    sortParameter: "a.begin_time"

@@ -1,0 +1,102 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/12/21 19:14
+# @Author  : liyang
+# @FileName: test_Report.py.py
+# @Software: PyCharm
+
+
+-
+  url: /userWinLose/getUserWinLoseDetails
+  method: POST
+
+- #test_01用例
+  describe: 业主后台-会员盈亏报表-详情,默认查询会员近7日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1472086350940360705"
+    dateoffset: "7"
+  resp:
+    user_id: "1472086350940360705"
+    dateoffset: "7"
+    sortIndex: ""
+    sortParameter: ""
+    owner_id: "1469495292033343489"
+- #test_02用例
+  describe: 业主后台-会员盈亏报表-详情,默认查询会员近6日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1472086350940360705"
+    dateoffset: "6"
+  resp:
+    user_id: "1472086350940360705"
+    dateoffset: "6"
+    sortIndex: ""
+    sortParameter: ""
+    owner_id: "1469495292033343489"
+- #test_03用例
+  describe: 业主后台-会员盈亏报表-详情,默认查询会员近5日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1472086350940360705"
+    dateoffset: "5"
+  resp:
+    user_id: "1472086350940360705"
+    dateoffset: "5"
+    sortIndex: ""
+    sortParameter: ""
+    owner_id: "1469495292033343489"
+- #test_04用例
+  describe: 业主后台-会员盈亏报表-详情,默认查询会员近4日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1472086350940360705"
+    dateoffset: "4"
+  resp:
+    user_id: "1472086350940360705"
+    dateoffset: "4"
+    sortIndex: ""
+    sortParameter: ""
+    owner_id: "1469495292033343489"
+- #test_05用例
+  describe: 业主后台-会员盈亏报表-详情,默认查询会员近3日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1472086350940360705"
+    dateoffset: "3"
+  resp:
+    user_id: "1472086350940360705"
+    dateoffset: "3"
+    sortIndex: ""
+    sortParameter: ""
+    owner_id: "1469495292033343489"
+- #test_06用例
+  describe: 业主后台-会员盈亏报表-详情,默认查询会员近2日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1472086350940360705"
+    dateoffset: "2"
+  resp:
+    user_id: "1472086350940360705"
+    dateoffset: "2"
+    sortIndex: ""
+    sortParameter: ""
+    owner_id: "1469495292033343489"
+- #test_07用例
+  describe: 业主后台-会员盈亏报表-详情,默认查询会员近1日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1472086350940360705"
+    dateoffset: "1"
+  resp:
+    user_id: "1472086350940360705"
+    dateoffset: "1"
+    sortIndex: ""
+    sortParameter: ""
+    owner_id: "1469495292033343489"

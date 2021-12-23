@@ -1,0 +1,87 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2021/12/20 14:07
+# @Author  : liyang
+# @FileName: test_Report.py.py
+# @Software: PyCharm
+
+-
+  url: /dailyWinAndLoss/getAgentCommissionReportDetail
+  method: POST
+
+- #test_01用例
+  describe: 代理佣金统计详情,默认查询近7日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1472086411770351617"
+    dateoffset: "7"
+  resp:
+    dateoffset: "7"
+    owner_id: "1469495292033343489"
+    member_id: "1472086411770351617"
+- #test_01用例
+  describe: 代理佣金统计详情,默认查询近7日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1472086411770351617"
+    dateoffset: "6"
+  resp:
+    dateoffset: "6"
+    owner_id: "1469495292033343489"
+    member_id: "1472086411770351617"
+- #test_01用例
+  describe: 代理佣金统计详情,默认查询近7日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1472086411770351617"
+    dateoffset: "5"
+  resp:
+    dateoffset: "5"
+    owner_id: "1469495292033343489"
+    member_id: "1472086411770351617"
+- #test_01用例
+  describe: 代理佣金统计详情,默认查询近7日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1472086411770351617"
+    dateoffset: "4"
+  resp:
+    dateoffset: "4"
+    owner_id: "1469495292033343489"
+    member_id: "1472086411770351617"
+- #test_01用例
+  describe: 代理佣金统计详情,默认查询近7日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1472086411770351617"
+    dateoffset: "3"
+  resp:
+    dateoffset: "3"
+    owner_id: "1469495292033343489"
+    member_id: "1472086411770351617"
+- #test_01用例
+  describe: 代理佣金统计详情,默认查询近7日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1472086411770351617"
+    dateoffset: "2"
+  resp:
+    dateoffset: "2"
+    owner_id: "1469495292033343489"
+    member_id: "1472086411770351617"
+- #test_01用例
+  describe: 代理佣金统计详情,默认查询近7日数据
+  data:
+    page: 1
+    limit: 50
+    userId: "1472086411770351617"
+    dateoffset: "1"
+  resp:
+    dateoffset: "1"
+    owner_id: "1469495292033343489"
+    member_id: "1472086411770351617"
