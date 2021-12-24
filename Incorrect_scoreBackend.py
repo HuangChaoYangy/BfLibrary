@@ -1218,6 +1218,72 @@ class IncorrectBackend(object):
         return depositwithdrawalReport,currentdepositwithdrawalReport,totaldepositwithdrawalReport
 
 
+    def getPayoffcommission(self, inData , isDetail=False):
+        '''
+        业主后台--代理佣金发放     ///    修改于2021.12.24
+        :param startTime: 默认查询最近7天
+        :param endTime:
+        :return:
+        '''
+        resp = inData
+        if resp['dateoffset'] == '':
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=-6)
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=0)
+        elif resp['dateoffset'] == '7':
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=-6)
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=0)
+        elif resp['dateoffset'] == '6':
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=-5)
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=0)
+        elif resp['dateoffset'] == '5':
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=-4)
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=0)
+        elif resp['dateoffset'] == '4':
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=-3)
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=0)
+        elif resp['dateoffset'] == '3':
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=-2)
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=0)
+        elif resp['dateoffset'] == '2':
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=-1)
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=0)
+        elif resp['dateoffset'] == '1':
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=0)
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=0)
+        else:
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=-6)
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=0)
+
+        Authorization = self.login_background(uname='TestAgent02', password='Bfty123456', googleCode="111111",
+                                          loginDiv='555666', mode=True)
+
+        url = self.auth_url + '/commission/payoff/page'
+        head = {"LoginDiv": '555666',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": Authorization,
+                "lang": "zh_CN",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"}
+        page = resp['page']
+        limit = resp['limit']
+        memberAccount = resp['memberAccount']
+        memberId = resp['memberId']
+        status = resp['status']
+        data ={"page":page, "limit":limit, "memberAccount":memberAccount,"memberId":memberId,
+                "status":status,"begin":ctime,"end":etime}
+
+        rsp = self.session.post(url, headers=head, json=data)
+        if rsp.json()['message'] != "OK":
+            raise AssertionError("查询数据失败,原因：" + rsp.json()["message"])
+        commissionList = rsp.json()['data']['data']
+
+        commission_list = []
+        for item in commissionList:
+            commission_list.append((item['memberAccount'], item['memberId'], item['followEffectiveBet'], item['followWinLose'],
+                                    item['commission'], item['statusDes']))
+
+        return commission_list
+
+
     def get_DailyWinAndLoss(self, Authorization,startTime="-6",endTime="0",sortIndex="",sortParameter=""):
         '''
         业主后台--获取每日输赢统计     ///    修改于2021.12.01

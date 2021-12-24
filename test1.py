@@ -64,4 +64,6 @@ user_list = [{"account":"viptest01","agentAccount":None,"balance":0.00,"currency
 new_list = []
 for item in user_list:
     new_list.append((item['ownerAccount'],item['balance']))
-print(new_list)
+# print(new_list)
+
+
