@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2021/11/11 20:24
 # @Author  : liyang
-# @FileName: Incorrect_scoreClient.py.py
+# @FileName: Incorrect_scoreClient.py
 # @Software: PyCharm
 
 
@@ -511,7 +511,7 @@ if __name__ == "__main__":
     userList_mde = ["testuser004","testuser0041","testuser0042","testuser0043","testuser0044","testuser0045","testuser0046","testuser0047","testuser0048","testuser0049","testuser0050"]
     # userList_mde = ["testuser003","testuser0031","testuser0032","testuser0033","testuser0034","testuser0035","testuser0036","testuser0037","testuser0038"]
     for username in userList_mde:
-        orderNo = bf.submit_all_outcomes(account=username, match_id="sr:match:30935997", IsRandom='',environment='120') # 投注,包含校验注单和余额
+        orderNo = bf.submit_all_outcomes(account=username, match_id="sr:match:28404122", IsRandom='',environment='120') # 投注,包含校验注单和余额
 
 
     # commission = bf.commission(username='testuser32')

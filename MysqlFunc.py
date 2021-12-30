@@ -5637,7 +5637,7 @@ class MysqlQuery(MysqlFunc):
 
         user_list = self.user_level_commission(user=agent_account, owner_account=owner_account)
         user_tuple = tuple(user_list)
-        print(user_tuple)
+        # print(user_tuple)
         if resp['dateoffset'] == '':
             ctime = self.get_current_time_for_client(time_type='ctime',day_diff=-6)
             etime = self.get_current_time_for_client(time_type='ctime', day_diff=0)
@@ -5674,7 +5674,7 @@ class MysqlQuery(MysqlFunc):
                       f"`status` FROM o_account_order a JOIN u_commission_record b ON a.order_no = b.order_no WHERE a.owner_account = '{owner_account}' AND a.`status`=1 AND " \
                       f"a.user_name in {user_tuple} AND b.agent_account = '{agent_account}' {agent_id} {status} GROUP BY b.agent_account,b.agent_id," \
                       f"DATE_FORMAT(a.match_start_time,'%Y-%m-%d'),b.`status`"
-            print(sql_str)
+            # print(sql_str)
             rtn = list(self.query_data(sql_str, db_name))
 
             userAgent_commission = []
@@ -5684,13 +5684,13 @@ class MysqlQuery(MysqlFunc):
             return userAgent_commission
 
         else:
-            sql_str = f"SELECT b.payoff_time,b.agent_account,b.agent_id,sum(a.bet_amount) team_betAmount,sum(TRUNCATE((case when a.`status` =1 and settlement_result=1 then " \
+            sql_str = f"SELECT b.agent_account,b.agent_id,b.payoff_time,sum(a.bet_amount) team_betAmount,sum(TRUNCATE((case when a.`status` =1 and settlement_result=1 then " \
                       f"bet_amount*odd when a.`status` =1 and settlement_result=2 then -bet_amount when a.`status` =1 and settlement_result=3 then bet_amount end ),2)) " \
                       f"team_win_or_lose,sum(TRUNCATE(a.bet_amount*a.odd*a.handling_rate*(b.agent_level_rate/100),2)) commissionAmount,if(b.`status`=2,'已发放','未发放') `status` " \
                       f"FROM o_account_order a JOIN u_commission_record b ON a.order_no = b.order_no WHERE a.owner_account = '{owner_account}' AND a.`status`=1 AND a.user_name " \
                       f"in {user_tuple} AND b.agent_account = '{agent_account}' AND DATE_FORMAT(b.payoff_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' GROUP BY " \
-                      f"b.agent_account,b.agent_id,b.payoff_time,b.`status`"
-
+                      f"b.agent_account,b.agent_id,b.payoff_time,b.`status` ORDER BY b.payoff_time"
+            # print(sql_str)
             rtn = list(self.query_data(sql_str, db_name))
 
             userAgent_commission = []

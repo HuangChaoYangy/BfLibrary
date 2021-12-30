@@ -19,8 +19,38 @@
     status: ""
     dateoffset: ""
   resp:
-    owner_account: "TestAgent01"
     agent_account: "testuser004"
     agent_id: ""
     status: ""
     dateoffset: ""
+    owner_account: "TestAgent01"
+- #test_02用例
+  describe: 业主后台-代理佣金发放,根据会员账号默认查询近7日数据
+  data:
+    page: 1
+    limit: 50
+    memberAccount: "testuser0041"
+    memberId: ""
+    status: ""
+    dateoffset: ""
+  resp:
+    agent_account: "testuser0041"
+    agent_id: ""
+    status: ""
+    dateoffset: ""
+    owner_account: "TestAgent01"
+- #test_03用例
+  describe: 业主后台-代理佣金发放,根据会员账号和时间查询数据
+  data:
+    page: 1
+    limit: 50
+    memberAccount: "testuser004"
+    memberId: ""
+    status: ""
+    dateoffset: "7"
+  resp:
+    agent_account: "testuser004"
+    agent_id: ""
+    status: ""
+    dateoffset: "7"
+    owner_account: "TestAgent01"
