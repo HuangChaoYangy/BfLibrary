@@ -66,5 +66,7 @@ for item in user_list:
     new_list.append((item['ownerAccount'],item['balance']))
 # print(new_list)
 
-
+complex_m = {'3': 4, '4': 11, '5': 26, '6': 57}
+for i,n in complex_m.items():
+    print(i,n)
 
