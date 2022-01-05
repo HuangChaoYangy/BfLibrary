@@ -1114,11 +1114,11 @@ if __name__ == "__main__":
     # 单注
     # match_id_list = bf.get_pc_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     # print(match_id_list)
-    # bf.submit_all_outcome(match_id="sr:match:31373109", sport_name='篮球', token=token_list[0], odds_type=1, IsRandom='')
+    bf.submit_all_outcome(match_id="sr:match:31373109", sport_name='篮球', token=token_list[0], odds_type=1, IsRandom='')
     # 串关
     # bf.submit_all_outcomes(sport_name='排球', token=token_list[0], bet_type=3, event_type='TODAY', IsRandom='')
-    match = bf.get_pc_match_list(sport_name='足球', token=token_list[0], event_type="TODAY", sort=1, odds_type=1)[0]
-    print(match)
+    # match = bf.get_pc_match_list(sport_name='足球', token=token_list[0], event_type="TODAY", sort=1, odds_type=1)[0]
+    # print(match)
 
     # outcomes = bf.get_match_all_outcomes(match_id="sr:match:23204495", token=token_list[0], odd_type=1)
     # outcome = bf.get_match_all_outcome(match_id="sr:match:28503692", token=token_list[0], sport_name="冰上曲棍球", odds_Type=1)
