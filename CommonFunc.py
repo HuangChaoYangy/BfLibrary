@@ -340,6 +340,22 @@ class CommonFunc(object):
                 raise AssertionError(f"数据未找到:{int_data[index]}")
 
 
+    def write_to_local_file(self, content, file_name, mode='w', file_type='txt'):
+        '''
+        写入txt文件
+        :param content:
+        :param file_name:
+        :param mode:
+        :param file_type:
+        :return:
+        '''
+        if file_type=='txt':
+            txt_file = open(f'{file_name}', mode=mode)
+            txt_file.write(f'{content}')
+            txt_file.close()
+
+            return txt_file
+
 
 if __name__ == "__main__":
 
@@ -350,6 +366,8 @@ if __name__ == "__main__":
     # print(cf.get_day_range("年", 1))
     # cf.get_relative_time()
     # now_time = arrow.now()
-    l1 = [806000000.00, 828000000.00, 367837.82, 359595.68, 259836.94, 7113.14, -99758.74, 52.62, -99706.12]
-    l2 = [403000000.0, 419000000.0, 362729.06, 354551.92, 253214.48, 7048.14, -101337.44, 52.62, -101284.82]
-    cf.two_list_should_be_equal(l1, l2)
+    # l1 = [806000000.00, 828000000.00, 367837.82, 359595.68, 259836.94, 7113.14, -99758.74, 52.62, -99706.12]
+    # l2 = [403000000.0, 419000000.0, 362729.06, 354551.92, 253214.48, 7048.14, -101337.44, 52.62, -101284.82]
+    # cf.two_list_should_be_equal(l1, l2)
+
+    file = cf.write_to_local_file(content='测试一下', file_name='C:/Users/USER/Desktop/test.txt', mode='w', file_type='txt')

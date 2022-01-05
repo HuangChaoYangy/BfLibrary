@@ -4,6 +4,7 @@ import time
 import random
 import arrow
 import requests
+import hashlib
 
 try:
     from MongoFunc import MongoFunc, DbQuery
@@ -74,6 +75,44 @@ class H5_Credit_Client(object):
             return now.strftime("%Y-%m-%dT23:59:59+07:00")
         else:
             raise AssertionError("【ERR】传参错误")
+
+    def get_md5(self, data):
+        '''
+        md5加密
+        :param data:
+        :return:
+        '''
+        # 创建md5对象
+        md5 = hashlib.md5()
+        # 调用加密方法直接直接加密,此处必须声明encode,否则报错为：hl.update(str)    Unicode-objects must be encoded before hashing
+        md5.update(data.encode(encoding='utf-8'))
+
+        return md5.hexdigest()
+
+    def login_client(self, username, password):
+        '''
+        信用网-客户端登录
+        :param username:
+        :param password:
+        :return:
+        '''
+        url = self.auth_url + ':6210/creditUser/creditUserLogIn'
+        loginUrl = 'http://192.168.10.120:96'
+        head = {"lang": "ZH",
+                "Accept-Encoding": "gzip, deflate",
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Connection": "keep-alive",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"}
+        data = {"userName":username, "password":self.get_md5(password),"loginUrl":loginUrl}
+
+        rsp = self.session.post(url, json=data, headers=head)
+        if rsp.json()['message'] != "OK":
+            return "查询赛事列表失败,原因：" + rsp.json()["message"]
+        else:
+            self.Authorization = rsp.json()['data']['token']
+
+            return self.Authorization
+
 
     def get_pc_match_list(self, sport_name, token, event_type="INPLAY", sort=1, odds_type=1, dateOffset=-1):
         '''
@@ -501,7 +540,6 @@ class H5_Credit_Client(object):
                                                         odds_Type=odds_type)  # 指定盘口类型，1是欧洲盘，2是香港盘，3是马来盘，4是印尼盘
 
         if not IsRandom:
-
             print("比赛ID: %s, 总共投注 %d 个投注项: " % (match_id, len(outcome_info_list)))
             selection_list = []
             for outcome in outcome_info_list:
@@ -514,12 +552,11 @@ class H5_Credit_Client(object):
                                        "originalOdds": odds,
                                        "oddsType": oddsType,
                                        "outcomeId": outcomeId})
-
             # 判断变量bet_amount是否为None，等同于if not bet_amount 和 if bet_amount is None
             sub_order_no_list = []
             loop = 1
             for outcomeid in selection_list:
-                bet_amount = random.randint(10, 100)
+                bet_amount = random.randint(10, 1000)
                 data = {"betAmount": str(bet_amount),
                         "betId": 1632573273553,
                         "betIp": '192.168.10.120',
@@ -528,7 +565,6 @@ class H5_Credit_Client(object):
                         "selections": [outcomeid],
                         "oddsChangeType": odds_type,
                         "terminal": "pc"}
-
                 rsp = self.session.post(url, json=data, headers=head)
                 if rsp.json()['message'] != "OK":
                     print("投注失败,原因：" + rsp.json()["message"])
@@ -537,7 +573,9 @@ class H5_Credit_Client(object):
                 else:
                     run_loop = len(outcome_info_list)
                     sub_order_no = rsp.json()['data']['orderNo']
-
+                    content = self.cm.write_to_local_file(content=f"{sub_order_no}\n",
+                                                          file_name='C:/Users/USER/Desktop/test.txt', mode='a',
+                                                          file_type='txt')
                     time.sleep(3)  # 等待3秒
                     if sub_order_no:
                         sub_order_no_list.append(str(sub_order_no))
@@ -552,14 +590,12 @@ class H5_Credit_Client(object):
             randomNum = int(IsRandom)  # 随机投注次数
             random.seed(5)
             random_outcome_list = random.sample(outcome_info_list,randomNum)  # 使用python random模块的sample函数从列表outcome_info_list中随机选择一组元素
-
             random_num = len(random_outcome_list)
             if random_num > len(outcome_info_list):
                 print('该比赛没有那么多投注项,该比赛总有【%d】个投注项 ' % (len(outcome_info_list)))
             else:
                 pass
             print("比赛ID: %s, 总共投注 %d 个投注项: " % (match_id, len(random_outcome_list)))
-
             selection_list = []
             for outcome in random_outcome_list:
                 islive = outcome[1]['islive']
@@ -571,12 +607,11 @@ class H5_Credit_Client(object):
                                        "originalOdds": odds,
                                        "oddsType": oddsType,
                                        "outcomeId": outcomeId})
-
             # 判断变量bet_amount是否为None，等同于if not bet_amount 和 if bet_amount is None
             sub_order_no_list = []
             loop = 1
             for outcomeid in selection_list:
-                bet_amount = random.randint(10, 100)
+                bet_amount = random.randint(10, 300)
                 data = {"betAmount": str(bet_amount),
                         "betId": 1632573273553,
                         "betIp": '192.168.10.120',
@@ -585,16 +620,16 @@ class H5_Credit_Client(object):
                         "selections": [outcomeid],
                         "oddsChangeType": odds_type,
                         "terminal": "pc"}
-
                 rsp = self.session.post(url, json=data, headers=head)
-
                 if rsp.json()['message'] != "OK":
                     print("投注失败,原因：" + rsp.json()["message"])
                 elif not rsp.json():
                     raise AssertionError('【ERROR】返回数据为空')
                 else:
                     sub_order_no = rsp.json()['data']['orderNo']
-
+                    content = self.cm.write_to_local_file(content=f"{sub_order_no}\n",
+                                                          file_name='C:/Users/USER/Desktop/test.txt', mode='a',
+                                                          file_type='txt')
                     time.sleep(3)
                     if sub_order_no:
                         sub_order_no_list.append(str(sub_order_no))
@@ -606,7 +641,8 @@ class H5_Credit_Client(object):
             print('注单号列表: %s' % (sub_order_no_list))
 
 
-    def submit_all_outcomes(self, sport_name, token, bet_type, event_type='TODAY', odds_type=1, oddsChangeType=1, IsRandom=''):
+
+    def  submit_all_outcomes(self, sport_name, token, bet_type, event_type='TODAY', odds_type=1, oddsChangeType=1, IsRandom=''):
         '''
         投注串关，从串关接口种获取比赛和所有下注项                 /// 修改于2021.10.12
         :param match_id:
@@ -1071,15 +1107,17 @@ if __name__ == "__main__":
     mongo_info = ['app', '123456', '192.168.10.120', '27017']
     bf = H5_Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['f12ba3f1edeb4b6790aff51f0d189948','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
+    token_list = ['741a3f6ab74b412cae1d0740fc151f21','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
 
     thread_num = 1
     # outcome = bf.get_match_all_outcomes(match_id='sr:match:28781318', token=token_list[0], sport_name='足球', odds_Type=1) # 获取所有玩法
     # 单注
-    # match_id_list = bf.get_pc_match_list(sport_name='', token, event_type=event_type, odds_type=odds_type)
-    bf.submit_all_outcome(match_id="sr:match:29903843", sport_name='网球', token=token_list[0], odds_type=1, IsRandom='10')
+    # match_id_list = bf.get_pc_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
+    # print(match_id_list)
+    bf.submit_all_outcome(match_id="sr:match:31373109", sport_name='篮球', token=token_list[0], odds_type=1, IsRandom='')
     # 串关
-    # bf.submit_all_outcomes(sport_name='篮球', token=token_list[0], bet_type=4, event_type='TODAY', IsRandom='8')
+    # bf.submit_all_outcomes(sport_name='排球', token=token_list[0], bet_type=3, event_type='TODAY', IsRandom='')
+
 
     # outcomes = bf.get_match_all_outcomes(match_id="sr:match:23204495", token=token_list[0], odd_type=1)
     # outcome = bf.get_match_all_outcome(match_id="sr:match:28503692", token=token_list[0], sport_name="冰上曲棍球", odds_Type=1)
