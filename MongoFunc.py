@@ -5260,13 +5260,13 @@ if __name__ == "__main__":
     # sportCategoryId = db.get_sportCategoryId_sql(sportName='足球')
     # tournamentId = db.get_tournamentId_sql(tournamentName='德国超级杯')
 
-    # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
-        # live_match_data = db.get_live_match_data_sql(sport_name=sport_name, sort=1 )
+    for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
+        live_match_data = db.get_live_match_data_sql(sport_name=sport_name, sort=1 )
         # today_match_data = db.get_today_match_data_sql(sport_name=sport_name, sort=1)
         # early_match_data = db.get_early_match_data_sql(sport_name=sport_name, sort=1, dateOff=0)
     # parlay_match_data = db.get_parlay_match_data_sql(sport_name=sport_name)
 
-    searchMacth = db.get_search_matchName_sql(sport_name='网球', dateOff=0, teamName='可罗兹', matchCategory='live')        # 搜索功能
+    # searchMacth = db.get_search_matchName_sql(sport_name='网球', dateOff=0, teamName='可罗兹', matchCategory='live')        # 搜索功能
     # Score = db.get_live_match_list_score(sport_name='羽毛球', teamName='沙也加')
 
     # data = db.get_choose_tournament_sql(sport_name="篮球", highlight="false", matchCategory='inplay')           # 获取选择联赛列表

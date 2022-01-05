@@ -6,6 +6,10 @@ import base64
 from tzlocal import get_localzone
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
 from Crypto.PublicKey import RSA
+import hashlib
+import xlsxwriter as xw
+import pandas as pd
+import openpyxl as op
 
 # try:
 #     from Decorators import add_doc
@@ -19,6 +23,31 @@ class CommonFunc(object):
     def __init__(self, *args, **kwargs):
         self.pub_key = "-----BEGIN PUBLIC KEY-----\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAL1XuLmIZttk13hmAGVuXiKSfQggfVck" \
                        "p+iNr9jBIxkmBBfmygJ9D5A7lhUbhBEY1SqyGNIHI1DsNLfxfRvW2EcCAwEAAQ==\n-----END PUBLIC KEY-----"
+
+    def rsa_encrypt(self, data):
+        '''
+        RSA加密（encrypt）
+        :param data:
+        :return:
+        '''
+        msg = data.encode('utf-8')
+        rsa_key = RSA.importKey(self.pub_key)
+        cipher = Cipher_pkcs1_v1_5.new(rsa_key)
+        cipher_text = base64.b64encode(cipher.encrypt(msg)).decode("utf-8")
+        return cipher_text
+
+    def get_md5(self, data):
+        '''
+        md5加密
+        :param data:
+        :return:
+        '''
+        # 创建md5对象
+        md5 = hashlib.md5()
+        # 调用加密方法直接直接加密,此处必须声明encode,否则报错为：hl.update(str)    Unicode-objects must be encoded before hashing
+        md5.update(data.encode(encoding='utf-8'))
+
+        return md5.hexdigest()
 
     def get_md_search_time(self, diff=0):
         """
@@ -246,13 +275,6 @@ class CommonFunc(object):
                 list_obj[index] = 0
         return list_obj
 
-    def rsa_encrypt(self, data):
-        msg = data.encode('utf-8')
-        rsa_key = RSA.importKey(self.pub_key)
-        cipher = Cipher_pkcs1_v1_5.new(rsa_key)
-        cipher_text = base64.b64encode(cipher.encrypt(msg)).decode("utf-8")
-        return cipher_text
-
     @staticmethod
     def str_to_timestamp(time_str):
         """
@@ -340,7 +362,7 @@ class CommonFunc(object):
                 raise AssertionError(f"数据未找到:{int_data[index]}")
 
 
-    def write_to_local_file(self, content, file_name, mode='w', file_type='txt'):
+    def write_to_local_file(self, content, file_name, mode='w'):
         '''
         写入txt文件
         :param content:
@@ -349,12 +371,71 @@ class CommonFunc(object):
         :param file_type:
         :return:
         '''
-        if file_type=='txt':
-            txt_file = open(f'{file_name}', mode=mode)
-            txt_file.write(f'{content}')
-            txt_file.close()
+        txt_file = open(f'{file_name}', mode=mode)
+        txt_file.write(f'{content}')
+        txt_file.close()
 
-            return txt_file
+        return txt_file
+
+    def xw_toExcel(self, data, filename):
+        '''
+        xlsxwriter库储存数据到excel,不支持读取、修改、XLS文件、透视表（Pivot Table）
+        :param data:
+        :param filename:
+        :return:
+        '''
+        workbook = xw.Workbook(filename)         # 创建工作簿
+        worksheet1 = workbook.add_worksheet("sheet1")   # 创建子表
+        worksheet1.activate()         # 激活表
+        title = ['序号', '酒店', '价格']   # 设置表头
+        worksheet1.write_row('A1', title)   # 从A1单元格开始写入表头
+        i = 2
+        for j in range(len(data)):
+            insertData = [data[j]["id"], data[j]["name"], data[j]["price"]]
+            row = 'A' + str(i)
+            worksheet1.write_row(row, insertData)
+            i += 1
+        workbook.close()   # 关闭表
+
+        return worksheet1
+
+    def pd_toExcel(self, data, filename):
+        '''
+        pandas库储存数据到excel
+        :param data:
+        :param filename:
+        :return:
+        '''
+        ids = []
+        names = []
+        prices = []
+        for i in range(len(data)):
+            ids.append(data[i]["id"])
+            names.append(data[i]["name"])
+            prices.append(data[i]["price"])
+
+        dfData = {'序号': ids, '酒店': names, '价格': prices}     # 字典设置DataFrame所需数据
+        df = pd.DataFrame(dfData)      # 创建DataFrame
+        df.to_excel(filename, index=False)   # 存表,去除原始索引列（0,1,2...）
+
+        return df
+
+    def op_toExcel(self, data, filename):
+        '''
+        openpyxl库储存数据到excel
+        :param data:
+        :param filename:
+        :return:
+        '''
+        wb = op.Workbook()       # 创建工作簿对象
+        ws = wb['sheet']         # 创建子表
+        ws.append(['序号','酒店','价格'])      # 添加表头
+        for i in range(len(data[0])):
+            d = data[i]["id"], data[i]["name"], data[i]["price"]
+            ws.append(d)   # 每次写入一行
+        wb.save(filename)
+
+        return wb
 
 
 if __name__ == "__main__":
@@ -370,4 +451,10 @@ if __name__ == "__main__":
     # l2 = [403000000.0, 419000000.0, 362729.06, 354551.92, 253214.48, 7048.14, -101337.44, 52.62, -101284.82]
     # cf.two_list_should_be_equal(l1, l2)
 
-    file = cf.write_to_local_file(content='测试一下', file_name='C:/Users/USER/Desktop/test.txt', mode='w', file_type='txt')
+    # file = cf.write_to_local_file(content='测试一下', file_name='C:/Users/USER/Desktop/test.txt', mode='w', file_type='txt')
+
+    # testData = [{'id':1,'name':'李扬','price':10},{'id':2,'name':'杜鑫','price':20},{'id':3,'name':'杰瑞','price':30}]
+    # excel_file = cf.xw_toExcel(data=testData, filename='C:/Users/USER/Desktop/test.xlsx')
+
+    testData1 = [{'id':1,'name':'李扬','price':10},{'id':2,'name':'杜鑫','price':20},{'id':3,'name':'杰瑞','price':30}]
+    file = cf.pd_toExcel(data=testData1, filename='C:/Users/USER/Desktop/test1.xlsx')

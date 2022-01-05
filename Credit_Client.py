@@ -189,7 +189,7 @@ class H5_Credit_Client(object):
 
                 match_num = rsp.json()["data"]['totalCount']
             # print('体育类型：%s,赛事类型【今日】,总共有【%d】场比赛 ' % (sport_name, match_num))
-            # print(match_list)
+            # print(len(match_list))
             return match_list, match_num
 
         elif event_type == "EARLY":
@@ -1107,17 +1107,18 @@ if __name__ == "__main__":
     mongo_info = ['app', '123456', '192.168.10.120', '27017']
     bf = H5_Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['741a3f6ab74b412cae1d0740fc151f21','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
+    token_list = ['fb8c00bc6502475c8535cfb46014c6da','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
 
     thread_num = 1
     # outcome = bf.get_match_all_outcomes(match_id='sr:match:28781318', token=token_list[0], sport_name='足球', odds_Type=1) # 获取所有玩法
     # 单注
     # match_id_list = bf.get_pc_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     # print(match_id_list)
-    bf.submit_all_outcome(match_id="sr:match:31373109", sport_name='篮球', token=token_list[0], odds_type=1, IsRandom='')
+    # bf.submit_all_outcome(match_id="sr:match:31373109", sport_name='篮球', token=token_list[0], odds_type=1, IsRandom='')
     # 串关
     # bf.submit_all_outcomes(sport_name='排球', token=token_list[0], bet_type=3, event_type='TODAY', IsRandom='')
-
+    match = bf.get_pc_match_list(sport_name='足球', token=token_list[0], event_type="TODAY", sort=1, odds_type=1)[0]
+    print(match)
 
     # outcomes = bf.get_match_all_outcomes(match_id="sr:match:23204495", token=token_list[0], odd_type=1)
     # outcome = bf.get_match_all_outcome(match_id="sr:match:28503692", token=token_list[0], sport_name="冰上曲棍球", odds_Type=1)
