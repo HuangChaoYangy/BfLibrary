@@ -1,20 +1,22 @@
 import re
-
 import requests
 import base64
 import time
 import arrow
 import datetime
+import random
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
 from Crypto.PublicKey import RSA
 try:
     from ThridMerchantDetail import Third_Merchant
     from MysqlFunc import MysqlQuery
     from MongoFunc import MongoFunc,DbQuery
+    from CommonFunc import CommonFunc
 except ModuleNotFoundError or ImportError:
     from .ThridMerchantDetail import Third_Merchant
     from .MysqlFunc import MysqlQuery
     from .MongoFunc import MongoFunc, DbQuery
+    from .CommonFunc import CommonFunc
 
 
 class CreditBackGround(object):
@@ -25,11 +27,12 @@ class CreditBackGround(object):
         self.session = requests.session()
         self.auth_url = backend_url
         self.auth_url = "http://192.168.10.11:6100"
+        self.bacekend_url = "http://192.168.10.120:8093"
         self.head = {"Authorization": ""}
         self.mysql = MysqlQuery(mysql_info,mongo_info)
         self.mg = MongoFunc(mongo_info)
         self.db = DbQuery(mongo_info)
-
+        self.cm = CommonFunc()
         self.small_sport_id_dic = {"乒乓球": "sr:sport:20","足球": "sr:sport:1","网球": "sr:sport:5","冰上曲棍球": "sr:sport:4","刀塔2": "sr:sport:111","羽毛球": "sr:sport:31",
                                    "棒球": "sr:sport:3","美式橄榄球": "sr:sport:16","排球": "sr:sport:23","英雄联盟": "sr:sport:110","篮球": "sr:sport:2","桌球": "sr:sport:19"}
         self.sport_id_dic = {"足球": 1,"篮球": 2,"网球": 3,"排球": 4,"羽毛球": 5,"乒乓球": 6,"棒球": 7,"斯诺克": 8,"其他": 100}
@@ -167,6 +170,49 @@ class CreditBackGround(object):
             except ConnectionError:
                 time.sleep(2)
                 continue
+
+
+    def user_register(self, token, account, name, password, creditsAmount, Percentage, handicapType='A'):
+        '''
+        登3建会员             // 2022.1.13
+        :param Authorization:
+        :param account:
+        :param name:
+        :param password:
+        :param creditsAmount:
+        :param Percentage:
+        :param handicapType:
+        :return:
+        '''
+        # token = self.login_background(uname='TetestAdmin01', password='Bfty123456', securityCode='123456', loginDiv='555666')
+        url = self.bacekend_url + '/uuser/addUser'
+        head = {"LoginDiv": '555666',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": token,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.131 Safari/537.36"}
+
+        accountname = handicapType + 'Te' + account
+        data = {"account":accountname,"creditsAmount":creditsAmount,"status":"","currency":"CNY","exchangeRate":None,"handicapType":handicapType,
+                "profitLossPercentage":Percentage,"quotaMode":"","name":name,"password":password,
+                "userConfigurationParams":[{"handicapCategoryId":"1","retreatProportion":16,"singleBetLimit":3000,"singleGameBetLimit":100000,"sportCategoryId":"1"},
+                                           {"handicapCategoryId":"2","retreatProportion":14,"singleBetLimit":3000,"singleGameBetLimit":100000,"sportCategoryId":"1"},
+                                           {"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":3000,"singleGameBetLimit":100000,"sportCategoryId":"1"},
+                                           {"handicapCategoryId":"100","retreatProportion":"","singleBetLimit":3000,"singleGameBetLimit":100000,"sportCategoryId":"1"},
+                                           {"handicapCategoryId":"1","retreatProportion":16,"singleBetLimit":3000,"singleGameBetLimit":100000,"sportCategoryId":"2"},
+                                           {"handicapCategoryId":"2","retreatProportion":14,"singleBetLimit":3000,"singleGameBetLimit":100000,"sportCategoryId":"2"},
+                                           {"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":3000,"singleGameBetLimit":100000,"sportCategoryId":"2"},
+                                           {"handicapCategoryId":"100","retreatProportion":"","singleBetLimit":3000,"singleGameBetLimit":100000,"sportCategoryId":"2"},
+                                           {"handicapCategoryId":"1","retreatProportion":13,"singleBetLimit":3000,"singleGameBetLimit":100000,"sportCategoryId":"100"},
+                                           {"handicapCategoryId":"2","retreatProportion":16,"singleBetLimit":3000,"singleGameBetLimit":100000,"sportCategoryId":"100"},
+                                           {"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":3000,"singleGameBetLimit":100000,"sportCategoryId":"100"},
+                                           {"handicapCategoryId":"100","retreatProportion":"","singleBetLimit":3000,"singleGameBetLimit":100000,"sportCategoryId":"100"}]}
+        rsp = self.session.post(url, headers=head, json=data)
+        if rsp.json()['message'] != "OK":
+            raise AssertionError("创建会员失败,原因：" + rsp.json()["message"])
+        elif rsp.json()['data'] == []:
+            raise AssertionError("创建会员失败,原因：data为空")
+
+        return None
 
 
     def user_management(self, Authorization, userStatus='0', userName='', userAccount='', sortIndex='', sortParameter=''):
@@ -1527,17 +1573,27 @@ if __name__ == "__main__":
     bg = CreditBackGround(mysql_info,mongo_info)            # 创建对象
 
     # login_loken = bg.login_background('Liyang333', 'Bfty123456', securityCode="Li123456")           # 登录信用网代理后台
-    login_loken = bg.login_background(uname='Liyang1212', password='Bfty123456', securityCode="" , loginDiv='222333')  # 登录信用网总台
+    # login_loken = bg.login_background(uname='Liyang1212', password='Bfty123456', securityCode="" , loginDiv='222333')  # 登录信用网总台
 
     # user = bg.user_management(Authorization=login_loken, userStatus='0', userName='', userAccount='', sortIndex='', sortParameter='')   # 会员管理
-    match = bg.credit_match_result_query(Authorization=login_loken, sportName='足球', tournamentName='', teamName='',offset='0')    # 新赛果查询
+    # match = bg.credit_match_result_query(Authorization=login_loken, sportName='足球', tournamentName='', teamName='',offset='0')    # 新赛果查询
 
     # userInfo = bg.credit_user_info_query(Authorization=login_loken, agentLine='Liyang00')            # 总台-会员信息
     # userBasicInfo = bg.credit_userManagement_query(Authorization=login_loken, userAccount='aLiYYtest02',queryType=3)     # 总台-会员详情
     # orderNo_detail = bg.credit_orderManagement_query(Authorization=login_loken, userAccount='YYlang002',queryTpye=3, betoffset='-1',orderNo='WVyjejXsyvTD')  # 总台-订单详情
 
-    rdata_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=3)   # 总台-报表管理-返水报表
+    # rdata_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=3)   # 总台-报表管理-返水报表
     # daily_report = bg.credit_dailyReport_query(Authorization=login_loken, starttime='-6',endtime='', queryType=2)           # 总台-报表管理-每日盈亏
     # daily_report = bg.credit_terminalReport_query(Authorization=login_loken, starttime='', endtime='',terminal='ios-h5', queryType=3)       # 总台-报表管理-客户端盈亏
     # sports_report = bg.credit_sportsReport_query(Authorization=login_loken, starttime='', endtime='',sportName='', queryType=1)    # 总台-报表管理-体育项盈亏
     # rebate_report = bg.credit_rebateReport_query(Authorization=login_loken, starttime='', endtime='', queryType=2)   # 总台-报表管理-返水报表
+
+    for uname in range(1,2):
+        accountName = ("Testnum0" + str(uname))
+        username = ("测试账号0" + str(uname))
+        percentage = random.randint(7,21)
+        handicaptype = random.choice(['A','B','C','D'])
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE0NzI4MjA4MTM4NzM5MTM4NTgiLCJleHAiOjE2NDIwNzA1NTIsInVzZXJuYW1lIjoiVGVUZXN0QWdlbnQzMyJ9.MPGfXBqKn3oL7iJb90FcgpVc9fUSGShHw_IZ8I0DruM'
+        register = bg.user_register(token= token,account=accountName, name=username, password='Bfty123456', creditsAmount=10000, Percentage=percentage, handicapType=handicaptype)
+
+        content =bg.cm.write_to_local_file(content=f"{accountName}\n",file_name='C:/Users/USER/Desktop/balance.txt', mode='a',)
