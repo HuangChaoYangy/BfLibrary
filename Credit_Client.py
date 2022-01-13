@@ -1,3 +1,5 @@
+import json
+
 import arrow
 import re
 import time
@@ -686,9 +688,10 @@ class H5_Credit_Client(object):
                     outcome_len = len(outcome_info_list[start_index:][item])
                     index = random.choice([i for i in range(outcome_len)])
                     outcome_detail = outcome_info_list[start_index:][item][index][1]
+                    credit_impairment =0.05
                     selection_list.append({
                         "isLive": outcome_detail['islive'],
-                        "creditOdds": round(outcome_detail['odds'] * 0.85, 2) - 0.05,  # 通过原赔率计算信用网赔率
+                        "creditOdds": round(outcome_detail['odds'] * 0.85, 2) - credit_impairment,  # 通过原赔率计算信用网赔率
                         "originalOdds": round(outcome_detail['odds'] * 0.85, 2),  # 获取来的赔率乘0.85,四舍五入保留2位小数   保证下注成功率
                         "oddsType": outcome_detail['oddsType'],
                         "outcomeId": outcome_detail['outcome_id']})
@@ -755,9 +758,10 @@ class H5_Credit_Client(object):
                         outcome_len = len(outcome_info_list[start_index:][item])
                         index = random.choice([i for i in range(outcome_len)])
                         outcome_detail = outcome_info_list[start_index:][item][index][1]
+                        credit_impairment = 0.05
                         selection_list.append({
                             "isLive": outcome_detail['islive'],
-                            "creditOdds": round(outcome_detail['odds'] * 0.85, 2) - 0.05,  # 通过原赔率计算信用网赔率
+                            "creditOdds": round(outcome_detail['odds'] * 0.85, 2) - credit_impairment,  # 通过原赔率计算信用网赔率
                             "originalOdds": round(outcome_detail['odds'] * 0.85, 2),  # 获取来的赔率乘0.85,四舍五入保留2位小数   保证下注成功率
                             "oddsType": outcome_detail['oddsType'],
                             "outcomeId": outcome_detail['outcome_id']})
@@ -819,7 +823,7 @@ class H5_Credit_Client(object):
         outcome_info_list = []
         match_info_list = self.get_pc_match_list(sport_name, token, event_type=event_type, odds_type=odds_type)[0]
         [outcome_info_list.append(self.get_match_all_outcome(item, token, sport_name, odds_Type=odds_type)) for item in match_info_list]
-        # print(outcome_info_list[0])
+        # print(outcome_info_list[0])   # 打印第一场比赛的盘口投注信息
 
         if complex == 'single':
             for item in outcome_info_list:  # 在outcome_list循环，去除列表为空的元素
@@ -880,9 +884,10 @@ class H5_Credit_Client(object):
                     outcome_len = len(outcome_info_list[start_index:][item])
                     index = random.choice([i for i in range(outcome_len)])
                     outcome_detail = outcome_info_list[start_index:][item][index][1]
+                    credit_impairment = 0.05
                     selection_list.append({
                         "isLive": outcome_detail['islive'],
-                        "creditOdds": round(outcome_detail['odds'] * 0.85, 2) - 0.05,  # 通过原赔率计算信用网赔率
+                        "creditOdds": round(outcome_detail['odds'] * 0.85, 2) - credit_impairment,  # 通过原赔率计算信用网赔率
                         "originalOdds": round(outcome_detail['odds'] * 0.85, 2),  # 获取来的赔率乘0.85,四舍五入保留2位小数   保证下注成功率
                         "oddsType": outcome_detail['oddsType'],
                         "outcomeId": outcome_detail['outcome_id']})
@@ -890,7 +895,7 @@ class H5_Credit_Client(object):
                         "betId": 1641795071506,
                         "betIp": "192.168.10.120",
                         "browserFingerprintId": "2b0148c380e1e7daee36c6752532f33f",
-                        "oddsChangeType": oddsChangeType,  # 0:不接受任何赔率变化,1:接受任意赔率变化,2:接受较佳赔率变化
+                        "oddsChangeType": oddsChangeType,
                         "selections": selection_list,
                         "terminal": "pc"}
                 rsp = self.session.post(url, json=data, headers=head)
@@ -946,9 +951,10 @@ class H5_Credit_Client(object):
                     outcome_len = len(outcome_info_list[start_index:][item])
                     index = random.choice([i for i in range(outcome_len)])
                     outcome_detail = outcome_info_list[start_index:][item][index][1]
+                    credit_impairment = 0.05    # 信用网该会员所属盘口的赔率减值
                     selection_list.append({
                         "isLive": outcome_detail['islive'],
-                        "creditOdds": round(outcome_detail['odds'] * 0.85, 2) - 0.05,  # 通过原赔率计算信用网赔率
+                        "creditOdds": round(outcome_detail['odds'] * 0.85, 2) - credit_impairment,  # 通过原赔率计算信用网赔率
                         "originalOdds": round(outcome_detail['odds'] * 0.85, 2),  # 获取来的赔率乘0.85,四舍五入保留2位小数   保证下注成功率
                         "oddsType": outcome_detail['oddsType'],
                         "outcomeId": outcome_detail['outcome_id']})
@@ -956,7 +962,7 @@ class H5_Credit_Client(object):
                         "betId": 1641795071506,
                         "betIp": "192.168.10.120",
                         "browserFingerprintId": "2b0148c380e1e7daee36c6752532f33f",
-                        "oddsChangeType": oddsChangeType,  # 0:不接受任何赔率变化,1:接受任意赔率变化,2:接受较佳赔率变化
+                        "oddsChangeType": oddsChangeType,
                         "selections": selection_list,
                         "terminal": "pc"}
                 rsp = self.session.post(url, json=data, headers=head)
@@ -982,6 +988,38 @@ class H5_Credit_Client(object):
                         print("ERR: 投注失败:原因【%s】" % (rsp.json()['data']['message']))
                     loop += 1
             print('注单号列表: %s' % (sub_order_no_list))
+
+    def get_balance(self, token):
+        '''
+        获取会员余额
+        :param token:
+        :return:
+        '''
+        url = self.auth_url + ':6210/creditUser/getUserAmount'
+        head = {"accessCode": token,
+                "Accept-Encoding": "gzip, deflate",
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Connection": "keep-alive",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                              "Chrome/85.0.4183.102 Safari/537.36"}
+        date = {}
+        rsp = self.session.get(url=url, headers=head, params=date)
+        if rsp.json()['message'] != "OK":
+            raise AssertionError("查询余额失败,原因：" + rsp.json()["message"])
+        results = json.loads(rsp.text)
+
+        balance = results['data']['balance']
+        winLoseAmount = results['data']['winLoseAmount']
+        frozenAmount = results['data']['frozenAmount']
+        creditsAmount = results['data']['creditsAmount']
+        balance_list = []
+        balance_list.append((balance,winLoseAmount,frozenAmount,creditsAmount))
+
+        content =self.cm.write_to_local_file(content=f"{balance},{winLoseAmount},,{frozenAmount},{creditsAmount}\n",
+                                             file_name='C:/Users/USER/Desktop/balance.txt', mode='a',)
+
+        return balance_list
+
 
     def get_match_all_outcomes(self, match_id, token, sport_name='', odds_Type=1):
         '''
@@ -1294,7 +1332,7 @@ if __name__ == "__main__":
     mongo_info = ['app', '123456', '192.168.10.120', '27017']
     bf = H5_Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['a0ea8483e0e444329bfbbb0ce5f48c97','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
+    token_list = ['9ca18ea188b3476c90addf305c8ce1ff','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
 
     thread_num = 1
     # outcome = bf.get_match_all_outcomes(match_id='sr:match:28781318', token=token_list[0], sport_name='足球', odds_Type=1) # 获取所有玩法
@@ -1302,12 +1340,13 @@ if __name__ == "__main__":
     # print(match_id_list)
 
     # 单注
-    # bf.submit_all_outcome(match_id="sr:match:28160244", sport_name='足球', token=token_list[0], odds_type=1, IsRandom='')
+    # bf.submit_all_outcome(match_id="sr:match:28809090", sport_name='足球', token=token_list[0], odds_type=1, IsRandom='')
     # 非复式串关投注
     # bf.submit_all_outcomes(sport_name='排球', token=token_list[0], bet_type=3, event_type='TODAY', IsRandom='')
     # 复式串关投注
     bf.submit_all_complex(sport_name='足球', token=token_list[0], bet_type=6, event_type='EARLY', odds_type=1, oddsChangeType=1, complex='multi', complex_number=2)
-
+    # balance = bf.get_balance(token=token_list[0])
+    # print(balance)
 
     # outcomes = bf.get_match_all_outcomes(match_id="sr:match:23204495", token=token_list[0], odd_type=1)
     # outcome = bf.get_match_all_outcome(match_id="sr:match:28503692", token=token_list[0], sport_name="冰上曲棍球", odds_Type=1)
