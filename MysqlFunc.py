@@ -4362,6 +4362,36 @@ class MysqlQuery(MysqlFunc):
 
 
 
+                                                                            #  【信用网】
+
+
+    def get_accountHistoryStatistics_sql(self, username, starttime='-30', endtime='0'):
+        '''
+        获取信用网-已结算注单外层统计sql
+        :param username:
+        :param starttime:
+        :param endtime:
+        :return:
+        '''
+        table_name1 = "o_account_order"
+        table_name2 = "u_user"
+        database_name = "bfty_credit"
+        ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(starttime))
+        etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(endtime))
+        sql_str = f"SELECT a.`day`,bet_amount,effective_amount,backwater,win_or_lose FROM `s_day` a LEFT JOIN ( SELECT any_value(bet_time) as bet_time,sum(bet_amount) as bet_amount," \
+                  f"sum(case when `status` not in (3,5) then bet_amount end) as effective_amount,COUNT(1) as total,sum(handicap_final_win_or_lose) as win_or_lose,sum(if(status != 6," \
+                  f"ROUND((level3_retreat_proportion*bet_amount),2),0)) backwater FROM ( SELECT DISTINCT a.*,DATE_FORMAT( any_value(a.award_time), '%Y-%m-%d' ) as bet_time FROM " \
+                  f"{table_name1} a JOIN {table_name2} b ON a.user_id = b.id WHERE a.`status` in (2,3,5) and b.account = '{username}' ) a GROUP BY any_value(bet_time) ORDER BY any_value(bet_time) " \
+                  f"DESC ) b ON a.`day` = b.bet_time WHERE a.`day` BETWEEN '{ctime}' AND '{etime}' ORDER BY a.`day` DESC"
+        rtn = list(self.query_data(sql_str, database_name))
+
+        accountHistoryStatistics = []
+        for item in rtn:
+            match_time = item[0]
+            matchTime = match_time.strftime("%Y-%m-%d")  # 将datetime格式转成字符串
+            accountHistoryStatistics.append((matchTime, item[1], item[2], item[3], item[4]))
+
+        return accountHistoryStatistics
 
 
 
@@ -5775,8 +5805,8 @@ if __name__ == "__main__":
 
     # agent_id = mysql.get_credit_agent_accountId_sql(account='LiLiyang3333')
     # user_id = mysql.get_credit_user_accountId_sql(account='aliSkytest01')
-
-
+    account = mysql.get_accountHistoryStatistics_sql(username='BTeTestuser002')
+    print(account)
 
                                                                               # 【反波胆-客户端】
 
@@ -5789,5 +5819,5 @@ if __name__ == "__main__":
 
     # data = mysql.get_proxy_members(user='testuser002')
     # data1 = mysql.get_dict_value_member(dict_f=data, user='testuser002')
-    data = mysql.get_userAgent_commission(user_name='testuser0041', owner_account='TestAgent01')
-    print(data)
+    # data = mysql.get_userAgent_commission(user_name='testuser0041', owner_account='TestAgent01')
+    # print(data)
