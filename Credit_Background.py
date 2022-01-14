@@ -1588,6 +1588,7 @@ if __name__ == "__main__":
     # sports_report = bg.credit_sportsReport_query(Authorization=login_loken, starttime='', endtime='',sportName='', queryType=1)    # 总台-报表管理-体育项盈亏
     # rebate_report = bg.credit_rebateReport_query(Authorization=login_loken, starttime='', endtime='', queryType=2)   # 总台-报表管理-返水报表
 
+    # 后台注册会员
     for uname in range(1,2):
         accountName = ("Testnum0" + str(uname))
         username = ("测试账号0" + str(uname))
