@@ -153,6 +153,12 @@ class CommonFunc(object):
             return now.strftime("%Y-%m-%dT00:00:00+07:00")
         elif time_type == "end":
             return now.strftime("%Y-%m-%dT23:59:59+07:00")
+        elif time_type == "start_time":
+            return now.strftime("%Y-%m-%d 00:00:00")
+        elif time_type == "end_time":
+            return now.strftime("%Y-%m-%d 23:59:59")
+        elif time_type == "ctime":
+            return now.strftime("%Y-%m-%d")
         else:
             raise AssertionError("【ERR】传参错误")
 
