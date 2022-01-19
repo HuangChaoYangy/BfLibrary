@@ -1,5 +1,5 @@
 import json
-
+import threading
 import arrow
 import re
 import time
@@ -63,6 +63,12 @@ class H5_Credit_Client(object):
             return now.strftime("%Y-%m-%dT23:59:59+07:00")
         elif time_type == "current":
             return now.strftime("%Y-%m-%d")
+        elif time_type == "start_time":
+            return now.strftime("%Y-%m-%d 00:00:00")
+        elif time_type == "end_time":
+            return now.strftime("%Y-%m-%d 23:59:59")
+        elif time_type == "ctime":
+            return now.strftime("%Y-%m-%d")
         else:
             raise AssertionError("【ERR】传参错误")
 
@@ -108,10 +114,11 @@ class H5_Credit_Client(object):
         data = {"userName":username, "password":self.get_md5(password),"loginUrl":loginUrl}
 
         rsp = self.session.post(url, json=data, headers=head)
+        # print(rsp.json())
         if rsp.json()['message'] != "OK":
             return "查询赛事列表失败,原因：" + rsp.json()["message"]
         else:
-            self.Authorization = rsp.json()['data']['token']
+            self.Authorization = rsp.json()['data']['data']['accessCode']
 
             return self.Authorization
 
@@ -139,7 +146,7 @@ class H5_Credit_Client(object):
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Connection": "keep-alive",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"}
-
+        # print(event_type)
         if event_type == "INPLAY":
             data = {"highlight": "false",
                     "limit": 1000,  # "limit":前端给后端传的参数,数字是几就是前端向后端请求几个比赛数量
@@ -558,7 +565,7 @@ class H5_Credit_Client(object):
             sub_order_no_list = []
             loop = 1
             for outcomeid in selection_list:
-                bet_amount = random.randint(10, 1000)
+                bet_amount = random.randint(10, 100)
                 mixedNum = "1_1_0_%s" % (str(bet_amount))
                 data = {"mixedNum": [mixedNum],
                         "betId": 1632573273553,
@@ -567,6 +574,7 @@ class H5_Credit_Client(object):
                         "selections": [outcomeid],
                         "oddsChangeType": odds_type,
                         "terminal": "pc"}
+                # print(data)
                 rsp = self.session.post(url, json=data, headers=head)
                 if rsp.json()['message'] != "OK":
                     print("投注失败,原因：" + rsp.json()["message"])
@@ -583,7 +591,7 @@ class H5_Credit_Client(object):
                         sub_order_no_list.append(str(sub_order_no))
                         print("投注成功：" + str(sub_order_no))
                     else:
-                        print("ERR: 投注失败")
+                        print("ERR: 投注失败" + rsp.json()["message"])
                     print("总共【%d】个投注项，已投注【%d】个投注项，还剩【%d】个投注项" % (run_loop, loop, run_loop - loop))
                     loop += 1
             print('注单号列表: %s' % (sub_order_no_list))
@@ -631,13 +639,13 @@ class H5_Credit_Client(object):
                     sub_order_no = rsp.json()['data']['orderNo']
                     content = self.cm.write_to_local_file(content=f"{sub_order_no}\n",
                                                           file_name='C:/Users/USER/Desktop/test.txt', mode='a',
-                                                          )
+                                                            )
                     time.sleep(3)
                     if sub_order_no:
                         sub_order_no_list.append(str(sub_order_no))
                         print("投注成功：" + str(sub_order_no))
                     else:
-                        print("ERR: 投注失败")
+                        print("ERR: 投注失败" + rsp.json()["message"])
                     print("总共【%d】个投注项，已投注【%d】个投注项，还剩【%d】个投注项" % (randomNum, loop, randomNum - loop))
                     loop += 1
             print('注单号列表: %s' % (sub_order_no_list))
@@ -722,7 +730,7 @@ class H5_Credit_Client(object):
                         sub_order_no_list.append(str(sub_order_no))
                         print("投注成功：" + str(sub_order_no))
                     else:
-                        print("ERR: 投注失败")
+                        print("ERR: 投注失败" + rsp.json()["message"])
                     loop += 1
             print('注单号列表: %s' % (sub_order_no_list))
 
@@ -792,7 +800,7 @@ class H5_Credit_Client(object):
                             sub_order_no_list.append(str(sub_order_no))
                             print("投注成功：" + str(sub_order_no))
                         else:
-                            print("ERR: 投注失败")
+                            print("ERR: 投注失败" + rsp.json()["message"])
                     loop += 1
                 print('注单号列表: %s' % (sub_order_no_list))
 
@@ -823,7 +831,7 @@ class H5_Credit_Client(object):
         outcome_info_list = []
         match_info_list = self.get_pc_match_list(sport_name, token, event_type=event_type, odds_type=odds_type)[0]
         [outcome_info_list.append(self.get_match_all_outcome(item, token, sport_name, odds_Type=odds_type)) for item in match_info_list]
-        # print(outcome_info_list[0])   # 打印第一场比赛的盘口投注信息
+        # print(outcome_info_list[0])  # 打印第一场比赛的盘口投注信息
 
         if complex == 'single':
             for item in outcome_info_list:  # 在outcome_list循环，去除列表为空的元素
@@ -1324,6 +1332,38 @@ class H5_Credit_Client(object):
             print(earlyMachList)
 
 
+    def get_accountHistoryStatistics(self, token, starttime='-30', endtime='0'):
+        '''
+        获取信用网-已结算注单外层统计
+        :param token:
+        :param starttime:
+        :param endtime:
+        :return:
+        '''
+        ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(starttime))
+        etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(endtime))
+        url = self.auth_url + ":6210/creditPCOrder/accountHistoryStatistics"
+        head = {"Accept-Encoding": "gzip, deflate",
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Connection": "keep-alive",
+                "accessCode": token,
+                "lang": "ZH",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                              "Chrome/85.0.4183.102 Safari/537.36"}
+        data = {"createDay": ctime, "endDay": etime }
+        rsp = self.session.post(url, headers=head, json=data)
+        # print(rsp.json()['data'])
+        if rsp.json()['message'] != "OK":
+            print("查询已结算注单数据失败,原因：" + rsp.json()["message"])
+
+        accountHistoryStatistics = []
+        for item in rsp.json()['data']:
+            accountHistoryStatistics.append((item['date'], item['betAmount'], item['effectiveAmount'],
+                                             item['backwaterAmount'], item['profitAmount']))
+
+        return accountHistoryStatistics
+
+
 
 
 if __name__ == "__main__":
@@ -1332,19 +1372,32 @@ if __name__ == "__main__":
     mongo_info = ['app', '123456', '192.168.10.120', '27017']
     bf = H5_Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['9ca18ea188b3476c90addf305c8ce1ff','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
+    token_list = ['0fef0e0527e24963a93e9d885e286737','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
 
-    thread_num = 1
+
     # outcome = bf.get_match_all_outcomes(match_id='sr:match:28781318', token=token_list[0], sport_name='足球', odds_Type=1) # 获取所有玩法
     # match_id_list = bf.get_pc_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     # print(match_id_list)
 
+    # 多线程模拟多用户进行投注
+    # user_list = ['Testuser001','Testuser002']
+    # for user in user_list:
+    #     thread_num = len(user_list)
+    #     token = bf.login_client(username=user, password='Bfty123456')
+    #     print(f'当前投注账号为 {user}')
+    #     # tuple_parameter = ("sr:match:31625947","排球", f'{token}')     # 单注的入参
+    #     tuple_parameter = ("排球", f'{token}', 5, 'EARLY')          # 非复式串关投注的入参
+    #     sub_thread = threading.Thread(target=bf.submit_all_outcomes, args=tuple_parameter )          #创建线程,target为线程执行的目标方法
+    #     sub_thread.start()          # 通过start()方法手动来启动线程
+
+
+
     # 单注
-    # bf.submit_all_outcome(match_id="sr:match:28809090", sport_name='足球', token=token_list[0], odds_type=1, IsRandom='')
+    bf.submit_all_outcome(match_id="sr:match:29510888", sport_name='篮球', token=token_list[0], odds_type=1, IsRandom='')
     # 非复式串关投注
-    # bf.submit_all_outcomes(sport_name='排球', token=token_list[0], bet_type=3, event_type='TODAY', IsRandom='')
+    # bf.submit_all_outcomes(sport_name='篮球', token=token_list[0], bet_type=3, event_type='TODAY', IsRandom='')
     # 复式串关投注
-    bf.submit_all_complex(sport_name='足球', token=token_list[0], bet_type=6, event_type='EARLY', odds_type=1, oddsChangeType=1, complex='multi', complex_number=2)
+    # bf.submit_all_complex(sport_name='足球', token=token_list[0], bet_type=5, event_type='TODAY', odds_type=1, oddsChangeType=1, complex='multi', complex_number=3)
     # balance = bf.get_balance(token=token_list[0])
     # print(balance)
 
@@ -1361,3 +1414,7 @@ if __name__ == "__main__":
 
     # match_result = bf.get_h5_credit_match_result(token=token_list[0], sportName='篮球', offset='-1')      # 信用网-h5端,新赛果查询
     # searchName = bf.get_search_matchName_list(token=token_list[0], sport_name='足球', teamName='蒂安')
+
+
+    # settled = bf.get_accountHistoryStatistics(token=token_list[0])
+    # print(settled)
