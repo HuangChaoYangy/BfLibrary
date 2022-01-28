@@ -421,7 +421,7 @@ class H5_BfClient(object):
             for Odds_list in originalOdds_list:
                 outcomes_odds_list = []
                 for originalodds in Odds_list:
-                    reg = re.search(r"_(\d+?)_", originalodds[0])      # originalodds = ['sr:match:28828430_1__1', 2.24]
+                    reg = re.search(r"_(\d+?)_", originalodds[0])      # originalodds = ['sr:match:28828430_1__1', 2.24],从originalodds[0]的第一个元素sr:match:28828430_1__1中获取盘口id
                     market_id = int(reg.group(1))
                     if int(market_id) in marketId_no_change:                  # 切换盘口类型,赔率不会变,即欧赔
                         if originalodds[1] < minimum_uk_odds:

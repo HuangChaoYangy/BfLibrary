@@ -337,7 +337,7 @@ class DbDetialQuery(object):
         查询比赛状态为closed，数据库没有比分的比赛
         :return:
         '''
-        # match_id_list = self.get_match_status_sql()[0]
+        match_id_list = self.get_match_status_sql()[0]
         match_id_list = ['sr:match:28227102']
 
         match_list = []

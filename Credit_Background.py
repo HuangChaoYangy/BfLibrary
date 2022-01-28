@@ -1589,12 +1589,12 @@ if __name__ == "__main__":
     # rebate_report = bg.credit_rebateReport_query(Authorization=login_loken, starttime='', endtime='', queryType=2)   # 总台-报表管理-返水报表
 
     # 后台注册会员
-    for uname in range(1,2):
-        accountName = ("Testnum0" + str(uname))
+    for uname in range(7,8):
+        accountName = ("Testuser00" + str(uname))
         username = ("测试账号0" + str(uname))
         percentage = random.randint(7,21)
         handicaptype = random.choice(['A','B','C','D'])
-        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE0NzI4MjA4MTM4NzM5MTM4NTgiLCJleHAiOjE2NDIwNzA1NTIsInVzZXJuYW1lIjoiVGVUZXN0QWdlbnQzMyJ9.MPGfXBqKn3oL7iJb90FcgpVc9fUSGShHw_IZ8I0DruM'
-        register = bg.user_register(token= token,account=accountName, name=username, password='Bfty123456', creditsAmount=10000, Percentage=percentage, handicapType=handicaptype)
+        token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE0NzI4NDkwODAzMzcxNDU4NTgiLCJleHAiOjE2NDMwMDg3MTgsInVzZXJuYW1lIjoiVGV0ZXN0QWRtaW4wMSJ9.QiKUv2pP1aehbJ08gUaGVydWoHWKnCtsmUvKHvupTpg'
+        register = bg.user_register(token= token,account=accountName, name=username, password='Bfty123456', creditsAmount=100000, Percentage=percentage, handicapType=handicaptype)
 
         content =bg.cm.write_to_local_file(content=f"{accountName}\n",file_name='C:/Users/USER/Desktop/balance.txt', mode='a',)

@@ -7,10 +7,11 @@ import random
 import arrow
 import requests
 import hashlib
+from concurrent.futures import ThreadPoolExecutor
 
 try:
     from MongoFunc import MongoFunc, DbQuery
-    from MysqlFunc import MysqlFunc
+    from MysqlFunc import MysqlFunc,MysqlQuery
     from CommonFunc import CommonFunc
     from H5_BfClient import H5_BfClient
 except ModuleNotFoundError:
@@ -19,7 +20,7 @@ except ModuleNotFoundError:
     from .CommonFunc import CommonFunc
 except ImportError:
     from .MongoFunc import MongoFunc, DbQuery
-    from .MysqlFunc import MysqlFunc
+    from .MysqlFunc import MysqlFunc,MysqlQuery
     from .CommonFunc import CommonFunc
     from .H5_BfClient import H5_BfClient
 
@@ -32,8 +33,10 @@ class H5_Credit_Client(object):
                              "羽毛球": "sr:sport:31", "乒乓球": "sr:sport:20",
                              "棒球": "sr:sport:3", "斯诺克": "sr:sport:19", "冰上曲棍球": "sr:sport:4"}
         self.auth_url = 'http://192.168.10.120'
+        self.local_url = 'http://192.168.10.196'
         self.session = requests.session()
         self.ms = MysqlFunc(mysql_info, mongo_info, merchant_url)
+        self.my = MysqlQuery(mysql_info, mongo_info)
         self.mg = MongoFunc(mongo_info)
         self.db = DbQuery(mongo_info, merchant_url)
         self.bfh5 = H5_BfClient(mysql_info, mongo_info)
@@ -539,6 +542,7 @@ class H5_Credit_Client(object):
         :return:
         '''
         url = self.auth_url + ":6210/creditBet/mobileSubmit"
+        local_url = self.local_url + ":8095/creditBet/mobileSubmit"
         head = {"accessCode": token,
                 "Accept-Encoding": "gzip, deflate",
                 "Accept-Language": "zh-CN,zh;q=0.9",
@@ -556,8 +560,9 @@ class H5_Credit_Client(object):
                 odds = round(outcome[1]['odds'] * 0.9, 2)  # 获取来的赔率乘0.85,四舍五入保留2位小数   保证下注成功率
                 oddsType = outcome[1]['oddsType']
                 outcomeId = outcome[1]['outcome_id']
+                credit_impairment = 0.05
                 selection_list.append({"isLive": islive,
-                                       "creditOdds": odds,
+                                       "creditOdds": odds - credit_impairment,
                                        "originalOdds": odds,
                                        "oddsType": oddsType,
                                        "outcomeId": outcomeId})
@@ -612,8 +617,9 @@ class H5_Credit_Client(object):
                 odds = round(outcome[1]['odds'] * 0.9, 2)  # 获取来的赔率乘0.85,四舍五入保留2位小数   保证下注成功率
                 oddsType = outcome[1]['oddsType']
                 outcomeId = outcome[1]['outcome_id']
+                credit_impairment = 0.05
                 selection_list.append({"isLive": islive,
-                                       "creditOdds": odds,
+                                       "creditOdds": odds - credit_impairment,
                                        "originalOdds": odds,
                                        "oddsType": oddsType,
                                        "outcomeId": outcomeId})
@@ -663,6 +669,7 @@ class H5_Credit_Client(object):
         :return:
         '''
         url = self.auth_url + ":6210/creditBet/mobileSubmit"
+        local_url = self.local_url + ":8095/creditBet/mobileSubmit"
         head = {"accessCode": token,
                 "Accept-Encoding": "gzip, deflate",
                 "Accept-Language": "zh-CN,zh;q=0.9",
@@ -819,6 +826,7 @@ class H5_Credit_Client(object):
         :return:
         '''
         url = self.auth_url + ":6210/creditBet/mobileSubmit"
+        local_url = self.local_url + ":8095/creditBet/submit"
         head = {"accessCode": token,
                 "Accept-Encoding": "gzip, deflate",
                 "Accept-Language": "zh-CN,zh;q=0.9",
@@ -906,6 +914,7 @@ class H5_Credit_Client(object):
                         "oddsChangeType": oddsChangeType,
                         "selections": selection_list,
                         "terminal": "pc"}
+                # print(data)
                 rsp = self.session.post(url, json=data, headers=head)
 
                 if rsp.json()['message'] != "OK":
@@ -973,9 +982,9 @@ class H5_Credit_Client(object):
                         "oddsChangeType": oddsChangeType,
                         "selections": selection_list,
                         "terminal": "pc"}
-                rsp = self.session.post(url, json=data, headers=head)
-                # print(rsp.json())
-
+                # print(data)
+                rsp = self.session.post(local_url, json=data, headers=head)
+                print(local_url)
                 if rsp.json()['message'] != "OK":
                     print("投注失败,原因：" + rsp.json()["message"])
                 elif not rsp.json():
@@ -1332,6 +1341,35 @@ class H5_Credit_Client(object):
             print(earlyMachList)
 
 
+    def get_userAmount(self, token):
+        '''
+        获取会员的账户余额
+        :param token:
+        :return:
+        '''
+        url = self.auth_url + ":6210/creditUser/getUserAmount"
+        head = {"Accept-Encoding": "gzip, deflate",
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Connection": "keep-alive",
+                "accessCode": token,
+                "lang": "ZH",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                              "Chrome/85.0.4183.102 Safari/537.36"}
+        param = {}
+        rsp = self.session.get(url, headers=head, params=param)
+        # print(rsp.json()['data'])
+        if rsp.json()['message'] != "OK":
+            print("查询账户余额失败,原因：" + rsp.json()["message"])
+        balance = rsp.json()['data']
+        balance_list = []
+        balance_list.extend([str(balance['balance']), str(balance['winLoseAmount']), str(balance['frozenAmount']), str(balance['creditsAmount'])])
+        balance_sql = self.my.get_userAmount_sql(username='Testuser004')
+
+        check = self.cm.list_data_should_be_equal(balance_list, balance_sql)
+
+        return balance_list
+
+
     def get_accountHistoryStatistics(self, token, starttime='-30', endtime='0'):
         '''
         获取信用网-已结算注单外层统计
@@ -1364,6 +1402,8 @@ class H5_Credit_Client(object):
         return accountHistoryStatistics
 
 
+    def threading_pool(self):
+        return None
 
 
 if __name__ == "__main__":
@@ -1372,32 +1412,46 @@ if __name__ == "__main__":
     mongo_info = ['app', '123456', '192.168.10.120', '27017']
     bf = H5_Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['0fef0e0527e24963a93e9d885e286737','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
+    token_list = ['56a2da26313340d686f3d2712e97e474','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
 
 
     # outcome = bf.get_match_all_outcomes(match_id='sr:match:28781318', token=token_list[0], sport_name='足球', odds_Type=1) # 获取所有玩法
     # match_id_list = bf.get_pc_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     # print(match_id_list)
 
-    # 多线程模拟多用户进行投注
+    # token = bf.login_client(username='Testuser004', password='Bfty123456')
+    # amount = bf.get_userAmount(token=token)
+    # print(amount)
+
+    # 新增多线程-模拟多用户进行投注
     # user_list = ['Testuser001','Testuser002']
     # for user in user_list:
     #     thread_num = len(user_list)
     #     token = bf.login_client(username=user, password='Bfty123456')
     #     print(f'当前投注账号为 {user}')
-    #     # tuple_parameter = ("sr:match:31625947","排球", f'{token}')     # 单注的入参
-    #     tuple_parameter = ("排球", f'{token}', 5, 'EARLY')          # 非复式串关投注的入参
-    #     sub_thread = threading.Thread(target=bf.submit_all_outcomes, args=tuple_parameter )          #创建线程,target为线程执行的目标方法
-    #     sub_thread.start()          # 通过start()方法手动来启动线程
-
-
+    #     # tuple_parameter = ("sr:match:31625947","排球", f'{token}', 1)     # 单注的入参
+    #     # tuple_parameter = ("排球", f'{token}', 5, 'EARLY')          # 非复式串关投注的入参
+    #     # sub_thread = threading.Thread(target=bf.submit_all_outcomes, args=tuple_parameter )          #创建线程,target为线程执行的目标方法
+    #     # sub_thread.start()          # 通过start()方法手动来启动线程
+    #
+    #     with ThreadPoolExecutor(max_workers=5) as task:            # 创建一个最大容纳数量为5的线程池
+    #         for item in range(thread_num):
+    #             tuple_parameter = ("sr:match:31627905", "乒乓球", f'{token}', 1)
+    #             dict_parameter = {'match_id':'sr:match:31627905', 'token':f'{token}', 'sport_name':'乒乓球'}
+    #             sub_thread1 = task.submit(bf.submit_all_outcome, *tuple_parameter)
+    #             # print(f"task1: {sub_thread1.done()}")
+    #             # time.sleep(3)
+    #             # print(sub_thread1.result())
+    #             # time.sleep(3)
+    #             # task.shutdown()
+    #     print(f"task1: {sub_thread1.done()}")
 
     # 单注
-    bf.submit_all_outcome(match_id="sr:match:29510888", sport_name='篮球', token=token_list[0], odds_type=1, IsRandom='')
+    bf.submit_all_outcome(match_id="sr:match:29507810", sport_name='篮球', token=token_list[0], odds_type=1, IsRandom='')
     # 非复式串关投注
     # bf.submit_all_outcomes(sport_name='篮球', token=token_list[0], bet_type=3, event_type='TODAY', IsRandom='')
     # 复式串关投注
-    # bf.submit_all_complex(sport_name='足球', token=token_list[0], bet_type=5, event_type='TODAY', odds_type=1, oddsChangeType=1, complex='multi', complex_number=3)
+    # bf.submit_all_complex(sport_name='排球', token=token_list[0], bet_type=6, event_type='TODAY', odds_type=1, oddsChangeType=1, complex='multi', complex_number=3)
     # balance = bf.get_balance(token=token_list[0])
     # print(balance)
 
@@ -1409,8 +1463,8 @@ if __name__ == "__main__":
     # outcome_detail = bf.get_match_all_outcomes_detail(token=token_list[0],sport_name='网球',event_type="INPLAY", sort=1, odds_type=1)              # 检测比赛下注项数量是否一致
     # tournament = bf.get_choose_tourment_list(sport_name='足球', token=token_list[0], matchCategory="today", highlight="false")     # 选择联赛列表数量是否一致
 
-    # credits_odds = bf.get_credit_outcomes_odds(token=token_list[0], sport_name='冰上曲棍球', event_type="EARLY", sort=1, odds_type=2)         # 获取接口中ABCD盘口的信用网赔率
-    # check_odds = bf.check_credit_outcomes_odds(token=token_list[0], sport_name='冰上曲棍球', event_type="EARLY", sort=1, odds_type=2)  # 验证ABCD盘口的信用网赔率
+    credits_odds = bf.get_credit_outcomes_odds(token=token_list[0], sport_name='冰上曲棍球', event_type="EARLY", sort=1, odds_type=2)         # 获取接口中ABCD盘口的信用网赔率
+    check_odds = bf.check_credit_outcomes_odds(token=token_list[0], sport_name='冰上曲棍球', event_type="EARLY", sort=1, odds_type=2)  # 验证ABCD盘口的信用网赔率
 
     # match_result = bf.get_h5_credit_match_result(token=token_list[0], sportName='篮球', offset='-1')      # 信用网-h5端,新赛果查询
     # searchName = bf.get_search_matchName_list(token=token_list[0], sport_name='足球', teamName='蒂安')

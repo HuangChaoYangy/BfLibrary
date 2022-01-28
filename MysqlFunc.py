@@ -17,6 +17,16 @@ class MysqlFunc(object):
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
     def __init__(self, mysql_info, mongo_info, *args, **kwargs):
+        '''
+        使用connect创建连接对象
+        connect.cursor创建游标对象，SQL语句的执行基本都在游标上进行
+        cursor.executeXXX方法执行SQL语句，cursor.fetchXXX获取查询结果等
+        调用close方法关闭游标cursor和数据库连接
+        :param mysql_info:
+        :param mongo_info:
+        :param args:
+        :param kwargs:
+        '''
         self.connect = pymysql.connect(host=mysql_info[0], user=mysql_info[1], password=mysql_info[2],
                                        database='business_order', charset='utf8',
                                        port=int(mysql_info[3]), autocommit=True)
@@ -114,12 +124,15 @@ class MysqlQuery(MysqlFunc):
                     "乒乓球": 6,
                     "棒球": 7,
                     "冰上曲棍球": 100}
-
+    # 如果在子类中定义构造方法(等同于重写第一个直接父类的构造方法), 则必须在该方法中调用父类的构造方法
     def __init__(self, mysql_info, mongo_info, *args, **kwargs):
         self.cf = CommonFunc()
         self.mg = MongoFunc(mongo_info)
         self.db = DbQuery(mongo_info)
-        super().__init__(mysql_info, mongo_info, *args, **kwargs)
+
+        # 子类中的构造方法中,调用父类构造方法的方式有 2 种
+        super().__init__(mysql_info, mongo_info, *args, **kwargs)          # 使用 super() 函数
+        # MysqlFunc.__init__(self, mysql_info, mongo_info, *args, **kwargs)  # 使用未绑定方法,即在类的外部调用其中的实例方法,可以向调用普通函数那样,只不过需要额外备注类名
 
     @staticmethod
     def get_current_time_for_client(time_type="now", day_diff=0):
@@ -4090,7 +4103,7 @@ class MysqlQuery(MysqlFunc):
         :return:
         '''
         current_time = self.get_current_time_for_client(time_type='begin', day_diff=-1)
-        print(current_time)
+        # print(current_time)
         sql = "SELECT match_id,match_start_time FROM (SELECT DISTINCT a.*,b.match_id,b.merchant_name as mer_name FROM biz_order a JOIN biz_order_detail b ON a.order_no = b.order_no WHERE " \
               "a.STATUS IN (2, 3) AND a.create_time > '%s') a GROUP BY match_id" % (current_time)
         order_data = list(self.query_data(sql, db_name="business_order"))
@@ -4363,6 +4376,25 @@ class MysqlQuery(MysqlFunc):
 
 
                                                                             #  【信用网】
+    def get_userAmount_sql(self, username):
+        '''
+        获取会员的账户余额sql
+        :param username:
+        :return:
+        '''
+        database_name = 'bfty_credit'
+        sql_str = f"select cast(h.balance as char) as '投注额度',cast((sum(if(g.order_no in (select order_no from o_account_order where order_no in (select order_no from u_user_report a join u_user b " \
+                  f"on a.user_id=b.id where b.login_account='{username}' and a.payment_status=0)) and g.status=2,handicap_final_win_or_lose,0))) as char) as '输赢',cast(sum(if(g.status in (1)," \
+                  f"bet_amount,0)) as char) as '未结算额度',cast(f.credits_amount as char) as '信用额度' from u_user a join m_account b on a.proxy0_id = b.id join m_account c on a.proxy1_id = c.id join " \
+                  f"m_account d on a.proxy2_id = d.id join m_account e on a.proxy3_id = e.id join u_user_balance f on a.id=f.user_id join u_user_balance h on a.id=h.user_id left join " \
+                  f"o_account_order g on a.id=g.user_id where a.login_account='{username}' group by a.id"
+        print(sql_str)
+        rtn = list(self.query_data(sql_str, database_name))
+        balance_list = []
+        for item in rtn:
+            balance_list.extend((item[0], item[1], item[2], item[3]))
+
+        return balance_list
 
 
     def get_accountHistoryStatistics_sql(self, username, starttime='-30', endtime='0'):
@@ -5805,8 +5837,10 @@ if __name__ == "__main__":
 
     # agent_id = mysql.get_credit_agent_accountId_sql(account='LiLiyang3333')
     # user_id = mysql.get_credit_user_accountId_sql(account='aliSkytest01')
-    account = mysql.get_accountHistoryStatistics_sql(username='BTeTestuser002')
-    print(account)
+    # account = mysql.get_accountHistoryStatistics_sql(username='BTeTestuser002')
+
+    balance = mysql.get_userAmount_sql(username='Testuser004')
+    print(balance)
 
                                                                               # 【反波胆-客户端】
 

@@ -485,9 +485,8 @@ class DbQuery(object):
                     match_id_list.append(matchId)
                 live_match_num = len(new_match_list)
                 print('体育名称【%s】,赛事类型【%s】,总共有【%d】比赛' % (sport_name, Categrory[matchCategory], live_match_num))
-
-                for item in new_match_list:
-                    print(item)
+                # for item in new_match_list:
+                #     print(item)
 
                 return live_match_num, match_id_list
 
@@ -1628,7 +1627,7 @@ class DbQuery(object):
 
         if matchCategory == "inplay":
             match_id_list = \
-            self.get_live_match_data_sql(sport_name=sport_name, highlight=highlight, matchCategory=matchCategory)[1]
+            self.get_live_match_data_sql(sport_name=sport_name, highlight=highlight, matchCategory=matchCategory)[0]
 
             outcomeInfo = {}
             for matchId in match_id_list[:1]:
@@ -1680,7 +1679,7 @@ class DbQuery(object):
                 1]
 
             outcomeInfo = {}
-            for matchId in match_id_list[:1]:
+            for matchId in match_id_list:
 
                 enable_outcome_num = 0
                 select_dic = {"_id": 1, "markets": 1}
@@ -1717,7 +1716,7 @@ class DbQuery(object):
 
                         if period_number_list:  # 如果 period_number_list 不为空
 
-                            print(period_number_list)
+                            # print(period_number_list)
                             for item in enable_specifier_dic[period_number_list[0]]:
                                 for outcome in specifier['outComes']:
                                     if item['isActive'] == True:
@@ -5260,8 +5259,8 @@ if __name__ == "__main__":
     # sportCategoryId = db.get_sportCategoryId_sql(sportName='足球')
     # tournamentId = db.get_tournamentId_sql(tournamentName='德国超级杯')
 
-    for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
-        live_match_data = db.get_live_match_data_sql(sport_name=sport_name, sort=1 )
+    # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
+    live_match_data = db.get_live_match_data_sql(sport_name='足球', sort=1 )[0]
         # today_match_data = db.get_today_match_data_sql(sport_name=sport_name, sort=1)
         # early_match_data = db.get_early_match_data_sql(sport_name=sport_name, sort=1, dateOff=0)
     # parlay_match_data = db.get_parlay_match_data_sql(sport_name=sport_name)
@@ -5272,7 +5271,7 @@ if __name__ == "__main__":
     # data = db.get_choose_tournament_sql(sport_name="篮球", highlight="false", matchCategory='inplay')           # 获取选择联赛列表
     # data = db.get_tournament_and_match_number_sql(sport_name="足球", matchCategory='today')          # 获取联赛数量以及联赛下的比赛数量
     # data = db.get_match_outcomes_detail_sql(sport_name="排球", highlight="false", matchCategory='today')            # 获取比赛所有投注项数量
-    # odds = db.get_match_outcomes_odds_sql(sport_name="足球", highlight="false", matchCategory='today')            # 获取比赛所有投注项赔率
+    odds = db.get_match_outcomes_odds_sql(sport_name="足球", highlight="false", matchCategory='today')            # 获取比赛所有投注项赔率
     # data = db.get_all_specifier_markets(sport_name="足球", sort=1)
 
     # match_result = db.Bfclient_match_result_sql(sportId='1')        # 获取客户端赛果查询
