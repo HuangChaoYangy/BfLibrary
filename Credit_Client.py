@@ -100,6 +100,38 @@ class H5_Credit_Client(object):
 
         return md5.hexdigest()
 
+
+    def login(self, inData, mode=True):
+        '''
+        登录客户端,用于接口自动化测试
+        :param inData:
+        :param mode:
+        :return:
+        '''
+        url = self.auth_url + ':6210/creditUser/creditUserLogIn'
+        head = {
+            "Accept-Encoding": "gzip, deflate",
+            "Accept-Language": "zh-CN,zh;q=0.9",
+            "Connection": "keep-alive",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                          "Chrome/85.0.4183.102 Safari/537.36"}
+
+        data = json.loads(inData)              # 将请求参数转换成字典格式
+        data['password'] = self.get_md5(data['password'])
+        # print(data)
+        for loop in range(3):
+            try:
+                rsp = self.session.post(url, headers=head, json=data)
+
+                if mode == True:
+                    self.Authorization = rsp.json()['data']['token']
+                    return self.Authorization
+                else:
+                    return rsp.json()
+            except ConnectionError:
+                time.sleep(2)
+                continue
+
     def login_client(self, username, password):
         '''
         信用网-客户端登录
@@ -1420,6 +1452,8 @@ if __name__ == "__main__":
     # print(match_id_list)
 
     # token = bf.login_client(username='Testuser004', password='Bfty123456')
+    token =bf.login(inData=1)
+    print(token)
     # amount = bf.get_userAmount(token=token)
     # print(amount)
 
@@ -1447,7 +1481,7 @@ if __name__ == "__main__":
     #     print(f"task1: {sub_thread1.done()}")
 
     # 单注
-    bf.submit_all_outcome(match_id="sr:match:29507810", sport_name='篮球', token=token_list[0], odds_type=1, IsRandom='')
+    # bf.submit_all_outcome(match_id="sr:match:29507810", sport_name='篮球', token=token_list[0], odds_type=1, IsRandom='')
     # 非复式串关投注
     # bf.submit_all_outcomes(sport_name='篮球', token=token_list[0], bet_type=3, event_type='TODAY', IsRandom='')
     # 复式串关投注
@@ -1463,8 +1497,8 @@ if __name__ == "__main__":
     # outcome_detail = bf.get_match_all_outcomes_detail(token=token_list[0],sport_name='网球',event_type="INPLAY", sort=1, odds_type=1)              # 检测比赛下注项数量是否一致
     # tournament = bf.get_choose_tourment_list(sport_name='足球', token=token_list[0], matchCategory="today", highlight="false")     # 选择联赛列表数量是否一致
 
-    credits_odds = bf.get_credit_outcomes_odds(token=token_list[0], sport_name='冰上曲棍球', event_type="EARLY", sort=1, odds_type=2)         # 获取接口中ABCD盘口的信用网赔率
-    check_odds = bf.check_credit_outcomes_odds(token=token_list[0], sport_name='冰上曲棍球', event_type="EARLY", sort=1, odds_type=2)  # 验证ABCD盘口的信用网赔率
+    # credits_odds = bf.get_credit_outcomes_odds(token=token_list[0], sport_name='冰上曲棍球', event_type="EARLY", sort=1, odds_type=2)         # 获取接口中ABCD盘口的信用网赔率
+    # check_odds = bf.check_credit_outcomes_odds(token=token_list[0], sport_name='冰上曲棍球', event_type="EARLY", sort=1, odds_type=2)  # 验证ABCD盘口的信用网赔率
 
     # match_result = bf.get_h5_credit_match_result(token=token_list[0], sportName='篮球', offset='-1')      # 信用网-h5端,新赛果查询
     # searchName = bf.get_search_matchName_list(token=token_list[0], sport_name='足球', teamName='蒂安')
