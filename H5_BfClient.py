@@ -380,25 +380,49 @@ class H5_BfClient(object):
             raise AssertionError('传入参数错误,请检查传入的参数')
 
 
-    def query_credit_outcomes_odds(self, token, sport_name, event_type="INPLAY", sort=1, odds_type=1):
+    def query_credit_outcomes_odds(self, token, sport_name, handicap_type='A', event_type="INPLAY", sort=1, odds_type=1):
         '''
-        通过现金网获取的赔率来计算信用网赔率              /// 修改于2021.09.16
+        通过现金网获取的赔率来计算信用网赔率              /// 修改于2022.02.21
         :param token:
         :param sport_name:
+        :param handicap_type:  需人工判断 该会员是属于ABCD哪类盘口
         :param event_type:
         :param sort:
-        :param odds_type:
+        :param odds_type: 1 欧洲盘   2 香港盘
         :return:
         '''
-        originalOdds_list = self.get_cash_outcomes_odds(token=token, sport_name=sport_name, event_type=event_type, sort=sort, odds_type=odds_type)
-        # print(originalOdds_list)
+        originalOdds_list = self.get_cash_outcomes_odds(token=token, sport_name=sport_name, event_type=event_type, sort=sort, odds_type=odds_type)     # 首先查询会员是属于ABCD哪类盘口
+        print(originalOdds_list[0])
         marketId_no_change = [1, 60, 45, 81, 25, 21, 71, 29, 75, 26, 74, 8, 47, 15, 10, 31, 32, 33, 34, 37, 35, 36, 146, 52, 56, 57, 547, 546, 48, 49, 50, 51, 172, 163,
                               164, 175, 137, 2, 3, 113, 119, 123, 30, 27, 28, 9, 5, 63, 11, 64, 12, 13, 76, 77, 78, 79, 53, 54, 58, 59, 23, 24, 542, 183, 175, 169, 182,
                               170, 180, 171, 181, 142, 155, 143, 156, 144, 157, 159, 147, 160,148, 161, 6, 220, 122, 219, 229, 304, 186, 202, 199, 311, 245, 248, 251, 406]
+
+        handcip_management = {'A': [1.5, 0.06], 'B': [2.33, 0.05], 'C': [2.32, 0.06], 'D': [2.33, 0.04]}        # 赔率是欧赔,从信用网总台中获取,这里写死
+
+        if handicap_type == 'A':
+            minimum_odds =  handcip_management['A'][0]
+            minimum_uk_odds = minimum_odds                      # 欧洲赔率最小值
+            minimum_hk_odds = minimum_odds - 1                  # 香港赔率最小值
+            handicap_impairment = handcip_management['A'][1]    # 赔率减值
+        elif handicap_type == 'B':
+            minimum_odds =  handcip_management['B'][0]
+            minimum_uk_odds = minimum_odds
+            minimum_hk_odds = minimum_odds - 1
+            handicap_impairment = handcip_management['B'][1]
+        elif handicap_type == 'C':
+            minimum_odds =  handcip_management['C'][0]
+            minimum_uk_odds = minimum_odds
+            minimum_hk_odds = minimum_odds - 1
+            handicap_impairment = handcip_management['C'][1]
+        elif handicap_type == 'D':
+            minimum_odds =  handcip_management['D'][0]
+            minimum_uk_odds = minimum_odds
+            minimum_hk_odds = minimum_odds - 1
+            handicap_impairment = handcip_management['D'][1]
+        else:
+            raise AssertionError('ERROR,暂不支持该盘口类型')
+
         creditOdds_list = []
-        minimum_uk_odds = 1.3
-        minimum_hk_odds = 0.3
-        handicap_impairment = 0.05
 
         if odds_type == 1:
             for Odds_list in originalOdds_list:
@@ -417,8 +441,8 @@ class H5_BfClient(object):
             # print(creditOdds_list)
             return creditOdds_list
 
-        elif odds_type == 2:
-            for Odds_list in originalOdds_list:
+        elif odds_type == 2:                           # 若为香港盘,需要判断切换判了类型赔率是否会变
+            for Odds_list in originalOdds_list[:1]:
                 outcomes_odds_list = []
                 for originalodds in Odds_list:
                     reg = re.search(r"_(\d+?)_", originalodds[0])      # originalodds = ['sr:match:28828430_1__1', 2.24],从originalodds[0]的第一个元素sr:match:28828430_1__1中获取盘口id
@@ -446,7 +470,7 @@ class H5_BfClient(object):
                         else:
                             outcomes_odds_list.append([originalodds[0],round(originalodds[1],2)])
                 creditOdds_list.append(outcomes_odds_list)
-            # print(creditOdds_list)
+            print(creditOdds_list)
             return creditOdds_list
 
         else:
@@ -1012,7 +1036,7 @@ if __name__ == "__main__":
     mongo_info = ['app', '123456', '192.168.10.120', '27017']
     bf = H5_BfClient(mysql_info, mongo_info, "http://192.168.10.120")
 
-    token_list = ['b438b0d3593a44bdb8931082557b5bcc','559edd80eb634aaca4ba97247d77c13e']
+    token_list = ['d07c8dfe3a0b4001b41e28683548fbbb','559edd80eb634aaca4ba97247d77c13e']
 
     thread_num = 1
     # 单注
@@ -1024,7 +1048,7 @@ if __name__ == "__main__":
     # outcomes = bf.get_match_all_outcomes(match_id="sr:match:23204495", token=token_list[0], odd_type=1)
     # outcome = bf.get_match_all_outcome(match_id="sr:match:23204495", token=token_list[0], sport_name="足球", odds_Type=1)
     # outcome = bf.get_cash_outcomes_odds(token=token_list[0], sport_name='冰上曲棍球', event_type="EARLY", sort=1, odds_type=1 )         #  获取现金网的赔率
-    credits_odds = bf.query_credit_outcomes_odds(token=token_list[0], sport_name='足球', event_type="EARLY", sort=1, odds_type=2)   #  通过现金网的赔率计算信用网赔率
+    credits_odds = bf.query_credit_outcomes_odds(token=token_list[0], sport_name='篮球', handicap_type='B', event_type="TODAY", sort=1, odds_type=2)   #  通过现金网的赔率计算信用网赔率
 
     # match_list = bf.get_multi_match_info_list(token=token_list[0], sport_name="足球")
     # match_num = bf.get_sport_match_num(token=token_list[0], event_type="TODAY")
@@ -1034,4 +1058,4 @@ if __name__ == "__main__":
         # outcome_detail = bf.get_match_all_outcomes_detail(token=token_list[0],sport_name=sport_name,event_type="EARLY", sort=1, odds_type=1)
         # choose_tournament = bf.get_choose_tourment_list(sport_name=sport_name, token=token_list[0], matchCategory="today", highlight="false")
 
-    match_result = bf.get_h5_new_match_result(token=token_list[0], sportName='足球', offset='-1')      # 现金网-h5端,新赛果查询
+    # match_result = bf.get_h5_new_match_result(token=token_list[0], sportName='足球', offset='-1')      # 现金网-h5端,新赛果查询
