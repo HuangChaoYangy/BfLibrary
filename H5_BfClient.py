@@ -392,12 +392,12 @@ class H5_BfClient(object):
         :return:
         '''
         originalOdds_list = self.get_cash_outcomes_odds(token=token, sport_name=sport_name, event_type=event_type, sort=sort, odds_type=odds_type)     # 首先查询会员是属于ABCD哪类盘口
-        print(originalOdds_list[0])
+        # print(originalOdds_list[0])
         marketId_no_change = [1, 60, 45, 81, 25, 21, 71, 29, 75, 26, 74, 8, 47, 15, 10, 31, 32, 33, 34, 37, 35, 36, 146, 52, 56, 57, 547, 546, 48, 49, 50, 51, 172, 163,
                               164, 175, 137, 2, 3, 113, 119, 123, 30, 27, 28, 9, 5, 63, 11, 64, 12, 13, 76, 77, 78, 79, 53, 54, 58, 59, 23, 24, 542, 183, 175, 169, 182,
                               170, 180, 171, 181, 142, 155, 143, 156, 144, 157, 159, 147, 160,148, 161, 6, 220, 122, 219, 229, 304, 186, 202, 199, 311, 245, 248, 251, 406]
-
-        handcip_management = {'A': [1.5, 0.06], 'B': [2.33, 0.05], 'C': [2.32, 0.06], 'D': [2.33, 0.04]}        # 赔率是欧赔,从信用网总台中获取,这里写死
+        # 赔率是欧赔,从信用网总台中获取,列表中第一个元素为赔率最低值（欧赔）,第二个元素为赔率减值。这里写死
+        handcip_management = {'A': [1.5, 0.06], 'B': [2.33, 0.05], 'C': [2.32, 0.06], 'D': [2.33, 0.04]}
 
         if handicap_type == 'A':
             minimum_odds =  handcip_management['A'][0]
@@ -442,7 +442,7 @@ class H5_BfClient(object):
             return creditOdds_list
 
         elif odds_type == 2:                           # 若为香港盘,需要判断切换判了类型赔率是否会变
-            for Odds_list in originalOdds_list[:1]:
+            for Odds_list in originalOdds_list:
                 outcomes_odds_list = []
                 for originalodds in Odds_list:
                     reg = re.search(r"_(\d+?)_", originalodds[0])      # originalodds = ['sr:match:28828430_1__1', 2.24],从originalodds[0]的第一个元素sr:match:28828430_1__1中获取盘口id
@@ -470,7 +470,7 @@ class H5_BfClient(object):
                         else:
                             outcomes_odds_list.append([originalodds[0],round(originalodds[1],2)])
                 creditOdds_list.append(outcomes_odds_list)
-            print(creditOdds_list)
+            # print(creditOdds_list)
             return creditOdds_list
 
         else:
