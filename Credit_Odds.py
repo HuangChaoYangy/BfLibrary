@@ -6,10 +6,12 @@ import arrow
 #     from .YgClient import YgClient
 
 
-class PC_Credit_Client_odds(object):
+class Credit_Client_odds(object):
 
     def __init__(self, *args, **kwargs):
         self.sport_id_dic = {"足球": "1", "篮球": "2", "网球": "3", "排球": "4", "羽毛球": "5", "乒乓球": "6","棒球": "7", "冰上曲棍球": "100"}
+        self.sport_small_id_dic = {"足球": "sr:sport:1", "篮球": "sr:sport:2", "网球": "sr:sport:5", "排球": "sr:sport:23",
+                        "羽毛球": "sr:sport:31", "乒乓球": "sr:sport:20","棒球": "sr:sport:3", "斯诺克": "sr:sport:19", "冰上曲棍球": "sr:sport:4"}
         self.auth_url = 'http://192.168.10.120'
         self.session = requests.session()
 
@@ -26,20 +28,29 @@ class PC_Credit_Client_odds(object):
             raise AssertionError("【ERR】传参错误")
 
 
-    def get_pc_match_list(self, sport_name, token, event_type="INPLAY", sort=1, odds_type=1, dateOffset=-1):
+    def get_match_list(self, sport_name, token, event_type="INPLAY", terminal='pc', sort=1, odds_type=1, dateOffset=-1):
         '''
-        获取信用网PC端的滚球、今日、早盘赛事列表                          /// 修改于2021.09.30
+        获取信用网PC/H5端的滚球、今日、早盘赛事列表                          /// 修改于2022.02.22
         :param sport_name:
         :param token:
         :param event_type:  INPLAY,TODAY、EARLY、PARLAY
+        :param terminal:  pc  h5
         :param sort: 1 时间排序, 2 联赛排序
         :param odds_type:
         :param dateOffset: 早盘和串关可以指定参数时间dateOffset，-1代表所有日期，0代表今日，1代表明日，依次类推，8代表未来
         :return:
         '''
-        url = self.auth_url + ':6210/creditMatchPC/matchList'
-        market_group_dic = {"足球": "100","篮球": "200","网球": "300","排球": "400","羽毛球": "500","乒乓球": "600","棒球": "700","冰上曲棍球": "10000"}
-        sport_id_dic = {"足球": "sr:sport:1", "篮球": "sr:sport:2", "网球": "sr:sport:5", "排球": "sr:sport:23", "羽毛球": "sr:sport:31", "乒乓球": "sr:sport:20",
+        if terminal == 'pc':
+            url = self.auth_url + ':6210/creditMatchPC/matchList'
+        elif terminal == 'h5':
+            url = self.auth_url + ':6210/creditMatchH5/matchList'
+        else:
+            url = ''
+            assert AssertionError('ERROR,暂无支持该终端类型')
+        market_group_dic = {"足球": "100", "篮球": "200", "网球": "300", "排球": "400", "羽毛球": "500", "乒乓球": "600", "棒球": "700",
+                            "冰上曲棍球": "10000"}
+        sport_id_dic = {"足球": "sr:sport:1", "篮球": "sr:sport:2", "网球": "sr:sport:5", "排球": "sr:sport:23",
+                        "羽毛球": "sr:sport:31", "乒乓球": "sr:sport:20",
                         "棒球": "sr:sport:3", "斯诺克": "sr:sport:19", "冰上曲棍球": "sr:sport:4"}
         head = {"accessCode": token,
                 "lang": "ZH",
@@ -49,16 +60,16 @@ class PC_Credit_Client_odds(object):
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"}
 
         if event_type == "INPLAY":
-            data = {  "highlight": "false",
-                      "limit": 1000,                       # "limit":前端给后端传的参数,数字是几就是前端向后端请求几个比赛数量
-                      "page": 1,
-                      "marketGroupId": market_group_dic[sport_name],
-                      "matchIds": [],
-                      "oddsType": odds_type,
-                      "periodId": event_type,
-                      "sort": sort,
-                      "sportCategoryId": sport_id_dic[sport_name],
-                      "tournamentIds": []  }
+            data = {"highlight": "false",
+                    "limit": 1000,  # "limit":前端给后端传的参数,数字是几就是前端向后端请求几个比赛数量
+                    "page": 1,
+                    "marketGroupId": market_group_dic[sport_name],
+                    "matchIds": [],
+                    "oddsType": odds_type,
+                    "periodId": event_type,
+                    "sort": sort,
+                    "sportCategoryId": sport_id_dic[sport_name],
+                    "tournamentIds": []}
             rsp = self.session.post(url, headers=head, json=data, timeout=60)
             match_list = []
             if rsp.json()['message'] != "OK":
@@ -99,7 +110,7 @@ class PC_Credit_Client_odds(object):
 
                 match_num = rsp.json()["data"]['totalCount']
             # print('体育类型：%s,赛事类型【今日】,总共有【%d】场比赛 ' % (sport_name, match_num))
-            # print(match_list)
+            # print(len(match_list))
             return match_list, match_num
 
         elif event_type == "EARLY":
@@ -133,20 +144,27 @@ class PC_Credit_Client_odds(object):
         else:
             raise AssertionError('传入参数错误,请检查传入的参数')
 
-
-    def get_match_all_outcome(self, match_id, token, sport_name, odds_Type=1):
+    def get_match_all_outcome(self, match_id, token, sport_name, terminal='pc', odds_Type=1):
         '''
-        PC端,通过比赛ID获取该比赛所有盘口                /// 修改于2021.09.30
+        PC端,通过比赛ID获取该比赛所有盘口                /// 修改于2022.02.22
         :param match_id:
         :param token:
         :param sport_name:
+        :param terminal:  pc  h5
         :param odds_Type:
         :return:
         '''
-        url = self.auth_url + ":6210/creditMatchPC/totalMarketList"
-        sport_id_dic = {"足球": "sr:sport:1", "篮球": "sr:sport:2", "网球": "sr:sport:5", "排球": "sr:sport:23", "羽毛球": "sr:sport:31", "乒乓球": "sr:sport:20",
+        if terminal == 'pc':
+            url = self.auth_url + ':6210/creditMatchPC/totalMarketList'
+        elif terminal == 'h5':
+            url = self.auth_url + ':6210/creditMatchH5/matchList'
+        else:
+            url = ''
+            assert AssertionError('ERROR,暂无支持该终端类型')
+        sport_id_dic = {"足球": "sr:sport:1", "篮球": "sr:sport:2", "网球": "sr:sport:5", "排球": "sr:sport:23",
+                        "羽毛球": "sr:sport:31", "乒乓球": "sr:sport:20",
                         "棒球": "sr:sport:3", "斯诺克": "sr:sport:19", "冰上曲棍球": "sr:sport:4"}
-        head = {"lang":"ZH",
+        head = {"lang": "ZH",
                 "accessCode": token,
                 "Accept-Encoding": "gzip, deflate",
                 "Accept-Language": "zh-CN,zh;q=0.9",
@@ -320,22 +338,22 @@ if __name__ == "__main__":
 
     mongo_info = ['app', '123456', '192.168.10.120', '27017']
     mysql_info = ['192.168.10.121', 'root', 's3CDfgfbFZcFEaczstX1VQrdfRFEaXTc', '3306']
-    bf = PC_Credit_Client_odds()
+    bf = Credit_Client_odds()
 
-    token_list = ['7f81d67a343840789afc8a6fa49aa183']
-    odds_type_dic = {"港赔": 2,}
+    token_list = ['be3503b053944864a796f577efd6c180']
+    odds_type_dic = {"港赔": 2,}          # 信用网只支持欧赔和港赔
 
     # 验证遍历所有体育类型中的所有比赛
-    for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
-        print("----------------------------------------------------------------------------------      " + sport_name + "      ----------------------------------------------------------------------------------------          ")
-        match_list = bf.get_pc_match_list(sport_name=sport_name, token=token_list[0], event_type="EARLY", sort=1)[0]
-
-        for match_id in match_list:                             # 遍历所有match_list列表，检查赔率是否一致
-            if match_id not in ["sr:match:27267978"]:           # 此数据有问题,判断比赛ID为有问题的话,跳过该比赛
-                bf.check_odds(match_id=match_id, token=token_list[0], odds_type='港赔', sport_name=sport_name)
+    # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
+    #     print("----------------------------------------------------------------------------------      " + sport_name + "      ----------------------------------------------------------------------------------------          ")
+    #     match_list = bf.get_match_list(sport_name=sport_name, token=token_list[0], terminal='pc', event_type="EARLY", sort=1)[0]
+    #
+    #     for match_id in match_list:                             # 遍历所有match_list列表，检查赔率是否一致
+    #         if match_id not in ["sr:match:27267978"]:           # 此数据有问题,判断比赛ID为有问题的话,跳过该比赛
+    #             bf.check_odds(match_id=match_id, token=token_list[0], odds_type='港赔', sport_name=sport_name)
 
     # 验证单场比赛,赔率是否正确
-    # bf.check_odds(match_id ="sr:match:28188402", token=token_list[0], odds_type='港赔', sport_name="足球")
+    bf.check_odds(match_id ="sr:match:32115245", token=token_list[0], odds_type='港赔', sport_name="足球")
 
     # all_outcomes = bf.get_match_all_outcomes(match_id="sr:match:27268012", token=token_list[0], odds_Type=3, sport_name="足球", )
 
