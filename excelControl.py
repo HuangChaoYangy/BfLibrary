@@ -11,7 +11,7 @@ from xlutils.copy import copy
 from MongoFunc import MongoFunc, DbQuery
 from MysqlFunc import MysqlFunc, MysqlQuery
 from CommonFunc import CommonFunc
-from Credit_Client import H5_Credit_Client
+from Credit_Client import Credit_Client
 
 class excelAuto(object):
 
@@ -21,7 +21,7 @@ class excelAuto(object):
         self.my = MysqlQuery(mysql_info, mongo_info)
         self.mg = MongoFunc(mongo_info)
         self.db = DbQuery(mongo_info)
-        self.bfh5 = H5_Credit_Client(mysql_info, mongo_info)
+        self.bfh5 = Credit_Client(mysql_info, mongo_info)
         self.cm = CommonFunc()
 
     def get_excel_testcse(self, excelDir, workSheetName):

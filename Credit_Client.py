@@ -160,7 +160,7 @@ class Credit_Client(object):
 
     def get_match_list(self, sport_name, token, event_type="INPLAY", terminal='pc', sort=1, odds_type=1, dateOffset=-1):
         '''
-        获取信用网PC/H5端的滚球、今日、早盘赛事列表                          /// 修改于2022.02.22
+        获取信用网PC/H5端的滚球、今日、早盘赛事列表                          /// 修改于2022.03.02
         :param sport_name:
         :param token:
         :param event_type:  INPLAY,TODAY、EARLY、PARLAY
@@ -189,90 +189,167 @@ class Credit_Client(object):
                 "Connection": "keep-alive",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"}
 
-        if event_type == "INPLAY":
-            data = {"highlight": "false",
-                    "limit": 1000,  # "limit":前端给后端传的参数,数字是几就是前端向后端请求几个比赛数量
-                    "page": 1,
-                    "marketGroupId": market_group_dic[sport_name],
-                    "matchIds": [],
-                    "oddsType": odds_type,
-                    "periodId": event_type,
-                    "sort": sort,
-                    "sportCategoryId": sport_id_dic[sport_name],
-                    "tournamentIds": []}
-            rsp = self.session.post(url, headers=head, json=data, timeout=60)
-            match_list = []
-            if rsp.json()['message'] != "OK":
-                print(rsp.json())
-                return "查询赛事列表失败,原因：" + rsp.json()["message"]
+        if terminal == 'pc':
+            if event_type == "INPLAY":
+                data = {"highlight": "false",
+                        "limit": 1000,  # "limit":前端给后端传的参数,数字是几就是前端向后端请求几个比赛数量
+                        "page": 1,
+                        "marketGroupId": market_group_dic[sport_name],
+                        "matchIds": [],
+                        "oddsType": odds_type,
+                        "periodId": event_type,
+                        "sort": sort,
+                        "sportCategoryId": sport_id_dic[sport_name],
+                        "tournamentIds": []}
+                rsp = self.session.post(url, headers=head, json=data, timeout=60)
+                match_list = []
+                if rsp.json()['message'] != "OK":
+                    print(rsp.json())
+                    return "查询赛事列表失败,原因：" + rsp.json()["message"]
+                else:
+                    for childList in rsp.json()["data"]["data"]:
+                        matchList = childList['matchList']
+                        for matchInfo in matchList:
+                            match_list.append(matchInfo['matchId'])
+
+                    match_num = rsp.json()["data"]['totalCount']
+                # print('体育类型：%s,赛事类型【滚球】,总共有【%d】场比赛 ' % (sport_name, match_num))
+                # print(match_list)
+                return match_list, match_num
+
+            elif event_type == "TODAY":
+                data = {"highlight": "false",
+                        "limit": 1000,
+                        "page": 1,
+                        "marketGroupId": market_group_dic[sport_name],
+                        "matchIds": [],
+                        "oddsType": odds_type,
+                        "periodId": event_type,
+                        "sort": sort,
+                        "sportCategoryId": sport_id_dic[sport_name],
+                        "tournamentIds": []}
+                rsp = self.session.post(url, headers=head, json=data, timeout=60)
+                match_list = []
+                if rsp.json()['message'] != "OK":
+                    print(rsp.json())
+                    return "查询赛事列表失败,原因：" + rsp.json()["message"]
+                else:
+                    for childList in rsp.json()["data"]["data"]:
+                        matchList = childList['matchList']
+                        for matchInfo in matchList:
+                            match_list.append(matchInfo['matchId'])
+
+                    match_num = rsp.json()["data"]['totalCount']
+                # print('体育类型：%s,赛事类型【今日】,总共有【%d】场比赛 ' % (sport_name, match_num))
+                # print(len(match_list))
+                return match_list, match_num
+
+            elif event_type == "EARLY":
+                data = {"dateOffset": dateOffset,
+                        "limit": 1000,
+                        "page": 1,
+                        "highlight": "false",
+                        "marketGroupId": market_group_dic[sport_name],
+                        "matchIds": [],
+                        "oddsType": odds_type,
+                        "periodId": event_type,
+                        "sort": sort,
+                        "sportCategoryId": sport_id_dic[sport_name],
+                        "tournamentIds": []}
+                rsp = self.session.post(url, headers=head, json=data, timeout=60)
+                match_list = []
+                if rsp.json()['message'] != "OK":
+                    print(rsp.json())
+                    return "查询赛事列表失败,原因：" + rsp.json()["message"]
+                else:
+                    for childList in rsp.json()["data"]["data"]:
+                        matchList = childList['matchList']
+                        for matchInfo in matchList:
+                            match_list.append(matchInfo['matchId'])
+
+                    match_num = rsp.json()["data"]['totalCount']
+                # print('体育类型：%s,赛事类型【早盘】,总共有【%d】场比赛 ' % (sport_name, match_num))
+                # print(match_list)
+                return match_list, match_num
+
             else:
-                for childList in rsp.json()["data"]["data"]:
-                    matchList = childList['matchList']
-                    for matchInfo in matchList:
-                        match_list.append(matchInfo['matchId'])
+                raise AssertionError('传入参数错误,请检查传入的参数')
 
-                match_num = rsp.json()["data"]['totalCount']
-            # print('体育类型：%s,赛事类型【滚球】,总共有【%d】场比赛 ' % (sport_name, match_num))
-            # print(match_list)
-            return match_list, match_num
+        elif terminal == 'h5':
+            if event_type == "INPLAY":
+                data = {"dateOffset": 1,
+                        "highlight": "false",
+                        "marketGroupId": market_group_dic[sport_name],
+                        "matchIds": [],
+                        "oddsType": odds_type,
+                        "periodId": event_type,
+                        "sort": sort,
+                        "sportCategoryId": sport_id_dic[sport_name],
+                        "tournamentIds": []}
+                rsp = self.session.post(url, headers=head, json=data, timeout=60)
+                match_list = []
+                if rsp.json()['message'] != "OK":
+                    print(rsp.json())
+                    return "查询赛事列表失败,原因：" + rsp.json()["message"]
+                else:
+                    for item in rsp.json()["data"]:
+                        match_list.extend(item['matchIds'])
+                match_num = len(match_list)
+                print('体育类型：%s,赛事类型【%s】,总共有【%d】场比赛 ' % (sport_name,event_type, match_num))
+                return match_list, match_num
 
-        elif event_type == "TODAY":
-            data = {"highlight": "false",
-                    "limit": 1000,
-                    "page": 1,
-                    "marketGroupId": market_group_dic[sport_name],
-                    "matchIds": [],
-                    "oddsType": odds_type,
-                    "periodId": event_type,
-                    "sort": sort,
-                    "sportCategoryId": sport_id_dic[sport_name],
-                    "tournamentIds": []}
-            rsp = self.session.post(url, headers=head, json=data, timeout=60)
-            match_list = []
-            if rsp.json()['message'] != "OK":
-                print(rsp.json())
-                return "查询赛事列表失败,原因：" + rsp.json()["message"]
+            elif event_type == "TODAY":
+                data = {"dateOffset": 0,
+                        "highlight": "false",
+                        "marketGroupId": market_group_dic[sport_name],
+                        "matchIds": [],
+                        "oddsType": odds_type,
+                        "periodId": event_type,
+                        "sort": sort,
+                        "sportCategoryId": sport_id_dic[sport_name],
+                        "tournamentIds": []}
+                rsp = self.session.post(url, headers=head, json=data, timeout=60)
+                match_list = []
+                if rsp.json()['message'] != "OK":
+                    print(rsp.json())
+                    return "查询赛事列表失败,原因：" + rsp.json()["message"]
+                else:
+                    for item in rsp.json()["data"]:
+                        match_list.extend(item['matchIds'])
+                match_num = len(match_list)
+                print('体育类型：%s,赛事类型【%s】,总共有【%d】场比赛 ' % (sport_name, event_type, match_num))
+
+                return match_list, match_num
+
+            elif event_type == "EARLY":
+                data = {"dateOffset": dateOffset,
+                        "highlight": "false",
+                        "marketGroupId": market_group_dic[sport_name],
+                        "matchIds": [],
+                        "oddsType": odds_type,
+                        "periodId": event_type,
+                        "sort": sort,
+                        "sportCategoryId": sport_id_dic[sport_name],
+                        "tournamentIds": []}
+                rsp = self.session.post(url, headers=head, json=data, timeout=60)
+                match_list = []
+                if rsp.json()['message'] != "OK":
+                    print(rsp.json())
+                    return "查询赛事列表失败,原因：" + rsp.json()["message"]
+                else:
+                    for item in rsp.json()["data"]:
+                        match_list.extend(item['matchIds'])
+                match_num = len(match_list)
+                print('体育类型：%s,赛事类型【%s】,总共有【%d】场比赛 ' % (sport_name, event_type, match_num))
+
+                return match_list, match_num
+
             else:
-                for childList in rsp.json()["data"]["data"]:
-                    matchList = childList['matchList']
-                    for matchInfo in matchList:
-                        match_list.append(matchInfo['matchId'])
-
-                match_num = rsp.json()["data"]['totalCount']
-            # print('体育类型：%s,赛事类型【今日】,总共有【%d】场比赛 ' % (sport_name, match_num))
-            # print(len(match_list))
-            return match_list, match_num
-
-        elif event_type == "EARLY":
-            data = {"dateOffset": dateOffset,
-                    "limit": 1000,
-                    "page": 1,
-                    "highlight": "false",
-                    "marketGroupId": market_group_dic[sport_name],
-                    "matchIds": [],
-                    "oddsType": odds_type,
-                    "periodId": event_type,
-                    "sort": sort,
-                    "sportCategoryId": sport_id_dic[sport_name],
-                    "tournamentIds": []}
-            rsp = self.session.post(url, headers=head, json=data, timeout=60)
-            match_list = []
-            if rsp.json()['message'] != "OK":
-                print(rsp.json())
-                return "查询赛事列表失败,原因：" + rsp.json()["message"]
-            else:
-                for childList in rsp.json()["data"]["data"]:
-                    matchList = childList['matchList']
-                    for matchInfo in matchList:
-                        match_list.append(matchInfo['matchId'])
-
-                match_num = rsp.json()["data"]['totalCount']
-            # print('体育类型：%s,赛事类型【早盘】,总共有【%d】场比赛 ' % (sport_name, match_num))
-            # print(match_list)
-            return match_list, match_num
+                raise AssertionError('传入参数错误,请检查传入的参数')
 
         else:
             raise AssertionError('传入参数错误,请检查传入的参数')
+
 
     def get_match_all_outcome(self, match_id, token, sport_name, terminal='pc', odds_Type=1):
         '''
@@ -338,10 +415,8 @@ class Credit_Client(object):
         :return:
         '''
         if event_type == "INPLAY":
-            match_id_list = \
-            self.get_match_list(sport_name=sport_name, token=token_list[0], event_type=event_type, sort=sort,
+            match_id_list = self.get_match_list(sport_name=sport_name, token=token_list[0], event_type=event_type, sort=sort,
                                    odds_type=odds_type)[0]
-
             outcomeInfo = {}
 
             for matchId in match_id_list:
@@ -360,7 +435,6 @@ class Credit_Client(object):
         elif event_type == "TODAY":
             match_id_list = self.get_match_list(sport_name=sport_name, token=token, event_type=event_type, sort=sort,
                                                    odds_type=odds_type)[0]
-
             outcomeInfo = {}
             for matchId in match_id_list:
                 outcomes_detail_list = []
@@ -1466,12 +1540,12 @@ if __name__ == "__main__":
     mongo_info = ['app', '123456', '192.168.10.120', '27017']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['be3503b053944864a796f577efd6c180','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
+    token_list = ['55e90f453bc84985808f935c4ce43d0e','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
 
     # match_id_list = bf.get_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     # print(match_id_list)
 
-    # token = bf.login_client(username='Testuser004', password='Bfty123456')
+    # token = bf.login_client(username='Member01', password='Bfty123456')
     # amount = bf.get_userAmount(token=token)
 
     # 新增多线程-模拟多用户进行投注
@@ -1509,7 +1583,7 @@ if __name__ == "__main__":
     # outcome = bf.get_match_all_outcome(match_id="sr:match:28503692", token=token_list[0], sport_name="冰上曲棍球", odds_Type=1)   # 获取所有玩法
 
     # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
-    #     match_list = bf.get_match_list(sport_name=sport_name, token=token_list[0], event_type="EARLY", sort= 2, odds_type=1)              # 检测比赛数量是否一致
+    # match_list = bf.get_match_list(sport_name='篮球', token=token_list[0], terminal='h5', event_type="EARLY", sort= 2, odds_type=1)              # 检测比赛数量是否一致
     # outcome_detail = bf.get_match_all_outcomes_detail(token=token_list[0],sport_name='网球',event_type="INPLAY", sort=1, odds_type=1)              # 检测比赛下注项数量是否一致
     # tournament = bf.get_choose_tourment_list(sport_name='足球', token=token_list[0], matchCategory="today", highlight="false")     # 选择联赛列表数量是否一致
 

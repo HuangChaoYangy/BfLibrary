@@ -5,7 +5,6 @@ import time
 import datetime
 try:
     from MysqlFunc import MysqlFunc, MysqlQuery
-    from datetime import datetime
     from MongoFunc import DbQuery
 except ModuleNotFoundError or ImportError:
     from .MysqlFunc import MysqlFunc, MysqlQuery
@@ -57,6 +56,8 @@ class DbDetialQuery(object):
             return now.strftime("%Y-%m-%d 04:00:00")
         elif time_type == "end":
             return now.strftime("%Y-%m-%d 03:59:59")
+        elif time_type == "current_time":
+            return now.strftime("%Y-%m-%d %H:%M:%S")
         else:
             raise AssertionError("【ERR】传参错误")
 
@@ -399,7 +400,8 @@ class DbDetialQuery(object):
                               "tournamentName": 1,
                               "homeTeamName": 1,
                               "awayTeamName": 1,
-                              "highlight": 1}
+                              "highlight": 1,
+                              "markets":1 }
                 try:
                     new_match_list = []
                     match_id_list = []
@@ -466,8 +468,10 @@ class DbDetialQuery(object):
 
         elif matchCategory == 'today':
             if sort == 1:
-                create_time = self.get_current_time_for_client(time_type="begin", day_diff=dateOff)
+                create_time = self.get_current_time_for_client(time_type="current_time", day_diff=dateOff)   # 获取当前时间
                 create_time = datetime.datetime.strptime(create_time, "%Y-%m-%d %H:%M:%S")  # 将字符串转换成datetime时间格式
+                ctime = (create_time + datetime.timedelta(hours=-7)).strftime("%Y-%m-%d %H:%M:%S")  # 将datetime格式减去xx个小时再转换成字符串格式
+                ctime = datetime.datetime.strptime(ctime, "%Y-%m-%d %H:%M:%S")  # 将字符串转换成datetime时间格式
                 end_time = self.get_current_time_for_client(time_type="end",day_diff=dateOff + 1)  # 将字符串转换成datetime时间格式
                 end_time = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S")
                 select_dic = {"_id": 1,
@@ -483,12 +487,9 @@ class DbDetialQuery(object):
                     new_match_list = []
                     match_id_list = []
                     if sport_name in ["足球", "篮球"]:
-                        mg_se1 = {"tournamentSportId": sportId, "mainActiveMarket": {"$gt": 1},
-                                  "markets": {"$ne": None},
-                                  "isLive": {"$ne": True},
-                                  "matchStatus": "not_started",
-                                  "matchScheduled": {"$gte": create_time, "$lte": end_time}}
-
+                        mg_se1 = {"tournamentSportId": sportId, "mainActiveMarket": {"$gt": 1},"markets": {"$ne": None},"isLive": {"$ne": True},
+                                  "matchStatus": "not_started","matchScheduled": {"$gte": ctime, "$lte": end_time}}
+                        # print(mg_se1)
                         data = self.mg.mg_select("soccer_match", mg_se1, select_dic)
                         for item in list(data):
                             matchId = item['_id']
@@ -500,8 +501,7 @@ class DbDetialQuery(object):
                             matchScheduled = matchScheduled.strftime("%Y-%m-%d %H:%M:%S")
                             new_match_list.append(
                                 {"matchId": matchId, "tournamentName": tournamentName, "highlight": Highlight,
-                                 "homeTeamName": homeTeamName,
-                                 "awayTeamName": awayTeamName, "matchScheduled": matchScheduled})
+                                 "homeTeamName": homeTeamName,"awayTeamName": awayTeamName, "matchScheduled": matchScheduled})
                             match_id_list.append(matchId)
                         match_number = len(new_match_list)
                         print('体育名称【%s】,赛事类型【%s】,总共有【%d】比赛' % (sport_name, Categrory[matchCategory], match_number))
@@ -511,10 +511,8 @@ class DbDetialQuery(object):
                         return match_number, match_id_list
 
                     else:
-                        mg_se2 = {"tournamentSportId": sportId, "matchStatus": "not_started",
-                                  "activeMarket": {"$gt": 0},
-                                  "isLive": {"$ne": True},
-                                  "matchScheduled": {"$gte": create_time, "$lte": end_time}}
+                        mg_se2 = {"tournamentSportId": sportId, "matchStatus": "not_started","activeMarket": {"$gt": 0}, "markets": {"$ne": None},
+                                  "isLive": {"$ne": True},"matchScheduled": {"$gte": ctime, "$lte": end_time}}
                         data = self.mg.mg_select("soccer_match", mg_se2, select_dic)
                         new_match_list = []
                         for item in list(data):
@@ -541,8 +539,10 @@ class DbDetialQuery(object):
                     return e
 
             elif sort == 2:
-                create_time = self.get_current_time_for_client(time_type="begin", day_diff=dateOff)
+                create_time = self.get_current_time_for_client(time_type="current_time", day_diff=dateOff)
                 create_time = datetime.datetime.strptime(create_time, "%Y-%m-%d %H:%M:%S")
+                ctime = (create_time + datetime.timedelta(hours=-7)).strftime("%Y-%m-%d %H:%M:%S")  # 将datetime格式减去xx个小时再转换成字符串格式
+                ctime = datetime.datetime.strptime(ctime, "%Y-%m-%d %H:%M:%S")  # 将字符串转换成datetime时间格式
                 end_time = self.get_current_time_for_client(time_type="end", day_diff=dateOff + 1)
                 end_time = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S")
                 select_dic = {"_id": 1, "matchScheduled": 1, "tournamentCateoryName": 1, "bookStatus": 1, "producer": 1,
@@ -552,9 +552,7 @@ class DbDetialQuery(object):
                     match_id_list = []
                     if sport_name in ["足球", "篮球"]:
                         mg_se = {"tournamentSportId": sportId, "mainActiveMarket": {"$gt": 1}, "markets": {"$ne": None},
-                                 "isLive": {"$ne": True},
-                                 "matchStatus": "not_started",
-                                 "matchScheduled": {"$gte": create_time, "$lte": end_time}}
+                                 "isLive": {"$ne": True},"matchStatus": "not_started","matchScheduled": {"$gte": ctime, "$lte": end_time}}
                         data = self.mg.mg_select("soccer_match", mg_se, select_dic)
                         for item in list(data):
                             matchId = item['_id']
@@ -564,40 +562,36 @@ class DbDetialQuery(object):
                             awayTeamName = item['awayTeamName']
                             matchScheduled = item['matchScheduled']
                             matchScheduled = matchScheduled.strftime("%Y-%m-%d %H:%M:%S")
-                            new_match_list.append(
-                                {"matchId": matchId, "tournamentName": tournamentName, "highlight": Highlight,
-                                 "homeTeamName": homeTeamName,
-                                 "awayTeamName": awayTeamName, "matchScheduled": matchScheduled})
+                            new_match_list.append({"matchId": matchId, "tournamentName": tournamentName, "highlight": Highlight,
+                                 "homeTeamName": homeTeamName,"awayTeamName": awayTeamName, "matchScheduled": matchScheduled})
                             match_id_list.append(matchId)
                         match_number = len(new_match_list)
                         print('体育名称【%s】,赛事类型【%s】,总共有【%d】比赛' % (sport_name, Categrory[matchCategory], match_number))
 
-                        match_list = sorted(new_match_list, key=lambda new_match_list: new_match_list['highlight'],
-                                            reverse=True)  # 对match_list列表中字典元素中的 highlight 字段进行倒序排序
+                        match_list = sorted(new_match_list, key=lambda new_match_list: new_match_list['highlight'], reverse=True)  # 对match_list列表中字典元素中的 highlight 字段进行倒序排序
 
                         tournamentName_list = []  # 获取当天的联赛名称列表
                         for item in match_list:
                             print(item)
-                            tournamentName_list.append(item['tournamentName'])
+                        #     tournamentName_list.append(item['tournamentName'])
                         # 若权重相同，按照联赛的中文名称首字母排序，暂时不做
-                        new_tournamentName_list = []  # 对查询出的所有联赛名称进行去重
-                        for detail in tournamentName_list:
-                            if detail not in new_tournamentName_list:
-                                new_tournamentName_list.append(detail)
-                        EN_tournament_Name = []  # 获取所有去重联赛名称的英文名称列表
-                        for tournamentName in new_tournamentName_list:
-                            tournament_Name = self.zh_change_to_en1(tournamentName)
-                            EN_tournament_Name.append(tournament_Name)
-                        first_EN_tournament_Name = []  # 获取所有去重联赛名称的首字母英文名称列表
-                        for item in EN_tournament_Name:
-                            first_EN_tournament_Name.append(item[0])
+                        # new_tournamentName_list = []  # 对查询出的所有联赛名称进行去重
+                        # for detail in tournamentName_list:
+                        #     if detail not in new_tournamentName_list:
+                        #         new_tournamentName_list.append(detail)
+                        # EN_tournament_Name = []  # 获取所有去重联赛名称的英文名称列表
+                        # for tournamentName in new_tournamentName_list:
+                        #     tournament_Name = self.zh_change_to_en1(tournamentName)
+                        #     EN_tournament_Name.append(tournament_Name)
+                        # first_EN_tournament_Name = []  # 获取所有去重联赛名称的首字母英文名称列表
+                        # for item in EN_tournament_Name:
+                        #     first_EN_tournament_Name.append(item[0])
 
                         return match_number, match_id_list
 
                     else:
-                        mg_se = {"tournamentSportId": sportId, "activeMarket": {"$gt": 0}, "isLive": {"$ne": True},
-                                 "matchStatus": "not_started",
-                                 "matchScheduled": {"$gte": create_time, "$lte": end_time}}
+                        mg_se = {"tournamentSportId": sportId, "mainActiveMarket": {"$gt": 1}, "isLive": {"$ne": True}, "markets": {"$ne": None},
+                                 "matchStatus": "not_started","matchScheduled": {"$gte": ctime, "$lte": end_time}}
                         data = self.mg.mg_select("soccer_match", mg_se, select_dic)
                         for item in list(data):
                             matchId = item['_id']
@@ -607,10 +601,8 @@ class DbDetialQuery(object):
                             awayTeamName = item['awayTeamName']
                             matchScheduled = item['matchScheduled']
                             matchScheduled = matchScheduled.strftime("%Y-%m-%d %H:%M:%S")
-                            new_match_list.append(
-                                {"matchId": matchId, "tournamentName": tournamentName, "highlight": Highlight,
-                                 "homeTeamName": homeTeamName,
-                                 "awayTeamName": awayTeamName, "matchScheduled": matchScheduled})
+                            new_match_list.append({"matchId": matchId, "tournamentName": tournamentName, "highlight": Highlight,
+                                 "homeTeamName": homeTeamName,"awayTeamName": awayTeamName, "matchScheduled": matchScheduled})
                             match_id_list.append(matchId)
                         match_number = len(new_match_list)
                         print('体育名称【%s】,赛事类型【%s】,总共有【%d】比赛' % (sport_name, Categrory[matchCategory], match_number))
@@ -671,7 +663,7 @@ class DbDetialQuery(object):
                         return match_number, match_id_list
 
                     else:
-                        mg_se2 = {"tournamentSportId": sportId, "matchStatus": "not_started",
+                        mg_se2 = {"tournamentSportId": sportId, "matchStatus": "not_started", "markets": {"$ne": None},
                                   "activeMarket": {"$gt": 0}, "isLive": {"$ne": True},
                                   "matchScheduled": {"$gte": start_time}}
                         data = self.mg.mg_select("soccer_match", mg_se2, select_dic)
@@ -796,4 +788,6 @@ if __name__ == "__main__":
     # match_data = db.get_match_status_sql()
     # score = db.get_match_score_statistics_sql()
 
-    match_list = db.get_match_list_sql(sport_name='足球', sort=1, dateOff=0, matchCategory='live')[1]
+    # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
+    match_list = db.get_match_list_sql(sport_name="棒球", sort=1, dateOff=0, matchCategory='live')[1]
+    # print(match_list)
