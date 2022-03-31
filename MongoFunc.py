@@ -1,8 +1,8 @@
 import datetime
 import re
-
 import arrow
 import pymongo
+from log import Bf_log
 
 
 class MongoFunc(object):
@@ -32,6 +32,7 @@ class DbQuery(object):
     def __init__(self, mongo_info, *args, **kwargs):
         self.mongo_info = mongo_info
         self.mg = MongoFunc(self.mongo_info)
+        self.blog = Bf_log(name='DbQuery')
 
     @staticmethod
     def get_current_time(timezone="utc"):
@@ -1111,7 +1112,7 @@ class DbQuery(object):
                             else:
                                 return None
 
-                    print(inplayMachList)
+                    self.blog.info(msg=inplayMachList)
 
             elif matchCategory == 'early':
                 if not teamName:
@@ -1137,7 +1138,7 @@ class DbQuery(object):
                             match_time = (matchStartTime + datetime.timedelta(hours=-4)).strftime("%Y-%m-%d %H:%M:%S")
                             team_name = matchInfo['homeTeamName'] + 'VS' + matchInfo['awayTeamName']
                             earlyMachList.append([team_name, match_time])
-                        print(earlyMachList)
+                        # print(earlyMachList)
 
                     else:
                         mg_se1 = {"tournamentSportId": sportId, "matchStatus": "not_started","activeMarket": {"$gt": 0}, "isLive": {"$ne": True},
@@ -1157,9 +1158,11 @@ class DbQuery(object):
                             match_time = (matchStartTime + datetime.timedelta(hours=-4)).strftime("%Y-%m-%d %H:%M:%S")
                             team_name = matchInfo['homeTeamName'] + 'VS' + matchInfo['awayTeamName']
                             earlyMachList.append([team_name, match_time])
-                        print(earlyMachList)
+                        # print(earlyMachList)
+                    self.blog.info(msg=earlyMachList)
 
             else:
+                self.blog.error(msg='错误')
                 raise AssertionError('传入参数错误,请检查传入的参数')
 
         except Exception as e:
@@ -5316,13 +5319,13 @@ if __name__ == "__main__":
         # early_match_data = db.get_early_match_data_sql(sport_name=sport_name, sort=1, dateOff=0)
     # parlay_match_data = db.get_parlay_match_data_sql(sport_name=sport_name)
 
-    searchMacth = db.get_search_matchName_sql(sport_name='排球', dateOff=0, teamName='Region', matchCategory='live')  # 搜索功能比赛/比分展示
+    searchMacth = db.get_search_matchName_sql(sport_name='足球', dateOff=0, teamName='Jsm', matchCategory='early')  # 搜索功能比赛/比分展示
     # Score = db.get_live_match_list_score(sport_name='羽毛球', teamName='沙也加')
 
     # data = db.get_choose_tournament_sql(sport_name="篮球", highlight="false", matchCategory='inplay')           # 获取选择联赛列表
     # data = db.get_tournament_and_match_number_sql(sport_name="足球", matchCategory='today')          # 获取联赛数量以及联赛下的比赛数量
     # data = db.get_match_outcomes_detail_sql(sport_name="排球", highlight="false", matchCategory='today')            # 获取比赛所有投注项数量
-    odds = db.get_match_outcomes_odds_sql(sport_name="足球", highlight="false", matchCategory='today')            # 获取比赛所有投注项赔率
+    # odds = db.get_match_outcomes_odds_sql(sport_name="足球", highlight="false", matchCategory='today')            # 获取比赛所有投注项赔率
     # data = db.get_all_specifier_markets(sport_name="足球", sort=1)
 
     # match_result = db.Bfclient_match_result_sql(sportId='1')        # 获取客户端赛果查询
