@@ -2231,7 +2231,8 @@ class Bf_Client(object):
                   "sportCategoryId": sport_id_dic[sport_name],
                   "oddsType": odds_Type}
         rsp = self.session.get(url, params=params, headers=head)
-        # print(rsp.json())
+        if rsp.json()['message'] != "OK":
+            print("投注失败,原因：" + rsp.json()["message"])
 
         outcome_info_list = []
         outcome_id_list = []
@@ -2535,6 +2536,8 @@ class Bf_Client(object):
 
             if rsp.json() is None:
                 return rsp.json()["data"]["orderNo"]
+            if rsp.json()['message'] != "OK":
+                print("投注失败,原因：" + rsp.json()["message"])
 
             run_loop = len(random_outcome_num)
             sub_order_no = rsp.json()['data']['orderNo']
@@ -2652,12 +2655,12 @@ if __name__ == "__main__":
     bf = Bf_Client(mysql_info, mongo_info)  # 实例化对象
 
     # token = bf.login_client(session, code="0a80e44873d84ce3a218a303c9236ece")
-    token_list = ['a7b32dd726f1431da82c9638853c6e4c']
+    token_list = ['94953377016c461186d03c0afdf577c7']
 
     # 随机单注
-    user_bet = bf.single_submit_random_outcome('sr:match:25324658',sport_name='棒球', token=token_list[0], odds_type=3)
+    user_bet = bf.single_submit_random_outcome('sr:match:32487953',sport_name='足球', token=token_list[0], odds_type=3)
     # 全部单注
-    user_bet = bf.single_submit_all_outcome(match_id='sr:match:25324658',sport_name='棒球', token=token_list[0], odds_type=3, oddsChangeType=2)
+    # user_bet = bf.single_submit_all_outcome(match_id='sr:match:25324658',sport_name='棒球', token=token_list[0], odds_type=3, oddsChangeType=2)
     # 串关
     # bet_type = 3
     # for token in token_list:
@@ -2695,4 +2698,4 @@ if __name__ == "__main__":
     # match_result_detail = bf.get_all_match_result(token=token_list[0], match_id='sr:match:25325502')         #  赛果查询详情
 
     # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
-    match_result = bf.get_new_match_result(token=token_list[0], sportName='篮球', offset='-2')  # 新赛果查询
+    # match_result = bf.get_new_match_result(token=token_list[0], sportName='篮球', offset='-2')  # 新赛果查询

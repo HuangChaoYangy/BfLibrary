@@ -428,7 +428,7 @@ class H5_BfClient(object):
             for Odds_list in originalOdds_list:
                 outcomes_odds_list = []
                 for originalodds in Odds_list:
-                    if originalodds[1] < minimum_uk_odds:                                    # 原始赔率小于设置的赔率最小值
+                    if originalodds[1] < minimum_uk_odds:                                    # 原始赔率小于设置的赔率最小值,直接取原始赔率
                         outcomes_odds_list.append([originalodds[0],round(originalodds[1],2)])
                     elif originalodds[1] > minimum_uk_odds:                                  # 原始赔率大于设置的赔率最小值
                         if originalodds[1] - handicap_impairment > minimum_uk_odds:          # 原始赔率-盘口减值 > 盘口最低值,取原始赔率-盘口减值的差值

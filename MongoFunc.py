@@ -878,7 +878,7 @@ class DbQuery(object):
 
     def get_search_matchName_sql(self, sport_name, dateOff=0, teamName='', matchCategory='live'):
         '''
-        信用网-PC端  搜索框功能                      /// 修改于2021.10.07
+        信用网-PC/H5端  搜索框功能比赛/比分展示                      /// 修改于2022.03.09
         :param sport_name:
         :param dateOff:
         :param teamName:
@@ -895,7 +895,9 @@ class DbQuery(object):
                       "awayTeamName": 1,
                       "homeTeamId": 1,
                       "awayTeamId": 1,
-                      "periodScores": 1}
+                      "periodScores": 1,
+                      "homeScore": 1,
+                      "awayScore":1 }
         try:
             if matchCategory == 'live':
                 if not teamName:
@@ -908,8 +910,8 @@ class DbQuery(object):
                     for matchInfo in data1:
                         matchStartTime = matchInfo['matchScheduled']
                         match_time = (matchStartTime + datetime.timedelta(hours=-4)).strftime("%Y-%m-%d %H:%M:%S")  # 将datetime格式减去xx个小时再转换成字符串格式
-                        team_name = matchInfo['homeTeamName'] + 'VS' + matchInfo['awayTeamName']
-                        periodName_now = matchInfo['periodScores'][-1]['periodDescription']
+                        team_name = matchInfo['homeTeamName'] + 'VS' + matchInfo['awayTeamName']   # 获取比赛双方球队名称
+                        periodName_now = matchInfo['periodScores'][-1]['periodDescription']        # 获取比赛当前所在的阶段
                         if sport_name == '足球':
                             all_homeScore = 0
                             all_awayScore = 0
@@ -940,7 +942,7 @@ class DbQuery(object):
                             elif periodName_now == "点球":
                                 inplayMachList.append([periodName_now, pentaly_totalScore, team_name, match_time])
 
-                        elif sport_name in ['篮球','棒球']:
+                        elif sport_name in ['篮球','棒球','冰上曲棍球']:           # 展示总分
                             if sport_name == '篮球':
                                 all_homeScore = 0
                                 all_awayScore = 0
@@ -957,7 +959,7 @@ class DbQuery(object):
                                 if periodName_now == '第一节' or periodName_now == '第二节' or periodName_now == '第三节' or periodName_now == '第四节' or periodName_now == '加时':
                                     inplayMachList.append([periodName_now, totalScore, team_name, match_time])
 
-                            else:
+                            elif sport_name == '棒球':
                                 all_homeScore = 0
                                 all_awayScore = 0
                                 totalScore = ""
@@ -975,12 +977,39 @@ class DbQuery(object):
                                             or periodName_now == '6局下半' or periodName_now == '7局下半' or periodName_now == '8局下半' or periodName_now == '9局下半' or periodName_now == '加时':
                                     inplayMachList.append([periodName_now, totalScore, team_name, match_time])
 
-                        elif sport_name in ['网球', '排球', '羽毛球', '乒乓球', '冰球']:
-                            periodScore = ""
-                            for period in matchInfo['periodScores']:
-                                periodScore = period['homeScore'] + '-' + period['awayScore']
-                            inplayMachList.append([periodName_now, periodScore, team_name, match_time])
+                            else:
+                                all_homeScore = 0
+                                all_awayScore = 0
+                                totalScore = ""
+                                for periodIndex in ['第一节','第二节','第三节']:
+                                    for period in matchInfo['periodScores']:
+                                        if period['periodDescription'] == periodIndex:
+                                            home_score = int(period['homeScore'])
+                                            away_score = int(period['awayScore'])
+                                            if periodIndex == '第一节' or periodIndex == '第二节' or periodIndex == '第三节':
+                                                all_homeScore += home_score
+                                                all_awayScore += away_score
+                                                totalScore = str(all_homeScore) + '-' + str(all_awayScore)
+                                if periodName_now == '第一节' or periodName_now == '第二节' or periodName_now == '第三节':
+                                    inplayMachList.append([periodName_now, totalScore, team_name, match_time])
 
+                        # elif sport_name in ['网球', '排球', '羽毛球', '乒乓球']:    # 获取当前盘/局的比分
+                        #     periodScore = ""
+                        #     for period in matchInfo['periodScores']:
+                        #         periodScore = period['homeScore'] + '-' + period['awayScore']
+                        #     inplayMachList.append([periodName_now, periodScore, team_name, match_time])
+
+                        elif sport_name in ['网球', '排球', '羽毛球', '乒乓球']:    # 获取赛盘/局的比分
+                            if sport_name in ['网球']:
+                                set_score = str(matchInfo['homeScore']) + '-' + str(matchInfo['awayScore'])
+                                inplayMachList.append([periodName_now, set_score, team_name, match_time])
+
+                            elif sport_name in ['排球', '羽毛球', '乒乓球']:
+                                total_score = str(matchInfo['homeScore']) + '-' + str(matchInfo['awayScore'])
+                                inplayMachList.append([periodName_now, total_score, team_name, match_time])
+
+                            else:
+                                return None
 
                     mg_se2 = {"tournamentSportId": sportId, "matchStatus": "live", "isLive": True, "awayTeamName": re.compile(teamName) }
                     data2 = list(self.mg.mg_select("soccer_match", mg_se2, select_dic))
@@ -1019,7 +1048,7 @@ class DbQuery(object):
                             elif periodName_now == "点球":
                                 inplayMachList.append([periodName_now, pentaly_totalScore, team_name, match_time])
 
-                        elif sport_name in ['篮球','棒球']:
+                        elif sport_name in ['篮球','棒球','冰上曲棍球']:
                             if sport_name == '篮球':
                                 all_homeScore = 0
                                 all_awayScore = 0
@@ -1036,7 +1065,7 @@ class DbQuery(object):
                                 if periodName_now == '第一节' or periodName_now == '第二节' or periodName_now == '第三节' or periodName_now == '第四节' or periodName_now == '加时':
                                     inplayMachList.append([periodName_now, totalScore, team_name, match_time])
 
-                            else:
+                            if sport_name == '棒球':
                                 all_homeScore = 0
                                 all_awayScore = 0
                                 totalScore = ""
@@ -1053,12 +1082,34 @@ class DbQuery(object):
                                 if periodName_now == '1局下半' or periodName_now == '2局下半' or periodName_now == '3局下半' or periodName_now == '4局下半' or periodName_now == '5局下半' \
                                             or periodName_now == '6局下半' or periodName_now == '7局下半' or periodName_now == '8局下半' or periodName_now == '9局下半' or periodName_now == '加时':
                                     inplayMachList.append([periodName_now, totalScore, team_name, match_time])
+                            else:
+                                all_homeScore = 0
+                                all_awayScore = 0
+                                totalScore = ""
+                                for periodIndex in ['第一节','第二节','第三节']:
+                                    for period in matchInfo['periodScores']:
+                                        if period['periodDescription'] == periodIndex:
+                                            home_score = int(period['homeScore'])
+                                            away_score = int(period['awayScore'])
+                                            if periodIndex == '第一节' or periodIndex == '第二节' or periodIndex == '第三节':
+                                                all_homeScore += home_score
+                                                all_awayScore += away_score
+                                                totalScore = str(all_homeScore) + '-' + str(all_awayScore)
+                                if periodName_now == '第一节' or periodName_now == '第二节' or periodName_now == '第三节':
+                                    inplayMachList.append([periodName_now, totalScore, team_name, match_time])
 
-                        elif sport_name in ['网球', '排球', '羽毛球', '乒乓球', '冰球']:
-                            periodScore = ""
-                            for period in matchInfo['periodScores']:
-                                periodScore = period['homeScore'] + '-' + period['awayScore']
-                            inplayMachList.append([periodName_now, periodScore, team_name, match_time])
+
+                        elif sport_name in ['网球', '排球', '羽毛球', '乒乓球']:
+                            if sport_name in ['网球']:
+                                set_score = str(matchInfo['homeScore']) + '-' + str(matchInfo['awayScore'])
+                                inplayMachList.append([periodName_now, set_score, team_name, match_time])
+
+                            elif sport_name in ['排球', '羽毛球', '乒乓球']:
+                                total_score = str(matchInfo['homeScore']) + '-' + str(matchInfo['awayScore'])
+                                inplayMachList.append([periodName_now, total_score, team_name, match_time])
+
+                            else:
+                                return None
 
                     print(inplayMachList)
 
@@ -5259,19 +5310,19 @@ if __name__ == "__main__":
     # sportCategoryId = db.get_sportCategoryId_sql(sportName='足球')
     # tournamentId = db.get_tournamentId_sql(tournamentName='德国超级杯')
 
-    for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
+    # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
     # live_match_data = db.get_live_match_data_sql(sport_name='足球', sort=1 )[0]
-        today_match_data = db.get_today_match_data_sql(sport_name=sport_name, sort=1)
+    #     today_match_data = db.get_today_match_data_sql(sport_name=sport_name, sort=1)
         # early_match_data = db.get_early_match_data_sql(sport_name=sport_name, sort=1, dateOff=0)
     # parlay_match_data = db.get_parlay_match_data_sql(sport_name=sport_name)
 
-    # searchMacth = db.get_search_matchName_sql(sport_name='网球', dateOff=0, teamName='可罗兹', matchCategory='live')        # 搜索功能
+    searchMacth = db.get_search_matchName_sql(sport_name='排球', dateOff=0, teamName='Region', matchCategory='live')  # 搜索功能比赛/比分展示
     # Score = db.get_live_match_list_score(sport_name='羽毛球', teamName='沙也加')
 
     # data = db.get_choose_tournament_sql(sport_name="篮球", highlight="false", matchCategory='inplay')           # 获取选择联赛列表
     # data = db.get_tournament_and_match_number_sql(sport_name="足球", matchCategory='today')          # 获取联赛数量以及联赛下的比赛数量
     # data = db.get_match_outcomes_detail_sql(sport_name="排球", highlight="false", matchCategory='today')            # 获取比赛所有投注项数量
-    # odds = db.get_match_outcomes_odds_sql(sport_name="足球", highlight="false", matchCategory='today')            # 获取比赛所有投注项赔率
+    odds = db.get_match_outcomes_odds_sql(sport_name="足球", highlight="false", matchCategory='today')            # 获取比赛所有投注项赔率
     # data = db.get_all_specifier_markets(sport_name="足球", sort=1)
 
     # match_result = db.Bfclient_match_result_sql(sportId='1')        # 获取客户端赛果查询

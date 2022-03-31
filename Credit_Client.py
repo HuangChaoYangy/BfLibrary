@@ -353,18 +353,18 @@ class Credit_Client(object):
 
     def get_match_all_outcome(self, match_id, token, sport_name, terminal='pc', odds_Type=1):
         '''
-        PC端,通过比赛ID获取该比赛所有盘口                /// 修改于2022.02.22
+        PC端,通过比赛ID获取该比赛所有盘口                /// 修改于2022.03.26
         :param match_id:
         :param token:
         :param sport_name:
-        :param terminal:  pc  h5
+        :param terminal:  区分pc和h5
         :param odds_Type:
         :return:
         '''
         if terminal == 'pc':
             url = self.auth_url + ':6210/creditMatchPC/totalMarketList'
         elif terminal == 'h5':
-            url = self.auth_url + ':6210/creditMatchH5/matchList'
+            url = self.auth_url + ':6210/creditMatchH5/totalMarketList'
         else:
             url = ''
             assert AssertionError('ERROR,暂无支持该终端类型')
@@ -378,31 +378,153 @@ class Credit_Client(object):
                 "Connection": "keep-alive",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                               "Chrome/85.0.4183.102 Safari/537.36"}
-        param = {"matchId": match_id, "sportCategoryId": sport_id_dic[sport_name], "oddsType": odds_Type}
-        rsp = self.session.get(url, headers=head, params=param)
+        if terminal == 'pc':
+            param = {"matchId": match_id, "sportCategoryId": sport_id_dic[sport_name], "oddsType": odds_Type}
+            rsp = self.session.get(url, headers=head, params=param)
+            print(rsp.json())
+            outcome_info_list = []
+            outcome_id_list = []
+            # market
+            is_live = rsp.json()["data"]["isLive"]
+            sport_id = rsp.json()["data"]["tournamentSportId"]
 
-        outcome_info_list = []
-        outcome_id_list = []
-        # market
-        is_live = rsp.json()["data"]["isLive"]
-        sport_id = rsp.json()["data"]["tournamentSportId"]
+            for market in rsp.json()["data"]["marketList"]:
+                market_id = market["marketId"]
+                for outcome in market["outcomeList"]:
+                    for outcome_detail in outcome:
+                        outcome_dic = {"market_id": market_id,
+                                       "specifier": outcome_detail["specifier"],
+                                       "outcome_id": outcome_detail["outcomeId"],
+                                       "oddsType": outcome_detail["oddsType"],
+                                       "odds": outcome_detail["odds"],
+                                       "islive": is_live,
+                                       "sport_category_id": sport_id}
+                        outcome_info_list.append((market_id, outcome_dic))
+                        outcomeid = outcome_detail['outcomeId']
+                        outcome_id_list.append(outcomeid)
 
-        for market in rsp.json()["data"]["marketList"]:
-            market_id = market["marketId"]
-            for outcome in market["outcomeList"]:
-                for outcome_detail in outcome:
-                    outcome_dic = {"market_id": market_id,
-                                   "specifier": outcome_detail["specifier"],
-                                   "outcome_id": outcome_detail["outcomeId"],
-                                   "oddsType": outcome_detail["oddsType"],
-                                   "odds": outcome_detail["odds"],
-                                   "islive": is_live,
-                                   "sport_category_id": sport_id}
-                    outcome_info_list.append((market_id, outcome_dic))
-                    outcomeid = outcome_detail['outcomeId']
-                    outcome_id_list.append(outcomeid)
+            return outcome_info_list
 
-        return outcome_info_list
+        elif terminal == 'h5':
+            data = {"matchId": match_id, "sportCategoryId": sport_id_dic[sport_name], "oddsType": odds_Type}
+            rsp = self.session.post(url, headers=head, params=data)
+            print(rsp.json())
+            outcome_info_list = []
+            outcome_id_list = []
+            # market
+            is_live = rsp.json()["data"]["isLive"]
+            sport_id = rsp.json()["data"]["tournamentSportId"]
+
+            for market in rsp.json()["data"]["marketList"]:
+                market_id = market["marketId"]
+                for outcome in market["outcomeList"]:
+                    for outcome_detail in outcome:
+                        outcome_dic = {"market_id": market_id,
+                                       "specifier": outcome_detail["specifier"],
+                                       "outcome_id": outcome_detail["outcomeId"],
+                                       "oddsType": outcome_detail["oddsType"],
+                                       "odds": outcome_detail["odds"],
+                                       "islive": is_live,
+                                       "sport_category_id": sport_id}
+                        outcome_info_list.append((market_id, outcome_dic))
+                        outcomeid = outcome_detail['outcomeId']
+                        outcome_id_list.append(outcomeid)
+
+            return outcome_info_list
+
+        else:
+            assert AssertionError('ERROR,暂无支持该终端类型')
+
+
+    def get_match_odds_and_outcomeId(self, match_id, token, sport_name, terminal='pc', odds_Type=1):
+        '''
+        信用网,通过比赛ID获取赔率和投注项                /// 修改于2022.03.26
+        :param match_id:
+        :param token:
+        :param sport_name:
+        :param terminal:  pc  h5
+        :param odds_Type:
+        :return:
+        '''
+        if terminal == 'pc':
+            url = self.auth_url + ':6210/creditMatchPC/totalMarketList'
+        elif terminal == 'h5':
+            url = self.auth_url + ':6210/creditMatchH5/totalMarketList'
+        else:
+            url = ''
+            assert AssertionError('ERROR,暂无支持该终端类型')
+        sport_id_dic = {"足球": "sr:sport:1", "篮球": "sr:sport:2", "网球": "sr:sport:5", "排球": "sr:sport:23",
+                        "羽毛球": "sr:sport:31", "乒乓球": "sr:sport:20",
+                        "棒球": "sr:sport:3", "斯诺克": "sr:sport:19", "冰上曲棍球": "sr:sport:4"}
+        head = {"lang": "ZH",
+                "accessCode": token,
+                "Accept-Encoding": "gzip, deflate",
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Connection": "keep-alive",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                              "Chrome/85.0.4183.102 Safari/537.36"}
+        if terminal == 'pc':
+            param = {"matchId": match_id, "sportCategoryId": sport_id_dic[sport_name], "oddsType": odds_Type}
+            rsp = self.session.get(url, headers=head, params=param)
+            # print(rsp.json())
+
+            outcome_info_list = []
+            odds_and_outcomeId_list = []
+            # market
+            is_live = rsp.json()["data"]["isLive"]
+            sport_id = rsp.json()["data"]["tournamentSportId"]
+
+            for market in rsp.json()["data"]["marketList"]:
+                market_id = market["marketId"]
+                for outcome in market["outcomeList"]:
+                    for outcome_detail in outcome:
+                        outcome_dic = {"market_id": market_id,
+                                       "specifier": outcome_detail["specifier"],
+                                       "outcome_id": outcome_detail["outcomeId"],
+                                       "oddsType": outcome_detail["oddsType"],
+                                       "odds": outcome_detail["odds"],
+                                       "islive": is_live,
+                                       "sport_category_id": sport_id}
+                        outcome_info_list.append((market_id, outcome_dic))
+                        outcomeid = outcome_detail['outcomeId']
+                        odds = outcome_detail['odds']
+                        oddsType = outcome_detail['oddsType']
+                        odds_and_outcomeId_list.append((odds,outcomeid,oddsType))
+
+            # data = self.cm.write_to_local_file(content=odds_and_outcomeId_list,
+            #                                    file_name='C:/Users/USER/Desktop/testOdds.txt', mode='w')
+            return odds_and_outcomeId_list
+
+        elif terminal == 'h5':
+            data = {"matchId": match_id, "sportCategoryId": sport_id_dic[sport_name], "oddsType": odds_Type}
+            rsp = self.session.post(url, headers=head, json=data)
+            # print(rsp.json())
+            outcome_info_list = []
+            odds_and_outcomeId_list = []
+            # market
+            is_live = rsp.json()["data"]["isLive"]
+            sport_id = rsp.json()["data"]["sportCategoryId"]
+
+            for market in rsp.json()["data"]["marketList"]:
+                market_id = market["marketId"]
+                for outcome in market["outcomeList"]:
+                    for outcome_detail in outcome:
+                        outcome_dic = {"market_id": market_id,
+                                       "specifier": outcome_detail["specifier"],
+                                       "outcome_id": outcome_detail["outcomeId"],
+                                       "oddsType": outcome_detail["oddsType"],
+                                       "odds": outcome_detail["odds"],
+                                       "islive": is_live,
+                                       "sport_category_id": sport_id}
+                        outcome_info_list.append((market_id, outcome_dic))
+                        outcomeid = outcome_detail['outcomeId']
+                        odds = outcome_detail['odds']
+                        oddsType = outcome_detail['oddsType']
+                        odds_and_outcomeId_list.append((odds,outcomeid,oddsType))
+
+            # data =self.cm.write_to_local_file(content=odds_and_outcomeId_list, file_name='C:/Users/USER/Desktop/testOdds.txt', mode='w')
+
+            return odds_and_outcomeId_list
 
     def get_match_all_outcomes_detail(self, token, sport_name, event_type="INPLAY", sort=1, odds_type=1):
         '''
@@ -1540,13 +1662,19 @@ if __name__ == "__main__":
     mongo_info = ['app', '123456', '192.168.10.120', '27017']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['55e90f453bc84985808f935c4ce43d0e','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
+    token_list = ['0c41c9818f014e95a523863651e213b1','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
 
     # match_id_list = bf.get_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     # print(match_id_list)
 
-    # token = bf.login_client(username='Member01', password='Bfty123456')
-    # amount = bf.get_userAmount(token=token)
+    # for item in ['Testuser001','Testuser002','Testuser003','Testuser004']:
+    #     token = bf.login_client(username=item, password='Bfty123456')
+    #     data = bf.cm.write_to_local_file(content=token+'\n', file_name='C:/Users/USER/Desktop/testToken.txt',mode='a')
+
+    odds_outcomeId = bf.get_match_odds_and_outcomeId(match_id='sr:match:32846261', token=token_list[0], sport_name='排球', terminal='h5', odds_Type=1)
+    for item in odds_outcomeId:
+        print(item)
+        data = bf.cm.write_to_local_file(content=item, file_name='C:/Users/USER/Desktop/testOdds.txt',mode='w')
 
     # 新增多线程-模拟多用户进行投注
     # user_list = ['Testuser001','Testuser002']
@@ -1572,11 +1700,11 @@ if __name__ == "__main__":
     #     print(f"task1: {sub_thread1.done()}")
 
     # 单注投注
-    # bf.submit_all_outcome(match_id="sr:match:31975595", sport_name='足球', token=token_list[0], odds_type=1, IsRandom='')
+    # bf.submit_all_outcome(match_id="sr:match:32846261", sport_name='排球', token=token_list[0], odds_type=1, IsRandom='')
     # 非复式串关投注
     # bf.submit_all_outcomes(sport_name='篮球', token=token_list[0], bet_type=3, event_type='TODAY', IsRandom='')
     # 复式串关投注
-    bf.submit_all_complex(sport_name='篮球', token=token_list[0], bet_type=5, event_type='TODAY', odds_type=1, oddsChangeType=1, complex='single', complex_number=3)
+    # bf.submit_all_complex(sport_name='篮球', token=token_list[0], bet_type=5, event_type='TODAY', odds_type=1, oddsChangeType=1, complex='single', complex_number=3)
     # balance = bf.get_balance(token=token_list[0])
     # print(balance)
 

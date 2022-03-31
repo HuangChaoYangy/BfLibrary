@@ -23,6 +23,7 @@ class YgClient(object):
         self.sport_id_dic = {"足球": "1", "篮球": "2", "网球": "3", "排球": "4", "羽毛球": "5", "乒乓球": "6",
                              "棒球": "7", "斯诺克": "8", "其他": "100"}
         # super().__init__(mysql_info, mongo_info, backend_url, merchant_url)
+        self.auth_url = 'http://192.168.10.120'
         self.host = merchant_url
         self.cf = CommonFunc()
         self.session = requests.session()
@@ -36,7 +37,269 @@ class YgClient(object):
         #                    "98d71afcfc174f068fbf2148e211764a", "328993ca5de54335b59b8c5bfbc504ac",
         #                    "65ac5c6670d04f19939aa36641f5f6f9", "42d22521e6364142bfb13067fc674e2a"]
 
-    def submit(self, outcome_info_list, bet_amount, token=""):
+    def get_match_list(self, sport_name, token, event_type="INPLAY", terminal='pc', sort=1, odds_type=1):
+        '''
+        获取现金网PC/H5端的滚球、今日、早盘赛事列表                          /// 修改于2022.03.07
+        :param sport_name:
+        :param token:
+        :param event_type:  INPLAY,TODAY、EARLY、PARLAY
+        :param terminal:  pc  h5
+        :param sort: 1 时间排序, 2 联赛排序
+        :param odds_type:
+        :param dateOffset: 早盘和串关可以指定参数时间dateOffset，-1代表所有日期，0代表今日，1代表明日，依次类推，8代表未来
+        :return:
+        '''
+        if terminal == 'pc':
+            if event_type == 'INPLAY':
+                url = self.auth_url + ':8091/match/inPlayMatchList'
+            elif event_type == 'TODAY':
+                url = self.auth_url + ':8091/match/todayMatchList'
+            elif event_type == 'TODAY':
+                url = self.auth_url + ':8091/match/earlyMatchList'
+            else:
+                url = self.auth_url + ':8091/match/parlayMatchList'
+        elif terminal == 'h5':
+            if event_type == 'INPLAY':
+                url = self.auth_url + ':8091/match/inPlayMatchList'
+            elif event_type == 'TODAY':
+                url = self.auth_url + ':8091/match/todayMatchList'
+            elif event_type == 'TODAY':
+                url = self.auth_url + ':8091/match/earlyMatchList'
+            else:
+                url = self.auth_url + ':8091/match/parlayMatchList'
+        else:
+            url = ''
+            assert AssertionError('ERROR,暂无支持该终端类型')
+
+        market_group_dic = {"足球": "100", "篮球": "200", "网球": "300", "排球": "400", "羽毛球": "500", "乒乓球": "600", "棒球": "700",
+                            "冰上曲棍球": "10000"}
+        sport_id_dic = {"足球": "sr:sport:1", "篮球": "sr:sport:2", "网球": "sr:sport:5", "排球": "sr:sport:23",
+                        "羽毛球": "sr:sport:31", "乒乓球": "sr:sport:20",
+                        "棒球": "sr:sport:3", "斯诺克": "sr:sport:19", "冰上曲棍球": "sr:sport:4"}
+        sportId_dic = {"足球": "1", "篮球": "2", "网球": "3", "排球": "4", "羽毛球": "5", "乒乓球": "6","棒球": "7", "斯诺克": "8", "冰上曲棍球": "100"}
+        head = {"accessCode": token,
+                "lang": "ZH",
+                "Accept-Encoding": "gzip, deflate",
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Connection": "keep-alive",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"}
+
+        if terminal == 'pc':
+            if event_type == "INPLAY":
+                data = {"highlight": "false",
+                        "limit": 1000,  # "limit":前端给后端传的参数,数字是几就是前端向后端请求几个比赛数量
+                        "page": 1,
+                        "sort": sort,
+                        "marketGroupId": market_group_dic[sport_name],
+                        "matchCategory": "inplay",
+                        "oddsType": odds_type,
+                        "sportCategoryId": sportId_dic[sport_name] }
+                rsp = self.session.post(url, headers=head, json=data, timeout=60)
+                match_list = []
+                if rsp.json()['message'] != "OK":
+                    print(rsp.json())
+                    return "查询赛事列表失败,原因：" + rsp.json()["message"]
+                else:
+                    for childList in rsp.json()["data"]["data"]:
+                        matchList = childList['matchList']
+                        for matchInfo in matchList:
+                            match_list.append(matchInfo['matchId'][9:])
+
+                    match_num = rsp.json()["data"]['totalCount']
+                # print('体育类型：%s,赛事类型【滚球】,总共有【%d】场比赛 ' % (sport_name, match_num))
+                # print(match_list)
+                return match_list, match_num
+
+            elif event_type == "TODAY":
+                data = {"highlight": "false",
+                        "limit": 1000,
+                        "page": 1,
+                        "sort": sort,
+                        "marketGroupId": market_group_dic[sport_name],
+                        "matchCategory": "today",
+                        "oddsType": odds_type,
+                        "sportCategoryId": sportId_dic[sport_name] }
+                rsp = self.session.post(url, headers=head, json=data, timeout=60)
+                match_list = []
+                if rsp.json()['message'] != "OK":
+                    print(rsp.json())
+                    return "查询赛事列表失败,原因：" + rsp.json()["message"]
+                else:
+                    for childList in rsp.json()["data"]["data"]:
+                        matchList = childList['matchList']
+                        for matchInfo in matchList:
+                            match_list.append(matchInfo['matchId'][9:])
+
+                    match_num = rsp.json()["data"]['totalCount']
+                # print('体育类型：%s,赛事类型【今日】,总共有【%d】场比赛 ' % (sport_name, match_num))
+                # print(len(match_list))
+                return match_list, match_num
+
+            elif event_type == "EARLY":
+                data = {"dateOffset": 1000,
+                        "highlight": "false",
+                        "limit": 1000,
+                        "page": 1,
+                        "sort": sort,
+                        "marketGroupId": market_group_dic[sport_name],
+                        "matchCategory": "early",
+                        "oddsType": odds_type,
+                        "sportCategoryId": sportId_dic[sport_name] }
+                rsp = self.session.post(url, headers=head, json=data, timeout=60)
+                match_list = []
+                if rsp.json()['message'] != "OK":
+                    print(rsp.json())
+                    return "查询赛事列表失败,原因：" + rsp.json()["message"]
+                else:
+                    for childList in rsp.json()["data"]["data"]:
+                        matchList = childList['matchList']
+                        for matchInfo in matchList:
+                            match_list.append(matchInfo['matchId'][9:])
+
+                    match_num = rsp.json()["data"]['totalCount']
+                # print('体育类型：%s,赛事类型【早盘】,总共有【%d】场比赛 ' % (sport_name, match_num))
+                # print(match_list)
+                return match_list, match_num
+
+            elif event_type == "PARLAY":
+                data = {"dateOffset": 0,
+                        "highlight": "false",
+                        "limit": 1000,
+                        "page": 1,
+                        "sort": sort,
+                        "marketGroupId": market_group_dic[sport_name],
+                        "matchCategory": "parlay",
+                        "oddsType": odds_type,
+                        "sportCategoryId": sportId_dic[sport_name] }
+                rsp = self.session.post(url, headers=head, json=data, timeout=60)
+                match_list = []
+                if rsp.json()['message'] != "OK":
+                    print(rsp.json())
+                    return "查询赛事列表失败,原因：" + rsp.json()["message"]
+                else:
+                    for childList in rsp.json()["data"]["data"]:
+                        matchList = childList['matchList']
+                        for matchInfo in matchList:
+                            match_list.append(matchInfo['matchId'][9:])
+
+                    match_num = rsp.json()["data"]['totalCount']
+                # print('体育类型：%s,赛事类型【早盘】,总共有【%d】场比赛 ' % (sport_name, match_num))
+                # print(match_list)
+                return match_list, match_num
+
+            else:
+                raise AssertionError('传入参数错误,请检查传入的参数')
+
+        elif terminal == 'h5':
+            if event_type == "INPLAY":
+                data = {"highlight": "false",
+                        "limit": 1000,  # "limit":前端给后端传的参数,数字是几就是前端向后端请求几个比赛数量
+                        "page": 1,
+                        "sort": sort,
+                        "marketGroupId": market_group_dic[sport_name],
+                        "matchCategory": "inplay",
+                        "oddsType": odds_type,
+                        "sportCategoryId": sportId_dic[sport_name]}
+                rsp = self.session.post(url, headers=head, json=data, timeout=60)
+                match_list = []
+                if rsp.json()['message'] != "OK":
+                    print(rsp.json())
+                    return "查询赛事列表失败,原因：" + rsp.json()["message"]
+                else:
+                    for childList in rsp.json()["data"]["data"]:
+                        matchList = childList['matchList']
+                        for matchInfo in matchList:
+                            match_list.append(matchInfo['matchId'][9:])
+
+                    match_num = rsp.json()["data"]['totalCount']
+                # print('体育类型：%s,赛事类型【滚球】,总共有【%d】场比赛 ' % (sport_name, match_num))
+                # print(match_list)
+                return match_list, match_num
+
+            elif event_type == "TODAY":
+                data = {"highlight": "false",
+                        "limit": 1000,
+                        "page": 1,
+                        "sort": sort,
+                        "marketGroupId": market_group_dic[sport_name],
+                        "matchCategory": "today",
+                        "oddsType": odds_type,
+                        "sportCategoryId": sportId_dic[sport_name]}
+                rsp = self.session.post(url, headers=head, json=data, timeout=60)
+                match_list = []
+                if rsp.json()['message'] != "OK":
+                    print(rsp.json())
+                    return "查询赛事列表失败,原因：" + rsp.json()["message"]
+                else:
+                    for childList in rsp.json()["data"]["data"]:
+                        matchList = childList['matchList']
+                        for matchInfo in matchList:
+                            match_list.append(matchInfo['matchId'][9:])
+
+                    match_num = rsp.json()["data"]['totalCount']
+                # print('体育类型：%s,赛事类型【今日】,总共有【%d】场比赛 ' % (sport_name, match_num))
+                # print(len(match_list))
+                return match_list, match_num
+
+            elif event_type == "EARLY":
+                data = {"highlight": "false",
+                        "dateOffset": 1000,
+                        "limit": 1000,
+                        "page": 1,
+                        "sort": sort,
+                        "marketGroupId": market_group_dic[sport_name],
+                        "matchCategory": "early",
+                        "oddsType": odds_type,
+                        "sportCategoryId": sportId_dic[sport_name]}
+                rsp = self.session.post(url, headers=head, json=data, timeout=60)
+                match_list = []
+                if rsp.json()['message'] != "OK":
+                    print(rsp.json())
+                    return "查询赛事列表失败,原因：" + rsp.json()["message"]
+                else:
+                    for childList in rsp.json()["data"]["data"]:
+                        matchList = childList['matchList']
+                        for matchInfo in matchList:
+                            match_list.append(matchInfo['matchId'][9:])
+
+                    match_num = rsp.json()["data"]['totalCount']
+                # print('体育类型：%s,赛事类型【早盘】,总共有【%d】场比赛 ' % (sport_name, match_num))
+                # print(match_list)
+                return match_list, match_num
+
+            elif event_type == "PARLAY":
+                data = {"dateOffset": 0,
+                        "highlight": "false",
+                        "limit": 1000,
+                        "page": 1,
+                        "sort": sort,
+                        "marketGroupId": market_group_dic[sport_name],
+                        "matchCategory": "parlay",
+                        "oddsType": odds_type,
+                        "sportCategoryId": sportId_dic[sport_name]}
+                rsp = self.session.post(url, headers=head, json=data, timeout=60)
+                match_list = []
+                if rsp.json()['message'] != "OK":
+                    print(rsp.json())
+                    return "查询赛事列表失败,原因：" + rsp.json()["message"]
+                else:
+                    for childList in rsp.json()["data"]["data"]:
+                        matchList = childList['matchList']
+                        for matchInfo in matchList:
+                            match_list.append(matchInfo['matchId'][9:])
+
+                    match_num = rsp.json()["data"]['totalCount']
+                # print('体育类型：%s,赛事类型【早盘】,总共有【%d】场比赛 ' % (sport_name, match_num))
+                # print(match_list)
+                return match_list, match_num
+
+            else:
+                raise AssertionError('传入参数错误,请检查传入的参数')
+
+        else:
+            raise AssertionError('传入参数错误,请检查传入的参数')
+
+    def submit(self, outcome_info_list,bet_amount, token=""):
         """
         投注
         :param outcome_info_list: [(outcome_id,odds,amt)]
@@ -63,7 +326,7 @@ class YgClient(object):
         for outcome_group in outcome_info_list:
             for outcome in outcome_group:
                 selection_list.append({"isLive": outcome[1]["islive"],
-                                       "odds": outcome[1]["odds"],
+                                       "odds": round(outcome[1]['odds'] * 0.85, 2),
                                        "outcomeId": outcome[1]["outcome_id"],
                                        "sportCategoryId": outcome[1]["sport_category_id"],
                                        "oddsType": outcome[1]["oddsType"]})
@@ -83,6 +346,9 @@ class YgClient(object):
         # print(data)
         # print('------------------------------------------------------------')
         rtn = self.session.post(post_url, json=data, headers=head)
+
+        if rtn.json()['message'] != "OK":
+            print("投注失败,原因：" + rtn.json()["message"])
         if not rtn.json()["data"]:
             # print("------------")
             # print(rtn.json())
@@ -128,10 +394,10 @@ class YgClient(object):
         print(sub_order_no_list)
 
 
-    def submit_all_bets(self, match_id=None, bet_amount=0, sport_name=None, bet_type=1, outcome_random=True,
+    def submit_all_bets(self, match_id=None, bet_amount=0, sport_name=None, bet_type=1, outcome_random=True, odds_type=1,
                         user_access_list=None):
         """
-
+        投注
         :param match_id:
         :param bet_amount:
         :param bet_type:
@@ -145,15 +411,13 @@ class YgClient(object):
             user_access_list = []
         if bet_type == 1:
             match_id = "sr:match:" + match_id
-            outcome_list = self.get_match_all_outcomes(match_id, user_access_list[0], odd_type=2)
+            outcome_list = self.get_match_all_outcomes(match_id, user_access_list[0], odd_type=odds_type)
         else:
             match_list = self.get_multi_match_info_list(user_access_list[0], sport_name)
             # print(match_list)
-            [outcome_list.append(self.get_match_all_outcomes(item[0], user_access_list[0], odd_type=1)) for item in match_list]
+            [outcome_list.append(self.get_match_all_outcomes(item[0], user_access_list[0], odd_type=1)) for item in match_list]      # 串关只支持欧赔odd_type=1写死
         # print("1.outcome_list is : ")
-        # print('=======================')
-        print(outcome_list)
-        # print('=======================')
+
         new_outcome_list = []
 
         # 非串关
@@ -370,6 +634,8 @@ class YgClient(object):
         sport_category_id = self.db.get_match_data(match_id, "tournamentSportCategoryId")
         data = {"matchId": match_id, "sportCategoryId": sport_category_id, "oddsType": str(odd_type)}
         rsp = self.session.get(url, params=data, headers=head)
+        if rsp.json()['message'] != "OK":
+            print("投注失败,原因：" + rsp.json()["message"])
         outcome_info_list = []
         # market
         is_live = rsp.json()["data"]["isLive"]
@@ -434,13 +700,22 @@ class YgClient(object):
 if __name__ == "__main__":
 
 
-    token_list = ["8df1791b0e67418184e9fe617c7a513b","39a0a7a764064de9965d0fa24af7ca21"]
+    token_list = ["36c6f34726d04b01800521e1702755fc","5e92b50ee81b4576b3bde13010c764e9","fc6247f10f734303bc1a5b10c1053db5","6cf3044ccd794f63ba58c3a6b7297b8a","033032a4816c4aed9af2b994b2f517ce","c5bc31f5be8045e2805f3c6004e30a0a","40fdf671415b4977bfcc2780b90c2a79","7e6c4e68f3e145d89a80b3d68413cfbd","941add5d344644f2978bfb815e519190"]
     mongo_info = ['app', '123456', '192.168.10.120', '27017']
-    mysql_info = ['192.168.10.120', 'root', 's3CDfgfbFZcFEaczstX1VQrdfRFEaXTc', '3306']
+    mysql_info = ['192.168.10.121', 'root', 's3CDfgfbFZcFEaczstX1VQrdfRFEaXTc', '3306']
     yc = YgClient(mysql_info, mongo_info, "http://192.168.10.120")
-    thread_num = 1
-    # 串关
+
+    # 线程数
+    thread_num = 9
+
+    # 串关投注
     bet_type = 3
-    yc.submit_all_bets(user_access_list=token_list[:thread_num], bet_type=bet_type, sport_name="足球")
-    # 非串关
-    # yc.submit_all_bets("27244216", user_access_list=token_list[0:thread_num], bet_type=1, sport_name="足球")
+    # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
+    #     yc.submit_all_bets(user_access_list=token_list[:thread_num], bet_type=bet_type, sport_name=sport_name)
+
+    # 单注投注
+    mathc_id_list = yc.get_match_list(sport_name='足球', token=token_list[0], event_type="INPLAY", terminal='pc', sort=1)[0]
+    for match_id in mathc_id_list:
+        yc.submit_all_bets(match_id=match_id, user_access_list=token_list[0:thread_num], bet_type=1, sport_name="足球", odds_type=4)
+
+

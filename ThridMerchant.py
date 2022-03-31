@@ -232,7 +232,7 @@ class Third_Merchant(object):
         :param operation_type:
         :param merchant_name:
         :param merchant_uid:
-        :param money:
+        :param money:  单位：分
         :return:
         '''
         url = self.auth_url + ":8080/merchant/user/money"
@@ -354,17 +354,18 @@ class Third_Merchant(object):
 if __name__ == "__main__":
 
     # 120测试环境
-    for uname in range(1,2):
-        username = ("USD_test0" + str(uname))
+    for uname in range(1,10):
+        username = ("usertest0" + str(uname))
         mysql_info = ['192.168.10.121', 'root', 's3CDfgfbFZcFEaczstX1VQrdfRFEaXTc', '3306']    # 8.07 最新
-        # mysql_info = ['192.168.10.19', 'root', 's3CDfgfbFZcFEaczstX1VQrdfRFEaXTc', '4000']   # 最新
+
         user_info = Third_Merchant(mysql_info, host='http://192.168.10.11')            # 创建对象user_info
 
         # 注册或登录
-        token = user_info.login(merchant_name='李扬测试商户1', user_name=username, prefix='ll',language="英文", currency="美元")
-        print(username + ',' + token)
+        token = user_info.login(merchant_name='测试商户lee', user_name=username, prefix='ll',language="简体中文", currency="人民币")
+        # print(username + ',' + token)
+        print(f"{token}")
         # # 转入或转出
-        money_info = user_info.money_In_or_Out(operation_type=1, merchant_name='李扬测试商户1',merchant_uid=username, money='10000000')        # 1是转入   2是转出
+        # money_info = user_info.money_In_or_Out(operation_type=2, merchant_name='测试商户lee',merchant_uid=username, money='800000')        # 1是转入   2是转出
         # 查流水
         reward = user_info.get_flow_records_data('1351052452668915713','USD_result01')
         reward_info = user_info.query_flow_records_info()
