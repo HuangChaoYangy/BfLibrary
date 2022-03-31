@@ -1,0 +1,119 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2022/04/27 19:14
+# @Author  : liyang
+# @FileName: sportsReport.yaml
+# @Software: PyCharm
+
+
+-
+  url: /backendReport/sportsProfitAndLossList
+  method: POST
+
+- #test_01用例
+  describe: 管理后台-总台-体育项盈亏,默认查询近7天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: ""
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: ""
+- #test_02用例
+  describe: 管理后台-总台-体育项盈亏,默认查询近6天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: ""
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: ""
+- #test_03用例
+  describe: 管理后台-总台-体育项盈亏,默认查询近5天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: ""
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: ""
+- #test_04用例
+  describe: 管理后台-总台-体育项盈亏,默认查询近4天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: ""
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: ""
+- #test_05用例
+  describe: 管理后台-总台-体育项盈亏,默认查询近3天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: ""
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: ""
+- #test_06用例
+  describe: 管理后台-总台-体育项盈亏,默认查询近2天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: ""
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: ""
+- #test_07用例
+  describe: 管理后台-总台-体育项盈亏,默认查询近1天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: ""
+  resp:
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: ""
+- #test_08用例
+  describe: 管理后台-总台-体育项盈亏,默认查询近15天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: ""
+  resp:
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: ""
+- #test_09用例
+  describe: 管理后台-总台-体育项盈亏,默认查询近30天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: ""
+  resp:
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: ""

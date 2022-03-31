@@ -1,0 +1,37 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2022/04/11 10:21
+# @Author  : liyang
+# @FileName: db_config.py
+# @Software: PyCharm
+
+- # 测试环境mysql配置
+  describe: 测试环境mysql配置
+  database:
+    host: "192.168.10.120"
+    user: "root"
+    password: "s3CDfgfbFZcFEaczstX1VQrdfRFEaXTc"
+    port: 3306
+
+- # 测试环境mongodb配置
+  describe: 测试环境mongodb配置
+  database:
+    host: "192.168.10.120"
+    user: "app"
+    password: "123456"
+    port: 27017
+
+- # mde环境mysql配置
+  describe: 测试环境mysql配置
+  database:
+    host: "35.194.233.30"
+    user: "root"
+    password: "BB#gCmqf3gTO5b*"
+    port: 3306
+
+- # mde环境mongodb配置
+  describe: 测试环境mongodb配置
+  database:
+    host: "35.194.233.30"
+    user: "sport_test"
+    password: "gCmqf3gTO5777"
+    port: 27017

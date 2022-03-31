@@ -47,7 +47,7 @@ class Yaml_data(object):
 if __name__ == "__main__":
 
     ya = Yaml_data()
-    result = ya.get_yaml_data('../data/DailyWinAndLossReport.yaml')
+    result = ya.get_yaml_data('../credit_data/dailyReport.yaml')          # ../data/DailyWinAndLossReport.yaml
     # print(result)
     for item in result:
         print(item)

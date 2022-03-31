@@ -159,27 +159,73 @@
     # my_tuple = ("http://c.biancheng.net/python/", "http://c.biancheng.net/shell/", "http://c.biancheng.net/java/")
 
 
-from concurrent.futures import ThreadPoolExecutor
-import time
+# from concurrent.futures import ThreadPoolExecutor
+# import time
+#
+#
+# def spider(page):
+#     time.sleep(page)
+#     print(f"crawl task{page} finished")
+#     return page
+#
+# with ThreadPoolExecutor(max_workers=5) as t:  # 创建一个最大容纳数量为5的线程池
+#     task1 = t.submit(spider, 1)
+#     task2 = t.submit(spider, 2)  # 通过submit提交执行的函数到线程池中
+#     task3 = t.submit(spider, 3)
+#
+#     print(f"task1: {task1.done()}")  # 通过done来判断线程是否完成
+#     print(f"task2: {task2.done()}")
+#     print(f"task3: {task3.done()}")
+#
+#     time.sleep(2.5)
+#     print(f"task1: {task1.done()}")
+#     print(f"task2: {task2.done()}")
+#     print(f"task3: {task3.done()}")
+#     print(task1.result())  # 通过result来获取返回值
 
 
-def spider(page):
-    time.sleep(page)
-    print(f"crawl task{page} finished")
-    return page
 
-with ThreadPoolExecutor(max_workers=5) as t:  # 创建一个最大容纳数量为5的线程池
-    task1 = t.submit(spider, 1)
-    task2 = t.submit(spider, 2)  # 通过submit提交执行的函数到线程池中
-    task3 = t.submit(spider, 3)
+# def decorator(func):
+#     def wrapper(*args, **kwargs):
+#         print('123')
+#         return func(*args, **kwargs)
+#
+#     return wrapper
+#
+# def say_hello():
+#     print('同学你好')
+#
+# say_hello_super = decorator(say_hello)
+# say_hello_super()
 
-    print(f"task1: {task1.done()}")  # 通过done来判断线程是否完成
-    print(f"task2: {task2.done()}")
-    print(f"task3: {task3.done()}")
 
-    time.sleep(2.5)
-    print(f"task1: {task1.done()}")
-    print(f"task2: {task2.done()}")
-    print(f"task3: {task3.done()}")
-    print(task1.result())  # 通过result来获取返回值
+# dict = {"userName":"",
+# "password":"Bfty123456",
+# "loginUrl":"http://192.168.10.120:96"}
+# print(dict['password'])
 
+
+# handicap = {'A':[1.33, 0.05], 'B':[1.34, 0.04], 'C':[1.35, 0.03], 'D':[1.36, 0.02]}
+# print(handicap['A'][0])
+#
+#
+#
+# userDic = {1: ['testuser0042','testuser004211'], 2: ['testuser0043'], 3: ['testuser0044'], 4: ['testuser0045'], 5: ['testuser0046'], 6: ['testuser0047']}
+# agent_list = []
+# for key in userDic:
+#     agent_list.extend(userDic[key])
+# print(agent_list)
+
+new_list = []
+list =[{'betTime': '2022-04-16 02:49:10', 'orderNo': 'Xwc7JaqCV3cb', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,西澳大利亚', 'TeamName': 'ECU乔达路普VsStirling Macedonia FC', 'betScore': None, 'marketName': '让球', 'outcomeName': 'ECU乔达路普 (-0/0.5)', 'oddsType': 1, 'odds': 1.87, 'outcomeWinOrLoseName': '赢'}], 'betAmount': 300.0, 'profitAmount': 602.81, 'backwaterAmount': 0.0, 'resultAmount': 902.81},
+{'betTime': '2022-04-16 02:49:10', 'orderNo': 'Xwc7JaqCV3cb', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,西澳大利亚', 'TeamName': '科克本市Vs弗罗瑞特', 'betScore': None, 'marketName': '大/小', 'outcomeName': '大3.5', 'oddsType': 1, 'odds': 1.88, 'outcomeWinOrLoseName': '赢'}], 'betAmount': 300.0, 'profitAmount': 602.81, 'backwaterAmount': 0.0, 'resultAmount': 902.81},
+{'betTime': '2022-04-16 02:49:10', 'orderNo': 'Xwc7JaqCV3cb', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,西澳大利亚', 'TeamName': '戈维拉普克罗地亚Vs因勒乌德联', 'betScore': None, 'marketName': '大/小', 'outcomeName': '大3.5', 'oddsType': 1, 'odds': 1.94, 'outcomeWinOrLoseName': '半赢'}], 'betAmount': 300.0, 'profitAmount': 602.81, 'backwaterAmount': 0.0, 'resultAmount': 902.81}]
+
+dic = {'betime': '', 'orderNo': '', 'sportName': '', 'outcomeList':[]}
+for item in list:
+    dic['betime'] = item['betTime']
+    dic['orderNo'] = item['orderNo']
+    dic['sportName'] = item['sportName']
+    dic['outcomeList'].append(item['outcomeList'][0])
+new_list.append(dic)
+print(new_list)

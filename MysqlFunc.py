@@ -4375,7 +4375,7 @@ class MysqlQuery(MysqlFunc):
 
 
 
-                                                                            #  【信用网】
+                                                                            #  【信用网-客户端】
     def get_userAmount_sql(self, username):
         '''
         获取会员的账户余额sql
@@ -4426,11 +4426,917 @@ class MysqlQuery(MysqlFunc):
         return accountHistoryStatistics
 
 
+    def query_agentId_sql(self, agentAccount):
+        '''
+        通过代理账号查询代理id
+        :param agentAccount:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        sql_str = f"SELECT id FROM m_account WHERE account = '{agentAccount}'"
+        # print(sql_str)
+        rtn = list(self.query_data(sql_str, database_name))
+
+        return rtn[0][0]
+
+    def query_userId_sql(self, userAccount):
+        '''
+        通过会员账号查询会员id
+        :param userAccount:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        sql_str = f"SELECT id FROM u_user WHERE account = '{userAccount}'"
+        # print(sql_str)
+        rtn = list(self.query_data(sql_str, database_name))
+
+        return rtn[0][0]
+
+    def query_settledOrder(self, login_account, dateoffset='0'):
+        '''
+        信用网-查询已结算注单详情
+        :param login_account:
+        :param dateoffset:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(dateoffset))
+        sql_str = f"SELECT a.create_time,a.order_no,tournament_name,CONCAT( home_team_name, 'Vs', away_team_name ) team_name,(case when sport_category_id=1 then '足球' when " \
+                  f"sport_category_id=2 then '篮球' when sport_category_id=3 then '网球' when sport_category_id=4 then '排球' when sport_category_id=5 then '羽毛球' when " \
+                  f"sport_category_id=6 then '乒乓球' when sport_category_id=7 then '棒球' when sport_category_id=100 then '冰球' end ) sport_name,CONCAT(IF(bet_score<>NULL,'','滚球'))" \
+                  f" event_type,market_name,bet_score,outcome_name,odds_type,TRUNCATE(credit_odds,2) odds,(CASE WHEN d.settlement_result = 1 THEN '赢' WHEN d.settlement_result = 2 " \
+                  f"THEN '输' WHEN d.settlement_result = 3 THEN '半赢' WHEN d.settlement_result = 4 THEN '半输' WHEN d.settlement_result = 5 THEN '注单平局' WHEN " \
+                  f"d.settlement_result = 6 THEN '注单取消' ELSE '--' END ) outcomeWinOrLoseName,bet_amount,handicap_win_or_lose,backwater_amount,bet_amount+handicap_final_win_or_lose " \
+                  f"'backAmount' FROM o_account_order a JOIN o_account_order_match b ON a.order_no=b.order_no JOIN u_user c ON a.user_id =c.id JOIN o_account_order_match_update d ON " \
+                  f"( b.order_no =d.order_no AND b.match_id = d.match_id ) WHERE a.`status` in (2,3) AND c.login_account = '{login_account}' and DATE_FORMAT( a.award_time, '%Y-%m-%d' ) " \
+                  f"BETWEEN '{ctime}' AND '{ctime}' ORDER BY a.create_time DESC"
+        # print(sql_str)
+        rtn = list(self.query_data(sql_str, database_name))
+        order_list_Detail = []
+        for item in rtn:
+            match_time = item[0]
+            matchTime = match_time.strftime("%Y-%m-%d %H:%M:%S")  # 将datetime格式转成字符串
+            order_list_Detail.append({'betTime': matchTime, 'orderNo': item[1],'sportName': item[4],
+                                      'outcomeList': [{'tournamentName': item[2],'TeamName': item[3],'betScore': item[7], 'marketName': item[6],'outcomeName': item[8],
+                                                       'oddsType': item[9], 'odds': item[10], 'outcomeWinOrLoseName': item[11]}],
+                                      'betAmount': item[12], 'profitAmount': item[13], 'backwaterAmount': item[14],'resultAmount': item[15]})
+
+        return order_list_Detail
 
 
 
 
 
+                                                                    #  【信用网-管理后台】
+
+
+    def credit_agentLineManagement_sql(self, agentName="", agentAccount=""):
+        '''
+        总台-代理线管理                             2022.04.22
+        :param agentName:
+        :param agentAccount:
+        :return:
+        '''
+        if agentName:
+            name = f"AND a.`name`='{agentName}'"
+        else:
+            name = ""
+        if agentAccount:
+            account = f"AND a.account='{agentAccount}'"
+        else:
+            account = ""
+        database_name = "bfty_credit"
+        sql_str = f"SELECT DISTINCT a.`name` '代理线名称',a.account '代理线账号',credits '信用额度',available_quota '剩余额度',sum(IF( c.`status` >= 0, c.bet_amount, 0 )) '总投注金额'," \
+                  f"sum(IF( c.`status` = 2 AND award_time IS NOT NULL, c.bet_amount, 0 )) '总有效投注金额',sum(IF( c.`status` = 2 AND award_time IS NOT NULL AND payment_status IN ( 0, 1 ), " \
+                  f"level0_backwater_amount, 0 )) '总返水',sum(IF( c.`status` = 2 AND award_time IS NOT NULL AND payment_status IN ( 0, 1 ), level0_win_or_lose, 0 )) '总输赢',a.operator '创建人'," \
+                  f"a.create_time '创建时间',a.new_operator '最新操作人',a.update_time '最新操作时间' FROM `m_account` a JOIN m_account_credits b ON a.id = b.account_id LEFT JOIN " \
+                  f"o_account_order c ON a.id = c.proxy0_id LEFT JOIN m_account_unsettlement_amount_record d ON (c.order_no = d.order_no AND c.proxy0_id=d.parent_id) WHERE " \
+                  f"a.role_id= 0 {name} {account} GROUP BY a.`name`,a.account,a.create_time,a.new_operator,a.update_time,credits,available_quota ORDER BY a.create_time DESC"
+        rtn = list(self.query_data(sql_str, database_name))
+
+        agentLine_list = []
+        for item in rtn:
+            ctime = item[9]
+            create_time = ctime.strftime("%Y-%m-%d %H:%M:%S")  # 将datetime格式转成字符串
+            newctime = item[9]
+            new_create_time = newctime.strftime("%Y-%m-%d %H:%M:%S")
+            agentLine_list.append([item[0],item[1],item[2],item[3],item[4],item[5],item[6],
+                                   item[7],item[8],create_time,item[10],new_create_time])
+        print(agentLine_list)
+        return agentLine_list
+
+
+    def credit_dataSourceReport_sql(self, userAccount='', orderNo='', sportName='', result=[], status=[], betType='',
+                                     create_time=(-30,0), settle_time=(), sortBy='', sortParameter='', queryType=1):
+        '''
+        总台-报表管理-数据源对账报表，默认以"投注时间"查询近一个月数据                    /// 修改于2022.04.22
+        :param userAccount:
+        :param orderNo:
+        :param sportName:
+        :param result:     空字符串代表查询全部, {'1,3':'赢','2,4':'输','5':'注单平局','6':'注单取消'}
+        :param status:     空字符串代表查询全部, {'1':'未结算','2':'已结算','3':'已取消''}
+        :param betType:    空字符串代表查询全部, {'1':'单关,'2':'串关','3':'复式串关'}
+        :param create_time:
+        :param settle_time:
+        :param sortBy:
+        :param sortParameter:
+        :param queryType:
+        :return:
+        '''
+        if userAccount:
+            account = f'and login_account={userAccount}'
+        else:
+            account = ''
+        if orderNo:
+            order_no = f'and a.order_no={orderNo}'
+        else:
+            order_no = ''
+        if sportName:
+            name = self.db.get_sportCategoryId_sql(sportName=sportName)
+            sport_name = f'and a.sport_category_id={name}'
+        else:
+            sport_name = ''
+        if result:
+            result = f'and settlement_result={result}'
+        else:
+            result = ''
+        if status:
+            status = f'and a.`status`={status}'
+        else:
+            status = ''
+        if betType:
+            bet_type = f'and a.bet_type={betType}'
+        else:
+            bet_type = ''
+
+        if create_time:
+            sttime = create_time[0]
+            entime = create_time[1]
+            ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(sttime))
+            etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(entime))
+        else:
+            ctime = ""
+            etime = ""
+        if settle_time:
+            sttime = settle_time[0]
+            entime = settle_time[1]
+            set_ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(sttime))
+            set_etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(entime))
+            s_ctime = f"and DATE_FORMAT(a.award_time,'%Y-%m-%d') BETWEEN '{set_ctime}' AND '{set_etime}'"
+        else:
+            s_ctime = ""
+        database_name = "bfty_credit"
+        if queryType == 1:
+            sql_str = f"SELECT a.order_no as '注单号',if(a.bet_type=1,'单注','串关') as '注单类型',(CASE WHEN a.sport_category_id= 1 then '足球' WHEN a.sport_category_id = 2 THEN '篮球'" \
+                      f"WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 THEN '羽毛球' WHEN a.sport_category_id = 6 THEN " \
+                      f"'乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰上曲棍球' END) as '体育项目',login_account as '登入账号',a.create_time as '投注时间'," \
+                      f"bet_amount as '投注金额',ifnull(award_time,'--') as '结算时间',(CASE WHEN a.`status` in (2) then '已结算' WHEN a.`status` in (0,1) then '未结算' ELSE '已取消' END) as '注单状态'," \
+                      f"(CASE WHEN a.`status`= 2 and settlement_result in (1,3) then '赢' WHEN a.`status`= 2 and settlement_result in (2,4) then '输' WHEN a.`status`= 2 and " \
+                      f"settlement_result = 6 then '注单平局' WHEN a.`status`=3 and settlement_result = 6 then '注单取消' ELSE '--' END) as '注单结果',if(a.`status`=2," \
+                      f"account_win_or_lose,'--') as '原始输/赢',if(a.`status`=2,handicap_win_or_lose,'--') as '盘口输/赢' FROM o_account_order a JOIN u_user b ON a.user_id = b.id " \
+                      f"WHERE DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {account} {order_no} {sport_name} {result} {status} {bet_type}" \
+                      f" {s_ctime} AND a.`status`>=0 ORDER BY a.create_time DESC"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            dataSourceReport_list = []
+            for item in rtn:
+                ctime = item[4]
+                create_time = ctime.strftime("%Y-%m-%d %H:%M:%S")
+                dataSourceReport_list.append([item[0], item[1], item[2], item[3], create_time, item[5], item[6],
+                                       item[7], item[8], item[9], item[10]])
+
+            print(dataSourceReport_list)
+            return dataSourceReport_list
+
+        elif queryType == 2:
+            sql_str = f"SELECT sum(`投注金额`) as '投注金额',ROUND(sum(`原始输/赢`),2) as '原始输/赢',ROUND(sum(`盘口输/赢`),2) as '盘口输/赢' FROM ( SELECT a.order_no as '注单号'," \
+                      f"if(a.`status`>=0,bet_amount,0) as '投注金额',if(a.`status`=2,account_win_or_lose,'--') as '原始输/赢',if(a.`status`=2,handicap_win_or_lose,'--') as '盘口输/赢' " \
+                      f"FROM o_account_order a JOIN u_user b ON a.user_id = b.id WHERE DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' " \
+                      f"{account} {order_no} {sport_name} {result} {status} {bet_type} {s_ctime} ORDER BY a.create_time DESC ) a"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            dataSourceReport_list = []
+            for item in rtn:
+                dataSourceReport_list.append([item[0], item[1], item[2]])
+
+            print(dataSourceReport_list[0])
+            return dataSourceReport_list[0]
+
+        elif queryType == 3:
+            sql_str = f"SELECT count(if(`注单状态`='已结算',1,null)) as '已结算单数',count(if(`注单状态`='未结算',1,null)) as '未结算单数',count(1) as '单数总计' FROM (SELECT " \
+                      f"(CASE WHEN a.`status`=2 then '已结算' WHEN a.`status` in (0,1) then '未结算' ELSE '已取消' END) as '注单状态' FROM o_account_order a JOIN u_user b ON " \
+                      f"a.user_id = b.id WHERE DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {account} {order_no} {sport_name} {result} {status} {bet_type} " \
+                      f"{s_ctime} AND a.`status`>=0) a"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            dataSourceReport_list = []
+            for item in rtn:
+                dataSourceReport_list.append([item[0], item[1], item[2]])
+
+            print(dataSourceReport_list[0])
+            return dataSourceReport_list[0]
+
+        else:
+            raise AssertionError('暂不支持该类型')
+
+    def credit_dataSourceReport(self, expData={}, queryType=1):
+        '''
+        总台-报表管理-数据源对账报表，默认以"投注时间"查询近一个月数据                    /// 修改于2022.04.26
+        :param userAccount:
+        :param orderNo:
+        :param sportName:
+        :param result:     空字符串代表查询全部, {'1,3':'赢','2,4':'输','5':'注单平局','6':'注单取消'}
+        :param status:     空字符串代表查询全部, {'1':'未结算','2':'已结算','3':'已取消''}
+        :param betType:    空字符串代表查询全部, {'1':'单关,'2':'串关','3':'复式串关'}
+        :param create_time:
+        :param settle_time:
+        :param sortBy:
+        :param sortParameter:
+        :param queryType:
+        :return:
+        '''
+        resp = expData
+        if resp['betStartTime']:
+            createTime = resp['betStartTime']
+            endTime = resp['betEndTime']
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=int(createTime))
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=int(endTime))
+        else:
+            ctime = ""
+            etime = ""
+        if resp['settlementStartTime']:
+            createTime = resp['settlementStartTime']
+            endTime = resp['settlementEndTime']
+            set_ctime = self.get_current_time_for_client(time_type='ctime',day_diff=int(createTime))
+            set_etime = self.get_current_time_for_client(time_type='ctime', day_diff=int(endTime))
+            s_ctime = f"and DATE_FORMAT(a.award_time,'%Y-%m-%d') BETWEEN '{set_ctime}' AND '{set_etime}'"
+        else:
+            s_ctime = ""
+
+        if resp['userName']:
+            account = f"and login_account={resp['userName']}"
+        else:
+            account = ''
+        if resp['orderNo']:
+            order_no = f"and a.order_no={resp['orderNo']}"
+        else:
+            order_no = ''
+        if resp['sportId']:
+            sport_name = f"and a.sport_category_id={resp['sportId']}"
+        else:
+            sport_name = ''
+        if resp['settlementResult']:
+            result = f"and settlement_result in {resp['settlementResult']}"
+        else:
+            result = ''
+        if resp['status']:
+            status = f"and a.`status` in {resp['status']}"
+        else:
+            status = ''
+        if resp['betType']:
+            bet_type = f"and a.bet_type in {resp['betType']}"
+        else:
+            bet_type = ''
+        if not resp['sortBy']:
+            sort = 'ORDER BY a.create_time DESC'
+        else:
+            sort = "ORDER BY %s %s" % (resp['sortParameter'], resp['sortBy'] )
+
+        database_name = "bfty_credit"
+        if queryType == 1:
+            sql_str = f"SELECT a.order_no as '注单号',if(a.bet_type=1,'单注','串关') as '注单类型',(CASE WHEN a.sport_category_id= 1 then '足球' WHEN a.sport_category_id = 2 THEN '篮球'" \
+                      f"WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 THEN '羽毛球' WHEN a.sport_category_id = 6 THEN " \
+                      f"'乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰上曲棍球' END) as '体育项目',login_account as '登入账号',a.create_time as '投注时间'," \
+                      f"bet_amount as '投注金额',ifnull(award_time,'--') as '结算时间',(CASE WHEN a.`status` in (2) then '已结算' WHEN a.`status` in (0,1) then '未结算' ELSE '已取消' END) as '注单状态'," \
+                      f"(CASE WHEN a.`status`= 2 and settlement_result in (1,3) then '赢' WHEN a.`status`= 2 and settlement_result in (2,4) then '输' WHEN a.`status`= 2 and " \
+                      f"settlement_result = 6 then '注单平局' WHEN a.`status`=3 and settlement_result = 6 then '注单取消' ELSE '--' END) as '注单结果',if(a.`status`=2," \
+                      f"account_win_or_lose,'--') as '原始输/赢',if(a.`status`=2,handicap_win_or_lose,'--') as '盘口输/赢' FROM o_account_order a JOIN u_user b ON a.user_id = b.id " \
+                      f"WHERE DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {account} {order_no} {sport_name} {result} {status} {bet_type}" \
+                      f" {s_ctime} AND a.`status`>=0 {sort} limit 200"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            dataSourceReport_list = []
+            for item in rtn:
+                ctime = item[4]
+                create_time = ctime.strftime("%Y-%m-%d %H:%M:%S")
+                dataSourceReport_list.append([item[0], item[1], item[2], item[3], create_time, item[5], item[6],
+                                       item[7], item[8], item[9], item[10]])
+
+            print(dataSourceReport_list)
+            return dataSourceReport_list
+
+        elif queryType == 2:
+            sql_str = f"SELECT sum(`投注金额`) as '投注金额',ROUND(sum(`原始输/赢`),2) as '原始输/赢',ROUND(sum(`盘口输/赢`),2) as '盘口输/赢' FROM ( SELECT a.order_no as '注单号'," \
+                      f"if(a.`status`>=0,bet_amount,0) as '投注金额',if(a.`status`=2,account_win_or_lose,'--') as '原始输/赢',if(a.`status`=2,handicap_win_or_lose,'--') as '盘口输/赢' " \
+                      f"FROM o_account_order a JOIN u_user b ON a.user_id = b.id WHERE DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' " \
+                      f"{account} {order_no} {sport_name} {result} {status} {bet_type} {s_ctime} ORDER BY a.create_time DESC ) a"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            dataSourceReport_list = []
+            for item in rtn:
+                dataSourceReport_list.append([item[0], item[1], item[2]])
+
+            print(dataSourceReport_list[0])
+            return dataSourceReport_list[0]
+
+        elif queryType == 3:
+            sql_str = f"SELECT count(if(`注单状态`='已结算',1,null)) as '已结算单数',count(if(`注单状态`='未结算',1,null)) as '未结算单数',count(1) as '单数总计' FROM (SELECT " \
+                      f"(CASE WHEN a.`status`=2 then '已结算' WHEN a.`status` in (0,1) then '未结算' ELSE '已取消' END) as '注单状态' FROM o_account_order a JOIN u_user b ON " \
+                      f"a.user_id = b.id WHERE DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {account} {order_no} {sport_name} {result} {status} {bet_type} " \
+                      f"{s_ctime} AND a.`status`>=0) a"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            dataSourceReport_list = []
+            for item in rtn:
+                dataSourceReport_list.append([item[0], item[1], item[2]])
+
+            print(dataSourceReport_list[0])
+            return dataSourceReport_list[0]
+
+        else:
+            raise AssertionError('暂不支持该类型')
+
+
+    def credit_dailyReport_query_sql(self, create_time=(-6,0), queryType=1):
+        '''
+        总台-报表管理-每日盈亏                                   /// 修改于2022.04.23
+        :param create_time:
+        :param queryType:
+        :return:
+        '''
+        if create_time:
+            sttime = create_time[0]
+            entime = create_time[1]
+            ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(sttime))
+            etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(entime))
+        else:
+            ctime = ""
+            etime = ""
+        database_name = "bfty_credit"
+
+        if queryType == 1:
+            sql_str = f"SELECT a.`日期`,IFNULL(`投注人数`,0) `投注人数`,IFNULL(`投注量`,0) `投注量`,IFNULL(`投注金额`,0) `投注金额`,IFNULL(`有效投注`,0) `有效投注`,IFNULL(`投注盈亏`,0) `投注盈亏`," \
+                      f"IFNULL(`总返水`,0) `总返水`,IFNULL(`净盈亏`,0) `净盈亏` FROM (SELECT `day` as '日期',`bet_user` as '投注人数',`bet_num` as '投注量',`bet_amount` as '投注金额' FROM " \
+                      f"s_day a LEFT JOIN (SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as bet_day,count(distinct user_id) as bet_user,COUNT(1) as bet_num,sum(bet_amount) as bet_amount " \
+                      f"FROM o_account_order a WHERE `status` > 0 GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d') ORDER BY DATE_FORMAT(create_time,'%Y-%m-%d') DESC ) b ON a.`day` = " \
+                      f"b.bet_day WHERE a.`day` BETWEEN '{ctime}' AND '{etime}' ORDER BY a.`day` DESC) a LEFT JOIN (SELECT `day` as '日期',`effect_amount` as '有效投注'," \
+                      f"`win_or_lose` as '投注盈亏',`total_backwater` as '总返水',`total_win_or_lose` as '净盈亏' FROM s_day b LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as " \
+                      f"bet_day,ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount,SUM(level0_backwater_amount)+sum(level0_win_or_lose) as win_or_lose," \
+                      f"SUM(level0_backwater_amount) as total_backwater,sum(level0_win_or_lose) as total_win_or_lose FROM o_account_order a WHERE a.`status` = 2 AND award_time " \
+                      f"is not null GROUP BY DATE_FORMAT(award_time,'%Y-%m-%d') ORDER BY DATE_FORMAT(award_time,'%Y-%m-%d') DESC) a ON b.`day` = a.bet_day WHERE b.`day` BETWEEN " \
+                      f"'{ctime}' AND '{etime}' ORDER BY b.`day` DESC) b ON a.`日期` = b.`日期` ORDER BY a.`日期` DESC"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            dailyReport_list = []
+            for item in rtn:
+                ctime = item[0]
+                create_time = ctime.strftime("%Y-%m-%d")
+                dailyReport_list.append([create_time, item[1], item[2], item[3], item[4], item[5], item[6], item[7]])
+
+            print(dailyReport_list)
+            return dailyReport_list
+
+        elif queryType == 2:
+            sql_str = f"SELECT sum(`投注人数`) '投注人数',sum(`投注量`) '投注量',sum(`投注金额`) '投注金额',sum(`有效投注`) '有效投注',sum(`投注盈亏`) '投注盈亏',sum(`总返水`) '总返水'," \
+                      f"sum(`净盈亏`) '净盈亏' FROM (SELECT `day` as '日期',`bet_user` as '投注人数',`bet_num` as '投注量',`bet_amount` as '投注金额' FROM s_day a LEFT JOIN " \
+                      f"(SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as bet_day,count(distinct user_id) as bet_user,COUNT(1) as bet_num,sum(bet_amount) as bet_amount FROM " \
+                      f"o_account_order a WHERE `status` > 0 GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d') ORDER BY DATE_FORMAT(create_time,'%Y-%m-%d') DESC ) b ON a.`day` = b.bet_day" \
+                      f" WHERE a.`day` BETWEEN '{ctime}' AND '{etime}' ORDER BY a.`day` DESC) a LEFT JOIN (SELECT `day` as '日期',`effect_amount` as '有效投注',`win_or_lose` as" \
+                      f" '投注盈亏',`total_backwater` as '总返水',`total_win_or_lose` as '净盈亏' FROM s_day b LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day," \
+                      f"ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount,SUM(level0_backwater_amount)+sum(level0_win_or_lose) as win_or_lose,SUM(level0_backwater_amount) " \
+                      f"as total_backwater,sum(level0_win_or_lose) as total_win_or_lose FROM o_account_order a WHERE a.`status` = 2 AND award_time is not null GROUP BY " \
+                      f"DATE_FORMAT(award_time,'%Y-%m-%d') ORDER BY DATE_FORMAT(award_time,'%Y-%m-%d') DESC ) a ON b.`day` = a.bet_day WHERE b.`day` BETWEEN '{ctime}' AND '{etime}' " \
+                      f"ORDER BY b.`day` DESC) b ON a.`日期` = b.`日期`"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            dailyReport_list = []
+            for item in rtn:
+                dailyReport_list.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6]])
+
+            print(dailyReport_list[0])
+            return dailyReport_list[0]
+
+        else:
+            raise AssertionError('暂不支持该类型')
+
+    def credit_dailyReport_query(self, expData={}, queryType=1):
+        '''
+        总台-报表管理-每日盈亏   用于自动化测试                          /// 修改于2022.04.26
+        :param create_time:
+        :param queryType:
+        :return:
+        '''
+        resp = expData
+        if resp['startCreateTime']:
+            createTime = resp['startCreateTime']
+            endTime = resp['endCreateTime']
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=int(createTime))
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=int(endTime))
+        else:
+            ctime = ""
+            etime = ""
+        database_name = "bfty_credit"
+
+        if queryType == 1:
+            sql_str = f"SELECT a.`日期`,IFNULL(`投注人数`,0) `投注人数`,IFNULL(`投注量`,0) `投注量`,IFNULL(`投注金额`,0) `投注金额`,IFNULL(`有效投注`,0) `有效投注`,IFNULL(`投注盈亏`,0) `投注盈亏`," \
+                      f"IFNULL(`总返水`,0) `总返水`,IFNULL(`净盈亏`,0) `净盈亏` FROM (SELECT `day` as '日期',`bet_user` as '投注人数',`bet_num` as '投注量',`bet_amount` as '投注金额' FROM " \
+                      f"s_day a LEFT JOIN (SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as bet_day,count(distinct user_id) as bet_user,COUNT(1) as bet_num,sum(bet_amount) as bet_amount " \
+                      f"FROM o_account_order a WHERE `status` > 0 GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d') ORDER BY DATE_FORMAT(create_time,'%Y-%m-%d') DESC ) b ON a.`day` = " \
+                      f"b.bet_day WHERE a.`day` BETWEEN '{ctime}' AND '{etime}' ORDER BY a.`day` DESC) a LEFT JOIN (SELECT `day` as '日期',`effect_amount` as '有效投注'," \
+                      f"`win_or_lose` as '投注盈亏',`total_backwater` as '总返水',`total_win_or_lose` as '净盈亏' FROM s_day b LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as " \
+                      f"bet_day,ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount,SUM(level0_backwater_amount)+sum(level0_win_or_lose) as win_or_lose," \
+                      f"SUM(level0_backwater_amount) as total_backwater,sum(level0_win_or_lose) as total_win_or_lose FROM o_account_order a WHERE a.`status` = 2 AND award_time " \
+                      f"is not null GROUP BY DATE_FORMAT(award_time,'%Y-%m-%d') ORDER BY DATE_FORMAT(award_time,'%Y-%m-%d') DESC) a ON b.`day` = a.bet_day WHERE b.`day` BETWEEN " \
+                      f"'{ctime}' AND '{etime}' ORDER BY b.`day` DESC) b ON a.`日期` = b.`日期` ORDER BY a.`日期` DESC"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            dailyReport_list = []
+            for item in rtn:
+                ctime = item[0]
+                create_time = ctime.strftime("%Y-%m-%d")
+                dailyReport_list.append([create_time, item[1], item[2], item[3], item[4], item[5], item[6], item[7]])
+
+            print(dailyReport_list)
+            return dailyReport_list
+
+        elif queryType == 2:
+            sql_str = f"SELECT sum(`投注人数`) '投注人数',sum(`投注量`) '投注量',sum(`投注金额`) '投注金额',sum(`有效投注`) '有效投注',sum(`投注盈亏`) '投注盈亏',sum(`总返水`) '总返水'," \
+                      f"sum(`净盈亏`) '净盈亏' FROM (SELECT `day` as '日期',`bet_user` as '投注人数',`bet_num` as '投注量',`bet_amount` as '投注金额' FROM s_day a LEFT JOIN " \
+                      f"(SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as bet_day,count(distinct user_id) as bet_user,COUNT(1) as bet_num,sum(bet_amount) as bet_amount FROM " \
+                      f"o_account_order a WHERE `status` > 0 GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d') ORDER BY DATE_FORMAT(create_time,'%Y-%m-%d') DESC ) b ON a.`day` = b.bet_day" \
+                      f" WHERE a.`day` BETWEEN '{ctime}' AND '{etime}' ORDER BY a.`day` DESC) a LEFT JOIN (SELECT `day` as '日期',`effect_amount` as '有效投注',`win_or_lose` as" \
+                      f" '投注盈亏',`total_backwater` as '总返水',`total_win_or_lose` as '净盈亏' FROM s_day b LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day," \
+                      f"ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount,SUM(level0_backwater_amount)+sum(level0_win_or_lose) as win_or_lose,SUM(level0_backwater_amount) " \
+                      f"as total_backwater,sum(level0_win_or_lose) as total_win_or_lose FROM o_account_order a WHERE a.`status` = 2 AND award_time is not null GROUP BY " \
+                      f"DATE_FORMAT(award_time,'%Y-%m-%d') ORDER BY DATE_FORMAT(award_time,'%Y-%m-%d') DESC ) a ON b.`day` = a.bet_day WHERE b.`day` BETWEEN '{ctime}' AND '{etime}' " \
+                      f"ORDER BY b.`day` DESC) b ON a.`日期` = b.`日期`"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            dailyReport_list = []
+            for item in rtn:
+                dailyReport_list.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6]])
+
+            print(dailyReport_list[0])
+            return dailyReport_list[0]
+
+        else:
+            raise AssertionError('暂不支持该类型')
+
+
+    def credit_terminalReport_query_sql(self, create_time=(-6, 0), terminal="", queryType=1):
+        '''
+        总台-报表管理-客户端盈亏                                   /// 修改于2022.04.23
+        :param create_time:
+        :param terminal:    客户端只有五类：H5-android/pc/H5-IOS/APP-android/APP-IOS
+        :param queryType:  1:主界面详情  2：总计  3:根据客户端类型查看详情
+        :return:
+        '''
+        if create_time:
+            sttime = create_time[0]
+            entime = create_time[1]
+            ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(sttime))
+            etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(entime))
+        else:
+            ctime = ""
+            etime = ""
+        if terminal:
+            client_name = f"WHERE clientName = '{terminal}'"
+        else:
+            client_name = ""
+        database_name = "bfty_credit"
+
+        if queryType == 1:
+            sql_str = f"SELECT `clientName` '客户端',`bet_user` '投注人数',`bet_num` '投注量',`bet_amount` '投注金额',`effect_amount` as '有效投注',`win_or_lose` as '投注盈亏'," \
+                      f"`total_backwater` as '总返水',`total_win_or_lose` as '净盈亏' FROM s_client a LEFT JOIN ( SELECT * FROM ( SELECT `terminal`,`bet_user`,`bet_num`,`bet_amount` " \
+                      f"FROM (SELECT terminal,count(distinct user_id) as bet_user,COUNT(1) as bet_num,sum(bet_amount) as bet_amount FROM o_account_order a WHERE `status` > 0 AND " \
+                      f"DATE_FORMAT(create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' GROUP BY terminal) a ) a LEFT JOIN ( SELECT `terminal` 'client',`effect_amount`," \
+                      f"`win_or_lose`,`total_backwater`,`total_win_or_lose` FROM ( SELECT terminal,ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount," \
+                      f"SUM(level0_backwater_amount)+sum(level0_win_or_lose) as win_or_lose,SUM(level0_backwater_amount) as total_backwater,sum(level0_win_or_lose) as " \
+                      f"total_win_or_lose FROM o_account_order a WHERE a.`status` = 2 AND DATE_FORMAT(award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' " \
+                      f"GROUP BY terminal) a ) b ON a.`terminal` = b.`client`) b ON a.clientName =b.`terminal` {client_name}"
+            print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            terminalReport_list = []
+            for item in rtn:
+                # ctime = item[0]
+                # create_time = ctime.strftime("%Y-%m-%d")
+                terminalReport_list.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7]])
+
+            print(terminalReport_list)
+            return terminalReport_list
+
+        elif queryType == 2:
+            sql_str = f"SELECT sum(`bet_user`) '投注人数',sum(`bet_num`) '投注量',sum(`bet_amount`) '投注金额',sum(`effect_amount`) '有效投注',sum(`win_or_lose`) '投注盈亏'," \
+                      f"sum(`total_backwater`) '总返水',sum(`total_win_or_lose`) '净盈亏' FROM s_client a LEFT JOIN ( SELECT * FROM ( SELECT `terminal`,`bet_user`,`bet_num`," \
+                      f"`bet_amount` FROM (SELECT terminal,count(distinct user_id) as bet_user,COUNT(1) as bet_num,sum(bet_amount) as bet_amount FROM o_account_order a WHERE " \
+                      f"`status` > 0 AND DATE_FORMAT(create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' GROUP BY terminal) a ) a LEFT JOIN ( SELECT `terminal` 'client'," \
+                      f"`effect_amount`,`win_or_lose`,`total_backwater`,`total_win_or_lose` FROM ( SELECT terminal,ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount," \
+                      f"SUM(level0_backwater_amount)+sum(level0_win_or_lose) as win_or_lose,SUM(level0_backwater_amount) as total_backwater,sum(level0_win_or_lose) as " \
+                      f"total_win_or_lose FROM o_account_order a WHERE a.`status` = 2 AND DATE_FORMAT(award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' GROUP BY terminal) a ) b" \
+                      f" ON a.`terminal` = b.`client`) b ON a.clientName =b.`terminal`"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            terminalReport_list = []
+            for item in rtn:
+                terminalReport_list.append(['合计',item[0], item[1], item[2], item[3], item[4], item[5], item[6]])
+
+            print(terminalReport_list[0])
+            return terminalReport_list[0]
+
+        elif queryType == 3:
+            sql_str = f"SELECT `day`,IFNULL(`bet_user`,0) '投注人数',IFNULL(`bet_num`,0) '投注量',IFNULL(`bet_amount`,0) '投注金额',IFNULL(`effect_amount`,0) '有效投注'," \
+                      f"IFNULL(`win_or_lose`,0) '投注盈亏',IFNULL(`total_backwater`,0) '总返水',IFNULL(`total_win_or_lose`,0) '净盈亏' FROM (SELECT `day`,`bet_user`,`bet_num`," \
+                      f"`bet_amount` FROM s_day a LEFT JOIN (SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as bet_day,count(distinct user_id) as bet_user,COUNT(1) as bet_num," \
+                      f"sum(bet_amount) as bet_amount FROM o_account_order a WHERE `status` > 0 and terminal = 'pc' GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d') ORDER BY " \
+                      f"DATE_FORMAT(create_time,'%Y-%m-%d') DESC ) b ON a.`day` = b.bet_day WHERE a.`day` BETWEEN '{ctime}' AND '{etime}') a LEFT JOIN (SELECT `day` 'date'," \
+                      f"`effect_amount`,`win_or_lose`,`total_backwater`,`total_win_or_lose` FROM s_day b LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day," \
+                      f"ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount,SUM(level0_backwater_amount)+sum(level0_win_or_lose) as win_or_lose,SUM(level0_backwater_amount) " \
+                      f"as total_backwater,sum(level0_win_or_lose) as total_win_or_lose FROM o_account_order a WHERE a.`status`=2 and award_time is not null and terminal = '{terminal}' " \
+                      f"GROUP BY DATE_FORMAT(award_time,'%Y-%m-%d') ORDER BY DATE_FORMAT(award_time,'%Y-%m-%d') DESC ) a ON b.`day` = a.bet_day WHERE b.`day` " \
+                      f"BETWEEN '{ctime}' AND '{etime}') b ON a.`day` = b.`date` ORDER BY a.`day` DESC"
+
+            rtn = list(self.query_data(sql_str, database_name))
+
+            terminalReport_list = []
+            for item in rtn:
+                ctime = item[0]
+                create_time = ctime.strftime("%Y-%m-%d")
+                terminalReport_list.append([create_time, item[1], item[2], item[3], item[4], item[5], item[6], item[7]])
+
+            print(terminalReport_list)
+            return terminalReport_list
+        else:
+            raise AssertionError('暂不支持该类型')
+
+    def credit_terminalReport_query(self, expData={}, queryType=1):
+        '''
+        总台-报表管理-客户端盈亏                                   /// 修改于2022.04.23
+        :param create_time:
+        :param terminal:    客户端只有五类：H5-android/pc/H5-IOS/APP-android/APP-IOS
+        :param queryType:  1:主界面详情  2：总计  3:根据客户端类型查看详情
+        :return:
+        '''
+        resp = expData
+        if resp['startCreateTime']:
+            createTime = resp['startCreateTime']
+            endTime = resp['endCreateTime']
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=int(createTime))
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=int(endTime))
+        else:
+            ctime = ""
+            etime = ""
+        if resp['terminal']:
+            client_name = f"WHERE clientName = '{resp['terminal']}'"
+            client = f"and terminal = '{resp['terminal']}'"
+        else:
+            client_name = ""
+            client = ""
+        database_name = "bfty_credit"
+
+        if queryType == 1:
+            sql_str = f"SELECT `clientName` '客户端',IFNULL(`bet_user`,0) '投注人数',IFNULL(`bet_num`,0) '投注量',IFNULL(`bet_amount`,0) '投注金额',`effect_amount` as '有效投注'," \
+                      f"`win_or_lose` as '投注盈亏',`total_backwater` as '总返水',`total_win_or_lose` as '净盈亏' FROM (SELECT * FROM s_client a LEFT JOIN (SELECT `terminal`," \
+                      f"`bet_user`,`bet_num`,`bet_amount` FROM (SELECT terminal,count(distinct user_id) as bet_user,COUNT(1) as bet_num,sum(bet_amount) as bet_amount FROM " \
+                      f"o_account_order a WHERE `status` > 0 AND DATE_FORMAT(create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' GROUP BY terminal) a) b ON " \
+                      f"a.clientName=b.terminal) a JOIN (SELECT terminal,ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount,SUM(level0_backwater_amount)+" \
+                      f"sum(level0_win_or_lose) as win_or_lose,SUM(level0_backwater_amount) as total_backwater,sum(level0_win_or_lose) as total_win_or_lose FROM o_account_order a" \
+                      f" WHERE a.`status` = 2 AND DATE_FORMAT(award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' GROUP BY terminal) b ON a.clientName=b.terminal " \
+                      f"{client_name}"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            terminalReport_list = []
+            for item in rtn:
+                terminalReport_list.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7]])
+
+            return terminalReport_list
+
+        elif queryType == 2:
+            sql_str = f"SELECT cast(sum(`bet_user`) as char) '投注人数',sum(`bet_num`) '投注量',sum(`bet_amount`) '投注金额',sum(`effect_amount`) as '有效投注'," \
+                      f"sum(`win_or_lose`) as '投注盈亏',sum(`total_backwater`) as '总返水',sum(`total_win_or_lose`) as '净盈亏' FROM (SELECT * FROM s_client a LEFT JOIN " \
+                      f"(SELECT `terminal`,`bet_user`,`bet_num`,`bet_amount` FROM (SELECT terminal,count(distinct user_id) as bet_user,COUNT(1) as bet_num,sum(bet_amount) as " \
+                      f"bet_amount FROM o_account_order a WHERE `status` > 0 AND DATE_FORMAT(create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' GROUP BY terminal) a) b " \
+                      f"ON a.clientName=b.terminal) a JOIN (SELECT terminal,ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount,SUM(level0_backwater_amount)+" \
+                      f"sum(level0_win_or_lose) as win_or_lose,SUM(level0_backwater_amount) as total_backwater,sum(level0_win_or_lose) as total_win_or_lose FROM o_account_order a " \
+                      f"WHERE a.`status` = 2 AND DATE_FORMAT(award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' GROUP BY terminal) b ON a.clientName=b.terminal {client_name}"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            terminalReport_list = []
+            for item in rtn:
+                terminalReport_list.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6]])
+
+            return terminalReport_list
+
+        elif queryType == 3:
+            sql_str = f"SELECT `day`,cast(IFNULL(`bet_user`,0) as char) '投注人数',IFNULL(`bet_num`,0) '投注量',IFNULL(`bet_amount`,0) '投注金额',IFNULL(`effect_amount`,0) '有效投注'," \
+                      f"IFNULL(`win_or_lose`,0) '投注盈亏',IFNULL(`total_backwater`,0) '总返水',IFNULL(`total_win_or_lose`,0) '净盈亏' FROM (SELECT `day`,`bet_user`,`bet_num`," \
+                      f"`bet_amount` FROM s_day a LEFT JOIN (SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as bet_day,count(distinct user_id) as bet_user,COUNT(1) as bet_num," \
+                      f"sum(bet_amount) as bet_amount FROM o_account_order a WHERE `status` > 0 {client} GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d') ORDER BY " \
+                      f"DATE_FORMAT(create_time,'%Y-%m-%d') DESC ) b ON a.`day` = b.bet_day WHERE a.`day` BETWEEN '{ctime}' AND '{etime}') a LEFT JOIN (SELECT `day` 'date'," \
+                      f"`effect_amount`,`win_or_lose`,`total_backwater`,`total_win_or_lose` FROM s_day b LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day," \
+                      f"ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount,SUM(level0_backwater_amount)+sum(level0_win_or_lose) as win_or_lose,SUM(level0_backwater_amount) " \
+                      f"as total_backwater,sum(level0_win_or_lose) as total_win_or_lose FROM o_account_order a WHERE a.`status`=2 and award_time is not null {client} " \
+                      f"GROUP BY DATE_FORMAT(award_time,'%Y-%m-%d') ORDER BY DATE_FORMAT(award_time,'%Y-%m-%d') DESC ) a ON b.`day` = a.bet_day WHERE b.`day` " \
+                      f"BETWEEN '{ctime}' AND '{etime}') b ON a.`day` = b.`date` ORDER BY a.`day` DESC"
+            rtn = list(self.query_data(sql_str, database_name))
+            terminalReport_list = []
+            for item in rtn:
+                ctime = item[0]
+                create_time = ctime.strftime("%Y-%m-%d")
+                terminalReport_list.append([create_time, item[1], item[2], item[3], item[4], item[5], item[6], item[7]])
+
+            return terminalReport_list
+        else:
+            raise AssertionError('暂不支持该类型')
+
+    def credit_sportsReport_query_sql(self, create_time=(-6, 0), sportName='', queryType=1):
+        '''
+        总台-报表管理-体育项盈亏                                   /// 修改于2022.04.23
+        :param create_time:
+        :param sportName:
+        :param queryType:   1:主界面详情  2：总计  3:根据体育类型查看详情
+        :return:
+        '''
+        if create_time:
+            sttime = create_time[0]
+            entime = create_time[1]
+            ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(sttime))
+            etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(entime))
+        else:
+            ctime = ""
+            etime = ""
+        database_name = "bfty_credit"
+
+        if queryType == 1:
+            sql_str = f"SELECT a.`sport_name` as '体育类型',`bet_user` as '投注人数',`bet_num` as '投注量',`bet_amount` as '投注金额',`有效投注`,`投注盈亏`,`总返水`,`净盈亏` FROM " \
+                      f"(SELECT (case when sport_id='sr:sport:1' then '足球' when sport_id='sr:sport:2' then '篮球' when sport_id='sr:sport:20' then '乒乓球' when " \
+                      f"sport_id='sr:sport:23' then '排球' when sport_id='sr:sport:3' then '棒球' when sport_id='sr:sport:31' then '羽毛球' when sport_id='sr:sport:4' then '冰球' " \
+                      f"when sport_id='sr:sport:5' then '网球' end) as sport_name,COUNT(DISTINCT user_id) as bet_user,count(1) as bet_num,sum(bet_amount) as bet_amount FROM " \
+                      f"o_account_order WHERE `status`>0 and DATE_FORMAT(create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' GROUP BY sport_id) a LEFT JOIN (SELECT `sport_name` " \
+                      f"as '体育类型',`effect_amount` as '有效投注',`win_or_lose` as '投注盈亏',`total_backwater` as '总返水',`total_win_or_lose` as '净盈亏' FROM (SELECT (case when " \
+                      f"sport_id='sr:sport:1' then '足球' when sport_id='sr:sport:2' then '篮球' when sport_id='sr:sport:20' then '乒乓球' when sport_id='sr:sport:23' then '排球' " \
+                      f"when sport_id='sr:sport:3' then '棒球' when sport_id='sr:sport:31' then '羽毛球' when sport_id='sr:sport:4' then '冰球' when sport_id='sr:sport:5' then '网球' " \
+                      f"end) as sport_name,ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount,SUM(level0_backwater_amount)+sum(level0_win_or_lose) as win_or_lose," \
+                      f"SUM(level0_backwater_amount) as total_backwater,sum(level0_win_or_lose) as total_win_or_lose FROM o_account_order a WHERE a.`status` = 2 and award_time " \
+                      f"is not NULL and DATE_FORMAT(a.award_time,'%Y-%m-%d') between '{ctime}' AND '{etime}' GROUP BY sport_id ) a) b ON a.`sport_name` = b.`体育类型`"
+            print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            sportsReport_list = []
+            for item in rtn:
+                sportsReport_list.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7]])
+
+            print(sportsReport_list)
+            return sportsReport_list
+
+        elif queryType == 2:
+            sql_str = f"SELECT sum(`bet_user`) as '投注人数',sum(`bet_num`) as '投注量',sum(`bet_amount`) as '投注金额',sum(`有效投注`) as '有效投注',sum(`投注盈亏`) as '投注盈亏'," \
+                      f"sum(`总返水`) as '总返水',sum(`净盈亏`) as '净盈亏' FROM (SELECT (case when sport_id='sr:sport:1' then '足球' when sport_id='sr:sport:2' then '篮球' when " \
+                      f"sport_id='sr:sport:20' then '乒乓球' when sport_id='sr:sport:23' then '排球' when sport_id='sr:sport:3' then '棒球' when sport_id='sr:sport:31' then '羽毛球' " \
+                      f"when sport_id='sr:sport:4' then '冰球' when sport_id='sr:sport:5' then '网球' end) as sport_name,COUNT(DISTINCT user_id) as bet_user,count(1) as bet_num," \
+                      f"sum(bet_amount) as bet_amount FROM o_account_order WHERE `status`>0 and DATE_FORMAT(create_time,'%Y-%m-%d') BETWEEN '2022-04-17' AND '2022-04-23' GROUP BY " \
+                      f"sport_id) a LEFT JOIN (SELECT `sport_name` as '体育类型',`effect_amount` as '有效投注',`win_or_lose` as '投注盈亏',`total_backwater` as '总返水'," \
+                      f"`total_win_or_lose` as '净盈亏' FROM (SELECT (case when sport_id='sr:sport:1' then '足球' when sport_id='sr:sport:2' then '篮球' when sport_id='sr:sport:20' " \
+                      f"then '乒乓球' when sport_id='sr:sport:23' then '排球' when sport_id='sr:sport:3' then '棒球' when sport_id='sr:sport:31' then '羽毛球' when sport_id='sr:sport:4' " \
+                      f"then '冰球' when sport_id='sr:sport:5' then '网球' end) as sport_name,ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount," \
+                      f"SUM(level0_backwater_amount)+sum(level0_win_or_lose) as win_or_lose,SUM(level0_backwater_amount) as total_backwater,sum(level0_win_or_lose) as " \
+                      f"total_win_or_lose FROM o_account_order a WHERE a.`status` = 2  and DATE_FORMAT(award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' GROUP BY sport_id ) a) b " \
+                      f"ON a.`sport_name` = b.`体育类型`"
+            print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            sportsReport_list = []
+            for item in rtn:
+                sportsReport_list.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6]])
+
+            print(sportsReport_list[0])
+            return sportsReport_list[0]
+
+        elif queryType == 3:
+            if sportName:
+                sport_id = self.db.get_sportId_sql(sportName)
+            else:
+                raise AssertionError('ERROR,体育类型不能为空')
+            sql_str = f"SELECT a.`日期`,IFNULL(`投注人数`,0) '投注人数',IFNULL(`投注量`,0) '投注量',IFNULL(`投注金额`,0) '投注金额',IFNULL(`有效投注`,0) '有效投注',IFNULL(`投注盈亏`,0) " \
+                      f"'投注盈亏',IFNULL(`总返水`,0) '总返水',IFNULL(`净盈亏`,0) '净盈亏' FROM (SELECT `day` as '日期',`bet_user` as '投注人数',`bet_num` as '投注量',`bet_amount` as " \
+                      f"'投注金额' FROM s_day a LEFT JOIN (SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as bet_day,count(distinct user_id) as bet_user,COUNT(1) as bet_num," \
+                      f"sum(bet_amount) as bet_amount FROM o_account_order a WHERE `status`>0 AND sport_id = 'sr:sport:1' GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d') ORDER BY " \
+                      f"DATE_FORMAT(create_time,'%Y-%m-%d') DESC ) b ON a.`day` = b.bet_day WHERE a.`day` BETWEEN '2022-04-17' AND '2022-04-23' ORDER BY a.`day` DESC) a LEFT JOIN " \
+                      f"(SELECT `day` as '日期',`effect_amount` as '有效投注',`win_or_lose` as '投注盈亏',`total_backwater` as '总返水',`total_win_or_lose` as '净盈亏' FROM s_day b " \
+                      f"LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day,ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount," \
+                      f"SUM(level0_backwater_amount)+sum(level0_win_or_lose) as win_or_lose,SUM(level0_backwater_amount) as total_backwater,sum(level0_win_or_lose) as total_win_or_lose " \
+                      f"FROM o_account_order a WHERE a.`status`=2 AND a.sport_id = '{sport_id}' GROUP BY DATE_FORMAT(award_time,'%Y-%m-%d') ORDER BY " \
+                      f"DATE_FORMAT(award_time,'%Y-%m-%d') DESC ) a ON b.`day` = a.bet_day WHERE b.`day` BETWEEN '{ctime}' AND '{etime}' ORDER BY b.`day` DESC) b ON a.`日期` = b.`日期` ORDER BY a.`日期` DESC"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            sportsReport_list = []
+            for item in rtn:
+                ctime = item[0]
+                create_time = ctime.strftime("%Y-%m-%d")
+                sportsReport_list.append([create_time, item[1], item[2], item[3], item[4], item[5], item[6], item[7]])
+
+            print(sportsReport_list)
+            return sportsReport_list
+        else:
+            raise AssertionError('暂不支持该类型')
+
+    def credit_sportsReport_query(self, expData={}, queryType=1):
+        '''
+        总台-报表管理-体育项盈亏                                   /// 修改于2022.04.29
+        :param create_time:
+        :param sportName:
+        :param queryType:   1:主界面详情  2：总计  3:根据体育类型查看详情
+        :return:
+        '''
+        resp = expData
+        if resp['startCreateTime']:
+            createTime = resp['startCreateTime']
+            endTime = resp['endCreateTime']
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=int(createTime))
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=int(endTime))
+        else:
+            ctime = ""
+            etime = ""
+        if resp['sportName']:
+            sport_name = f"WHERE a.`sport_name` = '{resp['sportName']}'"
+        else:
+            sport_name = ""
+        database_name = "bfty_credit"
+
+        if queryType == 1:
+            sql_str = f"SELECT a.`sport_name` as '体育类型',`bet_user` as '投注人数',`bet_num` as '投注量',`bet_amount` as '投注金额',`有效投注`,`投注盈亏`,`总返水`,`净盈亏` FROM " \
+                      f"(SELECT a.sport_name,`bet_user`,`bet_num`,`bet_amount` FROM s_sport a LEFT JOIN (SELECT (case when sport_id='sr:sport:1' then '足球' when " \
+                      f"sport_id='sr:sport:2' then '篮球' when sport_id='sr:sport:20' then '乒乓球' when sport_id='sr:sport:23' then '排球' when sport_id='sr:sport:3' then '棒球' " \
+                      f"when sport_id='sr:sport:31' then '羽毛球' when sport_id='sr:sport:4' then '冰球' when sport_id='sr:sport:5' then '网球' end) as sportName,COUNT(DISTINCT " \
+                      f"user_id) as bet_user,count(1) as bet_num,sum(bet_amount) as bet_amount FROM o_account_order WHERE `status`>0 and DATE_FORMAT(create_time,'%Y-%m-%d') " \
+                      f"BETWEEN '{ctime}' AND '{etime}' GROUP BY sport_id) b ON a.sport_name = b.sportName) a LEFT JOIN (SELECT `sport_name` as '体育类型',`effect_amount` " \
+                      f"as '有效投注',`win_or_lose` as '投注盈亏',`total_backwater` as '总返水',`total_win_or_lose` as '净盈亏' FROM (SELECT (case when sport_id='sr:sport:1' then " \
+                      f"'足球' when sport_id='sr:sport:2' then '篮球' when sport_id='sr:sport:20' then '乒乓球' when sport_id='sr:sport:23' then '排球' when sport_id='sr:sport:3' " \
+                      f"then '棒球' when sport_id='sr:sport:31' then '羽毛球' when sport_id='sr:sport:4' then '冰球' when sport_id='sr:sport:5' then '网球' end) as sport_name," \
+                      f"ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount,SUM(level0_backwater_amount)+sum(level0_win_or_lose) as win_or_lose,SUM(level0_backwater_amount) " \
+                      f"as total_backwater,sum(level0_win_or_lose) as total_win_or_lose FROM o_account_order a WHERE a.`status` = 2 and award_time is not NULL and " \
+                      f"DATE_FORMAT(a.award_time,'%Y-%m-%d') between '{ctime}' AND '{etime}' GROUP BY sport_id ) a) b ON a.`sport_name` = b.`体育类型` {sport_name}"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            sportsReport_list = []
+            for item in rtn:
+                sportsReport_list.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7]])
+
+            return sportsReport_list
+
+        elif queryType == 2:
+            sql_str = f"SELECT cast(sum(`bet_user`) as char) as '投注人数',sum(`bet_num`) as '投注量',sum(`bet_amount`) as '投注金额',sum(`有效投注`) '有效投注',sum(`投注盈亏`) '投注盈亏'," \
+                      f"sum(`总返水`) '总返水',sum(`净盈亏`) '净盈亏' FROM (SELECT a.sport_name,`bet_user`,`bet_num`,`bet_amount` FROM s_sport a LEFT JOIN (SELECT (case when " \
+                      f"sport_id='sr:sport:1' then '足球' when sport_id='sr:sport:2' then '篮球' when sport_id='sr:sport:20' then '乒乓球' when sport_id='sr:sport:23' then '排球' " \
+                      f"when sport_id='sr:sport:3' then '棒球' when sport_id='sr:sport:31' then '羽毛球' when sport_id='sr:sport:4' then '冰球' when sport_id='sr:sport:5' then " \
+                      f"'网球' end) as sportName,COUNT(DISTINCT user_id) as bet_user,count(1) as bet_num,sum(bet_amount) as bet_amount FROM o_account_order WHERE `status`>0 and " \
+                      f"DATE_FORMAT(create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' GROUP BY sport_id) b ON a.sport_name = b.sportName) a LEFT JOIN (SELECT " \
+                      f"`sport_name` as '体育类型',`effect_amount` as '有效投注',`win_or_lose` as '投注盈亏',`total_backwater` as '总返水',`total_win_or_lose` as '净盈亏' FROM " \
+                      f"(SELECT (case when sport_id='sr:sport:1' then '足球' when sport_id='sr:sport:2' then '篮球' when sport_id='sr:sport:20' then '乒乓球' when " \
+                      f"sport_id='sr:sport:23' then '排球' when sport_id='sr:sport:3' then '棒球' when sport_id='sr:sport:31' then '羽毛球' when sport_id='sr:sport:4' then '冰球' " \
+                      f"when sport_id='sr:sport:5' then '网球' end) as sport_name,ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount,SUM(level0_backwater_amount)+" \
+                      f"sum(level0_win_or_lose) as win_or_lose,SUM(level0_backwater_amount) as total_backwater,sum(level0_win_or_lose) as total_win_or_lose FROM o_account_order a" \
+                      f" WHERE a.`status` = 2 and award_time is not NULL and DATE_FORMAT(a.award_time,'%Y-%m-%d') between '{ctime}' AND '{etime}' GROUP BY sport_id ) a) b ON " \
+                      f"a.`sport_name` = b.`体育类型` {sport_name}"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            sportsReport_list = []
+            for item in rtn:
+                sportsReport_list.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6]])
+
+            return sportsReport_list
+
+        elif queryType == 3:
+            if resp['sportName']:
+                sport_id = self.db.get_sportId_sql(resp['sportName'])
+            else:
+                raise AssertionError('ERROR,体育类型不能为空')
+            sql_str = f"SELECT a.`日期`,IFNULL(`投注人数`,0) '投注人数',IFNULL(`投注量`,0) '投注量',IFNULL(`投注金额`,0) '投注金额',IFNULL(`有效投注`,0) '有效投注',IFNULL(`投注盈亏`,0) " \
+                      f"'投注盈亏',IFNULL(`总返水`,0) '总返水',IFNULL(`净盈亏`,0) '净盈亏' FROM (SELECT `day` as '日期',`bet_user` as '投注人数',`bet_num` as '投注量',`bet_amount` as " \
+                      f"'投注金额' FROM s_day a LEFT JOIN (SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as bet_day,count(distinct user_id) as bet_user,COUNT(1) as bet_num," \
+                      f"sum(bet_amount) as bet_amount FROM o_account_order a WHERE `status`>0 AND sport_id = 'sr:sport:1' GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d') ORDER BY " \
+                      f"DATE_FORMAT(create_time,'%Y-%m-%d') DESC ) b ON a.`day` = b.bet_day WHERE a.`day` BETWEEN '2022-04-17' AND '2022-04-23' ORDER BY a.`day` DESC) a LEFT JOIN " \
+                      f"(SELECT `day` as '日期',`effect_amount` as '有效投注',`win_or_lose` as '投注盈亏',`total_backwater` as '总返水',`total_win_or_lose` as '净盈亏' FROM s_day b " \
+                      f"LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day,ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount," \
+                      f"SUM(level0_backwater_amount)+sum(level0_win_or_lose) as win_or_lose,SUM(level0_backwater_amount) as total_backwater,sum(level0_win_or_lose) as total_win_or_lose " \
+                      f"FROM o_account_order a WHERE a.`status`=2 AND a.sport_id = '{sport_id}' GROUP BY DATE_FORMAT(award_time,'%Y-%m-%d') ORDER BY " \
+                      f"DATE_FORMAT(award_time,'%Y-%m-%d') DESC ) a ON b.`day` = a.bet_day WHERE b.`day` BETWEEN '{ctime}' AND '{etime}' ORDER BY b.`day` DESC) b ON a.`日期` = b.`日期` ORDER BY a.`日期` DESC"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            sportsReport_list = []
+            for item in rtn:
+                ctime = item[0]
+                create_time = ctime.strftime("%Y-%m-%d")
+                sportsReport_list.append([create_time, item[1], item[2], item[3], item[4], item[5], item[6], item[7]])
+
+            print(sportsReport_list)
+            return sportsReport_list
+        else:
+            raise AssertionError('暂不支持该类型')
+
+    def credit_rebateReport_query_sql(self, create_time=(-6, 0), queryType=1):
+        '''
+        总台-报表管理-返水报表                                   /// 修改于2022.04.23
+        :param Authorization:
+        :param create_time:
+        :param queryType:
+        :return:
+        '''
+        if create_time:
+            sttime = create_time[0]
+            entime = create_time[1]
+            ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(sttime))
+            etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(entime))
+        else:
+            ctime = ""
+            etime = ""
+        database_name = "bfty_credit"
+
+        if queryType == 1:
+            sql_str = f"SELECT `day` '日期',IFNULL(`level1_backwater`,0)+IFNULL(`level2_backwater`,0)+IFNULL(`level3_backwater`,0)+IFNULL(`user_backwater`,0) total_backwater," \
+                      f"IFNULL(`level1_backwater`,0) level1_backwater,IFNULL(`level2_backwater`,0) level2_backwater,IFNULL(`level3_backwater`,0) level3_backwater," \
+                      f"IFNULL(`user_backwater`,0) user_backwater,IFNULL(`scoccer`,0) scoccer,IFNULL(`basketball`,0) basketball,IFNULL(`tennis`,0) tennis,IFNULL(`badminton`,0) " \
+                      f"badminton,IFNULL(`table_tennis`,0) table_tennis,IFNULL(`volleyball`,0) volleyball,IFNULL(`baseball`,0) baseball,IFNULL(`icd_hockey`,0) icd_hockey FROM s_day a " \
+                      f"LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day,sum(level0_backwater_amount) as total_backwater,sum(level1_backwater_amount) as level1_backwater," \
+                      f"sum(level2_backwater_amount) as level2_backwater,sum(level3_backwater_amount) as level3_backwater,sum(backwater_amount) as user_backwater," \
+                      f"sum(case when sport_id='sr:sport:1' then level0_backwater_amount end) as scoccer,sum(case when sport_id='sr:sport:2' then level0_backwater_amount end) as " \
+                      f"basketball,sum(case when sport_id='sr:sport:5' then level0_backwater_amount end) as tennis,sum(case when sport_id='sr:sport:31' then level0_backwater_amount end) as badminton," \
+                      f"sum(case when sport_id='sr:sport:20' then level0_backwater_amount end) as table_tennis,sum(case when sport_id='sr:sport:23' then level0_backwater_amount end) as volleyball," \
+                      f"sum(case when sport_id='sr:sport:3' then level0_backwater_amount end) as baseball,sum(case when sport_id='sr:sport:4' then level0_backwater_amount end) as " \
+                      f"icd_hockey FROM o_account_order WHERE `status`= 2 AND award_time is not NULL GROUP BY DATE_FORMAT(award_time,'%Y-%m-%d')) b ON a.`day` = b.bet_day WHERE " \
+                      f"a.`day` BETWEEN '{ctime}' AND '{etime}' ORDER BY a.`day` DESC"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            terminalReport_list = []
+            for item in rtn:
+                ctime = item[0]
+                create_time = ctime.strftime("%Y-%m-%d")
+                terminalReport_list.append([create_time, item[1], item[2], item[3], item[4], item[5], item[6], item[7],
+                                            item[8], item[9], item[10], item[11], item[12]])
+
+            print(terminalReport_list)
+            return terminalReport_list
+
+        elif queryType == 2:
+            sql_str = f"SELECT sum(IFNULL(`level1_backwater`,0)+IFNULL(`level2_backwater`,0)+IFNULL(`level3_backwater`,0)+IFNULL(`user_backwater`,0)) total_backwater," \
+                      f"sum(IFNULL(`level1_backwater`,0)) level1_backwater,sum(IFNULL(`level2_backwater`,0)) level2_backwater,sum(IFNULL(`level3_backwater`,0)) level3_backwater," \
+                      f"sum(IFNULL(`user_backwater`,0)) user_backwater,sum(IFNULL(`scoccer`,0)) scoccer,sum(IFNULL(`basketball`,0)) basketball,sum(IFNULL(`tennis`,0)) tennis," \
+                      f"sum(IFNULL(`badminton`,0)) badminton,sum(IFNULL(`table_tennis`,0)) table_tennis,sum(IFNULL(`volleyball`,0)) volleyball,sum(IFNULL(`baseball`,0)) baseball," \
+                      f"sum(IFNULL(`icd_hockey`,0)) icd_hockey FROM s_day a LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day,sum(level0_backwater_amount) as " \
+                      f"total_backwater,sum(level1_backwater_amount) as level1_backwater,sum(level2_backwater_amount) as level2_backwater,sum(level3_backwater_amount) as " \
+                      f"level3_backwater,sum(backwater_amount) as user_backwater,sum(case when sport_id='sr:sport:1' then level0_backwater_amount end) as scoccer," \
+                      f"sum(case when sport_id='sr:sport:2' then level0_backwater_amount end) as basketball,sum(case when sport_id='sr:sport:5' then level0_backwater_amount end) " \
+                      f"as tennis,sum(case when sport_id='sr:sport:31' then level0_backwater_amount end) as badminton,sum(case when sport_id='sr:sport:20' then " \
+                      f"level0_backwater_amount end) as table_tennis,sum(case when sport_id='sr:sport:23' then level0_backwater_amount end) as volleyball," \
+                      f"sum(case when sport_id='sr:sport:3' then level0_backwater_amount end) as baseball,sum(case when sport_id='sr:sport:4' then level0_backwater_amount end) as " \
+                      f"icd_hockey FROM o_account_order WHERE `status`= 2 AND award_time is not NULL GROUP BY DATE_FORMAT(award_time,'%Y-%m-%d')) b ON a.`day` = b.bet_day " \
+                      f"WHERE a.`day` BETWEEN '{ctime}' AND '{etime}'"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            terminalReport_list = []
+            for item in rtn:
+                terminalReport_list.append(['合计', item[1], item[2], item[3], item[4], item[5], item[6], item[7],
+                                            item[8], item[9], item[10], item[11], item[12]])
+
+            print(terminalReport_list)
+            return terminalReport_list
+
+        else:
+            raise AssertionError('暂不支持该类型')
+
+
+
+    def query_account_role_sql(self, account):
+        '''
+        根据代理账号查询代理
+        :param account:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        sql_str = f"SELECT (case when role_id=1 then '登0' when role_id=2 then '登1' when role_id=2 then '登2' when role_id=3 then '登3' when role_id in (4,5) then '子账号' end) " \
+                  f"'代理角色' FROM `bfty_credit`.`m_account` WHERE account='{account}'"
+        rtn = list(self.query_data(sql_str, database_name))
+
+        return rtn[0][0]
 
                                                                              #  【反波胆】
 
@@ -5839,8 +6745,21 @@ if __name__ == "__main__":
     # user_id = mysql.get_credit_user_accountId_sql(account='aliSkytest01')
     # account = mysql.get_accountHistoryStatistics_sql(username='BTeTestuser002')
 
-    balance = mysql.get_userAmount_sql(username='Testuser004')
-    print(balance)
+    # id = mysql.query_agentId_sql(agentAccount='a0')
+    # settled = mysql.query_settledOrder(login_account='a1', dateoffset='-1')
+    # print(settled)
+
+    # agentLine = mysql.credit_agentLineManagement_sql(agentName="aw", agentAccount="")
+    # data = mysql.credit_dataSourceReport_sql(queryType=2)
+    data = mysql.credit_dailyReport_query_sql(create_time=(-6,0), queryType=2)
+    # data = mysql.credit_terminalReport_query_sql(create_time=(-6, 0), terminal="", queryType=3)
+    # data = mysql.credit_sportsReport_query_sql(create_time=(-6, 0), sportName="足球", queryType=3)
+    # data = mysql.credit_rebateReport_query_sql(create_time=(-6, 0), queryType=2)
+    # account = mysql.query_account_role_sql(account='a0b1')
+
+
+
+
 
                                                                               # 【反波胆-客户端】
 

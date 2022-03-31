@@ -1,0 +1,191 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2022/04/27 19:14
+# @Author  : liyang
+# @FileName: terminalReportDetail.yaml
+# @Software: PyCharm
+
+
+-
+  url: /backendReport/totalDailyProfitAndLoss
+  method: POST
+
+- #test_01用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近7天数据,根据"H5-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    terminal: "H5-android"
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    terminal: "H5-android"
+- #test_02用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近7天数据,根据"APP-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    terminal: "APP-android"
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    terminal: "APP-android"
+- #test_03用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近7天数据,根据"APP-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+- #test_04用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近7天数据,根据"H5-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+- #test_05用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近7天数据,根据"pc"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    terminal: "pc"
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    terminal: "pc"
+- #test_06用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近15天数据,根据"H5-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    terminal: "H5-android"
+  resp:
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    terminal: "H5-android"
+- #test_07用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近15天数据,根据"APP-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    terminal: "APP-android"
+  resp:
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    terminal: "APP-android"
+- #test_08用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近15天数据,根据"APP-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+  resp:
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+- #test_09用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近15天数据,根据"H5-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+  resp:
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+- #test_10用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近15天数据,根据"pc"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    terminal: "pc"
+  resp:
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    terminal: "pc"
+- #test_11用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近30天数据,根据"H5-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    terminal: "H5-android"
+  resp:
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    terminal: "H5-android"
+- #test_12用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近30天数据,根据"APP-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    terminal: "APP-android"
+  resp:
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    terminal: "APP-android"
+- #test_13用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近30天数据,根据"APP-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+  resp:
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+- #test_14用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近30天数据,根据"H5-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+  resp:
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+- #test_15用例
+  describe: 管理后台-总台-客户端盈亏,默认查询近30天数据,根据"pc"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    terminal: "pc"
+  resp:
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    terminal: "pc"

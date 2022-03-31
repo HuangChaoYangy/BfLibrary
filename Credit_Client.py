@@ -8,6 +8,8 @@ import arrow
 import requests
 import hashlib
 from concurrent.futures import ThreadPoolExecutor
+from tools.yamlControl import Yaml_data
+import pytest
 
 try:
     from MongoFunc import MongoFunc, DbQuery
@@ -44,6 +46,9 @@ class Credit_Client(object):
         self.host = merchant_url
         self.cm = CommonFunc()
         self.order_no_list = []
+        self.ya = Yaml_data()
+
+        # @pytest.mark.parametrize('inBody, expData', self.ya.get_yaml_data('../data/RewardReport.yaml'))
 
     @staticmethod
     # 获取客户端当前时间
@@ -381,7 +386,7 @@ class Credit_Client(object):
         if terminal == 'pc':
             param = {"matchId": match_id, "sportCategoryId": sport_id_dic[sport_name], "oddsType": odds_Type}
             rsp = self.session.get(url, headers=head, params=param)
-            print(rsp.json())
+            # print(rsp.json())
             outcome_info_list = []
             outcome_id_list = []
             # market
@@ -776,12 +781,12 @@ class Credit_Client(object):
 
     def submit_all_outcome(self, match_id, sport_name, token, odds_type=1, IsRandom=''):
         '''
-        投注单注,比赛下所有盘口全投注                    /// 修改于2022.01.10
+        投注单注,比赛下所有盘口全投注                    /// 修改于2022.04.28
         :param match_id:
         :param sport_name:
         :param token:
         :param odds_type:
-        :param IsRandom: False不随机投注   True随机投注
+        :param IsRandom: False不随机投注   True随机投注           ['pc','H5-IOS','H5-android','APP-android','APP-IOS']
         :return:
         '''
         url = self.auth_url + ":6210/creditBet/mobileSubmit"
@@ -794,7 +799,7 @@ class Credit_Client(object):
                               "Chrome/85.0.4183.102 Safari/537.36"}
         outcome_info_list = self.get_match_all_outcome(match_id, token, sport_name=sport_name,
                                                         odds_Type=odds_type)  # 指定盘口类型，1是欧洲盘，2是香港盘，3是马来盘，4是印尼盘
-
+        terminal_list = ['pc','H5-IOS','H5-android','APP-android','APP-IOS']
         if not IsRandom:
             print("比赛ID: %s, 总共投注 %d 个投注项: " % (match_id, len(outcome_info_list)))
             selection_list = []
@@ -813,15 +818,16 @@ class Credit_Client(object):
             sub_order_no_list = []
             loop = 1
             for outcomeid in selection_list:
-                bet_amount = random.randint(10, 100)
+                bet_amount = random.randint(10, 1000)
                 mixedNum = "1_1_0_%s" % (str(bet_amount))
+                terminal = random.choice(terminal_list)   # 随机客户端
                 data = {"mixedNum": [mixedNum],
                         "betId": 1632573273553,
                         "betIp": '192.168.10.120',
                         "browserFingerprintId": "2b0148c380e1e7daee36c6752532f33f",
                         "selections": [outcomeid],
-                        "oddsChangeType": odds_type,
-                        "terminal": "pc"}
+                        "oddsChangeType": 1,      # 1 自动接受任意赔率    2 不接受任意赔率
+                        "terminal": terminal}
                 # print(data)
                 rsp = self.session.post(url, json=data, headers=head)
                 if rsp.json()['message'] != "OK":
@@ -960,7 +966,7 @@ class Credit_Client(object):
                         "browserFingerprintId": "2b0148c380e1e7daee36c6752532f33f",
                         "oddsChangeType": oddsChangeType,  # 0:不接受任何赔率变化,1:接受任意赔率变化,2:接受较佳赔率变化
                         "selections": selection_list,
-                        "terminal": "pc"}
+                        "terminal": "H5-android"}
                 rsp = self.session.post(url, json=data, headers=head)
 
                 if rsp.json()['message'] != "OK":
@@ -1620,16 +1626,16 @@ class Credit_Client(object):
         return balance_list
 
 
-    def get_accountHistoryStatistics(self, token, starttime='-30', endtime='0'):
+    def get_accountHistoryStatistics(self, token, dateoffset=(-30,0)):
         '''
-        获取信用网-已结算注单外层统计
+        获取信用网-已结算注单外层统计                    修改于 2022.04.16
         :param token:
         :param starttime:
         :param endtime:
         :return:
         '''
-        ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(starttime))
-        etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(endtime))
+        ctime = self.get_current_time_for_client(time_type="ctime", day_diff=dateoffset[0])
+        etime = self.get_current_time_for_client(time_type="ctime", day_diff=dateoffset[1])
         url = self.auth_url + ":6210/creditPCOrder/accountHistoryStatistics"
         head = {"Accept-Encoding": "gzip, deflate",
                 "Accept-Language": "zh-CN,zh;q=0.9",
@@ -1652,6 +1658,57 @@ class Credit_Client(object):
         return accountHistoryStatistics
 
 
+    def get_accountHistoryDetail(self, token, dateoffset='-1', sportName=''):
+        '''
+        获取信用网-已结算注单详情                    修改于 2022.04.16
+        :param token:
+        :param starttime:
+        :param endtime:
+        :return:
+        '''
+        sport_id = self.db.get_sportId_sql(sportName=sportName)
+        # ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(dateoffset))
+        url = self.auth_url + ":6210/creditPCOrder/settledRecord"
+        head = {"Accept-Encoding": "gzip, deflate",
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Connection": "keep-alive",
+                "accessCode": token,
+                "lang": "ZH",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
+                              "Chrome/85.0.4183.102 Safari/537.36"}
+        data = {"offset":dateoffset, "sportId":sport_id, "limit":100, "page":1}
+        rsp = self.session.post(url, headers=head, json=data)
+        # print(rsp.json()['data']['orderList'])
+        if rsp.json()['message'] != "OK":
+            print("查询已结算注单数据失败,原因：" + rsp.json()["message"])
+
+        order_list_Detail = []
+        for orderDetail in rsp.json()['data']['orderList']:
+            for item in orderDetail['outcomeList']:
+                order_list_Detail.append({'betTime':orderDetail['betTime'], 'orderNo':orderDetail['orderNo'], 'sportName':orderDetail['sportName'],
+                                          'outcomeList': [{'tournamentName':item['tournamentName'], 'TeamName':item['homeTeamName'] + 'Vs' + item['awayTeamName'],
+                                          'betScore':item['betScore'], 'marketName':item['marketName'],'outcomeName':item['outcomeName'],'oddsType':item['oddsType'],
+                                          'odds':item['odds'],'outcomeWinOrLoseName':item['outcomeWinOrLoseName']}],
+                                          'betAmount':orderDetail['betAmount'], 'profitAmount':orderDetail['profitAmount'],
+                                          'backwaterAmount':orderDetail['backwaterAmount'], 'resultAmount':orderDetail['resultAmount']})
+        new_order_list = []
+        print(order_list_Detail)
+        order_dic = {'betTime': '','orderNo': '','sportName': '','outcomeList': [],'betAmount': '','profitAmount': '','backwaterAmount': '', 'resultAmount': ''}
+        for item in order_list_Detail:
+            order_dic['betTime'] = item['betTime']
+            order_dic['orderNo'] = item['orderNo']
+            order_dic['sportName'] = item['sportName']
+            if item['orderNo'] not in order_dic:
+                order_dic['outcomeList'].append(item['outcomeList'][0])
+            order_dic['betAmount'] = item['betAmount']
+            order_dic['profitAmount'] = item['profitAmount']
+            order_dic['backwaterAmount'] = item['backwaterAmount']
+            order_dic['resultAmount'] = item['resultAmount']
+        new_order_list.append(order_dic)
+
+        return new_order_list
+
+
     def threading_pool(self):
         return None
 
@@ -1660,9 +1717,11 @@ if __name__ == "__main__":
 
     mysql_info = ['192.168.10.121', 'root', 's3CDfgfbFZcFEaczstX1VQrdfRFEaXTc', '3306']
     mongo_info = ['app', '123456', '192.168.10.120', '27017']
+    # mongo_inf_mde = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
+    # mysql_inf_mde = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['0c41c9818f014e95a523863651e213b1','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
+    token_list = ['82da2d2fd5d7451b816e1fb15b411782','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
 
     # match_id_list = bf.get_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     # print(match_id_list)
@@ -1671,10 +1730,10 @@ if __name__ == "__main__":
     #     token = bf.login_client(username=item, password='Bfty123456')
     #     data = bf.cm.write_to_local_file(content=token+'\n', file_name='C:/Users/USER/Desktop/testToken.txt',mode='a')
 
-    odds_outcomeId = bf.get_match_odds_and_outcomeId(match_id='sr:match:32846261', token=token_list[0], sport_name='排球', terminal='h5', odds_Type=1)
-    for item in odds_outcomeId:
-        print(item)
-        data = bf.cm.write_to_local_file(content=item, file_name='C:/Users/USER/Desktop/testOdds.txt',mode='w')
+    # odds_outcomeId = bf.get_match_odds_and_outcomeId(match_id='sr:match:32846261', token=token_list[0], sport_name='排球', terminal='h5', odds_Type=1)
+    # for item in odds_outcomeId:
+    #     print(item)
+    #     data = bf.cm.write_to_local_file(content=item, file_name='C:/Users/USER/Desktop/testOdds.txt',mode='w')
 
     # 新增多线程-模拟多用户进行投注
     # user_list = ['Testuser001','Testuser002']
@@ -1700,9 +1759,9 @@ if __name__ == "__main__":
     #     print(f"task1: {sub_thread1.done()}")
 
     # 单注投注
-    # bf.submit_all_outcome(match_id="sr:match:32846261", sport_name='排球', token=token_list[0], odds_type=1, IsRandom='')
+    bf.submit_all_outcome(match_id="sr:match:27885382", sport_name='足球', token=token_list[0], odds_type=1, IsRandom='')
     # 非复式串关投注
-    # bf.submit_all_outcomes(sport_name='篮球', token=token_list[0], bet_type=3, event_type='TODAY', IsRandom='')
+    # bf.submit_all_outcomes(sport_name='篮球', token=token_list[0], bet_type=3, event_type='EARLY', IsRandom='')
     # 复式串关投注
     # bf.submit_all_complex(sport_name='篮球', token=token_list[0], bet_type=5, event_type='TODAY', odds_type=1, oddsChangeType=1, complex='single', complex_number=3)
     # balance = bf.get_balance(token=token_list[0])
@@ -1722,5 +1781,5 @@ if __name__ == "__main__":
     # searchName = bf.get_search_matchName_list(token=token_list[0], sport_name='足球', teamName='蒂安')
 
 
-    # settled = bf.get_accountHistoryStatistics(token=token_list[0])
+    # settled = bf.get_accountHistoryDetail(token=token_list[0], dateoffset='-1', sportName='')
     # print(settled)
