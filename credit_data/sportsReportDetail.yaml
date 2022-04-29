@@ -1,0 +1,875 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2022/04/29 19:14
+# @Author  : liyang
+# @FileName: sportsReportDetail.yaml
+# @Software: PyCharm
+
+
+-
+  url: /backendReport/queryDailyProfitAndLossList
+  method: POST
+
+- #test_01用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【足球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "足球"
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "足球"
+- #test_02用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【足球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "足球"
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "足球"
+- #test_03用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【足球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "足球"
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "足球"
+- #test_04用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【足球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "足球"
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "足球"
+- #test_05用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【足球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "足球"
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "足球"
+- #test_06用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【足球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "足球"
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "足球"
+- #test_07用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【足球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "足球"
+  resp:
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "足球"
+- #test_08用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【足球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "足球"
+  resp:
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "足球"
+- #test_09用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【足球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "足球"
+  resp:
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "足球"
+- #test_10用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【篮球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "篮球"
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "篮球"
+- #test_11用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【篮球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "篮球"
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "篮球"
+- #test_12用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【篮球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "篮球"
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "篮球"
+- #test_13用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【篮球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "篮球"
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "篮球"
+- #test_14用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【篮球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "篮球"
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "篮球"
+- #test_15用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【篮球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "篮球"
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "篮球"
+- #test_16用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【篮球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "篮球"
+  resp:
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "篮球"
+- #test_17用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【篮球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "篮球"
+  resp:
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "篮球"
+- #test_18用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【篮球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "篮球"
+  resp:
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "篮球"
+- #test_19用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【乒乓球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+- #test_20用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【乒乓球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+- #test_21用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【乒乓球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+- #test_22用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【乒乓球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+- #test_23用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【乒乓球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+- #test_24用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【乒乓球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+- #test_25用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【乒乓球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+  resp:
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+- #test_26用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【乒乓球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+  resp:
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+- #test_27用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【乒乓球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+  resp:
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "乒乓球"
+- #test_28用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【排球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "排球"
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "排球"
+- #test_29用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【排球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "排球"
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "排球"
+- #test_30用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【排球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "排球"
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "排球"
+- #test_31用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【排球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "排球"
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "排球"
+- #test_32用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【排球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "排球"
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "排球"
+- #test_33用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【排球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "排球"
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "排球"
+- #test_34用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【排球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "排球"
+  resp:
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "排球"
+- #test_35用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【排球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "排球"
+  resp:
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "排球"
+- #test_36用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【排球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "排球"
+  resp:
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "排球"
+- #test_37用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【棒球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "棒球"
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "棒球"
+- #test_38用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【棒球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "棒球"
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "棒球"
+- #test_39用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【棒球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "棒球"
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "棒球"
+- #test_40用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【棒球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "棒球"
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "棒球"
+- #test_41用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【棒球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "棒球"
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "棒球"
+- #test_42用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【棒球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "棒球"
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "棒球"
+- #test_43用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【棒球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "棒球"
+  resp:
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "棒球"
+- #test_44用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【棒球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "棒球"
+  resp:
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "棒球"
+- #test_45用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【棒球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "棒球"
+  resp:
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "棒球"
+- #test_46用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【羽毛球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+- #test_47用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【羽毛球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+- #test_48用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【羽毛球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+- #test_49用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【羽毛球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+- #test_50用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【羽毛球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+- #test_51用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【羽毛球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+- #test_52用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【羽毛球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+  resp:
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+- #test_53用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【羽毛球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+  resp:
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+- #test_54用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【羽毛球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+  resp:
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "羽毛球"
+- #test_55用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【冰上曲棍球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+- #test_56用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【冰上曲棍球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+- #test_57用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【冰上曲棍球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+- #test_58用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【冰上曲棍球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+- #test_59用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【冰上曲棍球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+- #test_60用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【冰上曲棍球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+- #test_61用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【冰上曲棍球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+  resp:
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+- #test_62用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【冰上曲棍球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+  resp:
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+- #test_63用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【冰上曲棍球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+  resp:
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "冰上曲棍球"
+- #test_64用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【网球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "网球"
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sportName: "网球"
+- #test_65用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【网球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "网球"
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    sportName: "网球"
+- #test_66用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【网球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "网球"
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    sportName: "网球"
+- #test_67用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【网球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "网球"
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    sportName: "网球"
+- #test_68用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【网球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "网球"
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    sportName: "网球"
+- #test_69用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【网球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "网球"
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    sportName: "网球"
+- #test_70用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【网球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "网球"
+  resp:
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    sportName: "网球"
+- #test_71用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【网球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "网球"
+  resp:
+    startCreateTime: "-14"
+    endCreateTime: "0"
+    sportName: "网球"
+- #test_72用例
+  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【网球】
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "网球"
+  resp:
+    startCreateTime: "-29"
+    endCreateTime: "0"
+    sportName: "网球"
