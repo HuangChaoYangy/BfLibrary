@@ -1863,7 +1863,7 @@ class CreditBackGround(object):
 
     def credit_sportsReport(self, inData, queryType=1):
         '''
-        总台-报表管理-体育项盈亏                                   /// 修改于2022.04.29
+        总台-报表管理-体育项盈亏   用于自动化测试                                /// 修改于2022.04.29
         :param Authorization:
         :param create_time:
         :param queryType:  1:主界面详情  2：总计  3:根据体育类型查看详情
@@ -1992,6 +1992,71 @@ class CreditBackGround(object):
                     Total_rebatesReport_list.extend([data['dateTime'], data['totalRebate'],data['levelBackwaterAmount'],data['leve2BackwaterAmount'],data['leve3BackwaterAmount'],
                                                   data['userBackwaterAmount'],data['soccer'],data['basketball'],data['tennis'],data['badminton'],data['tableTennis'],data['volleyball'],
                                                   data['baseball'],data['iceHockey'] ])
+
+                    return Total_rebatesReport_list
+
+            else:
+                raise AssertionError('抱歉,暂不支持该种类型')
+
+        except Exception as e:
+            print(e)
+
+    def credit_rebateReport(self, inData, queryType=1):
+        '''
+        总台-报表管理-返水报表      用户自动化测试                             /// 修改于2022.04.29
+        :param Authorization:
+        :param starttime:
+        :param endtime:
+        :param queryType:
+        :return:
+        '''
+        login_loken = self.login_background(uname='Liyang124', password='Bfty123456', securityCode="", loginDiv='222333')
+
+        resp = inData
+        if resp['startCreateTime']:
+            createTime = resp['startCreateTime']
+            endTime = resp['endCreateTime']
+            ctime = self.get_current_time_for_client(time_type='now',day_diff=int(createTime))
+            etime = self.get_current_time_for_client(time_type='now', day_diff=int(endTime))
+        else:
+            ctime = ""
+            etime = ""
+        page = inData['page']
+        limit = inData['limit']
+
+        url = self.auth_url + '/backendReport/rebateReportList'
+        total_url = self.auth_url + '/backendReport/totalRebateReport'
+
+        head = {"LoginDiv": '222333',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": login_loken,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+        try:
+            if queryType == 1:
+                data = {"page":page, "limit":limit, "startCreateTime":ctime, "endCreateTime":etime}
+                rsp = self.session.post(url, headers=head, json=data)
+                if rsp.json()['message'] != 'OK':
+                    print("查询返水报表失败,原因：" + rsp.json()["message"])
+                else:
+                    rebateReport_list = []
+                    for item in rsp.json()['data']['data']:
+                        rebateReport_list.append([item['dateTime'],item['totalRebate'],item['levelBackwaterAmount'],item['leve2BackwaterAmount'],item['leve3BackwaterAmount'],
+                                                 item['userBackwaterAmount'],item['soccer'],item['basketball'],item['tennis'],item['badminton'],item['tableTennis'],item['volleyball'],
+                                                  item['baseball'],item['iceHockey']])
+
+                    return rebateReport_list
+
+            elif queryType == 2:
+                data = {"startCreateTime": ctime, "endCreateTime": etime}
+                rsp = self.session.post(total_url, headers=head, json=data)
+                if rsp.json()['message'] != 'OK':
+                    print("查询返水报表失败,原因：" + rsp.json()["message"])
+                else:
+                    Total_rebatesReport_list = []
+                    data = rsp.json()['data']
+                    Total_rebatesReport_list.append([str(data['totalRebate']),str(data['levelBackwaterAmount']),str(data['leve2BackwaterAmount']),str(data['leve3BackwaterAmount']),
+                                                  str(data['userBackwaterAmount']),str(data['soccer']),str(data['basketball']),str(data['tennis']),str(data['badminton']),
+                                                  str(data['tableTennis']),str(data['volleyball']),str(data['baseball']),str(data['iceHockey']) ])
 
                     return Total_rebatesReport_list
 

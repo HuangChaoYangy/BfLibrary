@@ -5157,8 +5157,7 @@ class MysqlQuery(MysqlFunc):
     def credit_sportsReport_query(self, expData={}, queryType=1):
         '''
         总台-报表管理-体育项盈亏                                   /// 修改于2022.04.29
-        :param create_time:
-        :param sportName:
+        :param expData:
         :param queryType:   1:主界面详情  2：总计  3:根据体育类型查看详情
         :return:
         '''
@@ -5230,8 +5229,8 @@ class MysqlQuery(MysqlFunc):
             sql_str = f"SELECT a.`日期`,IFNULL(`投注人数`,0) '投注人数',IFNULL(`投注量`,0) '投注量',IFNULL(`投注金额`,0) '投注金额',IFNULL(`有效投注`,0) '有效投注',IFNULL(`投注盈亏`,0) " \
                       f"'投注盈亏',IFNULL(`总返水`,0) '总返水',IFNULL(`净盈亏`,0) '净盈亏' FROM (SELECT `day` as '日期',`bet_user` as '投注人数',`bet_num` as '投注量',`bet_amount` as " \
                       f"'投注金额' FROM s_day a LEFT JOIN (SELECT DATE_FORMAT(create_time,'%Y-%m-%d') as bet_day,count(distinct user_id) as bet_user,COUNT(1) as bet_num," \
-                      f"sum(bet_amount) as bet_amount FROM o_account_order a WHERE `status`>0 AND sport_id = 'sr:sport:1' GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d') ORDER BY " \
-                      f"DATE_FORMAT(create_time,'%Y-%m-%d') DESC ) b ON a.`day` = b.bet_day WHERE a.`day` BETWEEN '2022-04-17' AND '2022-04-23' ORDER BY a.`day` DESC) a LEFT JOIN " \
+                      f"sum(bet_amount) as bet_amount FROM o_account_order a WHERE `status`>0 AND sport_id = '{sport_id}' GROUP BY DATE_FORMAT(create_time,'%Y-%m-%d') ORDER BY " \
+                      f"DATE_FORMAT(create_time,'%Y-%m-%d') DESC ) b ON a.`day` = b.bet_day WHERE a.`day` BETWEEN '{ctime}' AND '{etime}' ORDER BY a.`day` DESC) a LEFT JOIN " \
                       f"(SELECT `day` as '日期',`effect_amount` as '有效投注',`win_or_lose` as '投注盈亏',`total_backwater` as '总返水',`total_win_or_lose` as '净盈亏' FROM s_day b " \
                       f"LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day,ROUND(sum(if(`status`=2,bet_amount,0)),2) as effect_amount," \
                       f"SUM(level0_backwater_amount)+sum(level0_win_or_lose) as win_or_lose,SUM(level0_backwater_amount) as total_backwater,sum(level0_win_or_lose) as total_win_or_lose " \
@@ -5246,7 +5245,6 @@ class MysqlQuery(MysqlFunc):
                 create_time = ctime.strftime("%Y-%m-%d")
                 sportsReport_list.append([create_time, item[1], item[2], item[3], item[4], item[5], item[6], item[7]])
 
-            print(sportsReport_list)
             return sportsReport_list
         else:
             raise AssertionError('暂不支持该类型')
@@ -5319,6 +5317,76 @@ class MysqlQuery(MysqlFunc):
 
             print(terminalReport_list)
             return terminalReport_list
+
+        else:
+            raise AssertionError('暂不支持该类型')
+
+    def credit_rebateReport_query(self, expData={}, queryType=1):
+        '''
+        总台-报表管理-返水报表                                   /// 修改于2022.04.29
+        :param expData:
+        :param queryType:
+        :return:
+        '''
+        resp = expData
+        if resp['startCreateTime']:
+            createTime = resp['startCreateTime']
+            endTime = resp['endCreateTime']
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=int(createTime))
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=int(endTime))
+        else:
+            ctime = ""
+            etime = ""
+        database_name = "bfty_credit"
+
+        if queryType == 1:
+            sql_str = f"SELECT `day` '日期',IFNULL(`level1_backwater`,0)+IFNULL(`level2_backwater`,0)+IFNULL(`level3_backwater`,0)+IFNULL(`user_backwater`,0) total_backwater," \
+                      f"IFNULL(`level1_backwater`,0) level1_backwater,IFNULL(`level2_backwater`,0) level2_backwater,IFNULL(`level3_backwater`,0) level3_backwater," \
+                      f"IFNULL(`user_backwater`,0) user_backwater,IFNULL(`scoccer`,0) scoccer,IFNULL(`basketball`,0) basketball,IFNULL(`tennis`,0) tennis,IFNULL(`badminton`,0) " \
+                      f"badminton,IFNULL(`table_tennis`,0) table_tennis,IFNULL(`volleyball`,0) volleyball,IFNULL(`baseball`,0) baseball,IFNULL(`icd_hockey`,0) icd_hockey FROM s_day a " \
+                      f"LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day,sum(level0_backwater_amount) as total_backwater,sum(level1_backwater_amount) as level1_backwater," \
+                      f"sum(level2_backwater_amount) as level2_backwater,sum(level3_backwater_amount) as level3_backwater,sum(backwater_amount) as user_backwater," \
+                      f"sum(case when sport_id='sr:sport:1' then level0_backwater_amount end) as scoccer,sum(case when sport_id='sr:sport:2' then level0_backwater_amount end) as " \
+                      f"basketball,sum(case when sport_id='sr:sport:5' then level0_backwater_amount end) as tennis,sum(case when sport_id='sr:sport:31' then level0_backwater_amount end) as badminton," \
+                      f"sum(case when sport_id='sr:sport:20' then level0_backwater_amount end) as table_tennis,sum(case when sport_id='sr:sport:23' then level0_backwater_amount end) as volleyball," \
+                      f"sum(case when sport_id='sr:sport:3' then level0_backwater_amount end) as baseball,sum(case when sport_id='sr:sport:4' then level0_backwater_amount end) as " \
+                      f"icd_hockey FROM o_account_order WHERE `status`= 2 AND award_time is not NULL GROUP BY DATE_FORMAT(award_time,'%Y-%m-%d')) b ON a.`day` = b.bet_day WHERE " \
+                      f"a.`day` BETWEEN '{ctime}' AND '{etime}' ORDER BY a.`day` DESC"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            rebateReport_list = []
+            for item in rtn:
+                ctime = item[0]
+                create_time = ctime.strftime("%Y-%m-%d")
+                rebateReport_list.append([create_time, item[1], item[2], item[3], item[4], item[5], item[6], item[7],
+                                            item[8], item[9], item[10], item[11], item[12], item[13]])
+
+            return rebateReport_list
+
+        elif queryType == 2:
+            sql_str = f"SELECT cast(sum(IFNULL(`level1_backwater`,0)+IFNULL(`level2_backwater`,0)+IFNULL(`level3_backwater`,0)+IFNULL(`user_backwater`,0)) as char) total_backwater," \
+                      f"sum(IFNULL(`level1_backwater`,0)) level1_backwater,sum(IFNULL(`level2_backwater`,0)) level2_backwater,sum(IFNULL(`level3_backwater`,0)) level3_backwater," \
+                      f"sum(IFNULL(`user_backwater`,0)) user_backwater,sum(IFNULL(`scoccer`,0)) scoccer,sum(IFNULL(`basketball`,0)) basketball,sum(IFNULL(`tennis`,0)) tennis," \
+                      f"sum(IFNULL(`badminton`,0)) badminton,sum(IFNULL(`table_tennis`,0)) table_tennis,sum(IFNULL(`volleyball`,0)) volleyball,sum(IFNULL(`baseball`,0)) baseball," \
+                      f"sum(IFNULL(`icd_hockey`,0)) icd_hockey FROM s_day a LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day,sum(level0_backwater_amount) as " \
+                      f"total_backwater,sum(level1_backwater_amount) as level1_backwater,sum(level2_backwater_amount) as level2_backwater,sum(level3_backwater_amount) as " \
+                      f"level3_backwater,sum(backwater_amount) as user_backwater,sum(case when sport_id='sr:sport:1' then level0_backwater_amount end) as scoccer," \
+                      f"sum(case when sport_id='sr:sport:2' then level0_backwater_amount end) as basketball,sum(case when sport_id='sr:sport:5' then level0_backwater_amount end) " \
+                      f"as tennis,sum(case when sport_id='sr:sport:31' then level0_backwater_amount end) as badminton,sum(case when sport_id='sr:sport:20' then " \
+                      f"level0_backwater_amount end) as table_tennis,sum(case when sport_id='sr:sport:23' then level0_backwater_amount end) as volleyball," \
+                      f"sum(case when sport_id='sr:sport:3' then level0_backwater_amount end) as baseball,sum(case when sport_id='sr:sport:4' then level0_backwater_amount end) as " \
+                      f"icd_hockey FROM o_account_order WHERE `status`= 2 AND award_time is not NULL GROUP BY DATE_FORMAT(award_time,'%Y-%m-%d')) b ON a.`day` = b.bet_day " \
+                      f"WHERE a.`day` BETWEEN '{ctime}' AND '{etime}'"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+
+            rebateReport_list = []
+            for item in rtn:
+                rebateReport_list.append([item[0],item[1], item[2], item[3], item[4], item[5], item[6], item[7],
+                                            item[8], item[9], item[10], item[11], item[12]])
+
+            return rebateReport_list
 
         else:
             raise AssertionError('暂不支持该类型')
