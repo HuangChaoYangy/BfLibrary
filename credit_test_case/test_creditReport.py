@@ -188,7 +188,8 @@ mongo_info = ['app', '123456', '192.168.10.120', '27017']
 #         '''
 #         apiRes = CreditBackGround(mysql_info,mongo_info).credit_rebateReport(inData=inBody, queryType=1)
 #         sqlRes = MysqlQuery(mysql_info, mongo_info).credit_rebateReport_query(expData=expData, queryType=1)
-#
+#         print(apiRes)
+#         print(sqlRes)
 #         self.cm.check_live_bet_report_new(apiRes, sqlRes)
 
 class Test_Report10(object):
@@ -205,7 +206,8 @@ class Test_Report10(object):
         '''
         apiRes = CreditBackGround(mysql_info,mongo_info).credit_rebateReport(inData=inBody, queryType=2)
         sqlRes = MysqlQuery(mysql_info, mongo_info).credit_rebateReport_query(expData=expData, queryType=2)
-
+        print(apiRes)
+        print(sqlRes)
         self.cm.check_live_bet_report_new(apiRes, sqlRes)
 
 

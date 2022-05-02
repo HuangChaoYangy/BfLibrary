@@ -5366,10 +5366,10 @@ class MysqlQuery(MysqlFunc):
 
         elif queryType == 2:
             sql_str = f"SELECT cast(sum(IFNULL(`level1_backwater`,0)+IFNULL(`level2_backwater`,0)+IFNULL(`level3_backwater`,0)+IFNULL(`user_backwater`,0)) as char) total_backwater," \
-                      f"sum(IFNULL(`level1_backwater`,0)) level1_backwater,sum(IFNULL(`level2_backwater`,0)) level2_backwater,sum(IFNULL(`level3_backwater`,0)) level3_backwater," \
-                      f"sum(IFNULL(`user_backwater`,0)) user_backwater,sum(IFNULL(`scoccer`,0)) scoccer,sum(IFNULL(`basketball`,0)) basketball,sum(IFNULL(`tennis`,0)) tennis," \
-                      f"sum(IFNULL(`badminton`,0)) badminton,sum(IFNULL(`table_tennis`,0)) table_tennis,sum(IFNULL(`volleyball`,0)) volleyball,sum(IFNULL(`baseball`,0)) baseball," \
-                      f"sum(IFNULL(`icd_hockey`,0)) icd_hockey FROM s_day a LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day,sum(level0_backwater_amount) as " \
+                      f"cast(sum(IFNULL(`level1_backwater`,0)) as char) level1_backwater,cast(sum(IFNULL(`level2_backwater`,0)) as char) level2_backwater,cast(sum(IFNULL(`level3_backwater`,0)) as char) level3_backwater," \
+                      f"cast(sum(IFNULL(`user_backwater`,0)) as char) user_backwater,cast(sum(IFNULL(`scoccer`,0)) as char) scoccer,cast(sum(IFNULL(`basketball`,0)) as char) basketball,cast(sum(IFNULL(`tennis`,0)) as char) tennis," \
+                      f"cast(sum(IFNULL(`badminton`,0)) as char) badminton,cast(sum(IFNULL(`table_tennis`,0)) as char) table_tennis,cast(sum(IFNULL(`volleyball`,0)) as char) volleyball,cast(sum(IFNULL(`baseball`,0)) as char) baseball," \
+                      f"cast(sum(IFNULL(`icd_hockey`,0)) as char) icd_hockey FROM s_day a LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day,sum(level0_backwater_amount) as " \
                       f"total_backwater,sum(level1_backwater_amount) as level1_backwater,sum(level2_backwater_amount) as level2_backwater,sum(level3_backwater_amount) as " \
                       f"level3_backwater,sum(backwater_amount) as user_backwater,sum(case when sport_id='sr:sport:1' then level0_backwater_amount end) as scoccer," \
                       f"sum(case when sport_id='sr:sport:2' then level0_backwater_amount end) as basketball,sum(case when sport_id='sr:sport:5' then level0_backwater_amount end) " \
@@ -5385,7 +5385,6 @@ class MysqlQuery(MysqlFunc):
             for item in rtn:
                 rebateReport_list.append([item[0],item[1], item[2], item[3], item[4], item[5], item[6], item[7],
                                             item[8], item[9], item[10], item[11], item[12]])
-
             return rebateReport_list
 
         else:

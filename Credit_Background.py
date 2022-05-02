@@ -2053,10 +2053,13 @@ class CreditBackGround(object):
                     print("查询返水报表失败,原因：" + rsp.json()["message"])
                 else:
                     Total_rebatesReport_list = []
+                    rebatesReport_list=[]
                     data = rsp.json()['data']
-                    Total_rebatesReport_list.append([str(data['totalRebate']),str(data['levelBackwaterAmount']),str(data['leve2BackwaterAmount']),str(data['leve3BackwaterAmount']),
-                                                  str(data['userBackwaterAmount']),str(data['soccer']),str(data['basketball']),str(data['tennis']),str(data['badminton']),
-                                                  str(data['tableTennis']),str(data['volleyball']),str(data['baseball']),str(data['iceHockey']) ])
+                    Total_rebatesReport_list.append([(data['totalRebate']),(data['levelBackwaterAmount']),(data['leve2BackwaterAmount']),(data['leve3BackwaterAmount']),
+                                                  (data['userBackwaterAmount']),(data['soccer']),(data['basketball']),(data['tennis']),(data['badminton']),
+                                                  (data['tableTennis']),(data['volleyball']),(data['baseball']),(data['iceHockey']) ])
+                    for item in Total_rebatesReport_list[0]:
+                        rebatesReport_list.append(str(round(item,2)))
 
                     return Total_rebatesReport_list
 

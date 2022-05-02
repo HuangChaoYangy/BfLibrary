@@ -5,6 +5,7 @@
 # @Software: PyCharm
 
 '''
+python+pytest+requests+yaml+allure
 测试步骤：
 1：yaml文件中编写测试用例
 2：读取yaml文件,获取用例数据

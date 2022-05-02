@@ -818,7 +818,7 @@ class Credit_Client(object):
             sub_order_no_list = []
             loop = 1
             for outcomeid in selection_list:
-                bet_amount = random.randint(10, 1000)
+                bet_amount = random.randint(10, 300)
                 mixedNum = "1_1_0_%s" % (str(bet_amount))
                 terminal = random.choice(terminal_list)   # 随机客户端
                 data = {"mixedNum": [mixedNum],
@@ -845,7 +845,7 @@ class Credit_Client(object):
                         sub_order_no_list.append(str(sub_order_no))
                         print("投注成功：" + str(sub_order_no))
                     else:
-                        print("ERR: 投注失败" + rsp.json()["message"])
+                        print("ERR: 投注失败：" + rsp.json()['data']["message"])
                     print("总共【%d】个投注项，已投注【%d】个投注项，还剩【%d】个投注项" % (run_loop, loop, run_loop - loop))
                     loop += 1
             print('注单号列表: %s' % (sub_order_no_list))
@@ -900,7 +900,7 @@ class Credit_Client(object):
                         sub_order_no_list.append(str(sub_order_no))
                         print("投注成功：" + str(sub_order_no))
                     else:
-                        print("ERR: 投注失败" + rsp.json()["message"])
+                        print("ERR: 投注失败：" + rsp.json()['data']["message"])
                     print("总共【%d】个投注项，已投注【%d】个投注项，还剩【%d】个投注项" % (randomNum, loop, randomNum - loop))
                     loop += 1
             print('注单号列表: %s' % (sub_order_no_list))
@@ -986,7 +986,7 @@ class Credit_Client(object):
                         sub_order_no_list.append(str(sub_order_no))
                         print("投注成功：" + str(sub_order_no))
                     else:
-                        print("ERR: 投注失败" + rsp.json()["message"])
+                        print("ERR: 投注失败：" + rsp.json()['data']["message"])
                     loop += 1
             print('注单号列表: %s' % (sub_order_no_list))
 
@@ -1056,7 +1056,7 @@ class Credit_Client(object):
                             sub_order_no_list.append(str(sub_order_no))
                             print("投注成功：" + str(sub_order_no))
                         else:
-                            print("ERR: 投注失败" + rsp.json()["message"])
+                            print("ERR: 投注失败：" + rsp.json()['data']["message"])
                     loop += 1
                 print('注单号列表: %s' % (sub_order_no_list))
 
@@ -1231,9 +1231,7 @@ class Credit_Client(object):
                         "oddsChangeType": oddsChangeType,
                         "selections": selection_list,
                         "terminal": "pc"}
-                # print(data)
-                rsp = self.session.post(local_url, json=data, headers=head)
-                print(local_url)
+                rsp = self.session.post(url, json=data, headers=head)
                 if rsp.json()['message'] != "OK":
                     print("投注失败,原因：" + rsp.json()["message"])
                 elif not rsp.json():
@@ -1721,7 +1719,7 @@ if __name__ == "__main__":
     # mysql_inf_mde = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['82da2d2fd5d7451b816e1fb15b411782','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
+    token_list = ['d26873aeb5cd456787ec00539bc84638','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
 
     # match_id_list = bf.get_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     # print(match_id_list)
@@ -1736,34 +1734,34 @@ if __name__ == "__main__":
     #     data = bf.cm.write_to_local_file(content=item, file_name='C:/Users/USER/Desktop/testOdds.txt',mode='w')
 
     # 新增多线程-模拟多用户进行投注
-    # user_list = ['Testuser001','Testuser002']
-    # for user in user_list:
-    #     thread_num = len(user_list)
-    #     token = bf.login_client(username=user, password='Bfty123456')
-    #     print(f'当前投注账号为 {user}')
-    #     # tuple_parameter = ("sr:match:31625947","排球", f'{token}', 1)     # 单注的入参
-    #     # tuple_parameter = ("排球", f'{token}', 5, 'EARLY')          # 非复式串关投注的入参
-    #     # sub_thread = threading.Thread(target=bf.submit_all_outcomes, args=tuple_parameter )          #创建线程,target为线程执行的目标方法
-    #     # sub_thread.start()          # 通过start()方法手动来启动线程
-    #
-    #     with ThreadPoolExecutor(max_workers=5) as task:            # 创建一个最大容纳数量为5的线程池
-    #         for item in range(thread_num):
-    #             tuple_parameter = ("sr:match:31627905", "乒乓球", f'{token}', 1)
-    #             dict_parameter = {'match_id':'sr:match:31627905', 'token':f'{token}', 'sport_name':'乒乓球'}
-    #             sub_thread1 = task.submit(bf.submit_all_outcome, *tuple_parameter)
-    #             # print(f"task1: {sub_thread1.done()}")
-    #             # time.sleep(3)
-    #             # print(sub_thread1.result())
-    #             # time.sleep(3)
-    #             # task.shutdown()
-    #     print(f"task1: {sub_thread1.done()}")
+    user_list = ['a2','a3','a5','a6','a7','a8']
+    for user in user_list:
+        thread_num = len(user_list)
+        token = bf.login_client(username=user, password='Bfty123456')
+        print(f'当前投注账号为 {user}')
+        # tuple_parameter = ("sr:match:30771251","棒球", f'{token}', 1)     # 单注的入参
+        tuple_parameter = ("足球", f'{token}', 5, 'EARLY')          # 非复式串关投注的入参
+        sub_thread = threading.Thread(target=bf.submit_all_outcomes, args=tuple_parameter )          #创建线程,target为线程执行的目标方法
+        sub_thread.start()          # 通过start()方法手动来启动线程
+
+        # with ThreadPoolExecutor(max_workers=5) as task:            # 创建一个最大容纳数量为5的线程池
+        #     for item in range(thread_num):
+        #         tuple_parameter = ("sr:match:32829111", "足球", f'{token}', 1)
+        #         dict_parameter = {'match_id':'sr:match:31627905', 'token':f'{token}', 'sport_name':'乒乓球'}
+        #         sub_thread1 = task.submit(bf.submit_all_outcome, *tuple_parameter)
+        #         # print(f"task1: {sub_thread1.done()}")
+        #         # time.sleep(3)
+        #         # print(sub_thread1.result())
+        #         # time.sleep(3)
+        #         # task.shutdown()
+        # print(f"task1: {sub_thread1.done()}")
 
     # 单注投注
-    bf.submit_all_outcome(match_id="sr:match:27885382", sport_name='足球', token=token_list[0], odds_type=1, IsRandom='')
+    # bf.submit_all_outcome(match_id="sr:match:27885382", sport_name='足球', token=token_list[0], odds_type=1, IsRandom='')
     # 非复式串关投注
     # bf.submit_all_outcomes(sport_name='篮球', token=token_list[0], bet_type=3, event_type='EARLY', IsRandom='')
     # 复式串关投注
-    # bf.submit_all_complex(sport_name='篮球', token=token_list[0], bet_type=5, event_type='TODAY', odds_type=1, oddsChangeType=1, complex='single', complex_number=3)
+    # bf.submit_all_complex(sport_name='足球', token=token_list[0], bet_type=5, event_type='EARLY', odds_type=1, oddsChangeType=1, complex='multi', complex_number=5)
     # balance = bf.get_balance(token=token_list[0])
     # print(balance)
 
