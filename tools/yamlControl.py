@@ -13,7 +13,7 @@ class Yaml_data(object):
         '''
         获取yaml文件
         :param fileDir:
-        :param isAll:
+        :param isAll:  True获取yaml所有参数
         :return:
         '''
         resList = []  # 存放结果 [(请求1,期望响应1),(请求2,期望响应2)]
