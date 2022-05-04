@@ -17,6 +17,7 @@ class Yaml_data(object):
         :return:
         '''
         resList = []  # 存放结果 [(请求1,期望响应1),(请求2,期望响应2)]
+        titleList = []
 
         if isAll==False:
             try:
@@ -28,6 +29,8 @@ class Yaml_data(object):
 
                 for item in res:
                     resList.append((item['data'], item['resp']))
+                for item in res:
+                    titleList.append(item['describe'])
 
                 return resList
 
@@ -39,7 +42,7 @@ class Yaml_data(object):
                 del res[0]
 
                 for item in res:
-                    resList.append((item['data'], item['resp']))
+                    resList.append((item['describe'], item['data'], item['resp']))
 
                 return resList
 
@@ -55,6 +58,7 @@ class Yaml_data(object):
                 file_object = open(fileDir, 'r', encoding="gbk", errors=None, closefd=True)
                 res = yaml.load(file_object, Loader=yaml.FullLoader)
                 file_object.close()
+                del res[0]
 
                 return res
 
@@ -65,6 +69,6 @@ class Yaml_data(object):
 if __name__ == "__main__":
 
     ya = Yaml_data()
-    # result = ya.get_yaml_data(fileDir='../credit_data/dataSourceReportTotal.yaml')          # ../data/DailyWinAndLossReport.yaml
+    # result = ya.get_yaml_data(fileDir='../credit_data/dataSourceReportTotal.yaml')[1]         # ../data/DailyWinAndLossReport.yaml
     result = ya.get_yaml_data(fileDir='../credit_data/dataSourceReportTotal.yaml', isAll=True)
     print(result)
