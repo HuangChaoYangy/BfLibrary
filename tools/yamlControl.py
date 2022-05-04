@@ -69,6 +69,6 @@ class Yaml_data(object):
 if __name__ == "__main__":
 
     ya = Yaml_data()
-    # result = ya.get_yaml_data(fileDir='../credit_data/dataSourceReportTotal.yaml')[1]         # ../data/DailyWinAndLossReport.yaml
-    result = ya.get_yaml_data(fileDir='../credit_data/dataSourceReportTotal.yaml', isAll=True)
+    # result = ya.get_yaml_data(fileDir='../credit_data/dataSourceReport.yaml')[1]         # ../data/DailyWinAndLossReport.yaml
+    result = ya.get_yaml_data(fileDir='../credit_data/dataSourceReport.yaml', isAll=True)
     print(result)
