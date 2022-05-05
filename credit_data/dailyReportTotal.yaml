@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/04/26 19:14
 # @Author  : liyang
-# @FileName: dailyReport.yaml
+# @FileName: dailyReportTotal.yaml
 # @Software: PyCharm
 
 
 -
   ip: 192.168.10.120:8093
-  url: /backendReport/queryDailyProfitAndLossList
+  url: /backendReport/totalDailyProfitAndLoss
   method: POST
 
 - #test_01用例

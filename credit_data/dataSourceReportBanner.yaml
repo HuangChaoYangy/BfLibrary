@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/05/04 19:14
 # @Author  : liyang
-# @FileName: dataSourceReport.yaml
+# @FileName: dataSourceReportBanner.yaml
 # @Software: PyCharm
 
 
@@ -13,7 +13,7 @@
   method: POST
 
 - #test_01用例
-  describe: 管理后台-总台-数据源对账报表-总计,默认查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,默认查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -28,7 +28,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,默认查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,默认查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -44,7 +44,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_02用例
-  describe: 管理后台-总台-数据源对账报表-总计,默认查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,默认查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -59,7 +59,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,默认查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,默认查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -75,7 +75,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_03用例
-  describe: 管理后台-总台-数据源对账报表-总计,默认查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,默认查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -90,7 +90,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,默认查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,默认查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -106,7 +106,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_04用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【会员账号】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【会员账号】查询近1个月数据
   data:
     userName: "a0b1c2b301"
     orderNo: ""
@@ -121,7 +121,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【会员账号】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【会员账号】查询近1个月数据
   resp:
     userName: "a0b1c2b301"
     orderNo: ""
@@ -137,7 +137,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_05用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【会员账号】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【会员账号】查询近15天数据
   data:
     userName: "a0b1c2b301"
     orderNo: ""
@@ -152,7 +152,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【会员账号】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【会员账号】查询近15天数据
   resp:
     userName: "a0b1c2b301"
     orderNo: ""
@@ -168,7 +168,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_06用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【会员账号】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【会员账号】查询近7天数据
   data:
     userName: "a0b1c2b301"
     orderNo: ""
@@ -183,7 +183,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【会员账号】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【会员账号】查询近7天数据
   resp:
     userName: "a0b1c2b301"
     orderNo: ""
@@ -199,7 +199,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_07用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单号】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单号】查询近1个月数据
   data:
     userName: ""
     orderNo: "XyGhrzkLXM2u"
@@ -214,7 +214,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单号】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单号】查询近1个月数据
   resp:
     userName: ""
     orderNo: "XyGhrzkLXM2u"
@@ -230,7 +230,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_08用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单号】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单号】查询近15天数据
   data:
     userName: ""
     orderNo: "XyGhrzkLXM2u"
@@ -245,7 +245,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单号】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单号】查询近15天数据
   resp:
     userName: ""
     orderNo: "XyGhrzkLXM2u"
@@ -261,7 +261,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_09用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单号】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单号】查询近7天数据
   data:
     userName: ""
     orderNo: "XyGhrzkLXM2u"
@@ -276,7 +276,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单号】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单号】查询近7天数据
   resp:
     userName: ""
     orderNo: "XyGhrzkLXM2u"
@@ -292,7 +292,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_10用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-足球】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-足球】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -307,7 +307,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-足球】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-足球】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -323,7 +323,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_11用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-足球】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-足球】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -338,7 +338,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-足球】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-足球】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -354,7 +354,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_12用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-足球】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-足球】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -369,7 +369,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-足球】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-足球】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -385,7 +385,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_13用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-篮球】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-篮球】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -400,7 +400,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-篮球】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-篮球】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -416,7 +416,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_14用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-篮球】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-篮球】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -431,7 +431,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-篮球】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-篮球】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -447,7 +447,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_15用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-篮球】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-篮球】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -462,7 +462,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-篮球】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-篮球】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -478,7 +478,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_16用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-排球】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-排球】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -493,7 +493,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-排球】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-排球】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -509,7 +509,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_17用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-排球】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-排球】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -524,7 +524,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-排球】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-排球】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -540,7 +540,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_18用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-排球】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-排球】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -555,7 +555,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-排球】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-排球】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -571,7 +571,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_19用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-网球】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-网球】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -586,7 +586,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-网球】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-网球】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -602,7 +602,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_20用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-网球】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-网球】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -617,7 +617,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-网球】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-网球】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -633,7 +633,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_21用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-网球】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-网球】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -648,7 +648,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-网球】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-网球】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -664,7 +664,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_22用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-羽毛球】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-羽毛球】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -679,7 +679,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-羽毛球】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-羽毛球】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -695,7 +695,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_23用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-羽毛球】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-羽毛球】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -710,7 +710,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-羽毛球】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-羽毛球】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -726,7 +726,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_24用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-羽毛球】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-羽毛球】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -741,7 +741,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-羽毛球】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-羽毛球】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -757,7 +757,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_25用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-乒乓球】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-乒乓球】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -772,7 +772,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-乒乓球】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-乒乓球】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -788,7 +788,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_26用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-乒乓球】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-乒乓球】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -803,7 +803,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-乒乓球】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-乒乓球】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -819,7 +819,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_27用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-乒乓球】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-乒乓球】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -834,7 +834,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-乒乓球】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-乒乓球】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -850,7 +850,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_28用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-棒球】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-棒球】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -865,7 +865,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-棒球】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-棒球】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -881,7 +881,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_29用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-棒球】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-棒球】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -896,7 +896,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-棒球】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-棒球】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -912,7 +912,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_30用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-棒球】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-棒球】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -927,7 +927,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-棒球】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-棒球】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -943,7 +943,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_31用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-冰球】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-冰球】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -958,7 +958,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-冰球】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-冰球】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -974,7 +974,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_32用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-冰球】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-冰球】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -989,7 +989,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-冰球】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-冰球】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1005,7 +1005,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_33用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【球类-冰球】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【球类-冰球】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -1020,7 +1020,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【球类-冰球】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【球类-冰球】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1036,12 +1036,12 @@
     sortIndex: ""
     sortParameter: ""
 - #test_34用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单结果-赢】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单结果-赢】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
-    sportId: ['sr:sport:4']
-    settlementResult: []
+    sportId: ["sr:sport:1"]
+    settlementResult: ["1"]
     status: []
     betType: ""
     betStartTime: "-30"
@@ -1051,12 +1051,12 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单结果-赢】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单结果-赢】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
-    sportId: ('sr:sport:4')
-    settlementResult: []
+    sportId: ("sr:sport:1")
+    settlementResult: (1,3)
     status: []
     betType: ""
     betStartTime: "-30"
@@ -1067,12 +1067,12 @@
     sortIndex: ""
     sortParameter: ""
 - #test_35用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单结果-赢】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单结果-赢】查询近15天数据
   data:
     userName: ""
     orderNo: ""
-    sportId: ['sr:sport:4']
-    settlementResult: []
+    sportId: ["sr:sport:1"]
+    settlementResult: ["1"]
     status: []
     betType: ""
     betStartTime: "-15"
@@ -1082,12 +1082,12 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单结果-赢】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单结果-赢】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
-    sportId: ('sr:sport:4')
-    settlementResult: []
+    sportId: ("sr:sport:1")
+    settlementResult: (1,3)
     status: []
     betType: ""
     betStartTime: "-15"
@@ -1098,12 +1098,12 @@
     sortIndex: ""
     sortParameter: ""
 - #test_36用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单结果-赢】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单结果-赢】查询近7天数据
   data:
     userName: ""
     orderNo: ""
-    sportId: ['sr:sport:4']
-    settlementResult: []
+    sportId: ["sr:sport:1"]
+    settlementResult: ["1"]
     status: []
     betType: ""
     betStartTime: "-7"
@@ -1113,12 +1113,12 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单结果-赢】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单结果-赢】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
-    sportId: ('sr:sport:4')
-    settlementResult: []
+    sportId: ("sr:sport:1")
+    settlementResult: (1,3)
     status: []
     betType: ""
     betStartTime: "-7"
@@ -1129,7 +1129,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_37用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单结果-输】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单结果-输】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -1144,7 +1144,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单结果-输】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单结果-输】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -1160,7 +1160,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_38用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单结果-输】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单结果-输】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -1175,7 +1175,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单结果-输】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单结果-输】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1191,7 +1191,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_39用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单结果-输】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单结果-输】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -1206,7 +1206,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单结果-输】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单结果-输】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1222,7 +1222,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_40用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单结果-取消】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单结果-取消】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -1237,7 +1237,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单结果-取消】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单结果-取消】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -1253,7 +1253,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_41用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单结果-取消】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单结果-取消】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -1268,7 +1268,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单结果-取消】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单结果-取消】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1284,7 +1284,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_42用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单结果-取消】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单结果-取消】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -1299,7 +1299,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单结果-取消】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单结果-取消】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1315,7 +1315,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_43用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单结果-注单平局】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单结果-注单平局】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -1330,7 +1330,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单结果-注单平局】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单结果-注单平局】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -1346,7 +1346,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_44用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单结果-注单平局】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单结果-注单平局】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -1361,7 +1361,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单结果-注单平局】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单结果-注单平局】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1377,7 +1377,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_45用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单结果-注单平局】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单结果-注单平局】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -1392,7 +1392,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单结果-注单平局】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单结果-注单平局】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1408,13 +1408,13 @@
     sortIndex: ""
     sortParameter: ""
 - #test_46用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单状态-未结算/已结算】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单状态-未结算】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
     sportId: ["sr:sport:1","sr:sport:2","sr:sport:4","sr:sport:5","sr:sport:20","sr:sport:31","sr:sport:3","sr:sport:23"]
     settlementResult: ["1","2","5","6"]
-    status: ["1","2"]
+    status: ["1"]
     betType: ""
     betStartTime: "-30"
     betEndTime: "0"
@@ -1423,13 +1423,13 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单状态-未结算/已结算】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单状态-未结算】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
     sportId: ("sr:sport:1","sr:sport:2","sr:sport:4","sr:sport:5","sr:sport:20","sr:sport:31","sr:sport:3","sr:sport:23")
     settlementResult: (1,2,3,4,5,6)
-    status: (1,2)
+    status: (1)
     betType: ""
     betStartTime: "-30"
     betEndTime: "0"
@@ -1439,13 +1439,13 @@
     sortIndex: ""
     sortParameter: ""
 - #test_47用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单状态-未结算/已结算】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单状态-未结算】查询近15天数据
   data:
     userName: ""
     orderNo: ""
     sportId: ["sr:sport:1","sr:sport:2","sr:sport:4","sr:sport:5","sr:sport:20","sr:sport:31","sr:sport:3","sr:sport:23"]
     settlementResult: ["1","2","5","6"]
-    status: ["1","2"]
+    status: ["1"]
     betType: ""
     betStartTime: "-15"
     betEndTime: "0"
@@ -1454,13 +1454,13 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单状态-未结算/已结算】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单状态-未结算】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
     sportId: ("sr:sport:1","sr:sport:2","sr:sport:4","sr:sport:5","sr:sport:20","sr:sport:31","sr:sport:3","sr:sport:23")
     settlementResult: (1,2,3,4,5,6)
-    status: (1,2)
+    status: (1)
     betType: ""
     betStartTime: "-15"
     betEndTime: "0"
@@ -1470,13 +1470,13 @@
     sortIndex: ""
     sortParameter: ""
 - #test_48用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单状态-未结算/已结算】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单状态-未结算】查询近7天数据
   data:
     userName: ""
     orderNo: ""
     sportId: ["sr:sport:1","sr:sport:2","sr:sport:4","sr:sport:5","sr:sport:20","sr:sport:31","sr:sport:3","sr:sport:23"]
     settlementResult: ["1","2","5","6"]
-    status: ["1","2"]
+    status: ["1"]
     betType: ""
     betStartTime: "-7"
     betEndTime: "0"
@@ -1485,13 +1485,13 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单状态-未结算/已结算】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单状态-未结算】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
     sportId: ("sr:sport:1","sr:sport:2","sr:sport:4","sr:sport:5","sr:sport:20","sr:sport:31","sr:sport:3","sr:sport:23")
     settlementResult: (1,2,3,4,5,6)
-    status: (1,2)
+    status: (1)
     betType: ""
     betStartTime: "-7"
     betEndTime: "0"
@@ -1501,7 +1501,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_49用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单状态-已结算】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单状态-已结算】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -1516,7 +1516,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单状态-已结算】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单状态-已结算】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -1532,7 +1532,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_50用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单状态-已结算】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单状态-已结算】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -1547,7 +1547,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单状态-已结算】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单状态-已结算】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1563,7 +1563,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_51用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单状态-已结算】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单状态-已结算】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -1578,7 +1578,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单状态-已结算】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单状态-已结算】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1594,7 +1594,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_52用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单状态-已取消】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单状态-已取消】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -1609,7 +1609,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单状态-已取消】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单状态-已取消】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -1625,7 +1625,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_53用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单状态-已取消】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单状态-已取消】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -1640,7 +1640,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单状态-已取消】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单状态-已取消】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1656,7 +1656,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_54用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单状态-已取消】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单状态-已取消】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -1671,7 +1671,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单状态-已取消】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单状态-已取消】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1687,7 +1687,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_55用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单类型-单关】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单类型-单关】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -1702,7 +1702,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单类型-单关】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单类型-单关】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -1718,7 +1718,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_56用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单类型-单关】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单类型-单关】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -1733,7 +1733,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单类型-单关】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单类型-单关】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1749,7 +1749,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_57用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单类型-单关】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单类型-单关】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -1764,7 +1764,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单类型-单关】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单类型-单关】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1780,7 +1780,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_58用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单类型-串关】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单类型-串关】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -1795,7 +1795,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单类型-串关】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单类型-串关】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -1811,7 +1811,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_59用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单类型-串关】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单类型-串关】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -1826,7 +1826,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单类型-串关】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单类型-串关】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1842,7 +1842,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_60用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单类型-串关】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单类型-串关】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -1857,7 +1857,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单类型-串关】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单类型-串关】查询近7天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1873,7 +1873,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_61用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单类型-复式串关】查询近1个月数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单类型-复式串关】查询近1个月数据
   data:
     userName: ""
     orderNo: ""
@@ -1888,7 +1888,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单类型-复式串关】查询近1个月数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单类型-复式串关】查询近1个月数据
   resp:
     userName: ""
     orderNo: ""
@@ -1904,7 +1904,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_62用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单类型-复式串关】查询近15天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单类型-复式串关】查询近15天数据
   data:
     userName: ""
     orderNo: ""
@@ -1919,7 +1919,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单类型-复式串关】查询近15天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单类型-复式串关】查询近15天数据
   resp:
     userName: ""
     orderNo: ""
@@ -1935,7 +1935,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_63用例
-  describe: 管理后台-总台-数据源对账报表-总计,根据【注单类型-复式串关】查询近7天数据
+  describe: 管理后台-总台-数据源对账报表-合计,根据【注单类型-复式串关】查询近7天数据
   data:
     userName: ""
     orderNo: ""
@@ -1950,7 +1950,7 @@
     sortBy: ""
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-数据源对账报表-总计,根据【注单类型-复式串关】查询近7天数据
+    title: 管理后台-总台-数据源对账报表-合计,根据【注单类型-复式串关】查询近7天数据
   resp:
     userName: ""
     orderNo: ""

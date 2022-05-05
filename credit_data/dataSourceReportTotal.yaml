@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/05/04 19:14
 # @Author  : liyang
-# @FileName: dataSourceReport.yaml
+# @FileName: dataSourceReportBanner.yaml
 # @Software: PyCharm
 
 
@@ -1040,8 +1040,8 @@
   data:
     userName: ""
     orderNo: ""
-    sportId: ['sr:sport:4']
-    settlementResult: []
+    sportId: ["sr:sport:1"]
+    settlementResult: ["1"]
     status: []
     betType: ""
     betStartTime: "-30"
@@ -1055,8 +1055,8 @@
   resp:
     userName: ""
     orderNo: ""
-    sportId: ('sr:sport:4')
-    settlementResult: []
+    sportId: ("sr:sport:1")
+    settlementResult: (1,3)
     status: []
     betType: ""
     betStartTime: "-30"
@@ -1071,8 +1071,8 @@
   data:
     userName: ""
     orderNo: ""
-    sportId: ['sr:sport:4']
-    settlementResult: []
+    sportId: ["sr:sport:1"]
+    settlementResult: ["1"]
     status: []
     betType: ""
     betStartTime: "-15"
@@ -1086,8 +1086,8 @@
   resp:
     userName: ""
     orderNo: ""
-    sportId: ('sr:sport:4')
-    settlementResult: []
+    sportId: ("sr:sport:1")
+    settlementResult: (1,3)
     status: []
     betType: ""
     betStartTime: "-15"
@@ -1102,8 +1102,8 @@
   data:
     userName: ""
     orderNo: ""
-    sportId: ['sr:sport:4']
-    settlementResult: []
+    sportId: ["sr:sport:1"]
+    settlementResult: ["1"]
     status: []
     betType: ""
     betStartTime: "-7"
@@ -1117,8 +1117,8 @@
   resp:
     userName: ""
     orderNo: ""
-    sportId: ('sr:sport:4')
-    settlementResult: []
+    sportId: ("sr:sport:1")
+    settlementResult: (1,3)
     status: []
     betType: ""
     betStartTime: "-7"
