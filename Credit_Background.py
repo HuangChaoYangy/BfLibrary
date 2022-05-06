@@ -5,6 +5,7 @@ import time
 import arrow
 import datetime
 import random
+import math
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
 from Crypto.PublicKey import RSA
 try:
@@ -1325,9 +1326,9 @@ class CreditBackGround(object):
             print(e)
 
     def credit_dataSourceReport_query(self, Authorization, userAccount='', orderNo='', sportName='', result=[], status=[], betType='',
-                                     create_time=(-30,0), settle_time=(), sortBy='', sortParameter='', queryType=1):
+                                     create_time=(-30,0), settle_time=(-30,0), sortBy='', sortParameter='', queryType=1):
         '''
-        总台-报表管理-数据源对账报表，默认以"投注时间"查询近一个月数据                                   /// 修改于2022.04.22
+        总台-报表管理-数据源对账报表，默认以"投注时间"查询近一个月数据                                   /// 修改于2022.05.02
         :param Authorization:
         :param userAccount:
         :param orderNo:
@@ -1358,6 +1359,9 @@ class CreditBackGround(object):
         else:
             set_ctime = ""
             set_etime = ""
+        orderNum = self.mysql.credit_dataSourceRepot_number(betTime=(-29,0), settleTime=(-29,0))
+        print(f'注单数量为：{orderNum}')
+        pageNum = math.ceil(orderNum/200)         # 向上取整  获取分页数
 
         sport_id = self.db.get_sportId_sql(sportName)
         url = self.auth_url + '/dataSourceCheckReport/getPage'
@@ -1368,20 +1372,22 @@ class CreditBackGround(object):
                 "Account_Login_Identify": Authorization,
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
         try:
+
             if queryType == 1:
-                data = {"page":1, "limit":50, "sortBy":sortBy, "sortParameter":sortParameter, "sortIndex":"", "betType":betType, "orderNo":orderNo, "settlementResult":result, "sportId":sport_id,
-                        "status":status, "userName":userAccount, "betStartTime":ctime, "betEndTime":etime, "settlementStartTime":set_ctime, "settlementEndTime":set_etime }
-                print(data)
-                rsp = self.session.post(url, headers=head, json=data)
-                if rsp.json()['message'] != 'OK':
-                    print("查询数据源对账报表失败,原因：" + rsp.json()["message"])
-                else:
-                    orderDetail_list = []
-                    for item in rsp.json()['data']['data']:
-                        orderDetail_list.append([item['orderNo'],item['betType'],item['sportName'],item['userName'],item['betTime'],item['betAmount'],
-                                                 item['settlementTime'],item['statusClientDesc'],item['settlementResult'],item['accountFinalWinOrLose'],item['handicapFinalWinOrLose'],])
-                    print(orderDetail_list)
-                    return orderDetail_list
+                orderDetail_list = []
+                for page in range(1,pageNum+1):
+                    data = {"page":page, "limit":200, "sortBy":sortBy, "sortParameter":sortParameter, "sortIndex":"", "betType":betType, "orderNo":orderNo, "settlementResult":result, "sportId":sport_id,
+                            "status":status, "userName":userAccount, "betStartTime":ctime, "betEndTime":etime, "settlementStartTime":set_ctime, "settlementEndTime":set_etime }
+                    rsp = self.session.post(url, headers=head, json=data)
+                    if rsp.json()['message'] != 'OK':
+                        print("查询数据源对账报表失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']['data']:
+                            orderDetail_list.append([item['orderNo'],item['betType'],item['sportName'],item['userName'],item['betTime'],item['betAmount'],
+                                                     item['settlementTime'],item['statusClientDesc'],item['settlementResult'],item['accountFinalWinOrLose'],
+                                                     item['handicapFinalWinOrLose'],])
+                print(len(orderDetail_list))
+                return orderDetail_list
 
             elif queryType == 2:
                 data = {"betType":betType, "orderNo":orderNo, "settlementResult":result, "sportId":sport_id, "status":status, "userName":userAccount,
@@ -1417,7 +1423,7 @@ class CreditBackGround(object):
 
     def credit_dataSourceReport(self, inData, queryType=1):
         '''
-        总台-报表管理-数据源对账报表，默认以"投注时间"查询近一个月数据                              /// 修改于2022.04.22
+        总台-报表管理-数据源对账报表，默认以"投注时间"查询近一个月数据                              /// 修改于2022.05.02
         :param Authorization:
         :param userAccount:
         :param orderNo:
@@ -1438,21 +1444,19 @@ class CreditBackGround(object):
         if resp['betStartTime']:
             createTime = resp['betStartTime']
             endTime = resp['betEndTime']
-            ctime = self.get_current_time_for_client(time_type='now',day_diff=int(createTime))
-            etime = self.get_current_time_for_client(time_type='now', day_diff=int(endTime))
+            ctime = self.get_current_time_for_client(time_type='time',day_diff=int(createTime))
+            etime = self.get_current_time_for_client(time_type='etime', day_diff=int(endTime))
         else:
             ctime = ""
             etime = ""
         if resp['settlementStartTime']:
             createTime = resp['settlementStartTime']
             endTime = resp['settlementEndTime']
-            set_ctime = self.get_current_time_for_client(time_type='now',day_diff=int(createTime))
-            set_etime = self.get_current_time_for_client(time_type='now', day_diff=int(endTime))
+            set_ctime = self.get_current_time_for_client(time_type='time',day_diff=int(createTime))
+            set_etime = self.get_current_time_for_client(time_type='etime', day_diff=int(endTime))
         else:
             set_ctime = ""
             set_etime = ""
-        page = inData['page']
-        limit = inData['limit']
         userName = inData['userName']
         orderNo = inData['orderNo']
         sportId = inData['sportId']
@@ -1461,6 +1465,11 @@ class CreditBackGround(object):
         betType = inData['betType']
         sortIndex = inData['sortIndex']
         sortParameter = inData['sortParameter']
+
+        orderNum = self.mysql.credit_dataSourceRepot_number(betTime=(int(resp['betStartTime']),int(resp['betEndTime'])),
+                                                            settleTime=(int(resp['settlementStartTime']),int(resp['settlementEndTime'])))
+        print(f'注单数量为：{orderNum}')
+        pageNum = math.ceil(orderNum/200)         # 向上取整  获取分页数
 
         url = self.auth_url + '/dataSourceCheckReport/getPage'
         total_url = self.auth_url + '/dataSourceCheckReport/getTotal'
@@ -1471,20 +1480,20 @@ class CreditBackGround(object):
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
         try:
             if queryType == 1:
-                data = {"page":page, "limit":limit, "sortBy":sortIndex, "sortParameter":sortParameter, "sortIndex":"", "betType":betType, "orderNo":orderNo,
-                        "settlementResult":result, "sportId":sportId, "status":status, "userName":userName, "betStartTime":ctime, "betEndTime":etime,
-                        "settlementStartTime":set_ctime, "settlementEndTime":set_etime }
-                print(data)
-                rsp = self.session.post(url, headers=head, json=data)
-                if rsp.json()['message'] != 'OK':
-                    print("查询数据源对账报表失败,原因：" + rsp.json()["message"])
-                else:
-                    orderDetail_list = []
-                    for item in rsp.json()['data']['data']:
-                        orderDetail_list.append([item['orderNo'],item['betType'],item['sportName'],item['userName'],item['betTime'],item['betAmount'],
-                                                 item['settlementTime'],item['statusClientDesc'],item['settlementResult'],item['accountFinalWinOrLose'],item['handicapFinalWinOrLose'],])
-                    print(orderDetail_list)
-                    return orderDetail_list
+                orderDetail_list = []
+                for page in range(1, pageNum + 1):
+                    data = {"page":page, "limit":200, "sortBy":sortIndex, "sortParameter":sortParameter, "sortIndex":"", "betType":betType, "orderNo":orderNo,
+                            "settlementResult":result, "sportId":sportId, "status":status, "userName":userName, "betStartTime":ctime, "betEndTime":etime,
+                            "settlementStartTime":set_ctime, "settlementEndTime":set_etime }
+                    rsp = self.session.post(url, headers=head, json=data)
+                    if rsp.json()['message'] != 'OK':
+                        print("查询数据源对账报表失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']['data']:
+                            orderDetail_list.append([item['orderNo'],item['betType'],item['sportName'],item['userName'],item['betTime'],item['betAmount'],
+                                                     item['settlementTime'],item['statusClientDesc'],item['settlementResult'],item['accountFinalWinOrLose'],
+                                                     item['handicapFinalWinOrLose'],])
+                return orderDetail_list
 
             elif queryType == 2:
                 data = {"betType":betType, "orderNo":orderNo, "settlementResult":result, "sportId":sportId, "status":status, "userName":userName,
@@ -1495,8 +1504,8 @@ class CreditBackGround(object):
                 else:
                     orderTotal_list = []
                     data = rsp.json()['data']
-                    orderTotal_list.extend([data['betAmount'],data['accountFinalWinOrLose'],data['handicapFinalWinOrLose']])
-                    print(orderTotal_list)
+                    orderTotal_list.append([data['betAmount'],data['accountFinalWinOrLose'],data['handicapFinalWinOrLose']])
+
                     return orderTotal_list
 
             elif queryType == 3:
@@ -1508,8 +1517,8 @@ class CreditBackGround(object):
                 else:
                     orderBanner_list = []
                     data = rsp.json()['data']
-                    orderBanner_list.extend([data['settledNumber'],data['unsettlementNumber'],data['orderTotal']])
-                    print(orderBanner_list)
+                    orderBanner_list.append([data['settledNumber'],data['unsettlementNumber'],data['orderTotal']])
+
                     return orderBanner_list
 
             else:
@@ -1614,7 +1623,7 @@ class CreditBackGround(object):
                     for item in rsp.json()['data']['data']:
                         dailyReport_list.append([item['dateTime'],item['bettingUserNumber'],item['bettingNumber'],item['betAmount'],item['effectiveBetAmount'],item['bettingProfitAndLoss'],
                                                  item['totalRebate'],item['netProfitAndLoss']])
-                    print(dailyReport_list)
+
                     return dailyReport_list
 
             elif queryType == 2:
@@ -1627,8 +1636,8 @@ class CreditBackGround(object):
                     total_dic = rsp.json()['data']
                     dailyReport_list.append([total_dic['bettingUserNumber'], total_dic['bettingNumber'], total_dic['betAmount'],
                              total_dic['effectiveBetAmount'], total_dic['bettingProfitAndLoss'],total_dic['totalRebate'], total_dic['netProfitAndLoss']])
-                    print(dailyReport_list[0])
-                    return dailyReport_list[0]
+
+                    return dailyReport_list
 
             else:
                 raise AssertionError('暂不支持该类型')
@@ -2053,13 +2062,10 @@ class CreditBackGround(object):
                     print("查询返水报表失败,原因：" + rsp.json()["message"])
                 else:
                     Total_rebatesReport_list = []
-                    rebatesReport_list=[]
                     data = rsp.json()['data']
-                    Total_rebatesReport_list.append([(data['totalRebate']),(data['levelBackwaterAmount']),(data['leve2BackwaterAmount']),(data['leve3BackwaterAmount']),
-                                                  (data['userBackwaterAmount']),(data['soccer']),(data['basketball']),(data['tennis']),(data['badminton']),
-                                                  (data['tableTennis']),(data['volleyball']),(data['baseball']),(data['iceHockey']) ])
-                    for item in Total_rebatesReport_list[0]:
-                        rebatesReport_list.append(str(round(item,2)))
+                    Total_rebatesReport_list.extend([data['totalRebate'],data['levelBackwaterAmount'],data['leve2BackwaterAmount'],data['leve3BackwaterAmount'],
+                                                  data['userBackwaterAmount'],data['soccer'],data['basketball'],data['tennis'],data['badminton'],
+                                                  data['tableTennis'],data['volleyball'],data['baseball'],data['iceHockey'] ])
 
                     return Total_rebatesReport_list
 
@@ -2090,8 +2096,8 @@ if __name__ == "__main__":
     # orderNo_detail = bg.credit_orderManagement_query(Authorization=login_loken, userAccount='YYlang002',queryTpye=3, betoffset='-1',orderNo='WVyjejXsyvTD')  # 总台-订单详情
 
     # report = bg.credit_home_report_query(Authorization=login_loken)
-    # rdata_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=2)   # 总台-报表管理-数据源对账报表
-    daily_report = bg.credit_dailyReport(Authorization=login_loken, create_time=(-6,0), queryType=2)           # 总台-报表管理-每日盈亏
+    rdata_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=1)   # 总台-报表管理-数据源对账报表
+    # daily_report = bg.credit_dailyReport(Authorization=login_loken, create_time=(-6,0), queryType=2)           # 总台-报表管理-每日盈亏
     # daily_report = bg.credit_terminalReport_query(Authorization=login_loken,create_time=(-6, 0), terminal='', queryType=2)       # 总台-报表管理-客户端盈亏
     # sports_report = bg.credit_sportsReport_query(Authorization=login_loken, starttime='', endtime='',sportName='', queryType=1)    # 总台-报表管理-体育项盈亏
     # rebate_report = bg.credit_rebateReport_query(Authorization=login_loken, starttime='', endtime='', queryType=2)   # 总台-报表管理-返水报表
