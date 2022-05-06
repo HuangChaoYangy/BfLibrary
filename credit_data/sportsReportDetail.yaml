@@ -6,6 +6,7 @@
 
 
 -
+  ip: 192.168.10.120:8093
   url: /backendReport/queryDailyProfitAndLossList
   method: POST
 
@@ -17,6 +18,7 @@
     startCreateTime: "-6"
     endCreateTime: "0"
     sportName: "足球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【足球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -29,6 +31,7 @@
     startCreateTime: "-5"
     endCreateTime: "0"
     sportName: "足球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【足球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -41,6 +44,7 @@
     startCreateTime: "-4"
     endCreateTime: "0"
     sportName: "足球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【足球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -53,6 +57,7 @@
     startCreateTime: "-3"
     endCreateTime: "0"
     sportName: "足球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【足球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -65,6 +70,7 @@
     startCreateTime: "-2"
     endCreateTime: "0"
     sportName: "足球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【足球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -77,6 +83,7 @@
     startCreateTime: "-1"
     endCreateTime: "0"
     sportName: "足球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【足球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -89,6 +96,7 @@
     startCreateTime: "-0"
     endCreateTime: "0"
     sportName: "足球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【足球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -101,6 +109,7 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     sportName: "足球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【足球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -113,6 +122,7 @@
     startCreateTime: "-29"
     endCreateTime: "0"
     sportName: "足球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【足球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
@@ -125,6 +135,7 @@
     startCreateTime: "-6"
     endCreateTime: "0"
     sportName: "篮球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【篮球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -137,6 +148,7 @@
     startCreateTime: "-5"
     endCreateTime: "0"
     sportName: "篮球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【篮球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -149,6 +161,7 @@
     startCreateTime: "-4"
     endCreateTime: "0"
     sportName: "篮球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【篮球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -161,6 +174,7 @@
     startCreateTime: "-3"
     endCreateTime: "0"
     sportName: "篮球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【篮球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -173,6 +187,7 @@
     startCreateTime: "-2"
     endCreateTime: "0"
     sportName: "篮球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【篮球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -185,6 +200,7 @@
     startCreateTime: "-1"
     endCreateTime: "0"
     sportName: "篮球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【篮球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -197,6 +213,7 @@
     startCreateTime: "-0"
     endCreateTime: "0"
     sportName: "篮球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【篮球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -209,6 +226,7 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     sportName: "篮球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【篮球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -221,6 +239,7 @@
     startCreateTime: "-29"
     endCreateTime: "0"
     sportName: "篮球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【篮球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
@@ -233,6 +252,7 @@
     startCreateTime: "-6"
     endCreateTime: "0"
     sportName: "乒乓球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -245,6 +265,7 @@
     startCreateTime: "-5"
     endCreateTime: "0"
     sportName: "乒乓球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -257,6 +278,7 @@
     startCreateTime: "-4"
     endCreateTime: "0"
     sportName: "乒乓球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -269,6 +291,7 @@
     startCreateTime: "-3"
     endCreateTime: "0"
     sportName: "乒乓球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -281,6 +304,7 @@
     startCreateTime: "-2"
     endCreateTime: "0"
     sportName: "乒乓球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -293,6 +317,7 @@
     startCreateTime: "-1"
     endCreateTime: "0"
     sportName: "乒乓球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -305,6 +330,7 @@
     startCreateTime: "-0"
     endCreateTime: "0"
     sportName: "乒乓球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -317,6 +343,7 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     sportName: "乒乓球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -329,6 +356,7 @@
     startCreateTime: "-29"
     endCreateTime: "0"
     sportName: "乒乓球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
@@ -341,6 +369,7 @@
     startCreateTime: "-6"
     endCreateTime: "0"
     sportName: "排球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【排球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -353,6 +382,7 @@
     startCreateTime: "-5"
     endCreateTime: "0"
     sportName: "排球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【排球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -365,6 +395,7 @@
     startCreateTime: "-4"
     endCreateTime: "0"
     sportName: "排球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【排球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -377,6 +408,7 @@
     startCreateTime: "-3"
     endCreateTime: "0"
     sportName: "排球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【排球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -389,6 +421,7 @@
     startCreateTime: "-2"
     endCreateTime: "0"
     sportName: "排球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【排球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -401,6 +434,7 @@
     startCreateTime: "-1"
     endCreateTime: "0"
     sportName: "排球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【排球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -413,6 +447,7 @@
     startCreateTime: "-0"
     endCreateTime: "0"
     sportName: "排球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【排球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -425,6 +460,7 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     sportName: "排球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【排球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -437,6 +473,7 @@
     startCreateTime: "-29"
     endCreateTime: "0"
     sportName: "排球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【排球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
@@ -449,6 +486,7 @@
     startCreateTime: "-6"
     endCreateTime: "0"
     sportName: "棒球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【棒球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -461,6 +499,7 @@
     startCreateTime: "-5"
     endCreateTime: "0"
     sportName: "棒球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【棒球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -473,6 +512,7 @@
     startCreateTime: "-4"
     endCreateTime: "0"
     sportName: "棒球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【棒球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -485,6 +525,7 @@
     startCreateTime: "-3"
     endCreateTime: "0"
     sportName: "棒球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【棒球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -497,6 +538,7 @@
     startCreateTime: "-2"
     endCreateTime: "0"
     sportName: "棒球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【棒球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -509,6 +551,7 @@
     startCreateTime: "-1"
     endCreateTime: "0"
     sportName: "棒球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【棒球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -521,6 +564,7 @@
     startCreateTime: "-0"
     endCreateTime: "0"
     sportName: "棒球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【棒球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -533,6 +577,7 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     sportName: "棒球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【棒球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -545,6 +590,7 @@
     startCreateTime: "-29"
     endCreateTime: "0"
     sportName: "棒球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【棒球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
@@ -557,6 +603,7 @@
     startCreateTime: "-6"
     endCreateTime: "0"
     sportName: "羽毛球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -569,6 +616,7 @@
     startCreateTime: "-5"
     endCreateTime: "0"
     sportName: "羽毛球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -581,6 +629,7 @@
     startCreateTime: "-4"
     endCreateTime: "0"
     sportName: "羽毛球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -593,6 +642,7 @@
     startCreateTime: "-3"
     endCreateTime: "0"
     sportName: "羽毛球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -605,6 +655,7 @@
     startCreateTime: "-2"
     endCreateTime: "0"
     sportName: "羽毛球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -617,6 +668,7 @@
     startCreateTime: "-1"
     endCreateTime: "0"
     sportName: "羽毛球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -629,6 +681,7 @@
     startCreateTime: "-0"
     endCreateTime: "0"
     sportName: "羽毛球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -641,6 +694,7 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     sportName: "羽毛球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -653,6 +707,7 @@
     startCreateTime: "-29"
     endCreateTime: "0"
     sportName: "羽毛球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
@@ -665,6 +720,7 @@
     startCreateTime: "-6"
     endCreateTime: "0"
     sportName: "冰上曲棍球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -677,6 +733,7 @@
     startCreateTime: "-5"
     endCreateTime: "0"
     sportName: "冰上曲棍球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -689,6 +746,7 @@
     startCreateTime: "-4"
     endCreateTime: "0"
     sportName: "冰上曲棍球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -701,6 +759,7 @@
     startCreateTime: "-3"
     endCreateTime: "0"
     sportName: "冰上曲棍球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -713,6 +772,7 @@
     startCreateTime: "-2"
     endCreateTime: "0"
     sportName: "冰上曲棍球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -725,6 +785,7 @@
     startCreateTime: "-1"
     endCreateTime: "0"
     sportName: "冰上曲棍球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -737,6 +798,7 @@
     startCreateTime: "-0"
     endCreateTime: "0"
     sportName: "冰上曲棍球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -749,6 +811,7 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     sportName: "冰上曲棍球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -761,6 +824,7 @@
     startCreateTime: "-29"
     endCreateTime: "0"
     sportName: "冰上曲棍球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
@@ -773,6 +837,7 @@
     startCreateTime: "-6"
     endCreateTime: "0"
     sportName: "网球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【网球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -785,6 +850,7 @@
     startCreateTime: "-5"
     endCreateTime: "0"
     sportName: "网球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【网球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -797,6 +863,7 @@
     startCreateTime: "-4"
     endCreateTime: "0"
     sportName: "网球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【网球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -809,6 +876,7 @@
     startCreateTime: "-3"
     endCreateTime: "0"
     sportName: "网球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【网球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -821,6 +889,7 @@
     startCreateTime: "-2"
     endCreateTime: "0"
     sportName: "网球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【网球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -833,6 +902,7 @@
     startCreateTime: "-1"
     endCreateTime: "0"
     sportName: "网球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【网球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -845,6 +915,7 @@
     startCreateTime: "-0"
     endCreateTime: "0"
     sportName: "网球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【网球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -857,6 +928,7 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     sportName: "网球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【网球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -869,6 +941,7 @@
     startCreateTime: "-29"
     endCreateTime: "0"
     sportName: "网球"
+    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【网球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
