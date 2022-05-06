@@ -6,89 +6,97 @@
 
 
 -
-  url: /backendReport/totalDailyProfitAndLoss
+  ip: 192.168.10.120:8093
+  url: /backendReport/queryDailyProfitAndLossList
   method: POST
 
 - #test_01用例
-  describe: 管理后台-总台-客户端盈亏,默认查询近7天数据,根据"H5-android"查询
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近7天数据,根据"H5-android"查询
   data:
     page: 1
     limit: 50
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "H5-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近7天数据,根据"H5-android"查询
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "H5-android"
 - #test_02用例
-  describe: 管理后台-总台-客户端盈亏,默认查询近7天数据,根据"APP-android"查询
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近7天数据,根据"APP-android"查询
   data:
     page: 1
     limit: 50
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "APP-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近7天数据,根据"APP-android"查询
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "APP-android"
 - #test_03用例
-  describe: 管理后台-总台-客户端盈亏,默认查询近7天数据,根据"APP-IOS"查询
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近7天数据,根据"APP-IOS"查询
   data:
     page: 1
     limit: 50
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近7天数据,根据"APP-IOS"查询
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "APP-IOS"
 - #test_04用例
-  describe: 管理后台-总台-客户端盈亏,默认查询近7天数据,根据"H5-IOS"查询
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近7天数据,根据"H5-IOS"查询
   data:
     page: 1
     limit: 50
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近7天数据,根据"H5-IOS"查询
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "H5-IOS"
 - #test_05用例
-  describe: 管理后台-总台-客户端盈亏,默认查询近7天数据,根据"pc"查询
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近7天数据,根据"pc"查询
   data:
     page: 1
     limit: 50
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "pc"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近7天数据,根据"pc"查询
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "pc"
 - #test_06用例
-  describe: 管理后台-总台-客户端盈亏,默认查询近15天数据,根据"H5-android"查询
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近15天数据,根据"H5-android"查询
   data:
     page: 1
     limit: 50
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "H5-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近15天数据,根据"H5-android"查询
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "H5-android"
 - #test_07用例
-  describe: 管理后台-总台-客户端盈亏,默认查询近15天数据,根据"APP-android"查询
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近15天数据,根据"APP-android"查询
   data:
     page: 1
     limit: 50
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "APP-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近15天数据,根据"APP-android"查询
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -101,91 +109,489 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近15天数据,根据"APP-IOS"查询
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "APP-IOS"
 - #test_09用例
-  describe: 管理后台-总台-客户端盈亏,默认查询近15天数据,根据"H5-IOS"查询
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近15天数据,根据"H5-IOS"查询
   data:
     page: 1
     limit: 50
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近15天数据,根据"H5-IOS"查询
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "H5-IOS"
 - #test_10用例
-  describe: 管理后台-总台-客户端盈亏,默认查询近15天数据,根据"pc"查询
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近15天数据,根据"pc"查询
   data:
     page: 1
     limit: 50
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "pc"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近15天数据,根据"pc"查询
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "pc"
 - #test_11用例
-  describe: 管理后台-总台-客户端盈亏,默认查询近30天数据,根据"H5-android"查询
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近30天数据,根据"H5-android"查询
   data:
     page: 1
     limit: 50
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "H5-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近30天数据,根据"H5-android"查询
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "H5-android"
 - #test_12用例
-  describe: 管理后台-总台-客户端盈亏,默认查询近30天数据,根据"APP-android"查询
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近30天数据,根据"APP-android"查询
   data:
     page: 1
     limit: 50
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "APP-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近30天数据,根据"APP-android"查询
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "APP-android"
 - #test_13用例
-  describe: 管理后台-总台-客户端盈亏,默认查询近30天数据,根据"APP-IOS"查询
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近30天数据,根据"APP-IOS"查询
   data:
     page: 1
     limit: 50
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近30天数据,根据"APP-IOS"查询
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "APP-IOS"
 - #test_14用例
-  describe: 管理后台-总台-客户端盈亏,默认查询近30天数据,根据"H5-IOS"查询
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近30天数据,根据"H5-IOS"查询
   data:
     page: 1
     limit: 50
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近30天数据,根据"H5-IOS"查询
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "H5-IOS"
 - #test_15用例
-  describe: 管理后台-总台-客户端盈亏,默认查询近30天数据,根据"pc"查询
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近30天数据,根据"pc"查询
   data:
     page: 1
     limit: 50
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "pc"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近30天数据,根据"pc"查询
   resp:
     startCreateTime: "-29"
+    endCreateTime: "0"
+    terminal: "pc"
+- #test_16用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近6天数据,根据"H5-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    terminal: "H5-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近6天数据,根据"H5-android"查询
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    terminal: "H5-android"
+- #test_17用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近6天数据,根据"APP-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    terminal: "APP-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近6天数据,根据"APP-android"查询
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    terminal: "APP-android"
+- #test_18用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近6天数据,根据"APP-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近6天数据,根据"APP-IOS"查询
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+- #test_19用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近6天数据,根据"H5-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近6天数据,根据"H5-IOS"查询
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+- #test_20用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近6天数据,根据"pc"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    terminal: "pc"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近6天数据,根据"pc"查询
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "0"
+    terminal: "pc"
+- #test_21用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近5天数据,根据"H5-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    terminal: "H5-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近5天数据,根据"H5-android"查询
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    terminal: "H5-android"
+- #test_22用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近5天数据,根据"APP-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    terminal: "APP-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近5天数据,根据"APP-android"查询
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    terminal: "APP-android"
+- #test_23用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近5天数据,根据"APP-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近5天数据,根据"APP-IOS"查询
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+- #test_24用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近5天数据,根据"H5-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近5天数据,根据"H5-IOS"查询
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+- #test_25用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近5天数据,根据"pc"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    terminal: "pc"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近5天数据,根据"pc"查询
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "0"
+    terminal: "pc"
+- #test_26用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近4天数据,根据"H5-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    terminal: "H5-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近4天数据,根据"H5-android"查询
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    terminal: "H5-android"
+- #test_27用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近4天数据,根据"APP-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    terminal: "APP-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近4天数据,根据"APP-android"查询
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    terminal: "APP-android"
+- #test_28用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近4天数据,根据"APP-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近4天数据,根据"APP-IOS"查询
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+- #test_29用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近4天数据,根据"H5-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近4天数据,根据"H5-IOS"查询
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+- #test_30用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近4天数据,根据"pc"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    terminal: "pc"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近4天数据,根据"pc"查询
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "0"
+    terminal: "pc"
+- #test_31用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近3天数据,根据"H5-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    terminal: "H5-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近3天数据,根据"H5-android"查询
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    terminal: "H5-android"
+- #test_32用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近3天数据,根据"APP-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    terminal: "APP-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近3天数据,根据"APP-android"查询
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    terminal: "APP-android"
+- #test_33用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近3天数据,根据"APP-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近3天数据,根据"APP-IOS"查询
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+- #test_34用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近3天数据,根据"H5-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近3天数据,根据"H5-IOS"查询
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+- #test_35用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近3天数据,根据"pc"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    terminal: "pc"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近3天数据,根据"pc"查询
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "0"
+    terminal: "pc"
+- #test_36用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近2天数据,根据"H5-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    terminal: "H5-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近2天数据,根据"H5-android"查询
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    terminal: "H5-android"
+- #test_37用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近2天数据,根据"APP-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    terminal: "APP-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近2天数据,根据"APP-android"查询
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    terminal: "APP-android"
+- #test_38用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近2天数据,根据"APP-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近2天数据,根据"APP-IOS"查询
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+- #test_39用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近2天数据,根据"H5-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近2天数据,根据"H5-IOS"查询
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+- #test_40用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近2天数据,根据"pc"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    terminal: "pc"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近2天数据,根据"pc"查询
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "0"
+    terminal: "pc"
+- #test_41用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近1天数据,根据"H5-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    terminal: "H5-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近1天数据,根据"H5-android"查询
+  resp:
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    terminal: "H5-android"
+- #test_42用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近1天数据,根据"APP-android"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    terminal: "APP-android"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近1天数据,根据"APP-android"查询
+  resp:
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    terminal: "APP-android"
+- #test_43用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近1天数据,根据"APP-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近1天数据,根据"APP-IOS"查询
+  resp:
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    terminal: "APP-IOS"
+- #test_44用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近1天数据,根据"H5-IOS"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近1天数据,根据"H5-IOS"查询
+  resp:
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    terminal: "H5-IOS"
+- #test_45用例
+  describe: 管理后台-总台-客户端盈亏-详情,默认查询近1天数据,根据"pc"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-0"
+    endCreateTime: "0"
+    terminal: "pc"
+    title: 管理后台-总台-客户端盈亏-详情,默认查询近1天数据,根据"pc"查询
+  resp:
+    startCreateTime: "-0"
     endCreateTime: "0"
     terminal: "pc"
