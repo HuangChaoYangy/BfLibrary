@@ -3,6 +3,7 @@ import pymysql
 import datetime
 import calendar
 from itertools import chain
+from log import Bf_log
 try:
     from CommonFunc import CommonFunc
     from MongoFunc import MongoFunc,DbQuery
@@ -5541,9 +5542,9 @@ class MysqlQuery(MysqlFunc):
 
                         if list(item1.values())[0] == list(item2.values())[0]:        # 判断注单号是否相等,若相等,则校验该条数据
                             if list(item1.values()) == list(item2.values()):
-                                print(f'注单号：{order_num} ---> 执行测试用例 -- 通过')
+                                Bf_log('test').info(f'注单号：{order_num}, ==》 测试通过')
                             else:
-                                print(f'注单号：{order_num}, 数据库中佣金为：{expect_commission},有效投注为：{expect_effectAmount}; '
+                                Bf_log('test').error(f'注单号：{order_num}, 数据库中佣金为：{expect_commission},有效投注为：{expect_effectAmount}; '
                                       f'实际佣金为：{actual_commission},有效投注为：{actual_effectAmount} --->执行测试用例 -- 失败')
             else:
                 raise AssertionError('気の毒だと思う,当前所选的查询条件中无注单')

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# @Time    : 2022/5/06 14:15
+# @Time    : 2022/5/11 14:15
 # @Author  : liyang
 # @FileName: test_effectAmount_and_commission.py
 # @Software: PyCharm
@@ -42,21 +42,30 @@ class Test_Report01(object):
             Bf_log('test').info(f'执行sql:{sql}')
         expectResult = MysqlQuery(mysql_info, mongo_info).auto_effectAmount_and_commission(expData=expData)[1]
 
-        print(actualResult)
-        print(expectResult)
         if actualResult:
-            self.cm.check_live_bet_report_new(actualResult, expectResult)
-            with allure.step(f'实际结果：{actualResult},期望结果：{expectResult},==》测试通过'):
-                Bf_log('test').info(f'sql值:{actualResult},期望结果：{expectResult},==》测试通过')
+            for index1, item1 in enumerate(actualResult):
+                for index2, item2 in enumerate(expectResult):
+                    if list(item1)[0] == list(item2)[0]:  # 判断注单号是否相等,若相等,则校验该条数据
+                        if list(item1) == list(item2):
+                            self.cm.check_live_bet_report_new(item1, item2)
+                            with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试通过'):
+                                Bf_log('test').info(f'sql值:{item1},期望结果：{item2},==》测试通过')
+                        else:
+                            with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
+                                Bf_log('test').error(f'实际结果：{item1},期望结果：{item2},==》测试不通过')
 
-        else:
-            with allure.step(f'实际结果：{actualResult},期望结果：{expectResult},==》测试不通过'):
-                Bf_log('test').error(f'实际结果：{actualResult},期望结果：{expectResult},==》测试不通过')
+
 
 
 
 if __name__ == "__main__":
 
+    # 方式一：直接打开默认浏览器展示报告
+    # allure serve ./result/
+
+    # 方式二：从结果生成报告
+    # 生成报告allure generate ./result/ -o ./report/ --clean (覆盖路径加--clean)
+    # 打开报告allure open -h 127.0.0.1 -p 8883 ./report/
 
     pytest.main(["test_effectAmount_and_commission.py","-s","--alluredir","../report/tmp"])       # -s  打印 输出      -sq  简化 打印输出内容
 
