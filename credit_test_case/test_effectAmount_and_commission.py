@@ -49,10 +49,10 @@ class Test_Report01(object):
                         if list(item1) == list(item2):
                             self.cm.check_live_bet_report_new(item1, item2)
                             with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试通过'):
-                                Bf_log('test').info(f'sql值:{item1},期望结果：{item2},==》测试通过')
+                                Bf_log('test').info(f'sql值:{item1}, 期望结果：{item2},==》测试通过')
                         else:
                             with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
-                                Bf_log('test').error(f'实际结果：{item1},期望结果：{item2},==》测试不通过')
+                                Bf_log('test').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
 
 
 

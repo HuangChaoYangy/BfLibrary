@@ -5545,7 +5545,7 @@ class MysqlQuery(MysqlFunc):
                                 Bf_log('test').info(f'注单号：{order_num}, ==》 测试通过')
                             else:
                                 Bf_log('test').error(f'注单号：{order_num}, 数据库中佣金为：{expect_commission},有效投注为：{expect_effectAmount}; '
-                                      f'实际佣金为：{actual_commission},有效投注为：{actual_effectAmount} --->执行测试用例 -- 失败')
+                                      f'实际佣金为：{actual_commission}, 有效投注为：{actual_effectAmount} --->执行测试用例 -- 失败')
             else:
                 raise AssertionError('気の毒だと思う,当前所选的查询条件中无注单')
 
