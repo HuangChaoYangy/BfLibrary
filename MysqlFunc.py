@@ -5418,6 +5418,229 @@ class MysqlQuery(MysqlFunc):
 
         return rtn[0][0]
 
+
+    def get_orderNo_effectAmount_and_commission(self, user_name='', order_no='', createDate=(), awardDate=() ):
+        '''
+        计算信用网注单有效金额和佣金          // 修改于2022.05.11
+        :param user_name:
+        :param order_no:
+        :param createDate: 创建时间,元组
+        :param awardDate:  结算时间,元组
+        :return:   actualResult_list:数据库取的实际结果    expectResult_list:通过公式计算的期望结果
+        '''
+        if createDate:
+            ctime = self.get_current_time_for_client(time_type='ctime', day_diff=createDate[0])
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=createDate[1])
+            create_time = f"AND DATE_FORMAT(create_time, '%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}'"
+        else:
+            create_time = ""
+        if awardDate:
+            create_time = self.get_current_time_for_client(time_type='ctime', day_diff=awardDate[0])
+            end_time = self.get_current_time_for_client(time_type='ctime', day_diff=awardDate[1])
+            award_time = f"AND DATE_FORMAT(award_time, '%Y-%m-%d') BETWEEN '{create_time}' AND '{end_time}'"
+        else:
+            award_time = ""
+        if user_name:
+            userName = f"and user_name='{user_name}'"
+        else:
+            userName = ""
+        if order_no:
+            order = f"and order_no='{order_no}'"
+        else:
+            order = ""
+
+        database_name = "bfty_credit"
+        sql_str = f"SELECT order_no,cast(bet_amount as char),cast(handicap_final_win_or_lose as char),cast(backwater_amount as char),cast(level3_retreat_proportion as char)," \
+                  f"cast(efficient_amount as char) FROM o_account_order WHERE `status`in (2,3) {userName} {order} {create_time} {award_time} ORDER BY create_time DESC"
+
+        rtn = list(self.query_data(sql_str, database_name))
+
+        data_list = []
+        actualResult_list = []
+        for item in rtn:
+            if item[3]:                    # 判断返水是否为null,为null是因为投注的盘口没有返水
+                commission = float(item[3])
+            else:
+                commission = None
+            if item[5]:                    # 判断有效金额是否为null
+                effectAmount = float(item[3])
+            else:
+                effectAmount = None
+            data_list.append([item[0],float(item[1]), float(item[2]), commission, float(item[4]), effectAmount ])
+            actualResult_list.append({"orderNo":item[0],"betAmount":float(item[1]),"winLose":float(item[2]),
+                                   "Commission":commission,"effect_amount":effectAmount})
+
+        expectResult_list = []
+        for detail in data_list:
+            orderNo = detail[0]
+            betAmount = detail[1]
+            winLose = detail[2]
+            retreat_proportion = detail[4]
+
+            if winLose > 0:
+                if winLose > betAmount:
+                    effect_amount = betAmount
+                elif winLose < betAmount:
+                    effect_amount = winLose
+                else:
+                    effect_amount = betAmount
+
+            elif winLose < 0:
+                if betAmount - abs(winLose) == 0:
+                    effect_amount = betAmount
+                else:
+                    effect_amount = abs(winLose)
+
+            else:
+                effect_amount = 0
+
+            value = effect_amount * retreat_proportion
+            Commission = "%.2f" % value
+
+            expectResult_list.append({"orderNo":orderNo,"betAmount":betAmount,"winLose":winLose,
+                                "Commission":Commission,"effect_amount":effect_amount})
+
+        return actualResult_list,expectResult_list
+
+
+    def check_orderNo_effectAmount_and_commission(self, user_name='', order_no='', createDate=(), awardDate=()):
+        '''
+        校验信用网注单有效金额和佣金          // 修改于2022.05.11
+        :param user_name:
+        :param order_no:
+        :param createDate: 创建时间,元组
+        :param awardDate:  结算时间,元组
+        :return:
+        '''
+        if user_name:
+            print(f'当前会员：{user_name}')
+        if order_no:
+            print(f'当前注单号：{order_no}')
+        if createDate:
+            ctime = self.get_current_time_for_client(time_type='ctime', day_diff=createDate[0])
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=createDate[1])
+            print(f'当前查询的开始时间：{ctime} -- {etime}')
+        if awardDate:
+            ctime = self.get_current_time_for_client(time_type='ctime', day_diff=awardDate[0])
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=awardDate[1])
+            print(f'当前查询的结算时间：{ctime} -- {etime}')
+
+        actualResult = self.get_orderNo_effectAmount_and_commission(user_name=user_name, order_no=order_no, createDate=createDate, awardDate=awardDate)[0]
+        expectResult = self.get_orderNo_effectAmount_and_commission(user_name=user_name, order_no=order_no, createDate=createDate,awardDate=awardDate)[1]
+
+        try:
+            if actualResult:
+                for index1, item1 in enumerate(actualResult):
+                    order_num = actualResult[index1]['orderNo']
+                    actual_commission = actualResult[index1]['Commission']
+                    actual_effectAmount = actualResult[index1]['effect_amount']
+
+                    for index2, item2 in enumerate(expectResult):
+                        expect_commission = expectResult[index2]['Commission']
+                        expect_effectAmount = expectResult[index2]['effect_amount']
+
+                        if list(item1.values())[0] == list(item2.values())[0]:        # 判断注单号是否相等,若相等,则校验该条数据
+                            if list(item1.values()) == list(item2.values()):
+                                print(f'注单号：{order_num} ---> 执行测试用例 -- 通过')
+                            else:
+                                print(f'注单号：{order_num}, 数据库中佣金为：{expect_commission},有效投注为：{expect_effectAmount}; '
+                                      f'实际佣金为：{actual_commission},有效投注为：{actual_effectAmount} --->执行测试用例 -- 失败')
+            else:
+                raise AssertionError('気の毒だと思う,当前所选的查询条件中无注单')
+
+        except Exception as e:
+            print(e)
+
+
+
+    def auto_effectAmount_and_commission(self, expData={} ):
+        '''
+        计算信用网注单有效金额和佣金,用于自动化测试          // 修改于2022.05.11
+        :param user_name:
+        :param order_no:
+        :param createDate: 创建时间,元组
+        :param awardDate:  结算时间,元组
+        :return:   data_detail_list:数据库取的    new_data_list:通过公式计算的
+        '''
+        resp = expData
+        if resp['betStartTime']:
+            createTime = resp['betStartTime']
+            endTime = resp['betEndTime']
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=int(createTime))
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=int(endTime))
+            create_time = f"AND DATE_FORMAT(create_time, '%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}'"
+        else:
+            create_time = ""
+        if resp['settleStartTime']:
+            createTime = resp['settleStartTime']
+            endTime = resp['settleEndTime']
+            ctime = self.get_current_time_for_client(time_type='ctime',day_diff=int(createTime))
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=int(endTime))
+            award_time = f"AND DATE_FORMAT(award_time, '%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}'"
+        else:
+            award_time = ""
+        if resp['user_name']:
+            userName = f"and user_name='{resp['user_name']}'"
+        else:
+            userName = ""
+        if resp['order_no']:
+            order = f"and order_no='{resp['order_no']}'"
+        else:
+            order = ""
+
+        database_name = "bfty_credit"
+        sql_str = f"SELECT order_no,cast(bet_amount as char),cast(handicap_final_win_or_lose as char),cast(backwater_amount as char),cast(level3_retreat_proportion as char)," \
+                  f"cast(efficient_amount as char) FROM o_account_order WHERE `status`in (2,3) {userName} {order} {create_time} {award_time} ORDER BY create_time DESC"
+
+        rtn = list(self.query_data(sql_str, database_name))
+
+        data_list = []
+        data_detail_list = []
+        for item in rtn:
+            if item[3]:  # 判断返水是否为null,为null是因为投注的盘口没有返水
+                commission = float(item[3])
+            else:
+                commission = None
+            if item[5]:  # 判断有效金额是否为null
+                effectAmount = float(item[3])
+            else:
+                effectAmount = None
+            data_list.append([item[0], float(item[1]), float(item[2]), commission, float(item[4]), effectAmount])
+
+            data_detail_list.append([ item[0], float(item[1]), float(item[2]), commission, effectAmount ])
+
+        new_data_list = []
+        for detail in data_list:
+            orderNo = detail[0]
+            betAmount = detail[1]
+            winLose = detail[2]
+            retreat_proportion = detail[4]
+
+            if winLose > 0:
+                if winLose > betAmount:
+                    effect_amount = betAmount
+                elif winLose < betAmount:
+                    effect_amount = winLose
+                else:
+                    effect_amount = betAmount
+
+            elif winLose < 0:
+                if betAmount - abs(winLose) == 0:
+                    effect_amount = betAmount
+                else:
+                    effect_amount = abs(winLose)
+
+            else:
+                effect_amount = 0
+
+            value = effect_amount * retreat_proportion
+            Commission = "%.2f" % value
+
+            new_data_list.append([orderNo, betAmount, winLose, Commission, effect_amount ])
+
+        return data_detail_list, new_data_list, sql_str
+
+
                                                                              #  【反波胆】
 
 
@@ -6830,9 +7053,9 @@ if __name__ == "__main__":
     # print(settled)
 
     # agentLine = mysql.credit_agentLineManagement_sql(agentName="aw", agentAccount="")
-    data = mysql.credit_dataSourceReport_sql(queryType=2)
-    for item in data:
-        print(type(item))
+    # data = mysql.credit_dataSourceReport_sql(queryType=2)
+    # for item in data:
+    #     print(type(item))
     # data = mysql.credit_dailyReport_query_sql(create_time=(-6,0), queryType=2)
     # data = mysql.credit_terminalReport_query_sql(create_time=(-6, 0), terminal="", queryType=3)
     # data = mysql.credit_sportsReport_query_sql(create_time=(-6, 0), sportName="足球", queryType=3)
@@ -6840,6 +7063,10 @@ if __name__ == "__main__":
     # account = mysql.query_account_role_sql(account='a0b1')
 
     # num = mysql.credit_dataSourceRepot_number(betTime=(-29,0), settleTime=(-29,0))
+
+    # data = mysql.get_orderNo_effectAmount_and_commission(user_name='', order_no='', createDate=(-1,0), awardDate=())[1]
+    data = mysql.check_orderNo_effectAmount_and_commission(user_name='a0b1c2b301', order_no='', createDate=(), awardDate=())
+
 
 
 
