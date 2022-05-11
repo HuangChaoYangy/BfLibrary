@@ -1,0 +1,26 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2022/05/11 19:14
+# @Author  : liyang
+# @FileName: effectAmount_and_commission.yaml
+# @Software: PyCharm
+
+-
+  ip: 192.168.10.120:8083
+
+- #test_01用例
+  describe:
+  data:
+    user_name: ""
+    order_no: "XA7aPqDUejYw"
+    betStartTime: ""
+    betEndTime: ""
+    settleStartTime: ""
+    settleEndTime: ""
+    title: 校验返水和有效投注,根据注单号
+  resp:
+    user_name: ""
+    order_no: "XA7aPqDUejYw"
+    betStartTime: ""
+    betEndTime: ""
+    settleStartTime: ""
+    settleEndTime: ""
