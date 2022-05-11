@@ -10,16 +10,16 @@
 - #test_01用例
   describe:
   data:
-    user_name: ""
-    order_no: "XA7aPqDUejYw"
+    user_name: "shd1mfndq8"
+    order_no: ""
     betStartTime: ""
     betEndTime: ""
     settleStartTime: ""
     settleEndTime: ""
-    title: 校验返水和有效投注,根据注单号
+    title: 根据【会员账号】校验返水和有效投注
   resp:
-    user_name: ""
-    order_no: "XA7aPqDUejYw"
+    user_name: "shd1mfndq8"
+    order_no: ""
     betStartTime: ""
     betEndTime: ""
     settleStartTime: ""
