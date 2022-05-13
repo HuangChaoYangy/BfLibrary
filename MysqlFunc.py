@@ -4,6 +4,7 @@ import datetime
 import calendar
 from itertools import chain
 from log import Bf_log
+import re
 try:
     from CommonFunc import CommonFunc
     from MongoFunc import MongoFunc,DbQuery
@@ -5553,7 +5554,6 @@ class MysqlQuery(MysqlFunc):
             print(e)
 
 
-
     def auto_effectAmount_and_commission(self, expData={} ):
         '''
         计算信用网注单有效金额和佣金,用于自动化测试          // 修改于2022.05.11
@@ -5640,6 +5640,151 @@ class MysqlQuery(MysqlFunc):
             new_data_list.append([orderNo, betAmount, winLose, Commission, effect_amount ])
 
         return data_detail_list, new_data_list, sql_str
+
+
+    def get_bet_type_by_ordernum(self, order_no):
+        '''
+        根据注单号获取注单的注单类型          // 修改于2022.05.13
+        :param order_no:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        sql_str = f"SELECT order_no,bet_type,bet_mix FROM `o_account_order` WHERE `order_no` = '{order_no}'"
+        data = list(self.query_data(sql_str, db_name=database_name))
+
+        bet_type = ''
+        type_dic = {'3_4': '复式3串4', '4_11': '复式4串11', '5_26': '复式5串26', '6_57': '复式6串57'}
+        if data[0][1] == 1:
+            bet_type = '单关'
+        elif data[0][1] == 2:
+            typeString = data[0][2]
+            type_start = re.search("^(\d+)",typeString)
+            type_end = re.search("_(\d)", typeString)
+            type = str(type_start.group()) + '串' + str(type_end.group(1))
+            bet_type = '串关 ' + type
+        elif data[0][1] == 3:
+            typeString = data[0][2]
+            if typeString in type_dic:
+                type_start = re.search("^(\d)",typeString)
+                type_end = re.search("_(\d+)", typeString)
+                type = str(type_start.group()) + '串' + str(type_end.group(1))
+                bet_type = '复式串关 ' + type
+            else:
+                type_start = re.search("^(\d)", typeString)
+                type = str(type_start.group()) + '串1'
+                bet_type = '复式串关 ' + type
+
+        return bet_type
+
+
+    def check_order_no_settlement_result(self, bet_type=1, user_name='', order_no='', createDate=(), awardDate=()):
+        '''
+        计算注单的结算结果
+        :param user_name:
+        :param order_no:
+        :param createDate:
+        :param awardDate:
+        :return:
+        '''
+        if createDate:
+            ctime = self.get_current_time_for_client(time_type='ctime', day_diff=createDate[0])
+            etime = self.get_current_time_for_client(time_type='ctime', day_diff=createDate[1])
+            create_time = f"AND DATE_FORMAT(a.create_time, '%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}'"
+        else:
+            create_time = ""
+        if awardDate:
+            create_time = self.get_current_time_for_client(time_type='ctime', day_diff=awardDate[0])
+            end_time = self.get_current_time_for_client(time_type='ctime', day_diff=awardDate[1])
+            award_time = f"AND DATE_FORMAT(award_time, '%Y-%m-%d') BETWEEN '{create_time}' AND '{end_time}'"
+        else:
+            award_time = ""
+        if user_name:
+            userName = f"and a.user_name='{user_name}'"
+        else:
+            userName = ""
+        if order_no:
+            orderNum = f"AND a.order_no='{order_no}'"
+        else:
+            orderNum = ""
+        database_name = "bfty_credit"
+        result_dic = {'赢': 1, '输': 2, '赢一半': 3, '输一半': 4, '走水': 5, '注单取消': 6}
+        odds_type_dic = {'欧洲盘': 1, '香港盘': 2}
+
+        if bet_type == 1:          # 如果投注类型为1,则执行以下程序,单注
+            sql_str = f"SELECT a.order_no,cast(a.bet_amount as char),cast(ifnull(a.handicap_win_or_lose,0) as char),cast(a.handicap_final_win_or_lose as char)," \
+                      f"cast(ifnull(a.backwater_amount,0) as char),cast(c.credit_odds as char),c.odds_type,b.settlement_result FROM o_account_order a JOIN o_account_order_match_update b ON " \
+                      f"a.order_no = b.order_no JOIN o_account_order_match c ON a.order_no = c.order_no WHERE bet_type={bet_type} AND a.`status` in (2,3) {orderNum} {create_time}" \
+                      f"{userName} {award_time}"
+            data = list(self.query_data(sql_str, db_name=database_name))
+
+            actual_data_list = []
+            expect_data_list = []
+            for item in data:
+                order_no = item[0]
+                bet_amount = float(item[1])
+                win_or_lose = float(item[2])
+                total_win_or_lose = float(item[3])
+                backwater = float(item[4])
+                odds = float(item[5])
+                odds_type = item[6]
+                result = item[7]
+                actual_data_list.append([order_no, win_or_lose, total_win_or_lose, backwater])
+
+                if odds_type == odds_type_dic['欧洲盘']:
+                    if result == result_dic['赢']:
+                        winLose = round(bet_amount*odds -bet_amount,2 )
+                        totalwinLose = winLose + backwater
+                        expect_data_list.append([order_no, winLose, totalwinLose, backwater])
+                    elif result == result_dic['输']:
+                        winLose = -bet_amount
+                        totalwinLose = winLose + backwater
+                        expect_data_list.append([order_no, winLose, totalwinLose, backwater])
+                    elif result == result_dic['赢一半']:
+                        winLose = round((odds*0.5+0.5)*bet_amount-bet_amount,2)
+                        totalwinLose = winLose + backwater
+                        expect_data_list.append([order_no, winLose, totalwinLose, backwater])
+                    elif result == result_dic['输一半']:
+                        winLose = 0.5 * bet_amount
+                        totalwinLose = winLose + backwater
+                        expect_data_list.append([order_no, winLose, totalwinLose, backwater])
+                    elif result == result_dic['走水']:
+                        winLose = 0
+                        totalwinLose = 0
+                        expect_data_list.append([order_no, winLose, totalwinLose, backwater])
+                    else:
+                        winLose = 0
+                        totalwinLose = 0
+                        expect_data_list.append([order_no, winLose, totalwinLose, backwater])
+                if odds_type == odds_type_dic['香港盘']:
+                    if result == result_dic['赢']:
+                        winLose = round(bet_amount * (odds+1) - bet_amount,2)
+                        totalwinLose = winLose + backwater
+                        expect_data_list.append([order_no, winLose, totalwinLose, backwater])
+                    elif result == result_dic['输']:
+                        winLose = -bet_amount
+                        totalwinLose = winLose + backwater
+                        expect_data_list.append([order_no, winLose, totalwinLose, backwater])
+                    elif result == result_dic['赢一半']:
+                        winLose = round(((odds+1) * 0.5 + 0.5) * bet_amount - bet_amount)
+                        totalwinLose = winLose + backwater
+                        expect_data_list.append([order_no, winLose, totalwinLose, backwater])
+                    elif result == result_dic['输一半']:
+                        winLose = 0.5 * bet_amount
+                        totalwinLose = winLose + backwater
+                        expect_data_list.append([order_no, winLose, totalwinLose, backwater])
+                    elif result == result_dic['走水']:
+                        winLose = 0
+                        totalwinLose = 0
+                        expect_data_list.append([order_no, winLose, totalwinLose, backwater])
+                    else:
+                        winLose = 0
+                        totalwinLose = 0
+                        expect_data_list.append([order_no, winLose, totalwinLose, backwater])
+            print(actual_data_list)
+            print(expect_data_list)
+
+
+
 
 
                                                                              #  【反波胆】
@@ -7066,10 +7211,10 @@ if __name__ == "__main__":
     # num = mysql.credit_dataSourceRepot_number(betTime=(-29,0), settleTime=(-29,0))
 
     # data = mysql.get_orderNo_effectAmount_and_commission(user_name='', order_no='', createDate=(-1,0), awardDate=())[1]
-    data = mysql.check_orderNo_effectAmount_and_commission(user_name='a0b1c2b301', order_no='', createDate=(), awardDate=())
+    # data = mysql.check_orderNo_effectAmount_and_commission(user_name='a0b1c2b301', order_no='', createDate=(), awardDate=())    # 校验信用网注单有效金额和佣金
 
-
-
+    # check_result = mysql.check_order_no_settlement_result(user_name='a0b1c2b301',order_no='XxKG4kdGhyJv')
+    betType = mysql.get_bet_type_by_ordernum(order_no='XvARWjrx3dRT')
 
                                                                               # 【反波胆-客户端】
 
