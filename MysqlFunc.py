@@ -5423,7 +5423,7 @@ class MysqlQuery(MysqlFunc):
 
     def get_orderNo_effectAmount_and_commission(self, user_name='', order_no='', createDate=(), awardDate=() ):
         '''
-        计算信用网注单有效金额和佣金          // 修改于2022.05.11
+        计算信用网注单有效金额和佣金          // 修改于2022.05.18
         :param user_name:
         :param order_no:
         :param createDate: 创建时间,元组
@@ -5452,25 +5452,26 @@ class MysqlQuery(MysqlFunc):
             order = ""
 
         database_name = "bfty_credit"
-        sql_str = f"SELECT order_no,cast(bet_amount as char),cast(handicap_final_win_or_lose as char),cast(backwater_amount as char),cast(level3_retreat_proportion as char)," \
+        sql_str = f"SELECT order_no,cast(bet_amount as char),cast(IFNULL(handicap_win_or_lose,0) as char),cast(IFNULL(backwater_amount,0) as char),cast(level3_retreat_proportion as char)," \
                   f"cast(efficient_amount as char) FROM o_account_order WHERE `status`in (2,3) {userName} {order} {create_time} {award_time} ORDER BY create_time DESC"
-
+        # print(sql_str)
         rtn = list(self.query_data(sql_str, database_name))
 
         data_list = []
         actualResult_list = []
         for item in rtn:
-            if item[3]:                    # 判断返水是否为null,为null是因为投注的盘口没有返水
+            if not item[3]:                    # 判断返水是否为null,为null是因为投注的盘口没有返水
+                commission = ''
+            else:
                 commission = float(item[3])
+            if not item[5]:                    # 判断有效金额是否为null
+                effectAmount = ''
             else:
-                commission = None
-            if item[5]:                    # 判断有效金额是否为null
-                effectAmount = float(item[3])
-            else:
-                effectAmount = None
+                effectAmount = float(item[5])
             data_list.append([item[0],float(item[1]), float(item[2]), commission, float(item[4]), effectAmount ])
-            actualResult_list.append({"orderNo":item[0],"betAmount":float(item[1]),"winLose":float(item[2]),
-                                   "Commission":commission,"effect_amount":effectAmount})
+            actualResult_list.append([item[0], float(item[1]), float(item[2]), commission, effectAmount])
+            # data_list.append({"orderNo":item[0],"betAmount":float(item[1]),"winLose":float(item[2]),
+            #                        "Commission":commission,"effect_amount":effectAmount})
 
         expectResult_list = []
         for detail in data_list:
@@ -5499,15 +5500,14 @@ class MysqlQuery(MysqlFunc):
             value = effect_amount * retreat_proportion
             Commission = "%.2f" % value
 
-            expectResult_list.append({"orderNo":orderNo,"betAmount":betAmount,"winLose":winLose,
-                                "Commission":Commission,"effect_amount":effect_amount})
+            expectResult_list.append([orderNo,betAmount,winLose,float(Commission),effect_amount])
 
         return actualResult_list,expectResult_list
 
 
     def check_orderNo_effectAmount_and_commission(self, user_name='', order_no='', createDate=(), awardDate=()):
         '''
-        校验信用网注单有效金额和佣金          // 修改于2022.05.11
+        校验信用网注单有效金额和佣金          // 修改于2022.05.18
         :param user_name:
         :param order_no:
         :param createDate: 创建时间,元组
@@ -5531,24 +5531,24 @@ class MysqlQuery(MysqlFunc):
         expectResult = self.get_orderNo_effectAmount_and_commission(user_name=user_name, order_no=order_no, createDate=createDate,awardDate=awardDate)[1]
 
         try:
-            if actualResult:
-                for index1, item1 in enumerate(actualResult):
-                    order_num = actualResult[index1]['orderNo']
-                    actual_commission = actualResult[index1]['Commission']
-                    actual_effectAmount = actualResult[index1]['effect_amount']
+            for index1, item1 in enumerate(actualResult):
+                order_num = actualResult[index1]
+                actual_commission = actualResult[index1]
+                actual_effectAmount = actualResult[index1]
 
-                    for index2, item2 in enumerate(expectResult):
-                        expect_commission = expectResult[index2]['Commission']
-                        expect_effectAmount = expectResult[index2]['effect_amount']
+                for index2, item2 in enumerate(expectResult):
+                    expect_commission = expectResult[index2]
+                    expect_effectAmount = expectResult[index2]
 
-                        if list(item1.values())[0] == list(item2.values())[0]:        # 判断注单号是否相等,若相等,则校验该条数据
-                            if list(item1.values()) == list(item2.values()):
-                                Bf_log('test').info(f'注单号：{order_num}, ==》 测试通过')
-                            else:
-                                Bf_log('test').error(f'注单号：{order_num}, 数据库中佣金为：{expect_commission},有效投注为：{expect_effectAmount}; '
-                                      f'实际佣金为：{actual_commission}, 有效投注为：{actual_effectAmount} --->执行测试用例 -- 失败')
-            else:
-                raise AssertionError('気の毒だと思う,当前所选的查询条件中无注单')
+                    if list(item1)[0] == list(item2)[0]:        # 判断注单号是否相等,若相等,则校验该条数据
+                        if item1 == item2:
+                            # self.cf.check_live_bet_report_new(item1, item2)
+                            Bf_log('test').info(f'实际结果：{item1}, 预期结果：{item2} --执行测试用例 ==》 测试通过')
+                        else:
+                            Bf_log('test').error(f'注单号：{order_num[0]}, 数据库中佣金为：{actual_commission[3]}, 有效投注为：{actual_effectAmount[4]};  '
+                                  f'实际佣金为：{expect_commission[3]}, 有效投注为：{expect_effectAmount[4]} --执行测试用例 ==》 测试失败')
+                            content = self.cf.write_to_local_file(content=f"{order_num[0]}\n",
+                                                                  file_name='C:/Users/USER/Desktop/orderNo.txt', mode='a')
 
         except Exception as e:
             print(e)
@@ -7210,11 +7210,11 @@ if __name__ == "__main__":
 
     # num = mysql.credit_dataSourceRepot_number(betTime=(-29,0), settleTime=(-29,0))
 
-    # data = mysql.get_orderNo_effectAmount_and_commission(user_name='', order_no='', createDate=(-1,0), awardDate=())[1]
-    # data = mysql.check_orderNo_effectAmount_and_commission(user_name='a0b1c2b301', order_no='', createDate=(), awardDate=())    # 校验信用网注单有效金额和佣金
+    # data = mysql.get_orderNo_effectAmount_and_commission(user_name='a2j1j2j3j5', order_no='XB4byuPEVHCe', createDate=(-1,0), awardDate=())[1]
+    data = mysql.check_orderNo_effectAmount_and_commission(user_name='', order_no='', createDate=(-1,0), awardDate=())    # 校验信用网注单有效金额和佣金
 
     # check_result = mysql.check_order_no_settlement_result(user_name='a0b1c2b301',order_no='XxKG4kdGhyJv')
-    betType = mysql.get_bet_type_by_ordernum(order_no='XvARWjrx3dRT')
+    # betType = mysql.get_bet_type_by_ordernum(order_no='XvARWjrx3dRT')
 
                                                                               # 【反波胆-客户端】
 
