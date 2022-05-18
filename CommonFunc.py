@@ -373,7 +373,7 @@ class CommonFunc(object):
         写入txt文件
         :param content:
         :param file_name:
-        :param mode:
+        :param mode: w模式打开文件，如果而文件中有数据，再次写入内容，会把原来的覆盖掉  a向文件追加   a+可读可追加
         :param file_type:
         :return:
         '''
