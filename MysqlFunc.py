@@ -5671,7 +5671,8 @@ class MysqlQuery(MysqlFunc):
                 bet_type = '复式串关 ' + type
             else:
                 type_start = re.search("^(\d)", typeString)
-                type = str(type_start.group()) + '串1'
+                type_end = re.search("_(\d+)", typeString)
+                type = str(type_start.group()) + f'串1*{type_end.group(1)}'
                 bet_type = '复式串关 ' + type
 
         return bet_type
@@ -7211,10 +7212,10 @@ if __name__ == "__main__":
     # num = mysql.credit_dataSourceRepot_number(betTime=(-29,0), settleTime=(-29,0))
 
     # data = mysql.get_orderNo_effectAmount_and_commission(user_name='a2j1j2j3j5', order_no='XB4byuPEVHCe', createDate=(-1,0), awardDate=())[1]
-    data = mysql.check_orderNo_effectAmount_and_commission(user_name='', order_no='', createDate=(-1,0), awardDate=())    # 校验信用网注单有效金额和佣金
+    # data = mysql.check_orderNo_effectAmount_and_commission(user_name='', order_no='', createDate=(-1,0), awardDate=())    # 校验信用网注单有效金额和佣金
 
     # check_result = mysql.check_order_no_settlement_result(user_name='a0b1c2b301',order_no='XxKG4kdGhyJv')
-    # betType = mysql.get_bet_type_by_ordernum(order_no='XvARWjrx3dRT')
+    betType = mysql.get_bet_type_by_ordernum(order_no='XB4E74xUtRtX')
 
                                                                               # 【反波胆-客户端】
 
