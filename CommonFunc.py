@@ -443,6 +443,21 @@ class CommonFunc(object):
 
         return wb
 
+    def get_cut_float_length(self, value, length):
+        '''
+        浮点数截取两位小数
+        :param value:
+        :param n:
+        :return:
+        '''
+        str_num = str(value)
+        a,b,c = str_num.partition('.')
+        c = (c+'0'*length)[:length]
+
+        return ".".join([a,c])
+
+
+
 
 if __name__ == "__main__":
 
@@ -462,5 +477,9 @@ if __name__ == "__main__":
     # testData = [{'id':1,'name':'李扬','price':10},{'id':2,'name':'杜鑫','price':20},{'id':3,'name':'杰瑞','price':30}]
     # excel_file = cf.xw_toExcel(data=testData, filename='C:/Users/USER/Desktop/test.xlsx')
 
-    testData1 = [{'id':1,'name':'李扬','price':10},{'id':2,'name':'杜鑫','price':20},{'id':3,'name':'杰瑞','price':30}]
-    file = cf.pd_toExcel(data=testData1, filename='C:/Users/USER/Desktop/test1.xlsx')
+    # testData1 = [{'id':1,'name':'李扬','price':10},{'id':2,'name':'杜鑫','price':20},{'id':3,'name':'杰瑞','price':30}]
+    # file = cf.pd_toExcel(data=testData1, filename='C:/Users/USER/Desktop/test1.xlsx')
+
+
+    value=0.048
+    print(cf.get_cut_float_length(value=value,length=2))
