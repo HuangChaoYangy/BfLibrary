@@ -10,6 +10,8 @@ import os
 import configparser
 from arrow import arrow
 from config import ControlFile
+from tools.yamlControl import Yaml_data
+import yaml
 
 try:
     from .MongoFunc import DbQuery,MongoFunc
@@ -39,6 +41,7 @@ class CtrlIoDocs(object):
         self.dbq = DbQuery(mysql_info, mongo_info)
         self.mysql = MysqlQuery(mysql_info,mongo_info)
         self.blog = Bf_log(name='leeyang')
+        self.ya = Yaml_data()
 
     def query_match_all_logs(self, event_id):
         """
@@ -204,9 +207,10 @@ class BetController(object):
                 # all_match = re.findall('(<market.+?</market>)', data)
                 # start = re.search('(<bet_settlement.+?<outcomes>)', data)
 
-                rtn = self.session.post(self.bc_host, data=data).content.decode()
+                rtn = self.session.post(url=self.bc_host, data=data).content.decode()
+                # print(self.session.post(url=self.bc_host, data=data))
                 if rtn != "OK":
-                    raise SendCtrlCmdFailedException("发送指令失败: " + rtn)
+                    raise Exception ("发送指令失败: " + rtn)
                 output += rtn
 
                 # for element in [all_match[index: index + 5] for index in range(0, len(all_match), 5)]:
@@ -222,7 +226,7 @@ class BetController(object):
                 print("指令内容为：\n", data)
                 rtn = self.session.post(self.bc_host, data=data).content.decode()
                 if rtn != "OK":
-                    raise SendCtrlCmdFailedException("发送指令失败: " + rtn)
+                    raise Exception("发送指令失败: " + rtn)
                 return rtn
         except Exception as e:
             return str(e)
@@ -375,6 +379,25 @@ class BetController(object):
             return output
         raise AssertionError("ERR：在数据库中未找到投注项ID与注单中的投注项ID相同的项。")
 
+    @staticmethod
+    def split_outcome_id(outcome_info):
+        '''
+        网球波胆盘口增加判断        sr:match:33574697_199_variant=sr:correct_score:bestof:3_sr:correct_score:bestof:3:4
+        :param outcome_info:
+        :return:
+        '''
+        outcome_list = outcome_info.split('_')
+        if len(outcome_list) > 4:  # 部分波胆数据加的判断
+            specifiers = outcome_list[2] + '_' + outcome_list[3]
+            outcome_id = outcome_list[4] + '_' + outcome_list[5]
+
+        else:
+            specifiers = outcome_list[2]
+            outcome_id = outcome_list[3]
+        match_id = outcome_list[0]
+        mark_id = outcome_list[1]
+        return match_id, mark_id, specifiers, outcome_id
+
     def generate_settlement_str_by_orderNo(self, order_no, sort=0, certainty='2', producer='', result=None):
         """
         通过注单号生成对应盘口或Specifier级别的结算报文
@@ -386,11 +409,12 @@ class BetController(object):
         :param result: 输|赢|赢一半|输一半|走盘
         :return:
         """
-        sql = f"SELECT spliced_outcome_id FROM `bfty_credit`.`o_account_order_match` WHERE `order_no` = '{order_no}'"
-        query_data = self.my.query_data(sql, db_name='bfty_credit')
+        sql_str = f"SELECT spliced_outcome_id FROM `bfty_credit`.`o_account_order_match` WHERE `order_no` = '{order_no}'"
+        query_data = list(self.my.query_data(sql=sql_str, db_name='bfty_credit'))
         outcomeId = query_data[sort][0]
-        outcome_list = outcomeId.split('_')
-        match_id = outcome_list[0]
+        match_id, mark_id, specifiers, outcome_id = self.split_outcome_id(outcomeId)
+        outcome_list=[]
+        outcome_list.extend([match_id, mark_id, specifiers, outcome_id])
         match_num = len(query_data)
 
         if match_num == 1:
@@ -445,7 +469,7 @@ class BetController(object):
                                 else:
                                     output += '<market id="%s" specifiers="%s">' % (market["_id"], specifier["specifier"])
                                 for outcome in specifier["outComes"]:
-                                    if int(outcome["_id"]) == int(outcome_id_simple):
+                                    if str(outcome["_id"]) == str(outcome_id_simple):
                                         output += '<outcome id=\"%s\" %s/>' % (outcome['_id'], result_str)
                                     else:
                                         output += '<outcome id=\"%s\" result=\"0\"/>' % outcome['_id']
@@ -483,6 +507,7 @@ class BetController(object):
             output += '</outcomes></bet_settlement>'
             return output
         raise AssertionError("ERR：在数据库中未找到投注项ID与注单中的投注项ID相同的项。")
+
 
 
     def generate_settlement_str_by_order(self, match_id, outcome_info=(), certainty='2', producer='', result="输"):
@@ -664,10 +689,11 @@ class BetController(object):
         :param result:  输|赢|赢一半|输一半|走盘
         :return:
         """
-        # producer = self.dbq.get_match_data(match_id, "producer") if not producer else producer
-        # if not producer:
-        #     raise AssertionError("Notice: 未找到对应的比赛。")
+        producer = self.dbq.get_match_data(match_id, "producer") if not producer else producer
+        if not producer:
+            raise AssertionError("Notice: 未找到对应的比赛。")
         data = self.generate_settlement_str_by_order(match_id, outcome_info, certainty, producer, result)
+
         print("返回结果为: %s" % self.data_post(data))
 
     def send_bet_settlement_allmarkets(self, match_id, certainty='2', producer=''):
@@ -1126,8 +1152,52 @@ class BetController(object):
 
             return output
 
+    def generate_settlement_str_by_count_orderNo(self, order_no=""):
+        global sort_num
+        """
+        通过订单号，获取注单的数量，用以sort传参使用
+        ：param order_no:
+        :param sort: 默认是0   串关中可根据sort指定某个投注项
+        """
+        #获取串关order_no的子注单数量
+        sql=f"SELECT COUNT(match_id) FROM `bfty_credit`.o_account_order_match_update  WHERE order_no='{order_no}' AND sub_order_status='1' "
+        sort_num = self.my.query_data(sql, db_name='bfty_credit')
+        return sort_num[0][0]
+
+    def send_message_to_datasourse(self, order_no="", certainty='2', result=None):
+
+        """
+        注单结算
+        :param order_no:
+        :param sort:  单注/串关
+        :param certainty:  1|3
+        :param result:  输|赢|赢一半|输一半|走盘
+        :return:
+        """
+        sort_num = bc.generate_settlement_str_by_count_orderNo(order_no=order_no)
+        if int(sort_num) == 0:
+            raise AssertionError(f'可结算的注单数为：{sort_num}')
+        elif int(sort_num)>=1:
+            sort_num_list=[]
+            for num in range(0,int(sort_num)):
+                sort_num_list.append(num)
+            for sort in sort_num_list:
+                message = bc.generate_settlement_str_by_orderNo(order_no=order_no, sort=int(sort), certainty=certainty,result=result)
+                if not message:
+                    raise AssertionError("Notice: 未找到对应的比赛。")
+                print("返回结果为: %s" % self.data_post(data=message))
+        else:
+            message = bc.generate_settlement_str_by_orderNo(order_no=order_no, sort=int(sort_num[0][0]), certainty=certainty,result=result)
+            print(message)
+            if not message:
+                raise AssertionError("Notice: 未找到对应的比赛。")
+            print("返回结果为: %s" % self.data_post(data=message))
+
 
 if __name__ == "__main__":
+
+    ya = Yaml_data()
+    result = ya.get_yaml_data(fileDir='D:\project\BfLibrary\config\config.yaml', isAll=True)
 
     mongo_inf = ['app', '123456', '192.168.10.120', '27017']
     mysql_inf = ['192.168.10.121', 'root', 's3CDfgfbFZcFEaczstX1VQrdfRFEaXTc', '3306']
@@ -1160,8 +1230,9 @@ if __name__ == "__main__":
     # settlement_by_outcomeId = bc.generate_settlement_str_by_outcomeId(outcomeId='sr:match:31482103_18_total=2.25_13', result='赢')    # 生成单投注项的结算(取消)指令
     # print(settlement_by_outcomeId)
 
-    settlement_by_orderNo = bc.generate_settlement_str_by_orderNo(order_no='XBF2KgNEmJHe', sort=0, certainty='2', result='赢')       #根据注单号进行生成结算指令
-    print(settlement_by_orderNo)
+    # settlement_by_orderNo = bc.generate_settlement_str_by_orderNo(order_no='XBkKN4Q5k6jq', sort=0, certainty='2', result='赢一半')       #根据注单号进行生成结算指令
+    # print(settlement_by_orderNo)
+    send = bc.send_message_to_datasourse(order_no='XCha9htMg4rR', certainty='2', result=None)        # 生成结算之类+注单结算
 
     # data = bc.generate_rollback_bet_cancel_str(match_id='31975607',start_stamp="1641713763000", end_stamp="1649489763000")      # 取消回滚指令
     # print(data)
