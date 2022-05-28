@@ -47,10 +47,12 @@ class Test_Report01(object):
                 for index2, item2 in enumerate(expectResult):
                     if list(item1)[0] == list(item2)[0]:  # 判断注单号是否相等,若相等,则校验该条数据
                         if list(item1) == list(item2):
-                            self.cm.check_live_bet_report_new(item1, item2)
+                            assert item1 == item2
+                        # self.cm.check_live_bet_report_new(item1, item2)
                             with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试通过'):
-                                Bf_log('test').info(f'sql值:{item1}, 期望结果：{item2},==》测试通过')
+                                Bf_log('test').info(f'实际结果:{item1}, 期望结果：{item2},==》测试通过')
                         else:
+                            assert item1 != item2
                             with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
                                 Bf_log('test').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
 

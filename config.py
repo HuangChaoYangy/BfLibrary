@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/4/11 15:28
 # @Author  : liyang
-# @FileName: config.py
+# @FileName: config.yaml
 # @Software: PyCharm
 
 import os, sys

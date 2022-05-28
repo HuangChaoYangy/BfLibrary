@@ -10,7 +10,7 @@
 - #test_01用例
   describe:
   data:
-    user_name: "shd1mfndq8"
+    user_name: "a0b1c2b301"
     order_no: ""
     betStartTime: ""
     betEndTime: ""
@@ -18,7 +18,7 @@
     settleEndTime: ""
     title: 根据【会员账号】校验返水和有效投注
   resp:
-    user_name: "shd1mfndq8"
+    user_name: "a0b1c2b301"
     order_no: ""
     betStartTime: ""
     betEndTime: ""
