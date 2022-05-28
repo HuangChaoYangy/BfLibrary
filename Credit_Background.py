@@ -955,6 +955,108 @@ class CreditBackGround(object):
             return closed_matchResult_list, cancelled_matchResult_list, abandoned_matchResult_list
 
 
+    def credit_front_page_query(self, queryType="收益", quertTime=0):
+        '''
+        管理后台-总台-首页
+        :param queryType:
+        :param quertTime:  默认查询当月
+        :return:
+        '''
+        login_loken = self.login_background(uname='Liyang124', password='Bfty123456', securityCode="",loginDiv='222333')
+        income_url = self.auth_url + '/frontPage/queryCumulativeIncome'
+        CreditQuota_url = self.auth_url + '/frontPage/allCreditQuota'
+        bet_url = self.auth_url + '/frontPage/getBetOverview'
+        agent_url = self.auth_url + '/frontPage/getProxySituation'
+        betAmount_url = self.auth_url + '/frontPage/getBetAmountHistogram'
+        totalwinlose_url = self.auth_url + '/frontPage/queryPercentageWinOrLose'
+        winlose_url = self.auth_url + '/frontPage/queryTotalWinOrLose'
+        backwater_url = self.auth_url + '/frontPage/getBackwaterHistogram'
+        ctime = self.get_current_time_for_client(time_type='month', day_diff=quertTime)
+        head = {"LoginDiv": '222333',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": login_loken,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+
+        if queryType == '收益':
+            param = {"mark": 1 }
+            rsp = self.session.get(income_url, headers=head, params=param)
+            if rsp.json()['message'] != 'OK':
+                print("查询首页数据失败,原因：" + rsp.json()["message"])
+            else:
+                income_list = []
+                income_dic = rsp.json()['data']
+                income_list.extend((income_dic['totalRevenue'],income_dic['yesterdaySEarnings']))
+
+                return income_list
+
+        elif queryType == '授信额度':
+            rsp = self.session.get(CreditQuota_url, headers=head, params={})
+            if rsp.json()['message'] != 'OK':
+                print("查询首页数据失败,原因：" + rsp.json()["message"])
+            else:
+                CreditQuota_list = rsp.json()['data']
+
+                return CreditQuota_list
+
+        elif queryType == '投注概况':
+            rsp = self.session.get(bet_url, headers=head, params={})
+            if rsp.json()['message'] != 'OK':
+                print("查询首页数据失败,原因：" + rsp.json()["message"])
+            else:
+                allbet_list = []
+                allbet_dic = rsp.json()['data']
+                todaybet_list = []
+
+                allbet_list.extend((allbet_dic['allBetNumber'], allbet_dic['allBetAmount']))
+                todaybet_list.extend((allbet_dic['todayBetNumber'], allbet_dic['todayBetAmount']))
+
+                return allbet_list,todaybet_list
+
+        elif queryType == '代理概况':
+            rsp = self.session.get(agent_url, headers=head, params={})
+            if rsp.json()['message'] != 'OK':
+                print("查询首页数据失败,原因：" + rsp.json()["message"])
+            else:
+                agent_list = []
+                user_list = []
+                agent_dic = rsp.json()['data']
+                agent_list.extend(agent_dic['proxy0Number'])
+                agent_list.extend(agent_dic['userNumber'])
+
+                return agent_list,user_list
+
+        elif queryType == '投注金额':
+            data = {"chooseTime": ctime}
+            rsp = self.session.post(betAmount_url, headers=head, json=data)
+            if rsp.json()['message'] != 'OK':
+                print("查询首页数据失败,原因：" + rsp.json()["message"])
+            else:
+                betAmountTotal = []
+                betAmountEffect = []
+                betAmount_dic = rsp.json()['data']
+                betAmountTotal.append(betAmount_dic['betAmountTotal'])
+                betAmountEffect.append(betAmount_dic['betAmountValidTotal'])
+                betAmountList = betAmount_dic['betAmountList']
+                betAmountEffectList = betAmount_dic['betAmountValidList']
+
+                return betAmountTotal,betAmountEffect,betAmountList,betAmountEffectList
+
+        elif queryType == '净盈亏':
+            data = {"chooseTime": ctime}
+            rsp = self.session.post(totalwinlose_url, headers=head, json=data)
+            if rsp.json()['message'] != 'OK':
+                print("查询首页数据失败,原因：" + rsp.json()["message"])
+            else:
+                totalwinlose = rsp.json()['data']
+                totalwinlose_list = []
+                totalwinloseDetail_list = []
+                totalwinlose_list.append(totalwinlose['total'])
+                totalwinloseDetail_list.append(totalwinlose['list'])
+
+                return totalwinlose_list
+
+
+
     def credit_user_info_query(self, Authorization, userAccount='', agentLine='', oneLevelAgent='', twoLevelAgent='', threeLevelAgent='', quotaMode='0',status=[],
                                riskControlLevel=[], AmountMax='',AmountMix='', isVip='', offset='',sortIndex='', sortParameter=''):
         '''
