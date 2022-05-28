@@ -146,14 +146,16 @@ class DbDetialQuery(object):
         return matchResult_list
 
 
-    def get_Client_orderNo_score_result_sql(self, user_name, offset=0):
+    def get_Client_orderNo_score_result_sql(self, user_name='',order_no='', offset=(-1,0)):
         '''
-        根据matchId查表获取客户端注单中的赛果比分,客户端比分是根据体育类型和盘口类型来进行展示的           /// 修改于2021.07.24
-        :param offset: 日期参数,必填
+        根据matchId查表获取客户端注单中的赛果比分,客户端比分是根据体育类型和盘口类型来进行展示的           /// 修改于2022.05.21
+        :param user_name: 用户账号,非必填
+        :param order_no: 注单号,非必填
+        :param offset: 日期参数,非必填
         :return:
         '''
-        matchInfolist = self.ms.get_client_orderNo_matchId_sql(user_name=user_name, offset=offset)
-
+        matchInfolist = self.ms.get_client_orderNo_matchId_sql(user_name=user_name,order_no=order_no, offset=offset)
+        # print(matchInfolist)
         select_dic = {"_id": 1, "createTime": 1, "allScore": 1 ,"fullTimeScore": 1, "halfTimeScore": 1, "cornerKickScore": 1, "penaltyScore": 1, "periodScoreInfoMap": 1}
 
         scoreResult = []
@@ -784,10 +786,11 @@ if __name__ == "__main__":
 
     # data = db.get_match_result_sql(offset=-1)
     # data = db.get_Client_orderNo_match_result_sql(user_name='USD_TEST02',offset=-3)
-    # data = db.get_Client_orderNo_score_result_sql(user_name='USD_TEST02',offset=-3)
+    score_data = db.get_Client_orderNo_score_result_sql(user_name='a0b1c2b301',order_no='XB4avMpdtXkV', offset=(-11,0))
+    print(score_data)
     # match_data = db.get_match_status_sql()
     # score = db.get_match_score_statistics_sql()
 
     # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
-    match_list = db.get_match_list_sql(sport_name="棒球", sort=1, dateOff=0, matchCategory='live')[1]
+    # match_list = db.get_match_list_sql(sport_name="棒球", sort=1, dateOff=0, matchCategory='live')[1]
     # print(match_list)
