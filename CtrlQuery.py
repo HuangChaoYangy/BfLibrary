@@ -180,6 +180,7 @@ class BetController(object):
         # self.ctrl_docs = CtrlIoDocs(mysql_info, mongo_info)
         self.cf = CommonFunc()
         self.my = MysqlFunc(mysql_info,mongo_info)
+        self.mysql = MysqlQuery(mysql_info, mongo_info)
         self.mg = MongoFunc(mongo_info)
         self.blog = Bf_log(name='BetController')
         self.config = ControlFile()
@@ -201,8 +202,8 @@ class BetController(object):
     def data_post(self, data):
         try:
             if "<bet_settlement" in data:
-                print("指令内容为：")
-                print(data)
+                # print("指令内容为：")
+                # print(data)
                 output = ""
                 # all_match = re.findall('(<market.+?</market>)', data)
                 # start = re.search('(<bet_settlement.+?<outcomes>)', data)
@@ -411,34 +412,49 @@ class BetController(object):
         """
         sql_str = f"SELECT spliced_outcome_id FROM `bfty_credit`.`o_account_order_match` WHERE `order_no` = '{order_no}'"
         query_data = list(self.my.query_data(sql=sql_str, db_name='bfty_credit'))
-        outcomeId = query_data[sort][0]
-        match_id, mark_id, specifiers, outcome_id = self.split_outcome_id(outcomeId)
+        outcomeInfo = query_data[sort][0]
+        match_id, mark_id, specifiers, outcome_id = self.split_outcome_id(outcome_info=outcomeInfo)
         outcome_list=[]
         outcome_list.extend([match_id, mark_id, specifiers, outcome_id])
         match_num = len(query_data)
 
         if match_num == 1:
-            print('查询的注单为【单注】')
+            print(f"查询的注单为【单注】, 注单号：【{order_no}】")
         else:
-            print(f'查询的注单为【串关】,比赛数量为：{match_num}, 当前比赛为：{match_id}')
-
+            print(f"查询的注单为【串关】,比赛数量为：{match_num}, 当前比赛为：{match_id}, 注单号：【{order_no}】")
         producer = self.dbq.get_match_data(match_id, "producer") if not producer else producer
-        if result==None:
-            result_list = ["输","赢","赢一半","输一半","走盘",'取消']
-            result = random.choice(result_list)
-        # print(result)
-        if result == "输":
-            result_str = 'result=\"0\"'
-        elif result == "赢":
-            result_str = 'result=\"1\"'
-        elif result == "赢一半":
-            result_str = 'result=\"1\" void_factor=\"0.5\"'
-        elif result == "输一半":
-            result_str = 'result=\"0\" void_factor=\"0.5\"'
-        elif result == "走盘" or result == '取消':
-            result_str = 'result=\"0\" void_factor=\"1\"'
+
+        # 让球大小盘口,才有"输","赢","赢一半","输一半","走盘",'取消'这6种结果
+        market_id_list = ["16", "18", "66", "68", "223", "225", "188", "314", "237", "238","256", "258"]
+
+        if mark_id in market_id_list:
+            if result==None:
+                result_list = ["输","赢","赢一半","输一半","走盘",'取消']
+                result = random.choice(result_list)
+            if result == "输":
+                result_str = 'result=\"0\"'
+            elif result == "赢":
+                result_str = 'result=\"1\"'
+            elif result == "赢一半":
+                result_str = 'result=\"1\" void_factor=\"0.5\"'
+            elif result == "输一半":
+                result_str = 'result=\"0\" void_factor=\"0.5\"'
+            elif result == "走盘" or result == '取消':
+                result_str = 'result=\"0\" void_factor=\"1\"'
+            else:
+                raise AssertionError("Result 输入的值错误。")
         else:
-            raise AssertionError("Result 输入的值错误。")
+            if result==None:
+                result_list = ["输","赢",'取消']
+                result = random.choice(result_list)
+            if result == "输":
+                result_str = 'result=\"0\"'
+            elif result == "赢":
+                result_str = 'result=\"1\"'
+            elif result == '取消':
+                result_str = 'result=\"0\" void_factor=\"1\"'
+            else:
+                raise AssertionError("Result 输入的值错误。")
         data = self.dbq.get_match_data(match_id)
         if not data:
             return "Sorry: [%s]未找到比赛数据" % match_id
@@ -446,8 +462,8 @@ class BetController(object):
                  'product=\"%s\" event_id=\"%s\" timestamp=\"%s\"><outcomes>' % (certainty, producer, data["_id"],
                                                                                  self.get_current_timestamp())
 
-        if outcomeId:
-            grep = re.search(r"^.+?_(\d+?)_(.*)_(.+?)$",outcomeId)
+        if outcomeInfo:
+            grep = re.search(r"^.+?_(\d+?)_(.*)_(.+?)$",outcomeInfo)
             outcome_market_id = grep.group(1)
             outcome_specifier = outcome_list[2]
             outcome_id_simple = outcome_list[3]
@@ -464,7 +480,6 @@ class BetController(object):
                                     cancle_reason ={'无法核实结果':'3','取消赛事':'5','弃权或者取消资格取消':'7','对手未露面或者退场':'9','赛事废弃':'10','赛事推迟':'11'}
                                     cancle_key = ['无法核实结果','取消赛事','弃权或者取消资格取消','对手未露面或者退场','赛事废弃','赛事推迟']
                                     key = random.choice(cancle_key)
-                                    print(key)
                                     output +='<market id="%s" specifiers="%s" void_reason="%s">' %(market["_id"], specifier["specifier"],cancle_reason[key])
                                 else:
                                     output += '<market id="%s" specifiers="%s">' % (market["_id"], specifier["specifier"])
@@ -475,6 +490,7 @@ class BetController(object):
                                         output += '<outcome id=\"%s\" result=\"0\"/>' % outcome['_id']
                                 output += '</market>'
                                 output += '</outcomes></bet_settlement>'
+                                print(f'盘口选项结算结果：{result}')
                                 return output
                         # 若注单投注项无specifier
                         else:
@@ -493,6 +509,7 @@ class BetController(object):
                                     output += '<outcome id=\"%s\" result=\"0\"/>' % outcome['_id']
                             output += '</market>'
                             output += '</outcomes></bet_settlement>'
+                            print(f'盘口选项结算结果：{result}')
                             return output
         else:
             for market in data["markets"]:
@@ -505,6 +522,7 @@ class BetController(object):
                         output += '<outcome id=\"%s\" result=\"0\"/>' % outcome['_id']
                     output += '</market>'
             output += '</outcomes></bet_settlement>'
+            print(f'盘口选项结算结果：{result}')
             return output
         raise AssertionError("ERR：在数据库中未找到投注项ID与注单中的投注项ID相同的项。")
 
@@ -1162,36 +1180,68 @@ class BetController(object):
         #获取串关order_no的子注单数量
         sql=f"SELECT COUNT(match_id) FROM `bfty_credit`.o_account_order_match_update  WHERE order_no='{order_no}' AND sub_order_status='1' "
         sort_num = self.my.query_data(sql, db_name='bfty_credit')
+
         return sort_num[0][0]
 
-    def send_message_to_datasourse(self, order_no="", certainty='2', result=None):
-
+    def send_message_to_datasourse(self, username='', order_no="", certainty='2', result=None):
         """
-        注单结算
+        注单结算                         // 修改于2022.05.28
+        :param username:
         :param order_no:
         :param sort:  单注/串关
         :param certainty:  1|3
         :param result:  输|赢|赢一半|输一半|走盘
         :return:
         """
-        sort_num = bc.generate_settlement_str_by_count_orderNo(order_no=order_no)
-        if int(sort_num) == 0:
-            raise AssertionError(f'可结算的注单数为：{sort_num}')
-        elif int(sort_num)>=1:
-            sort_num_list=[]
-            for num in range(0,int(sort_num)):
-                sort_num_list.append(num)
-            for sort in sort_num_list:
-                message = bc.generate_settlement_str_by_orderNo(order_no=order_no, sort=int(sort), certainty=certainty,result=result)
+        if username:
+            orderList = self.mysql.get_unsettled_order(user_name=username)
+            order_num = len(orderList)
+            loop = 1
+            for order in orderList:
+                print("总共有 %d 个未结算注单, 已结算注单 %d 个, 还剩 %d 个注单未结算" % (order_num, loop, order_num - loop))
+                sort_num = bc.generate_settlement_str_by_count_orderNo(order_no=order)
+                if int(sort_num) == 0:
+                    raise AssertionError(f'可结算的注单数为：{sort_num}')
+                elif int(sort_num)>=1:
+                    sort_num_list=[]
+                    for num in range(0,int(sort_num)):
+                        sort_num_list.append(num)
+                    for sort in sort_num_list:
+                        message = bc.generate_settlement_str_by_orderNo(order_no=order, sort=int(sort), certainty=certainty,result=result)
+                        if not message:
+                            raise AssertionError("Notice: 未找到对应的比赛。")
+                        loop += 1
+                        print("返回结果为: %s" % self.data_post(data=message))
+                        print('--------------------------------------------------------------------------------------------------------------------------------')
+                else:
+                    message = bc.generate_settlement_str_by_orderNo(order_no=order_no, sort=int(sort_num[0][0]), certainty=certainty,result=result)
+                    print(message)
+                    if not message:
+                        raise AssertionError("Notice: 未找到对应的比赛。")
+                    print("返回结果为: %s" % self.data_post(data=message))
+                    print('--------------------------------------------------------------------------------------------------------------------------------')
+        else:
+            sort_num = bc.generate_settlement_str_by_count_orderNo(order_no=order_no)
+            if int(sort_num) == 0:
+                raise AssertionError(f'可结算的注单数为：{sort_num}')
+            elif int(sort_num)>=1:
+                sort_num_list=[]
+                for num in range(0,int(sort_num)):
+                    sort_num_list.append(num)
+                for sort in sort_num_list:
+                    message = bc.generate_settlement_str_by_orderNo(order_no=order_no, sort=int(sort), certainty=certainty,result=result)
+                    if not message:
+                        raise AssertionError("Notice: 未找到对应的比赛。")
+                    print("返回结果为: %s" % self.data_post(data=message))
+                    print('--------------------------------------------------------------------------------------------------------------------------------')
+            else:
+                message = bc.generate_settlement_str_by_orderNo(order_no=order_no, sort=int(sort_num[0][0]), certainty=certainty,result=result)
+                print(message)
                 if not message:
                     raise AssertionError("Notice: 未找到对应的比赛。")
                 print("返回结果为: %s" % self.data_post(data=message))
-        else:
-            message = bc.generate_settlement_str_by_orderNo(order_no=order_no, sort=int(sort_num[0][0]), certainty=certainty,result=result)
-            print(message)
-            if not message:
-                raise AssertionError("Notice: 未找到对应的比赛。")
-            print("返回结果为: %s" % self.data_post(data=message))
+                print('--------------------------------------------------------------------------------------------------------------------------------')
+
 
 
 if __name__ == "__main__":
@@ -1230,9 +1280,9 @@ if __name__ == "__main__":
     # settlement_by_outcomeId = bc.generate_settlement_str_by_outcomeId(outcomeId='sr:match:31482103_18_total=2.25_13', result='赢')    # 生成单投注项的结算(取消)指令
     # print(settlement_by_outcomeId)
 
-    # settlement_by_orderNo = bc.generate_settlement_str_by_orderNo(order_no='XBkKN4Q5k6jq', sort=0, certainty='2', result='赢一半')       #根据注单号进行生成结算指令
+    # settlement_by_orderNo = bc.generate_settlement_str_by_orderNo(order_no='XCMMRnQ7dJVK', sort=0, certainty='2', result=None)       #根据注单号进行生成结算指令
     # print(settlement_by_orderNo)
-    send = bc.send_message_to_datasourse(order_no='XCha9htMg4rR', certainty='2', result=None)        # 生成结算之类+注单结算
+    send = bc.send_message_to_datasourse(username='a1',order_no='', certainty='2', result=None)        # 生成结算之类+注单结算
 
     # data = bc.generate_rollback_bet_cancel_str(match_id='31975607',start_stamp="1641713763000", end_stamp="1649489763000")      # 取消回滚指令
     # print(data)

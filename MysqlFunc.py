@@ -126,6 +126,14 @@ class MysqlQuery(MysqlFunc):
                     "乒乓球": 6,
                     "棒球": 7,
                     "冰上曲棍球": 100}
+    sport_category_id = {"足球": 'sr:sport:1',
+                    "篮球": 'sr:sport:2',
+                    "网球": 'sr:sport:5',
+                    "排球": 'sr:sport:23',
+                    "羽毛球": 'sr:sport:31',
+                    "乒乓球": 'sr:sport:20',
+                    "棒球": 'sr:sport:3',
+                    "冰上曲棍球": 'sr:sport:4'}
     # 如果在子类中定义构造方法(等同于重写第一个直接父类的构造方法), 则必须在该方法中调用父类的构造方法
     def __init__(self, mysql_info, mongo_info, *args, **kwargs):
         self.cf = CommonFunc()
@@ -4057,24 +4065,30 @@ class MysqlQuery(MysqlFunc):
         return order_data
 
 
-    def get_client_orderNo_matchId_sql(self, user_name='', offset=None):
+    def get_client_orderNo_matchId_sql(self, user_name='', order_no='', offset=(-4,0)):
         '''
-        获取客户端账户历史中注单的matchId,用于查询赛果比分          /// 修改于2021.07.24
+        查询已结算注单info,用于查询赛果比分          /// 修改于2022.05.21
+        :param user_name: 用户账号,必填
+        :param order_no: 注单号,必填
+        :param offset: 日期参数,必填
         :return:
         '''
-        merchant_name = self.get_parent_merchant_name(user_name)
-
         if not offset:
             selectTime = ""
         else:
-            start_time = self.get_current_time_for_client(time_type='ctime',day_diff=offset)
-            end_time = self.get_current_time_for_client(time_type='ctime', day_diff=offset)
-            selectTime = "and DATE_FORMAT(CONVERT_TZ( a.match_start_time, '+00:00', '-04:00' ), '%%Y-%%m-%%d') BETWEEN '%s' AND '%s'" % (start_time, end_time)
+            sttime = offset[0]
+            entime = offset[1]
+            ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(sttime))
+            etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(entime))
+            selectTime = f"and DATE_FORMAT(a.create_time, '%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}'"
+        if order_no:
+            orderNo = f"and a.order_no='{order_no}'"
+        else:
+            orderNo = ""
 
-        # 账户历史详情:
-        matchResult_sql = "SELECT a.order_no as '注单号',a.sport_category_id as '体育类型',b.match_id as '比赛ID',b.market_id as '盘口ID',specifier as '亚盘口' FROM biz_order a JOIN biz_order_detail b ON a.order_no=b.order_no " \
-                          "WHERE b.sub_order_status in (2,3,4,6) and a.merchant_name = '%s' and a.user_name='%s' %s ORDER BY a.create_time DESC" % (merchant_name,user_name,selectTime)
-        order_data = list(self.query_data(matchResult_sql, db_name="business_order"))
+        sql_str = f"SELECT a.order_no as '注单号',a.sport_category_id as '体育类型',b.match_id as '比赛ID',b.market_id as '盘口ID',specifier as '亚盘口' FROM o_account_order a " \
+                          f"JOIN o_account_order_match b ON a.order_no=b.order_no WHERE `status`=2 AND a.user_name='{user_name}' {orderNo} {selectTime}"
+        order_data = list(self.query_data(sql_str, db_name="bfty_credit"))
 
         for index in range(len(order_data)):
             order_data[index] = list(order_data[index])
@@ -5474,6 +5488,7 @@ class MysqlQuery(MysqlFunc):
             #                        "Commission":commission,"effect_amount":effectAmount})
 
         expectResult_list = []
+        effect_amount = 0
         for detail in data_list:
             orderNo = detail[0]
             betAmount = detail[1]
@@ -5498,11 +5513,11 @@ class MysqlQuery(MysqlFunc):
                 effect_amount = 0
 
             value = effect_amount * retreat_proportion
-            Commission = "%.2f" % value
+            Commission = self.cf.get_cut_float_length(value=value, length=2)
 
             expectResult_list.append([orderNo,betAmount,winLose,float(Commission),effect_amount])
 
-        return actualResult_list,expectResult_list
+        return actualResult_list,expectResult_list,effect_amount
 
 
     def check_orderNo_effectAmount_and_commission(self, user_name='', order_no='', createDate=(), awardDate=()):
@@ -5556,7 +5571,7 @@ class MysqlQuery(MysqlFunc):
 
     def auto_effectAmount_and_commission(self, expData={} ):
         '''
-        计算信用网注单有效金额和佣金,用于自动化测试          // 修改于2022.05.11
+        计算信用网注单有效金额和佣金,用于自动化测试          // 修改于2022.05.21
         :param user_name:
         :param order_no:
         :param createDate: 创建时间,元组
@@ -5590,7 +5605,7 @@ class MysqlQuery(MysqlFunc):
             order = ""
 
         database_name = "bfty_credit"
-        sql_str = f"SELECT order_no,cast(bet_amount as char),cast(handicap_final_win_or_lose as char),cast(backwater_amount as char),cast(level3_retreat_proportion as char)," \
+        sql_str = f"SELECT order_no,cast(bet_amount as char),cast(IFNULL(handicap_win_or_lose,0) as char),cast(IFNULL(backwater_amount,0) as char),cast(level3_retreat_proportion as char)," \
                   f"cast(efficient_amount as char) FROM o_account_order WHERE `status`in (2,3) {userName} {order} {create_time} {award_time} ORDER BY create_time DESC"
 
         rtn = list(self.query_data(sql_str, database_name))
@@ -5598,14 +5613,14 @@ class MysqlQuery(MysqlFunc):
         data_list = []
         data_detail_list = []
         for item in rtn:
-            if item[3]:  # 判断返水是否为null,为null是因为投注的盘口没有返水
+            if not item[3]:  # 判断返水是否为null,为null是因为投注的盘口没有返水
+                commission = ""
+            else:
                 commission = float(item[3])
+            if not item[5]:  # 判断有效金额是否为null
+                effectAmount = ""
             else:
-                commission = None
-            if item[5]:  # 判断有效金额是否为null
-                effectAmount = float(item[3])
-            else:
-                effectAmount = None
+                effectAmount = float(item[5])
             data_list.append([item[0], float(item[1]), float(item[2]), commission, float(item[4]), effectAmount])
 
             data_detail_list.append([ item[0], float(item[1]), float(item[2]), commission, effectAmount ])
@@ -5635,9 +5650,9 @@ class MysqlQuery(MysqlFunc):
                 effect_amount = 0
 
             value = effect_amount * retreat_proportion
-            Commission = "%.2f" % value
+            Commission = self.cf.get_cut_float_length(value=value, length=2)
 
-            new_data_list.append([orderNo, betAmount, winLose, Commission, effect_amount ])
+            new_data_list.append([orderNo, betAmount, winLose, float(Commission), effect_amount ])
 
         return data_detail_list, new_data_list, sql_str
 
@@ -5711,11 +5726,13 @@ class MysqlQuery(MysqlFunc):
         result_dic = {'赢': 1, '输': 2, '赢一半': 3, '输一半': 4, '走水': 5, '注单取消': 6}
         odds_type_dic = {'欧洲盘': 1, '香港盘': 2}
 
+
         if bet_type == 1:          # 如果投注类型为1,则执行以下程序,单注
             sql_str = f"SELECT a.order_no,cast(a.bet_amount as char),cast(ifnull(a.handicap_win_or_lose,0) as char),cast(a.handicap_final_win_or_lose as char)," \
                       f"cast(ifnull(a.backwater_amount,0) as char),cast(c.credit_odds as char),c.odds_type,b.settlement_result FROM o_account_order a JOIN o_account_order_match_update b ON " \
                       f"a.order_no = b.order_no JOIN o_account_order_match c ON a.order_no = c.order_no WHERE bet_type={bet_type} AND a.`status` in (2,3) {orderNum} {create_time}" \
                       f"{userName} {award_time}"
+            print(sql_str)
             data = list(self.query_data(sql_str, db_name=database_name))
 
             actual_data_list = []
@@ -5784,12 +5801,174 @@ class MysqlQuery(MysqlFunc):
             print(actual_data_list)
             print(expect_data_list)
 
+        if bet_type == 2:  # 如果投注类型为2,则执行以下程序,单注
+                sql_str = f"SELECT a.order_no,cast(a.bet_amount as char),cast(ifnull(a.handicap_win_or_lose,0) as char),cast(a.handicap_final_win_or_lose as char)," \
+                          f"cast(ifnull(a.backwater_amount,0) as char),c.odds_type,cast(c.credit_odds as char),b.settlement_result FROM o_account_order a JOIN o_account_order_match_update b ON " \
+                          f"a.order_no = b.order_no JOIN o_account_order_match c ON (a.order_no = c.order_no AND b.match_id=c.match_id) WHERE bet_type={bet_type} " \
+                          f"AND a.`status` in (2,3) {orderNum} {create_time}" \
+                          f"{userName} {award_time}"
+                data = list(self.query_data(sql_str, db_name=database_name))
+                actual_data_list = []
+                expect_data_list = []
+                odds_list = []
+                new_list = []
+                for item in data:
+                    order_no = item[0]
+                    bet_amount = float(item[1])
+                    win_or_lose = float(item[2])
+                    total_win_or_lose = float(item[3])
+                    backwater = float(item[4])
+                    odds_type = item[5]
+                    odds = float(item[6])
+                    result = item[7]
+                    actual_data_list.append([order_no, bet_amount, win_or_lose, total_win_or_lose, backwater, odds_type, odds, result])
+
+                for orderDetail in actual_data_list:
+                    odds_list.append([orderDetail[7], orderDetail[6]])
+                    for item in orderDetail[:6]:
+                        if item not in new_list:
+                            new_list.append(item)
+                new_list.append(odds_list)
+                print(new_list)
+
+                type_num = len(odds_list)
+                total_odds = 0
+                odds = 0
+                if new_list[4] == odds_type_dic['欧洲盘']:
+                    for item in odds_list:
+                        print(item[0])
+                        if item[0] == result_dic['赢']:
+                            odds = item[1]
+                        elif item[0] == result_dic['输']:
+                            odds = 0
+                        elif item[0] == result_dic['赢一半']:
+                            odds = item[1]*0.5+0.5
+                        elif item[0] == result_dic['输一半']:
+                            odds = 0.5
+                        elif item[0] == result_dic['走水']:
+                            odds = 1
+                        else:
+                            odds = 1
+
+                    print(odds)
+                    total_odds = odds*odds*odds
+                # print(total_odds)
+
+
 
 
 
 
                                                                              #  【反波胆】
 
+
+    def get_order_no_commission_result(self, order_no):
+        '''
+        计算注单的公司、代理和会员的佣金结果
+        :param user_name:
+        :param order_no:
+        :param createDate:
+        :param awardDate:
+        :return:
+        '''
+        effectAmount = self.get_orderNo_effectAmount_and_commission(order_no=order_no)[2]
+
+        database_name = "bfty_credit"
+        sql_str = f"SELECT order_no,company_backwater_amount,level0_backwater_amount,level1_backwater_amount,level2_backwater_amount,level3_backwater_amount,backwater_amount FROM " \
+                  f"o_account_order WHERE `status`in (2,3) and order_no='{order_no}'"
+        commission_data = list(self.query_data(sql_str, db_name=database_name))
+        sql_string = f"SELECT order_no,company_actual_percentage,level0_actual_percentage,level1_actual_percentage,level2_actual_percentage,level3_actual_percentage," \
+                     f"level0_retreat_proportion,level1_retreat_proportion,level2_retreat_proportion,level3_retreat_proportion FROM o_account_order WHERE order_no='{order_no}'"
+        percentage_data = list(self.query_data(sql_string, db_name=database_name))
+        actual_commission_list = []
+        actual_percentage_list = []
+        expect_commission_list = []
+        for item in commission_data:
+            order_no = item[0]
+            company_backwater_amount = float(item[1])
+            level0_backwater_amount = float(item[2])
+            level1_backwater_amount = float(item[3])
+            level2_backwater_amount = float(item[4])
+            level3_backwater_amount = float(item[5])
+            backwater_amount = float(item[6])
+            actual_commission_list.extend([order_no, company_backwater_amount, level0_backwater_amount,level1_backwater_amount, level2_backwater_amount,
+                                     level3_backwater_amount, backwater_amount])
+        for item in percentage_data:
+            order_no = item[0]
+            company_actual_percentage = float(item[1])
+            level0_actual_percentage = float(item[2])
+            level1_actual_percentage = float(item[3])
+            level2_actual_percentage = float(item[4])
+            level3_actual_percentage = float(item[5])
+            level0_retreat_proportion = float(item[6])
+            level1_retreat_proportion = float(item[7])
+            level2_retreat_proportion = float(item[8])
+            level3_retreat_proportion = float(item[9])
+            actual_percentage_list.extend([order_no, company_actual_percentage, level0_actual_percentage,level1_actual_percentage, level2_actual_percentage, level3_actual_percentage,
+                                     level0_retreat_proportion, level1_retreat_proportion,level2_retreat_proportion ,level3_retreat_proportion])
+            user_comission = effectAmount * level3_retreat_proportion
+            userCommission = self.cf.get_cut_float_length(value=user_comission, length=2)
+
+            agent_3 = effectAmount * level3_retreat_proportion * (1-level3_actual_percentage)-float(userCommission)
+            agent3Commission = self.cf.get_cut_float_length(value=agent_3, length=2)
+            agent_2 = effectAmount * level2_retreat_proportion * (1-level3_actual_percentage+level2_actual_percentage) - (float(agent3Commission)+float(userCommission))
+            agent2Commission = self.cf.get_cut_float_length(value=agent_2, length=2)
+            agent_1 = effectAmount * level1_retreat_proportion * (1-level3_actual_percentage+level2_actual_percentage+level1_actual_percentage) - (float(agent2Commission) +
+                                  float(agent3Commission) + float(userCommission))
+            agent1Commission = self.cf.get_cut_float_length(value=agent_1, length=2)
+            agent_0 = effectAmount * level0_retreat_proportion * (1 - level3_actual_percentage + level2_actual_percentage + level1_actual_percentage+ level1_actual_percentage) - \
+                                (float(agent1Commission) + float(agent2Commission) + float(agent3Commission) + float(userCommission))
+            agent0Commission = self.cf.get_cut_float_length(value=agent_0, length=2)
+            company_com = -(company_actual_percentage * effectAmount * level0_retreat_proportion)
+            companyCommission = self.cf.get_cut_float_length(value=company_com, length=2)
+            expect_commission_list.extend([order_no,float(companyCommission),float(agent0Commission),float(agent1Commission),
+                                           float(agent2Commission),float(agent3Commission),float(userCommission)])
+        print(actual_commission_list)
+        print(expect_commission_list)
+
+
+
+
+
+
+
+                                                                             #  【反波胆】
+
+
+    def get_unsettled_order(self, user_name):
+        '''
+        获取未结算注单号
+        :param user_name:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        sql_str = f"SELECT order_no FROM o_account_order WHERE `status`=1 AND login_account='{user_name}'"
+        rtn = list(self.query_data(sql_str, database_name))
+        order_list = []
+        for item in rtn:
+            order_list.extend(item)
+
+        return order_list
+
+    def get_order_detail(self, order_no):
+        '''
+        获取注单详情
+        :param order_no:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        sql_str=f"SELECT a.user_name,bet_amount,(CASE WHEN a.sport_category_id= 1 then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN '网球' WHEN " \
+                f"a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 THEN " \
+                f"'棒球' WHEN a.sport_category_id = 100 THEN '冰上曲棍球' END)as '球类',CONCAT(home_team_name,' Vs ',away_team_name) 'team',market_name FROM o_account_order a " \
+                f"JOIN o_account_order_match b ON a.order_no=b.order_no WHERE a.order_no='{order_no}' and bet_type=1"
+        rtn = list(self.query_data(sql_str, database_name))
+        user_name = rtn[0][0]
+        bet_amount = rtn[0][1]
+        sport_name = rtn[0][2]
+        team_name = rtn[0][3]
+        market_name = rtn[0][4]
+
+        return user_name,bet_amount,sport_name,team_name,market_name
 
 
     def get_incorrectScore_order_detail(self, order_no):
@@ -7123,7 +7302,6 @@ class MysqlQuery(MysqlFunc):
 if __name__ == "__main__":
 
     mysql_info = ['192.168.10.121', 'root', 's3CDfgfbFZcFEaczstX1VQrdfRFEaXTc', '3306']    # 内网mysql   # 8.07 最新
-    # mysql_info = ['192.168.10.19', 'root', 's3CDfgfbFZcFEaczstX1VQrdfRFEaXTc', '4000']   # 最新
     mongo_info = ['app', '123456', '192.168.10.120', '27017']               # 内网MongoDB
     # ms_info = ['35.201.231.209', 'root', '5XZQ4drg8St4V0jZqwXxVXWVqoc}O9o2', '3306']     # 外网mysql
     # mongo_info = ['admin', 'LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A', '35.229.139.160', '37017']  # 外网MongoDB
@@ -7145,7 +7323,8 @@ if __name__ == "__main__":
 
     # data = mysql.get_order_marketid_and_specifier_sql(offset=-1)
     # data = mysql.get_client_orderNo_marketid_and_specifier_sql(user_name="USD_TEST02",offset=-3)
-    # data = mysql.get_client_orderNo_matchId_sql(user_name="USD_TEST02", offset=-3)
+    # data = mysql.get_client_orderNo_matchId_sql(user_name="a0b1c2b301", order_no='XB4aCmTZhhvt', offset=(-4,0))
+    # print(data)
     # data = mysql.get_settled_order_matchid_sql()
 
 
@@ -7214,8 +7393,12 @@ if __name__ == "__main__":
     # data = mysql.get_orderNo_effectAmount_and_commission(user_name='a2j1j2j3j5', order_no='XB4byuPEVHCe', createDate=(-1,0), awardDate=())[1]
     # data = mysql.check_orderNo_effectAmount_and_commission(user_name='', order_no='', createDate=(-1,0), awardDate=())    # 校验信用网注单有效金额和佣金
 
-    # check_result = mysql.check_order_no_settlement_result(user_name='a0b1c2b301',order_no='XxKG4kdGhyJv')
-    betType = mysql.get_bet_type_by_ordernum(order_no='XB4E74xUtRtX')
+    # check_result = mysql.check_order_no_settlement_result(bet_type=2,user_name='a2j1j2j3j2',order_no='XB4mLjJJHmf2')
+    # betType = mysql.get_bet_type_by_ordernum(order_no='XB4E74xUtRtX')
+    # commission = mysql.get_order_no_commission_result(order_no='XB4aRPfWMsqB')
+    # order = mysql.get_unsettled_order(user_name='a01')
+    detail = mysql.get_order_detail(order_no='XCNASJCxN36b')
+    print(detail)
 
                                                                               # 【反波胆-客户端】
 
