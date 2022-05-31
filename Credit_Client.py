@@ -1263,7 +1263,7 @@ class Credit_Client(object):
         for sport_name in ['足球', '篮球', '网球', '排球', '羽毛球', '乒乓球', '棒球', '冰上曲棍球']:
             match_id_list = self.get_match_list(sport_name=sport_name, token=token,event_type=event_type, odds_type=odds_Type)[0]
             match_info_list.extend(match_id_list)
-
+        # print(match_info_list)
         url = self.auth_url + ':6210/creditMatchPC/totalMarketList'
         sport_id_dic = {"足球": "sr:sport:1", "篮球": "sr:sport:2", "网球": "sr:sport:5", "排球": "sr:sport:23",
                         "羽毛球": "sr:sport:31", "乒乓球": "sr:sport:20",
@@ -1319,11 +1319,6 @@ class Credit_Client(object):
                 "Connection": "keep-alive",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                               "Chrome/85.0.4183.102 Safari/537.36"}
-        match_info_list = []
-        for sport_name in ['足球', '篮球', '网球', '排球', '羽毛球', '乒乓球', '棒球', '冰上曲棍球']:
-            match_id_list = self.get_match_list(sport_name=sport_name, token=token,event_type=event_type, odds_type=odds_type)[0]
-            match_info_list.extend(match_id_list)
-
         outcome_info_list = self.get_all_match_outcome(token, event_type=event_type, odds_Type=odds_type)  # 指定盘口类型，1是欧洲盘，2是香港盘，3是马来盘，4是印尼盘
 
         if not IsRandom:
@@ -1355,7 +1350,6 @@ class Credit_Client(object):
                         "selections": [outcomeid],
                         "oddsChangeType": 1,      # 1 自动接受任意赔率    2 不接受任意赔率
                         "terminal": terminal}
-                # print(data)
                 rsp = self.session.post(url, json=data, headers=head)
                 if rsp.json()['message'] != "OK":
                     print("投注失败,原因：" + rsp.json()["message"])
@@ -1409,15 +1403,16 @@ class Credit_Client(object):
             sub_order_no_list = []
             loop = 1
             for outcomeid in selection_list:
-                bet_amount = random.randint(10, 300)
+                bet_amount = random.randint(10, 1000)
                 mixedNum = "1_1_0_%s" % (str(bet_amount))
+                terminal = random.choice(terminal_list)
                 data = {"mixedNum": [mixedNum],
                         "betId": 1632573273553,
                         "betIp": '192.168.10.120',
                         "browserFingerprintId": "2b0148c380e1e7daee36c6752532f33f",
                         "selections": [outcomeid],
                         "oddsChangeType": odds_type,
-                        "terminal": "pc"}
+                        "terminal": terminal}
                 rsp = self.session.post(url, json=data, headers=head)
                 if rsp.json()['message'] != "OK":
                     print("投注失败,原因：" + rsp.json()["message"])
@@ -1909,7 +1904,7 @@ if __name__ == "__main__":
     # mysql_inf_mde = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['27050b7694c746edb09447394c2c103d','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
+    token_list = ['e5cb9c8254ba4bd0aa7f637a80b5048a','559edd80eb634aaca4ba97247d77c13e']  # 跟之前的现金网不同,信用网的会员token是存在redis中的
 
     # match_id_list = bf.get_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     # print(match_id_list)
@@ -1924,14 +1919,18 @@ if __name__ == "__main__":
     #     data = bf.cm.write_to_local_file(content=item, file_name='C:/Users/USER/Desktop/testOdds.txt',mode='w')
 
     # 新增多线程-模拟多用户进行投注
-    # user_list = ['a0','a1','a2','a3','a5','a6','a7','a8']
+    # start_time = time.perf_counter()
+    # # user_list = ['a0','a1','a2','a3','a5','a6','a7','a8']
+    # user_list = ['a1',]
     # for user in user_list:
     #     thread_num = len(user_list)
     #     token = bf.login_client(username=user, password='Bfty123456')
-    #     print(f'当前投注账号为 {user}')
-    #     tuple_parameter = ("sr:match:31140173","足球", f'{token}', 1)     # 单注的入参
+    #     # tuple_parameter = ("sr:match:31908931","足球", f'{token}', 2, 30)     # 单注的入参
     #     # tuple_parameter = ("网球", f'{token}', 3, 'INPLAY')          # 非复式串关投注的入参
-    #     sub_thread = threading.Thread(target=bf.submit_all_outcome, args=tuple_parameter )          #创建线程,target为线程执行的目标方法
+    #     tuple_parameter = (f'{token}', 'INPLAY', 1, '20')           # 所有比赛随机投注的入参
+    #     # print(tuple_parameter)
+    #     sub_thread = threading.Thread(target=bf.submit_all_match, args=tuple_parameter)          #创建线程,所有比赛随机投注,target为线程执行的目标方法
+    #     # sub_thread = threading.Thread(target=bf.submit_all_outcome, args=tuple_parameter)          # 创建线程,target为线程执行的目标方法
     #     sub_thread.start()          # 通过start()方法手动来启动线程
 
         # with ThreadPoolExecutor(max_workers=5) as task:            # 创建一个最大容纳数量为5的线程池
@@ -1946,9 +1945,9 @@ if __name__ == "__main__":
         #         # task.shutdown()
         # print(f"task1: {sub_thread1.done()}")
 
-    # 投注
+    # 所有比赛随机投注
     for type in ['INPLAY', 'TODAY', 'EARLY']:
-        submit = bf.submit_all_match(token=token_list[0], event_type=type, odds_type=1, IsRandom='20')
+        submit = bf.submit_all_match(token=token_list[0], event_type=type, odds_type=2, IsRandom='100')
 
     # 单注投注
     # match_info_list = []
@@ -1958,9 +1957,11 @@ if __name__ == "__main__":
     # for match_id in match_info_list:
     #     bf.submit_all_outcome(match_id=match_id, sport_name=sport_name, token=token_list[0], odds_type=1, IsRandom='5')
     # 非复式串关投注
-    # bf.submit_all_outcomes(sport_name='篮球', token=token_list[0], bet_type=3, event_type='TODAY', IsRandom='')
+    # for bet_type in range(5,30):
+    #     bf.submit_all_outcomes(sport_name='乒乓球', token=token_list[0], bet_type=bet_type, event_type='EARLY', IsRandom='')
     # 复式串关投注
-    # bf.submit_all_complex(sport_name='足球', token=token_list[0], bet_type=5, event_type='EARLY', odds_type=1, oddsChangeType=1, complex='multi', complex_number=5)
+    # for bet_type in range(3, 6):
+    #     bf.submit_all_complex(sport_name='足球', token=token_list[0], bet_type=bet_type, event_type='TODAY', odds_type=1, oddsChangeType=1, complex='single', complex_number=2)
     # balance = bf.get_balance(token=token_list[0])
     # print(balance)
 

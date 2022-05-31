@@ -7397,7 +7397,7 @@ if __name__ == "__main__":
     # betType = mysql.get_bet_type_by_ordernum(order_no='XB4E74xUtRtX')
     # commission = mysql.get_order_no_commission_result(order_no='XB4aRPfWMsqB')
     # order = mysql.get_unsettled_order(user_name='a01')
-    detail = mysql.get_order_detail(order_no='XCNASJCxN36b')
+    detail = mysql.get_order_detail(order_no='XD6fEApxtgnK')
     print(detail)
 
                                                                               # 【反波胆-客户端】

@@ -174,7 +174,7 @@ class BetController(object):
         模拟ctrl给我司推送数据
         """
         self.bc_host = "http://192.168.10.10:8808/mock/message"         # 120测试环境消息推送接口
-        # self.bc_host = "34.81.26.253:31101/mock/message"              # 外网mde环境消息推送接口
+        # self.bc_host = "http://130.211.255.255:31101/mock/message"              # 外网mde环境消息推送接口
         self.session = requests.session()
         self.dbq = DbQuery(mongo_info)
         # self.ctrl_docs = CtrlIoDocs(mysql_info, mongo_info)
