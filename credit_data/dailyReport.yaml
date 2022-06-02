@@ -7,6 +7,7 @@
 
 -
   ip: 192.168.10.120:8093
+  mde_ip: https://mdesearch.betf.best
   url: /backendReport/queryDailyProfitAndLossList
   method: POST
 
