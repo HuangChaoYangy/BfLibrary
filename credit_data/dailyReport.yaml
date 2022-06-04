@@ -18,11 +18,14 @@
     limit: 50
     startCreateTime: "-6"
     endCreateTime: "0"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-每日盈亏列表,默认查询近7天数据
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
-
+    sortIndex: ""
+    sortParameter: ""
 - #test_02用例
   describe: 管理后台-总台-每日盈亏列表,默认查询近6天数据
   data:
@@ -30,11 +33,14 @@
     limit: 50
     startCreateTime: "-5"
     endCreateTime: "0"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-每日盈亏列表,默认查询近6天数据
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
-
+    sortIndex: ""
+    sortParameter: ""
 - #test_03用例
   describe: 管理后台-总台-每日盈亏列表,默认查询近5天数据
   data:
@@ -42,11 +48,14 @@
     limit: 50
     startCreateTime: "-4"
     endCreateTime: "0"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-每日盈亏列表,默认查询近5天数据
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
-
+    sortIndex: ""
+    sortParameter: ""
 - #test_04用例
   describe: 管理后台-总台-每日盈亏列表,默认查询近4天数据
   data:
@@ -54,11 +63,14 @@
     limit: 50
     startCreateTime: "-3"
     endCreateTime: "0"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-每日盈亏列表,默认查询近4天数据
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
-
+    sortIndex: ""
+    sortParameter: ""
 - #test_05用例
   describe: 管理后台-总台-每日盈亏列表,默认查询近3天数据
   data:
@@ -66,11 +78,14 @@
     limit: 50
     startCreateTime: "-2"
     endCreateTime: "0"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-每日盈亏列表,默认查询近3天数据
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
-
+    sortIndex: ""
+    sortParameter: ""
 - #test_06用例
   describe: 管理后台-总台-每日盈亏列表,默认查询近2天数据
   data:
@@ -78,11 +93,14 @@
     limit: 50
     startCreateTime: "-1"
     endCreateTime: "0"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-每日盈亏列表,默认查询近2天数据
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
-
+    sortIndex: ""
+    sortParameter: ""
 - #test_07用例
   describe: 管理后台-总台-每日盈亏列表,默认查询近1天数据
   data:
@@ -90,11 +108,14 @@
     limit: 50
     startCreateTime: "0"
     endCreateTime: "0"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-每日盈亏列表,默认查询近1天数据
   resp:
     startCreateTime: "0"
     endCreateTime: "0"
-
+    sortIndex: ""
+    sortParameter: ""
 - #test_08用例
   describe: 管理后台-总台-每日盈亏列表,默认查询近15天数据
   data:
@@ -102,11 +123,14 @@
     limit: 50
     startCreateTime: "-14"
     endCreateTime: "0"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-每日盈亏列表,默认查询近15天数据
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
-
+    sortIndex: ""
+    sortParameter: ""
 - #test_09用例
   describe: 管理后台-总台-每日盈亏列表,默认查询近30天数据
   data:
@@ -114,7 +138,221 @@
     limit: 50
     startCreateTime: "-29"
     endCreateTime: "0"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-每日盈亏列表,默认查询近30天数据
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
+    sortIndex: ""
+    sortParameter: ""
+- #test_10用例
+  describe: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注人数”进行升序排序
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "bettingUserNumber"
+    sortParameter: "descending"
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注人数”进行升序排序
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "IFNULL(`投注人数`,0)"
+    sortParameter: "DESC"
+- #test_11用例
+  describe: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注人数”进行降序排序
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "bettingUserNumber"
+    sortParameter: "ascending"
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注人数”进行降序排序
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "IFNULL(`投注人数`,0)"
+    sortParameter: "ASC"
+- #test_12用例
+  describe: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注量”进行升序排序
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "bettingNumber"
+    sortParameter: "descending"
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注量”进行升序排序
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "IFNULL(`投注量`,0)"
+    sortParameter: "DESC"
+- #test_13用例
+  describe: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注量”进行降序排序
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "bettingNumber"
+    sortParameter: "ascending"
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注量”进行降序排序
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "IFNULL(`投注量`,0)"
+    sortParameter: "ASC"
+- #test_14用例
+  describe: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注金额”进行升序排序
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "betAmount"
+    sortParameter: "descending"
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注金额”进行升序排序
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "IFNULL(`投注金额`,0)"
+    sortParameter: "DESC"
+- #test_15用例
+  describe: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注金额”进行降序排序
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "effectiveBetAmount"
+    sortParameter: "ascending"
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注金额”进行降序排序
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "IFNULL(`投注金额`,0)"
+    sortParameter: "ASC"
+- #test_16用例
+  describe: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“有效投注”进行升序排序
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "effectiveBetAmount"
+    sortParameter: "descending"
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“有效投注”进行升序排序
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "IFNULL(`有效投注`,0)"
+    sortParameter: "DESC"
+- #test_17用例
+  describe: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“有效投注”进行降序排序
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "effectiveBetAmount"
+    sortParameter: "ascending"
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“有效投注”进行降序排序
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "IFNULL(`有效投注`,0)"
+    sortParameter: "ASC"
+- #test_18用例
+  describe: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注盈亏”进行升序排序
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "bettingProfitAndLoss"
+    sortParameter: "descending"
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注盈亏”进行升序排序
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "IFNULL(`投注盈亏`,0)"
+    sortParameter: "DESC"
+- #test_19用例
+  describe: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注盈亏”进行降序排序
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "bettingProfitAndLoss"
+    sortParameter: "ascending"
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注盈亏”进行降序排序
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "IFNULL(`投注盈亏`,0)"
+    sortParameter: "ASC"
+- #test_20用例
+  describe: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“总佣金”进行升序排序
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "totalRebate"
+    sortParameter: "descending"
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“总佣金”进行升序排序
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "IFNULL(`总返水`,0)"
+    sortParameter: "DESC"
+- #test_21用例
+  describe: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“总佣金”进行降序排序
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "totalRebate"
+    sortParameter: "ascending"
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“总佣金”进行降序排序
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "IFNULL(`总返水`,0)"
+    sortParameter: "ASC"
+- #test_22用例
+  describe: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“净盈亏”进行升序排序
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "netProfitAndLoss"
+    sortParameter: "descending"
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“净盈亏”进行升序排序
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "IFNULL(`净盈亏`,0)"
+    sortParameter: "DESC"
+- #test_23用例
+  describe: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“净盈亏”进行降序排序
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "netProfitAndLoss"
+    sortParameter: "ascending"
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“净盈亏”进行降序排序
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "0"
+    sortIndex: "IFNULL(`净盈亏`,0)"
+    sortParameter: "ASC"
