@@ -7,6 +7,7 @@
 
 -
   ip: 192.168.10.120:8093
+  mde_ip: https://mdesearch.betf.best
   url: /backendReport/totalDailyProfitAndLoss
   method: POST
 
@@ -18,11 +19,15 @@
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近7天数据
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_02用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近6天数据
   data:
@@ -31,11 +36,15 @@
     startCreateTime: "-5"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近6天数据
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_03用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近5天数据
   data:
@@ -44,11 +53,15 @@
     startCreateTime: "-4"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近5天数据
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_04用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近4天数据
   data:
@@ -57,11 +70,15 @@
     startCreateTime: "-3"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近4天数据
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_05用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近3天数据
   data:
@@ -70,11 +87,15 @@
     startCreateTime: "-2"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近3天数据
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_06用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近2天数据
   data:
@@ -83,11 +104,15 @@
     startCreateTime: "-1"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近2天数据
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_07用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近1天数据
   data:
@@ -96,11 +121,15 @@
     startCreateTime: "-0"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近1天数据
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_08用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近15天数据
   data:
@@ -109,11 +138,15 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近11天数据
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_09用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近30天数据
   data:
@@ -122,11 +155,15 @@
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近30天数据
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_10用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近7天数据,根据"H5-IOS"查询
   data:
@@ -135,11 +172,15 @@
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近7天数据,根据"H5-IOS"查询
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_11用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近6天数据,根据"H5-IOS"查询
   data:
@@ -148,11 +189,15 @@
     startCreateTime: "-5"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近6天数据,根据"H5-IOS"查询
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_12用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近5天数据,根据"H5-IOS"查询
   data:
@@ -161,11 +206,15 @@
     startCreateTime: "-4"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近5天数据,根据"H5-IOS"查询
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_13用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近4天数据,根据"H5-IOS"查询
   data:
@@ -174,11 +223,15 @@
     startCreateTime: "-3"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近4天数据,根据"H5-IOS"查询
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_14用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近3天数据,根据"H5-IOS"查询
   data:
@@ -187,11 +240,15 @@
     startCreateTime: "-2"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近3天数据,根据"H5-IOS"查询
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_15用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近2天数据,根据"H5-IOS"查询
   data:
@@ -200,11 +257,15 @@
     startCreateTime: "-1"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近2天数据,根据"H5-IOS"查询
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_16用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近1天数据,根据"H5-IOS"查询
   data:
@@ -213,11 +274,15 @@
     startCreateTime: "-0"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近1天数据,根据"H5-IOS"查询
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_17用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近15天数据,根据"H5-IOS"查询
   data:
@@ -226,11 +291,15 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近15天数据,根据"H5-IOS"查询
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_18用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近30天数据,根据"H5-IOS"查询
   data:
@@ -239,11 +308,15 @@
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近30天数据,根据"H5-IOS"查询
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "H5-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_19用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近7天数据,根据"H5-android"查询
   data:
@@ -252,11 +325,15 @@
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近7天数据,根据"H5-android"查询
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_20用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近6天数据,根据"H5-android"查询
   data:
@@ -265,11 +342,15 @@
     startCreateTime: "-5"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近6天数据,根据"H5-android"查询
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_21用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近5天数据,根据"H5-android"查询
   data:
@@ -278,11 +359,15 @@
     startCreateTime: "-4"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近5天数据,根据"H5-android"查询
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_22用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近4天数据,根据"H5-android"查询
   data:
@@ -291,11 +376,15 @@
     startCreateTime: "-3"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近4天数据,根据"H5-android"查询
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_23用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近3天数据,根据"H5-android"查询
   data:
@@ -304,11 +393,15 @@
     startCreateTime: "-2"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近3天数据,根据"H5-android"查询
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_24用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近2天数据,根据"H5-android"查询
   data:
@@ -317,11 +410,15 @@
     startCreateTime: "-1"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近2天数据,根据"H5-android"查询
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_25用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近1天数据,根据"H5-android"查询
   data:
@@ -330,11 +427,15 @@
     startCreateTime: "-0"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近1天数据,根据"H5-android"查询
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_26用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近15天数据,根据"H5-android"查询
   data:
@@ -343,11 +444,15 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近15天数据,根据"H5-android"查询
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_27用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近30天数据,根据"H5-android"查询
   data:
@@ -356,11 +461,15 @@
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近30天数据,根据"H5-android"查询
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "H5-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_28用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近7天数据,根据"APP-IOS"查询
   data:
@@ -369,11 +478,15 @@
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近7天数据,根据"APP-IOS"查询
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_29用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近6天数据,根据"APP-IOS"查询
   data:
@@ -382,11 +495,15 @@
     startCreateTime: "-5"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近6天数据,根据"APP-IOS"查询
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_30用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近5天数据,根据"APP-IOS"查询
   data:
@@ -395,11 +512,15 @@
     startCreateTime: "-4"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近5天数据,根据"APP-IOS"查询
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_31用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近4天数据,根据"APP-IOS"查询
   data:
@@ -408,11 +529,15 @@
     startCreateTime: "-3"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近4天数据,根据"APP-IOS"查询
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_32用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近3天数据,根据"APP-IOS"查询
   data:
@@ -421,11 +546,15 @@
     startCreateTime: "-2"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近3天数据,根据"APP-IOS"查询
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_33用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近2天数据,根据"APP-IOS"查询
   data:
@@ -434,11 +563,15 @@
     startCreateTime: "-1"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近2天数据,根据"APP-IOS"查询
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_34用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近1天数据,根据"APP-IOS"查询
   data:
@@ -447,11 +580,15 @@
     startCreateTime: "-0"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近1天数据,根据"APP-IOS"查询
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_35用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近15天数据,根据"APP-IOS"查询
   data:
@@ -460,11 +597,15 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近15天数据,根据"APP-IOS"查询
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_36用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近30天数据,根据"APP-IOS"查询
   data:
@@ -473,11 +614,15 @@
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近30天数据,根据"APP-IOS"查询
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "APP-IOS"
+    sortIndex: ""
+    sortParameter: ""
 - #test_37用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近7天数据,根据"APP-android"查询
   data:
@@ -486,11 +631,15 @@
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近7天数据,根据"APP-android"查询
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_38用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近6天数据,根据"APP-android"查询
   data:
@@ -499,11 +648,15 @@
     startCreateTime: "-5"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近6天数据,根据"APP-android"查询
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_39用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近5天数据,根据"APP-android"查询
   data:
@@ -512,11 +665,15 @@
     startCreateTime: "-4"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近5天数据,根据"APP-android"查询
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_40用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近4天数据,根据"APP-android"查询
   data:
@@ -525,11 +682,15 @@
     startCreateTime: "-3"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近4天数据,根据"APP-android"查询
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_41用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近3天数据,根据"APP-android"查询
   data:
@@ -538,11 +699,15 @@
     startCreateTime: "-2"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近3天数据,根据"APP-android"查询
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_42用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近2天数据,根据"APP-android"查询
   data:
@@ -551,11 +716,15 @@
     startCreateTime: "-1"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近2天数据,根据"APP-android"查询
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_43用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近1天数据,根据"APP-android"查询
   data:
@@ -564,11 +733,15 @@
     startCreateTime: "-0"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近1天数据,根据"APP-android"查询
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_44用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近15天数据,根据"APP-android"查询
   data:
@@ -577,11 +750,15 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近15天数据,根据"APP-android"查询
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_45用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近30天数据,根据"APP-android"查询
   data:
@@ -590,11 +767,15 @@
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近30天数据,根据"APP-android"查询
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "APP-android"
+    sortIndex: ""
+    sortParameter: ""
 - #test_46用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近7天数据,根据"pc"查询
   data:
@@ -603,11 +784,15 @@
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近7天数据,根据"pc"查询
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
 - #test_47用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近6天数据,根据"pc"查询
   data:
@@ -616,11 +801,15 @@
     startCreateTime: "-5"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近6天数据,根据"pc"查询
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
 - #test_48用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近5天数据,根据"pc"查询
   data:
@@ -629,11 +818,15 @@
     startCreateTime: "-4"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近5天数据,根据"pc"查询
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
 - #test_49用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近4天数据,根据"pc"查询
   data:
@@ -642,11 +835,15 @@
     startCreateTime: "-3"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近4天数据,根据"pc"查询
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
 - #test_50用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近3天数据,根据"pc"查询
   data:
@@ -655,11 +852,15 @@
     startCreateTime: "-2"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近3天数据,根据"pc"查询
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
 - #test_51用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近2天数据,根据"pc"查询
   data:
@@ -668,11 +869,15 @@
     startCreateTime: "-1"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近2天数据,根据"pc"查询
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
 - #test_52用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近1天数据,根据"pc"查询
   data:
@@ -681,11 +886,15 @@
     startCreateTime: "-0"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近1天数据,根据"pc"查询
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
 - #test_53用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近15天数据,根据"pc"查询
   data:
@@ -694,11 +903,15 @@
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近15天数据,根据"pc"查询
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
 - #test_54用例
   describe: 管理后台-总台-客户端盈亏-总计,默认查询近30天数据,根据"pc"查询
   data:
@@ -707,8 +920,12 @@
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
     title: 管理后台-总台-客户端盈亏-总计,默认查询近30天数据,根据"pc"查询
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
     terminal: "pc"
+    sortIndex: ""
+    sortParameter: ""
