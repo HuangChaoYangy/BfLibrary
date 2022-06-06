@@ -12,7 +12,7 @@
   method: POST
 
 - #test_01用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【足球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【足球】
   data:
     page: 1
     limit: 50
@@ -21,7 +21,7 @@
     sportName: "足球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【足球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【足球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -29,7 +29,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_02用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【足球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【足球】
   data:
     page: 1
     limit: 50
@@ -38,7 +38,7 @@
     sportName: "足球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【足球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【足球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -46,7 +46,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_03用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【足球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【足球】
   data:
     page: 1
     limit: 50
@@ -55,7 +55,7 @@
     sportName: "足球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【足球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【足球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -63,7 +63,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_04用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【足球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【足球】
   data:
     page: 1
     limit: 50
@@ -72,7 +72,7 @@
     sportName: "足球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【足球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【足球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -80,7 +80,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_05用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【足球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【足球】
   data:
     page: 1
     limit: 50
@@ -89,7 +89,7 @@
     sportName: "足球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【足球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【足球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -97,7 +97,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_06用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【足球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【足球】
   data:
     page: 1
     limit: 50
@@ -106,7 +106,7 @@
     sportName: "足球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【足球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【足球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -114,7 +114,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_07用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【足球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【足球】
   data:
     page: 1
     limit: 50
@@ -123,7 +123,7 @@
     sportName: "足球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【足球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【足球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -131,7 +131,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_08用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【足球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【足球】
   data:
     page: 1
     limit: 50
@@ -140,7 +140,7 @@
     sportName: "足球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【足球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【足球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -148,7 +148,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_09用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【足球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【足球】
   data:
     page: 1
     limit: 50
@@ -157,7 +157,7 @@
     sportName: "足球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【足球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【足球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
@@ -165,7 +165,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_10用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【篮球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【篮球】
   data:
     page: 1
     limit: 50
@@ -174,7 +174,7 @@
     sportName: "篮球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【篮球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【篮球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -182,7 +182,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_11用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【篮球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【篮球】
   data:
     page: 1
     limit: 50
@@ -191,7 +191,7 @@
     sportName: "篮球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【篮球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【篮球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -199,7 +199,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_12用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【篮球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【篮球】
   data:
     page: 1
     limit: 50
@@ -208,7 +208,7 @@
     sportName: "篮球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【篮球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【篮球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -216,7 +216,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_13用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【篮球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【篮球】
   data:
     page: 1
     limit: 50
@@ -225,7 +225,7 @@
     sportName: "篮球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【篮球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【篮球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -233,7 +233,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_14用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【篮球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【篮球】
   data:
     page: 1
     limit: 50
@@ -242,7 +242,7 @@
     sportName: "篮球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【篮球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【篮球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -250,7 +250,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_15用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【篮球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【篮球】
   data:
     page: 1
     limit: 50
@@ -259,7 +259,7 @@
     sportName: "篮球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【篮球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【篮球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -267,7 +267,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_16用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【篮球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【篮球】
   data:
     page: 1
     limit: 50
@@ -276,7 +276,7 @@
     sportName: "篮球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【篮球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【篮球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -284,7 +284,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_17用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【篮球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【篮球】
   data:
     page: 1
     limit: 50
@@ -293,7 +293,7 @@
     sportName: "篮球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【篮球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【篮球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -301,7 +301,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_18用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【篮球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【篮球】
   data:
     page: 1
     limit: 50
@@ -310,7 +310,7 @@
     sportName: "篮球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【篮球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【篮球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
@@ -318,7 +318,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_19用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【乒乓球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【乒乓球】
   data:
     page: 1
     limit: 50
@@ -327,7 +327,7 @@
     sportName: "乒乓球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【乒乓球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -335,7 +335,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_20用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【乒乓球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【乒乓球】
   data:
     page: 1
     limit: 50
@@ -344,7 +344,7 @@
     sportName: "乒乓球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【乒乓球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -352,7 +352,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_21用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【乒乓球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【乒乓球】
   data:
     page: 1
     limit: 50
@@ -361,7 +361,7 @@
     sportName: "乒乓球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【乒乓球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -369,7 +369,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_22用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【乒乓球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【乒乓球】
   data:
     page: 1
     limit: 50
@@ -378,7 +378,7 @@
     sportName: "乒乓球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【乒乓球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -386,7 +386,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_23用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【乒乓球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【乒乓球】
   data:
     page: 1
     limit: 50
@@ -395,7 +395,7 @@
     sportName: "乒乓球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【乒乓球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -403,7 +403,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_24用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【乒乓球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【乒乓球】
   data:
     page: 1
     limit: 50
@@ -412,7 +412,7 @@
     sportName: "乒乓球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【乒乓球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -420,7 +420,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_25用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【乒乓球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【乒乓球】
   data:
     page: 1
     limit: 50
@@ -429,7 +429,7 @@
     sportName: "乒乓球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【乒乓球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -437,7 +437,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_26用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【乒乓球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【乒乓球】
   data:
     page: 1
     limit: 50
@@ -446,7 +446,7 @@
     sportName: "乒乓球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【乒乓球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -454,7 +454,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_27用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【乒乓球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【乒乓球】
   data:
     page: 1
     limit: 50
@@ -463,7 +463,7 @@
     sportName: "乒乓球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【乒乓球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【乒乓球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
@@ -471,7 +471,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_28用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【排球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【排球】
   data:
     page: 1
     limit: 50
@@ -480,7 +480,7 @@
     sportName: "排球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【排球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【排球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -488,7 +488,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_29用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【排球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【排球】
   data:
     page: 1
     limit: 50
@@ -497,7 +497,7 @@
     sportName: "排球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【排球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【排球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -505,7 +505,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_30用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【排球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【排球】
   data:
     page: 1
     limit: 50
@@ -514,7 +514,7 @@
     sportName: "排球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【排球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【排球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -522,7 +522,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_31用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【排球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【排球】
   data:
     page: 1
     limit: 50
@@ -531,7 +531,7 @@
     sportName: "排球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【排球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【排球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -539,7 +539,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_32用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【排球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【排球】
   data:
     page: 1
     limit: 50
@@ -548,7 +548,7 @@
     sportName: "排球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【排球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【排球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -556,7 +556,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_33用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【排球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【排球】
   data:
     page: 1
     limit: 50
@@ -565,7 +565,7 @@
     sportName: "排球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【排球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【排球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -573,7 +573,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_34用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【排球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【排球】
   data:
     page: 1
     limit: 50
@@ -582,7 +582,7 @@
     sportName: "排球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【排球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【排球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -590,7 +590,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_35用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【排球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【排球】
   data:
     page: 1
     limit: 50
@@ -599,7 +599,7 @@
     sportName: "排球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【排球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【排球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -607,7 +607,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_36用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【排球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【排球】
   data:
     page: 1
     limit: 50
@@ -616,7 +616,7 @@
     sportName: "排球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【排球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【排球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
@@ -624,7 +624,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_37用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【棒球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【棒球】
   data:
     page: 1
     limit: 50
@@ -633,7 +633,7 @@
     sportName: "棒球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【棒球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【棒球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -641,7 +641,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_38用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【棒球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【棒球】
   data:
     page: 1
     limit: 50
@@ -650,7 +650,7 @@
     sportName: "棒球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【棒球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【棒球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -658,7 +658,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_39用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【棒球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【棒球】
   data:
     page: 1
     limit: 50
@@ -667,7 +667,7 @@
     sportName: "棒球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【棒球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【棒球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -675,7 +675,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_40用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【棒球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【棒球】
   data:
     page: 1
     limit: 50
@@ -684,7 +684,7 @@
     sportName: "棒球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【棒球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【棒球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -692,7 +692,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_41用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【棒球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【棒球】
   data:
     page: 1
     limit: 50
@@ -701,7 +701,7 @@
     sportName: "棒球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【棒球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【棒球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -709,7 +709,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_42用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【棒球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【棒球】
   data:
     page: 1
     limit: 50
@@ -718,7 +718,7 @@
     sportName: "棒球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【棒球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【棒球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -726,7 +726,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_43用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【棒球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【棒球】
   data:
     page: 1
     limit: 50
@@ -735,7 +735,7 @@
     sportName: "棒球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【棒球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【棒球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -743,7 +743,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_44用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【棒球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【棒球】
   data:
     page: 1
     limit: 50
@@ -752,7 +752,7 @@
     sportName: "棒球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【棒球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【棒球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -760,7 +760,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_45用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【棒球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【棒球】
   data:
     page: 1
     limit: 50
@@ -769,7 +769,7 @@
     sportName: "棒球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【棒球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【棒球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
@@ -777,7 +777,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_46用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【羽毛球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【羽毛球】
   data:
     page: 1
     limit: 50
@@ -786,7 +786,7 @@
     sportName: "羽毛球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【羽毛球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -794,7 +794,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_47用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【羽毛球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【羽毛球】
   data:
     page: 1
     limit: 50
@@ -803,7 +803,7 @@
     sportName: "羽毛球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【羽毛球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -811,7 +811,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_48用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【羽毛球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【羽毛球】
   data:
     page: 1
     limit: 50
@@ -820,7 +820,7 @@
     sportName: "羽毛球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【羽毛球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -828,7 +828,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_49用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【羽毛球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【羽毛球】
   data:
     page: 1
     limit: 50
@@ -837,7 +837,7 @@
     sportName: "羽毛球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【羽毛球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -845,7 +845,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_50用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【羽毛球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【羽毛球】
   data:
     page: 1
     limit: 50
@@ -854,7 +854,7 @@
     sportName: "羽毛球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【羽毛球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -862,7 +862,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_51用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【羽毛球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【羽毛球】
   data:
     page: 1
     limit: 50
@@ -871,7 +871,7 @@
     sportName: "羽毛球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【羽毛球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -879,7 +879,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_52用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【羽毛球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【羽毛球】
   data:
     page: 1
     limit: 50
@@ -888,7 +888,7 @@
     sportName: "羽毛球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【羽毛球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -896,7 +896,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_53用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【羽毛球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【羽毛球】
   data:
     page: 1
     limit: 50
@@ -905,7 +905,7 @@
     sportName: "羽毛球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【羽毛球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -913,7 +913,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_54用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【羽毛球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【羽毛球】
   data:
     page: 1
     limit: 50
@@ -922,7 +922,7 @@
     sportName: "羽毛球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【羽毛球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【羽毛球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
@@ -930,7 +930,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_55用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【冰上曲棍球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【冰上曲棍球】
   data:
     page: 1
     limit: 50
@@ -939,7 +939,7 @@
     sportName: "冰上曲棍球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【冰上曲棍球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -947,7 +947,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_56用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【冰上曲棍球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【冰上曲棍球】
   data:
     page: 1
     limit: 50
@@ -956,7 +956,7 @@
     sportName: "冰上曲棍球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【冰上曲棍球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -964,7 +964,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_57用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【冰上曲棍球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【冰上曲棍球】
   data:
     page: 1
     limit: 50
@@ -973,7 +973,7 @@
     sportName: "冰上曲棍球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【冰上曲棍球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -981,7 +981,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_58用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【冰上曲棍球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【冰上曲棍球】
   data:
     page: 1
     limit: 50
@@ -990,7 +990,7 @@
     sportName: "冰上曲棍球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【冰上曲棍球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -998,7 +998,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_59用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【冰上曲棍球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【冰上曲棍球】
   data:
     page: 1
     limit: 50
@@ -1007,7 +1007,7 @@
     sportName: "冰上曲棍球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【冰上曲棍球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -1015,7 +1015,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_60用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【冰上曲棍球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【冰上曲棍球】
   data:
     page: 1
     limit: 50
@@ -1024,7 +1024,7 @@
     sportName: "冰上曲棍球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【冰上曲棍球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -1032,7 +1032,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_61用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【冰上曲棍球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【冰上曲棍球】
   data:
     page: 1
     limit: 50
@@ -1041,7 +1041,7 @@
     sportName: "冰上曲棍球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【冰上曲棍球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -1049,7 +1049,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_62用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【冰上曲棍球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【冰上曲棍球】
   data:
     page: 1
     limit: 50
@@ -1058,7 +1058,7 @@
     sportName: "冰上曲棍球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【冰上曲棍球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -1066,7 +1066,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_63用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【冰上曲棍球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【冰上曲棍球】
   data:
     page: 1
     limit: 50
@@ -1075,7 +1075,7 @@
     sportName: "冰上曲棍球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【冰上曲棍球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【冰上曲棍球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
@@ -1083,7 +1083,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_64用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【网球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【网球】
   data:
     page: 1
     limit: 50
@@ -1092,7 +1092,7 @@
     sportName: "网球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近7天数据,体育类型【网球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近7天数据,体育类型【网球】
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
@@ -1100,7 +1100,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_65用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【网球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【网球】
   data:
     page: 1
     limit: 50
@@ -1109,7 +1109,7 @@
     sportName: "网球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近6天数据,体育类型【网球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近6天数据,体育类型【网球】
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
@@ -1117,7 +1117,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_66用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【网球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【网球】
   data:
     page: 1
     limit: 50
@@ -1126,7 +1126,7 @@
     sportName: "网球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近5天数据,体育类型【网球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近5天数据,体育类型【网球】
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
@@ -1134,7 +1134,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_67用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【网球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【网球】
   data:
     page: 1
     limit: 50
@@ -1143,7 +1143,7 @@
     sportName: "网球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近4天数据,体育类型【网球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近4天数据,体育类型【网球】
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
@@ -1151,7 +1151,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_68用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【网球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【网球】
   data:
     page: 1
     limit: 50
@@ -1160,7 +1160,7 @@
     sportName: "网球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近3天数据,体育类型【网球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近3天数据,体育类型【网球】
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
@@ -1168,7 +1168,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_69用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【网球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【网球】
   data:
     page: 1
     limit: 50
@@ -1177,7 +1177,7 @@
     sportName: "网球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近2天数据,体育类型【网球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近2天数据,体育类型【网球】
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
@@ -1185,7 +1185,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_70用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【网球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【网球】
   data:
     page: 1
     limit: 50
@@ -1194,7 +1194,7 @@
     sportName: "网球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近1天数据,体育类型【网球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近1天数据,体育类型【网球】
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
@@ -1202,7 +1202,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_71用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【网球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【网球】
   data:
     page: 1
     limit: 50
@@ -1211,7 +1211,7 @@
     sportName: "网球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近15天数据,体育类型【网球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近15天数据,体育类型【网球】
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
@@ -1219,7 +1219,7 @@
     sortIndex: ""
     sortParameter: ""
 - #test_72用例
-  describe: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【网球】
+  describe: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【网球】
   data:
     page: 1
     limit: 50
@@ -1228,7 +1228,7 @@
     sportName: "网球"
     sortIndex: ""
     sortParameter: ""
-    title: 管理后台-总台-体育项盈亏详情,默认查询近30天数据,体育类型【网球】
+    title: 管理后台-总台-球类盈亏详情,默认查询近30天数据,体育类型【网球】
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
