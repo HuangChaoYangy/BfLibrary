@@ -7,123 +7,160 @@
 
 -
   ip: 192.168.10.120:8093
+  mde_ip: https://mdesearch.betf.best
   url: /backendReport/totalDailyProfitAndLoss
   method: POST
 
 - #test_01用例
-  describe: 管理后台-总台-体育项盈亏-总计,默认查询近7天数据
+  describe: 管理后台-总台-球类盈亏-总计,默认查询近7天数据
   data:
     page: 1
     limit: 50
     startCreateTime: "-6"
     endCreateTime: "0"
     sportName: ""
-    title: 管理后台-总台-体育项盈亏-总计,默认查询近7天数据
+    sortIndex: ""
+    sortParameter: ""
+    title: 管理后台-总台-球类盈亏-总计,默认查询近7天数据
   resp:
     startCreateTime: "-6"
     endCreateTime: "0"
     sportName: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_02用例
-  describe: 管理后台-总台-体育项盈亏-总计,默认查询近6天数据
+  describe: 管理后台-总台-球类盈亏-总计,默认查询近6天数据
   data:
     page: 1
     limit: 50
     startCreateTime: "-5"
     endCreateTime: "0"
     sportName: ""
-    title: 管理后台-总台-体育项盈亏-总计,默认查询近6天数据
+    sortIndex: ""
+    sortParameter: ""
+    title: 管理后台-总台-球类盈亏-总计,默认查询近6天数据
   resp:
     startCreateTime: "-5"
     endCreateTime: "0"
     sportName: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_03用例
-  describe: 管理后台-总台-体育项盈亏-总计,默认查询近5天数据
+  describe: 管理后台-总台-球类盈亏-总计,默认查询近5天数据
   data:
     page: 1
     limit: 50
     startCreateTime: "-4"
     endCreateTime: "0"
     sportName: ""
-    title: 管理后台-总台-体育项盈亏-总计,默认查询近5天数据
+    sortIndex: ""
+    sortParameter: ""
+    title: 管理后台-总台-球类盈亏-总计,默认查询近5天数据
   resp:
     startCreateTime: "-4"
     endCreateTime: "0"
     sportName: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_04用例
-  describe: 管理后台-总台-体育项盈亏-总计,默认查询近4天数据
+  describe: 管理后台-总台-球类盈亏-总计,默认查询近4天数据
   data:
     page: 1
     limit: 50
     startCreateTime: "-3"
     endCreateTime: "0"
     sportName: ""
-    title: 管理后台-总台-体育项盈亏-总计,默认查询近4天数据
+    sortIndex: ""
+    sortParameter: ""
+    title: 管理后台-总台-球类盈亏-总计,默认查询近4天数据
   resp:
     startCreateTime: "-3"
     endCreateTime: "0"
     sportName: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_05用例
-  describe: 管理后台-总台-体育项盈亏-总计,默认查询近3天数据
+  describe: 管理后台-总台-球类盈亏-总计,默认查询近3天数据
   data:
     page: 1
     limit: 50
     startCreateTime: "-2"
     endCreateTime: "0"
     sportName: ""
-    title: 管理后台-总台-体育项盈亏-总计,默认查询近3天数据
+    sortIndex: ""
+    sortParameter: ""
+    title: 管理后台-总台-球类盈亏-总计,默认查询近3天数据
   resp:
     startCreateTime: "-2"
     endCreateTime: "0"
     sportName: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_06用例
-  describe: 管理后台-总台-体育项盈亏,默认查询近2天数据
+  describe: 管理后台-总台-球类盈亏,默认查询近2天数据
   data:
     page: 1
     limit: 50
     startCreateTime: "-1"
     endCreateTime: "0"
     sportName: ""
-    title: 管理后台-总台-体育项盈亏-总计,默认查询近2天数据
+    sortIndex: ""
+    sortParameter: ""
+    title: 管理后台-总台-球类盈亏-总计,默认查询近2天数据
   resp:
     startCreateTime: "-1"
     endCreateTime: "0"
     sportName: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_07用例
-  describe: 管理后台-总台-体育项盈亏-总计,默认查询近1天数据
+  describe: 管理后台-总台-球类盈亏-总计,默认查询近1天数据
   data:
     page: 1
     limit: 50
     startCreateTime: "-0"
     endCreateTime: "0"
     sportName: ""
-    title: 管理后台-总台-体育项盈亏-总计,默认查询近1天数据
+    sortIndex: ""
+    sortParameter: ""
+    title: 管理后台-总台-球类盈亏-总计,默认查询近1天数据
   resp:
     startCreateTime: "-0"
     endCreateTime: "0"
     sportName: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_08用例
-  describe: 管理后台-总台-体育项盈亏-总计,默认查询近15天数据
+  describe: 管理后台-总台-球类盈亏-总计,默认查询近15天数据
   data:
     page: 1
     limit: 50
     startCreateTime: "-14"
     endCreateTime: "0"
     sportName: ""
-    title: 管理后台-总台-体育项盈亏-总计,默认查询近15天数据
+    sortIndex: ""
+    sortParameter: ""
+    title: 管理后台-总台-球类盈亏-总计,默认查询近15天数据
   resp:
     startCreateTime: "-14"
     endCreateTime: "0"
     sportName: ""
+    sortIndex: ""
+    sortParameter: ""
 - #test_09用例
-  describe: 管理后台-总台-体育项盈亏-总计,默认查询近30天数据
+  describe: 管理后台-总台-球类盈亏-总计,默认查询近30天数据
   data:
     page: 1
     limit: 50
     startCreateTime: "-29"
     endCreateTime: "0"
     sportName: ""
-    title: 管理后台-总台-体育项盈亏-总计,默认查询近30天数据
+    sortIndex: ""
+    sortParameter: ""
+    title: 管理后台-总台-球类盈亏-总计,默认查询近30天数据
   resp:
     startCreateTime: "-29"
     endCreateTime: "0"
     sportName: ""
+    sortIndex: ""
+    sortParameter: ""
