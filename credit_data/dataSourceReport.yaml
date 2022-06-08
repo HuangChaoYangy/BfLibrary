@@ -7,6 +7,7 @@
 
 -
   ip: 192.168.10.120:8083
+  mde_ip: https://mdesearch.betf.best
   url_detail: /dataSourceCheckReport/getPage
   url_total: /dataSourceCheckReport/getTotal
   url_banner: /dataSourceCheckReport/getBannerData
@@ -108,7 +109,7 @@
 - #test_04用例
   describe: 管理后台-总台-数据源对账报表-总计,根据【会员账号】查询近1个月数据
   data:
-    userName: "a0b1c2b301"
+    userName: "a0b1b2b301"
     orderNo: ""
     sportId: []
     settlementResult: []
@@ -123,7 +124,7 @@
     sortParameter: ""
     title: 管理后台-总台-数据源对账报表-总计,根据【会员账号】查询近1个月数据
   resp:
-    userName: "a0b1c2b301"
+    userName: "a0b1b2b301"
     orderNo: ""
     sportId: []
     settlementResult: []
@@ -139,7 +140,7 @@
 - #test_05用例
   describe: 管理后台-总台-数据源对账报表-总计,根据【会员账号】查询近15天数据
   data:
-    userName: "a0b1c2b301"
+    userName: "a0b1b2b301"
     orderNo: ""
     sportId: []
     settlementResult: []
@@ -154,7 +155,7 @@
     sortParameter: ""
     title: 管理后台-总台-数据源对账报表-总计,根据【会员账号】查询近15天数据
   resp:
-    userName: "a0b1c2b301"
+    userName: "a0b1b2b301"
     orderNo: ""
     sportId: []
     settlementResult: []
@@ -170,7 +171,7 @@
 - #test_06用例
   describe: 管理后台-总台-数据源对账报表-总计,根据【会员账号】查询近7天数据
   data:
-    userName: "a0b1c2b301"
+    userName: "a0b1b2b301"
     orderNo: ""
     sportId: []
     settlementResult: []
@@ -185,7 +186,7 @@
     sortParameter: ""
     title: 管理后台-总台-数据源对账报表-总计,根据【会员账号】查询近7天数据
   resp:
-    userName: "a0b1c2b301"
+    userName: "a0b1b2b301"
     orderNo: ""
     sportId: []
     settlementResult: []
@@ -202,7 +203,7 @@
   describe: 管理后台-总台-数据源对账报表-总计,根据【注单号】查询近1个月数据
   data:
     userName: ""
-    orderNo: "XyGhrzkLXM2u"
+    orderNo: "XEdUYNeBENsq"
     sportId: []
     settlementResult: []
     status: []
@@ -217,7 +218,7 @@
     title: 管理后台-总台-数据源对账报表-总计,根据【注单号】查询近1个月数据
   resp:
     userName: ""
-    orderNo: "XyGhrzkLXM2u"
+    orderNo: "XEdUYNeBENsq"
     sportId: []
     settlementResult: []
     status: []
@@ -233,7 +234,7 @@
   describe: 管理后台-总台-数据源对账报表-总计,根据【注单号】查询近15天数据
   data:
     userName: ""
-    orderNo: "XyGhrzkLXM2u"
+    orderNo: "XEdUYNeBENsq"
     sportId: []
     settlementResult: []
     status: []
@@ -248,7 +249,7 @@
     title: 管理后台-总台-数据源对账报表-总计,根据【注单号】查询近15天数据
   resp:
     userName: ""
-    orderNo: "XyGhrzkLXM2u"
+    orderNo: "XEdUYNeBENsq"
     sportId: []
     settlementResult: []
     status: []
@@ -264,7 +265,7 @@
   describe: 管理后台-总台-数据源对账报表-总计,根据【注单号】查询近7天数据
   data:
     userName: ""
-    orderNo: "XyGhrzkLXM2u"
+    orderNo: "XEdUYNeBENsq"
     sportId: []
     settlementResult: []
     status: []
@@ -279,7 +280,7 @@
     title: 管理后台-总台-数据源对账报表-总计,根据【注单号】查询近7天数据
   resp:
     userName: ""
-    orderNo: "XyGhrzkLXM2u"
+    orderNo: "XEdUYNeBENsq"
     sportId: []
     settlementResult: []
     status: []
