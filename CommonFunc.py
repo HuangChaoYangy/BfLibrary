@@ -5,6 +5,8 @@ import time
 import base64
 from tzlocal import get_localzone
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
+from apscheduler.schedulers.blocking import BlockingScheduler
+from apscheduler.schedulers.background import BackgroundScheduler
 from Crypto.PublicKey import RSA
 import hashlib
 import xlsxwriter as xw
@@ -456,7 +458,106 @@ class CommonFunc(object):
 
         return ".".join([a,c])
 
+    def job(self, text):
+        t = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+        print('{} --- {}'.format(text, t))
 
+    def timer_APScheduler(self,function, trigger='date',stime='', etime='',args=[], scheduler_type='Blocking', **kwargs):
+        '''
+        创建一个定时任务：http://www.cppcns.com/jiaoben/python/273434.html
+        :param trigger:  date:特定的时间点触发，只执行一次       interval：固定时间间隔触发       触发器cron：在特定时间周期性地触发
+        :param stime:
+        :param etime:
+        :param args:
+        :param scheduler_type: BlockingScheduler: 调用start函数后会阻塞当前线程        BackgroundScheduler: 调用start后主线程不会阻塞
+        :return:
+        使用APScheduler机制时，向job传递参数的代码示例
+        scheduler.add_job(job1, 'interval', seconds=20,args=['para1','para2','para3'])
+        scheduler.add_job(job2, 'interval', seconds=20,kwargs={'para1':'3','para2':'2','para3':'1'})
+        '''
+        scheduler = BlockingScheduler()
+        backscheduler = BackgroundScheduler()
+        if scheduler_type == 'Blocking':
+            if trigger=='date':
+                if stime:
+                    time = f'{stime}'
+                    scheduler.add_job(func=function, trigger=f'{trigger}', run_date=time, args=args)
+                    try:
+                        scheduler.start()
+                    except (KeyboardInterrupt, SystemExit):
+                        scheduler.shutdown(wait=False)
+                        print('Errors!')
+            elif trigger=='interval':
+                if stime:
+                    start_time = stime
+                    end_time = etime
+                else:
+                    raise AssertionError('ERROR,时间参数不能为空')
+                scheduler.add_job(func=function, trigger=f'{trigger}', minutes=30, start_date=start_time,
+                          end_date=end_time, args=args)
+                try:
+                    scheduler.start()
+                except (KeyboardInterrupt, SystemExit):
+                    scheduler.shutdown(wait=False)
+                    print('Errors!')
+            elif trigger=='cron':
+                if stime:
+                    start_time = stime
+                    end_time = etime
+                else:
+                    raise AssertionError('ERROR,时间参数不能为空')
+                scheduler.add_job(func=function, trigger=f'{trigger}', start_date=start_time,
+                          end_date=end_time, args=args)
+                scheduler.start()
+                try:
+                    scheduler.start()
+                except (KeyboardInterrupt, SystemExit):
+                    scheduler.shutdown(wait=False)
+                    print('Errors!')
+            else:
+                raise AssertionError('ERROR,暂无支持该参数')
+
+        elif scheduler_type == 'Background':
+            if trigger=='date':
+                if stime:
+                    time = f'{stime}'
+                    backscheduler.add_job(func=function, trigger=f'{trigger}', run_date=time, args=args)
+                    try:
+                        backscheduler.start()
+                    except (KeyboardInterrupt, SystemExit):
+                        backscheduler.shutdown(wait=False)
+                        print('Errors!')
+            elif trigger=='interval':
+                if stime:
+                    start_time = stime
+                    end_time = etime
+                else:
+                    raise AssertionError('ERROR,时间参数不能为空')
+                backscheduler.add_job(func=function, trigger=f'{trigger}', seconds=10, start_date=start_time,
+                          end_date=end_time, args=args)
+                try:
+                    backscheduler.start()
+                except (KeyboardInterrupt, SystemExit):
+                    backscheduler.shutdown(wait=False)
+                    print('Errors!')
+            elif trigger=='cron':
+                if stime:
+                    start_time = stime
+                    end_time = etime
+                else:
+                    raise AssertionError('ERROR,时间参数不能为空')
+                backscheduler.add_job(func=function, trigger=f'{trigger}', start_date=start_time,
+                          end_date=end_time, args=args)
+                backscheduler.start()
+                try:
+                    backscheduler.start()
+                except (KeyboardInterrupt, SystemExit):
+                    backscheduler.shutdown(wait=False)
+                    print('Errors!')
+            else:
+                raise AssertionError('ERROR,暂无支持该参数')
+        else:
+            raise AssertionError('ERROR,暂无支持该参数')
 
 
 if __name__ == "__main__":
@@ -481,5 +582,7 @@ if __name__ == "__main__":
     # file = cf.pd_toExcel(data=testData1, filename='C:/Users/USER/Desktop/test1.xlsx')
 
 
-    value=0.048
-    print(cf.get_cut_float_length(value=value,length=2))
+    # value=0.048
+    # print(cf.get_cut_float_length(value=value,length=2))
+
+    cf.timer_APScheduler(function=cf.job, trigger='interval', stime='2022-06-08 15:00:00', etime='2022-06-08 18:40:00',args=['text1'])
