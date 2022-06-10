@@ -4,7 +4,11 @@
 # @FileName: config.yaml
 # @Software: PyCharm
 
+-
+  environment: http://35.234.4.41:31101/mock/message
+#  environment: http://192.168.10.10:8808/mock/message
 
+-
 # 测试环境mysql配置
   mysql_config:
     host: '192.168.10.120'
