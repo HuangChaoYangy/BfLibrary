@@ -5306,7 +5306,8 @@ if __name__ == "__main__":
 
     # featuredevents_detail = db.get_featured_events_detail_sql()
     # live_data = db.get_live_list_sql()
-    # sportId = db.get_sportId_sql(sportName='足球')
+    sportId = db.get_sportId_sql(sportName='冰上曲棍球')
+    print(sportId)
     # sportCategoryId = db.get_sportCategoryId_sql(sportName='足球')
     # tournamentId = db.get_tournamentId_sql(tournamentName='德国超级杯')
 
@@ -5316,13 +5317,13 @@ if __name__ == "__main__":
         # early_match_data = db.get_early_match_data_sql(sport_name=sport_name, sort=1, dateOff=0)
     # parlay_match_data = db.get_parlay_match_data_sql(sport_name=sport_name)
 
-    searchMacth = db.get_search_matchName_sql(sport_name='排球', dateOff=0, teamName='Region', matchCategory='live')  # 搜索功能比赛/比分展示
+    # searchMacth = db.get_search_matchName_sql(sport_name='排球', dateOff=0, teamName='Region', matchCategory='live')  # 搜索功能比赛/比分展示
     # Score = db.get_live_match_list_score(sport_name='羽毛球', teamName='沙也加')
 
     # data = db.get_choose_tournament_sql(sport_name="篮球", highlight="false", matchCategory='inplay')           # 获取选择联赛列表
     # data = db.get_tournament_and_match_number_sql(sport_name="足球", matchCategory='today')          # 获取联赛数量以及联赛下的比赛数量
     # data = db.get_match_outcomes_detail_sql(sport_name="排球", highlight="false", matchCategory='today')            # 获取比赛所有投注项数量
-    odds = db.get_match_outcomes_odds_sql(sport_name="足球", highlight="false", matchCategory='today')            # 获取比赛所有投注项赔率
+    # odds = db.get_match_outcomes_odds_sql(sport_name="足球", highlight="false", matchCategory='today')            # 获取比赛所有投注项赔率
     # data = db.get_all_specifier_markets(sport_name="足球", sort=1)
 
     # match_result = db.Bfclient_match_result_sql(sportId='1')        # 获取客户端赛果查询
