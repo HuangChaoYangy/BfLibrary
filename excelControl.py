@@ -39,7 +39,7 @@ class excelAuto(object):
 
         # print(workSheet.nrows)  # 获取行数
 
-        for item in range(1,6):           # 范围为测试用例的长度，从1开始
+        for item in range(1,6):           # 范围为测试用例的条数，从1开始
             # 读取指定单元格
             cellData = workSheet.cell(rowx=item, colx=8).value  # 行，列--获取请求参数
             cellExp = json.loads(workSheet.cell(rowx=item, colx=9).value)  # 行，列--获取预期结果
