@@ -43,10 +43,10 @@ class excelAuto(object):
         for item in range(1,6):           # 范围为测试用例的条数，从1开始
             # 读取指定单元格
             cellData = workSheet.cell(rowx=item, colx=8).value  # 行，列--获取请求参数
-            cellExp = json.loads(workSheet.cell(rowx=item, colx=9).value)  # 行，列--获取预期结果
+            cellExp = json.loads(workSheet.cell(rowx=item, colx=9).value)  # 行，列--获取实际结果
             idNum = workSheet.cell(rowx=item, colx=0).value  # 行，列--获取用例编号
 
-            loginRsp = self.bfh5.login(inData=cellData, mode=False)  #获取实际结果
+            loginRsp = self.bfh5.login(inData=cellData, mode=False)  #获取预期结果
 
             cellDataDic = json.loads(cellData)      # 将字符串对象转成字典对象
             # print(cellDataDic)
