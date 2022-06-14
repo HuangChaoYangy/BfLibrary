@@ -1,0 +1,517 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2022/06/09 19:14
+# @Author  : liyang
+# @FileName: Agent_sportDetail.yaml
+# @Software: PyCharm
+
+
+-
+  ip: 192.168.10.120:8093
+  mde_ip: https://mdesearch.betf.best
+  url: /winOrLost/market
+  method: POST
+
+- #test_01用例
+  describe: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"足球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "足球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"足球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "足球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_02用例
+  describe: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"足球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "足球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"足球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "足球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_03用例
+  describe: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"足球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "足球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"足球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "足球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_04用例
+  describe: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"篮球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "篮球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"篮球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "篮球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_05用例
+  describe: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"篮球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "篮球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"篮球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "篮球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_06用例
+  describe: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"篮球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "篮球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"篮球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "篮球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_07用例
+  describe: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"网球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "网球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"网球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "网球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_08用例
+  describe: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"网球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "网球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"网球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "网球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_09用例
+  describe: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"网球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "网球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"网球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "网球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_10用例
+  describe: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"排球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "排球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"排球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "排球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_11用例
+  describe: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"排球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "排球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"排球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "排球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_12用例
+  describe: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"排球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "排球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"排球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "排球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_13用例
+  describe: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"羽毛球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "羽毛球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"羽毛球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "羽毛球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_14用例
+  describe: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"羽毛球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "羽毛球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"羽毛球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "羽毛球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_15用例
+  describe: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"羽毛球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "羽毛球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"羽毛球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "羽毛球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_16用例
+  describe: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"乒乓球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "乒乓球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"乒乓球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "乒乓球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_17用例
+  describe: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"乒乓球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "乒乓球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"乒乓球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "乒乓球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_18用例
+  describe: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"乒乓球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "乒乓球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"乒乓球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "乒乓球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_19用例
+  describe: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"棒球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "棒球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"棒球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "棒球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_20用例
+  describe: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"棒球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "棒球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"棒球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "棒球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_21用例
+  describe: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"棒球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "棒球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"棒球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "棒球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_22用例
+  describe: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"冰上曲棍球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "冰上曲棍球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"结算时间"查询近7天数据,根据"冰上曲棍球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "冰上曲棍球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_23用例
+  describe: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"冰上曲棍球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "冰上曲棍球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"赛事时间"查询近7天数据,根据"冰上曲棍球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "冰上曲棍球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_24用例
+  describe: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"冰上曲棍球"查询盘口详情
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "冰上曲棍球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-球类报表,默认按"投注时间"查询近7天数据,根据"冰上曲棍球"查询盘口详情
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "冰上曲棍球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""

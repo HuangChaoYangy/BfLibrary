@@ -1,0 +1,1273 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2022/06/13 19:14
+# @Author  : liyang
+# @FileName: Agent_multitermReport.yaml
+# @Software: PyCharm
+
+
+-
+  ip: 192.168.10.120:8093
+  mde_ip: https://mdesearch.betf.best
+  url: /winOrLost/multiterm
+  method: POST
+
+- #test_01用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_02用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近6天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近6天数据
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_03用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近5天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近5天数据
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_04用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近4天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近4天数据
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_05用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近3天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近3天数据
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_06用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近2天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近2天数据
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_07用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近1天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近1天数据
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_08用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"时间查询近7天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_09用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近6天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近6天数据
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_10用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近5天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近5天数据
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_11用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近4天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近4天数据
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_12用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近3天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近3天数据
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_13用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近2天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近2天数据
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_14用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近1天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近1天数据
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_15用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"时间查询近7天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_16用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近6天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-6"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近6天数据
+  resp:
+    startCreateTime: "-6"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_17用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近5天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-5"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近5天数据
+  resp:
+    startCreateTime: "-5"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_18用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近4天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-4"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近4天数据
+  resp:
+    startCreateTime: "-4"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_19用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近3天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-3"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近3天数据
+  resp:
+    startCreateTime: "-3"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_20用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近2天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-2"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近2天数据
+  resp:
+    startCreateTime: "-2"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_21用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近1天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-1"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近1天数据
+  resp:
+    startCreateTime: "-1"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_22用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近15天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-15"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近15天数据
+  resp:
+    startCreateTime: "-15"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_23用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近30天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-30"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近30天数据
+  resp:
+    startCreateTime: "-30"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_24用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近15天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-15"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近15天数据
+  resp:
+    startCreateTime: "-15"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_25用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近30天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-30"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近30天数据
+  resp:
+    startCreateTime: "-30"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_26用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近15天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-15"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近15天数据
+  resp:
+    startCreateTime: "-15"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_27用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近30天数据
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-30"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近30天数据
+  resp:
+    startCreateTime: "-30"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_28用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"足球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "足球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"足球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "足球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_29用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"足球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "足球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"足球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "足球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_30用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"足球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "足球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"足球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "足球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_31用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"篮球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "篮球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"篮球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "篮球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_32用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"篮球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "篮球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"篮球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "篮球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_33用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"篮球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "篮球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"篮球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "篮球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_34用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"网球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "网球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"网球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "网球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_35用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"网球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "网球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"网球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "网球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_36用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"网球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "网球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"网球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "网球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_37用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"排球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "排球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"排球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "排球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_38用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"排球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "排球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"排球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "排球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_39用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"排球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "排球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"排球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "排球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_40用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"羽毛球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "羽毛球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"羽毛球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "羽毛球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_41用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"羽毛球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "羽毛球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"羽毛球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "羽毛球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_42用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"羽毛球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "羽毛球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"羽毛球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "羽毛球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_43用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"乒乓球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "乒乓球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"乒乓球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "乒乓球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_44用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"乒乓球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "乒乓球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"乒乓球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "乒乓球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_45用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"乒乓球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "乒乓球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"乒乓球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "乒乓球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_46用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"棒球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "棒球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"棒球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "棒球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_47用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"棒球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "棒球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"棒球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "棒球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_48用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"棒球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "棒球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"棒球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "棒球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_49用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"冰上曲棍球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "冰上曲棍球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据"冰上曲棍球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "冰上曲棍球"
+    matchId: ""
+    queryDateType: 3
+    searchAccount: ""
+    sportId: ""
+- #test_50用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"冰上曲棍球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "冰上曲棍球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据"冰上曲棍球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "冰上曲棍球"
+    matchId: ""
+    queryDateType: 2
+    searchAccount: ""
+    sportId: ""
+- #test_51用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"冰上曲棍球"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "冰上曲棍球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据"冰上曲棍球"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: "冰上曲棍球"
+    matchId: ""
+    queryDateType: 1
+    searchAccount: ""
+    sportId: ""
+- #test_52用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据会员登入账号"a1"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: "a1"
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据会员登入账号"a1"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: "a1"
+    sportId: ""
+- #test_53用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据会员登入账号"a1"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: "a1"
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据会员登入账号"a1"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: "a1"
+    sportId: ""
+- #test_54用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据会员登入账号"a1"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: "a1"
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据会员登入账号"a1"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: "a1"
+    sportId: ""
+- #test_55用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据会员登入账号"a2"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: "a2"
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据会员登入账号"a2"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: "a2"
+    sportId: ""
+- #test_56用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据会员登入账号"a2"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: "a2"
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据会员登入账号"a2"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: "a2"
+    sportId: ""
+- #test_57用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据会员登入账号"a2"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: "a2"
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据会员登入账号"a2"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: "a2"
+    sportId: ""
+- #test_58用例
+  describe: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据会员登入账号"a3"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: "a3"
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"结算时间"查询近7天数据,根据会员登入账号"a3"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 3
+    searchAccount: "a3"
+    sportId: ""
+- #test_59用例
+  describe: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据会员登入账号"a3"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: "a3"
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"赛事时间"查询近7天数据,根据会员登入账号"a3"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 2
+    searchAccount: "a3"
+    sportId: ""
+- #test_60用例
+  describe: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据会员登入账号"a3"查询
+  data:
+    page: 1
+    limit: 50
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: "a3"
+    sportId: ""
+    title: 总台-代理报表-混合串关,默认按"投注时间"查询近7天数据,根据会员登入账号"a3"查询
+  resp:
+    startCreateTime: "-7"
+    endCreateTime: "-1"
+    sportName: ""
+    matchId: ""
+    queryDateType: 1
+    searchAccount: "a3"
+    sportId: ""
