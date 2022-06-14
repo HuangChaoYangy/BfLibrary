@@ -12,6 +12,7 @@ from MongoFunc import MongoFunc, DbQuery
 from MysqlFunc import MysqlFunc, MysqlQuery
 from CommonFunc import CommonFunc
 from Credit_Client import Credit_Client
+from base_dir import owner_backer_path
 
 class excelAuto(object):
 
@@ -32,7 +33,7 @@ class excelAuto(object):
         :return:
         '''
         excelUrl = excelDir
-        workbook = xlrd.open_workbook(filename=excelUrl, formatting_info=True)         # 打开excel,formatting_info以excel原格式打开,而不是以默认格式打开,但excel格式要改成手动xls
+        workbook = xlrd.open_workbook(filename=excelUrl, formatting_info=False)         # 打开excel,formatting_info以excel原格式打开,而不是以默认格式打开,但excel格式要改成手动xls
         workbookNew = copy(workbook)                  # 复制一个excel对象
         workSheetNew = workbookNew.get_sheet(f'{workSheetName}')         # 可以用子表单的name也可以用下标，可替换成 workbookNew.get_sheet(2)
         workSheet = workbook.sheet_by_name(f'{workSheetName}')
@@ -86,5 +87,5 @@ if __name__ == "__main__":
     # print(cellData)
     excel = excelAuto(mysql_info, mongo_info)
 
-    cellData = excel.get_excel_testcse(excelDir=r"C:\Users\USER\Desktop\接口测试用例v1.2.xls", workSheetName='登录客户端')
-    # print(cellData)
+    cellData = excel.get_excel_testcse(excelDir=owner_backer_path, workSheetName='登录客户端')
+    print(cellData)
