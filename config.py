@@ -64,3 +64,11 @@ class ControlFile(object):
         with open(os.getcwd() + r'/my_pytest/yamlconfig.yaml', 'w', encoding='utf-8') as f:
             f.truncate()
 
+
+cfile = ControlFile()
+
+if __name__ == '__main__':
+    # ct.read_ini('mysql_info')
+    #    print(cfile.read_yaml(r'd:\aip_project\test_data\token.yaml')['id'])
+    print(cfile.read_ini('switch', 'switch'))
+

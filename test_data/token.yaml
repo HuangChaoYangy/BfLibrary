@@ -1,0 +1,15 @@
+-
+  token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE0Mzk4NTA3OTIzNTI3NDM0MjYiLCJleHAiOjE2NTUyOTA4NjQsInVzZXJuYW1lIjoiTGl5YW5nMTIzIn0.1w0PuLceZVs-3ztdtj9hRGRx85wsC9SYr-rJfzWwJdk
+
+-
+  name: 登录接口
+  ip: 192.168.10.120:8093
+  mde_ip: https://mdesearch.betf.best
+  url: /system/accountLogin
+  method: POST
+-
+  data:
+    loginDiv: 222333
+    userName: "Liyang01"
+    password: "Bfty123456"
+    googleCode: "111111"
