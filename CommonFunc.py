@@ -12,6 +12,8 @@ import hashlib
 import xlsxwriter as xw
 import pandas as pd
 import openpyxl as op
+from itertools import combinations
+from functools import reduce
 
 # try:
 #     from Decorators import add_doc
@@ -593,6 +595,156 @@ class CommonFunc(object):
                             pass
         else:
             pass
+
+
+    def data_list_combine(self, data_list):
+        '''
+        串关数据合并
+        :param data_list:
+        data_list =[ {'betTime': '2022-06-16 23:26:42', 'orderNo': 'XFTztEQGVk9k', 'sportName': '足球', 'outcomeList': [{'tournamentName': '模拟现实联盟K-League 1 SRL', 'TeamName': 'Gimcheon Sangmu (Srl)VsSuwon FC (Srl)', 'betScore': '(1:0) ', 'marketName': '大/小', 'outcomeName': '大2.5/3', 'oddsType': 1, 'odds': 2.35, 'outcomeWinOrLoseName': '输'}], 'betAmount': 100.0, 'profitAmount': -100.0, 'backwaterAmount': 0.0, 'resultAmount': 0.0},
+              {'betTime': '2022-06-16 23:26:42', 'orderNo': 'XFTztEQGVk9k', 'sportName': '足球', 'outcomeList': [{'tournamentName': '模拟现实联盟K-League 1 SRL', 'TeamName': 'Pohang Steelers SRLVsGangwon FC SRL', 'betScore': '(1:0) ', 'marketName': '大/小', 'outcomeName': '小2', 'oddsType': 1, 'odds': 2.42, 'outcomeWinOrLoseName': '赢'}], 'betAmount': 100.0, 'profitAmount': -100.0, 'backwaterAmount': 0.0, 'resultAmount': 0.0},
+              {'betTime': '2022-06-15 22:26:20', 'orderNo': 'XFJqRTSKxrr9', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,塔斯马尼亚', 'TeamName': 'Olympia Warriors HobartVs河岸奥林匹克', 'betScore': None, 'marketName': '双重机会&大/小', 'outcomeName': 'Olympia Warriors Hobart/河岸奥林匹克 & 大 3.5', 'oddsType': 1, 'odds': 2.06, 'outcomeWinOrLoseName': '输'}], 'betAmount': 154.0, 'profitAmount': -154.0, 'backwaterAmount': 0.03, 'resultAmount': 0.03} ]
+        :return:
+        '''
+        new_list = []
+        count_i = 0
+        count_j = 1
+
+        for i in range(0, len(data_list)):
+            if i == count_i:
+                orderNo_list = []
+                new_list.append(data_list[i])
+                for j in range(count_j, len(data_list)):
+                    if j == count_j:
+                        if data_list[i]['orderNo'] == data_list[j]['orderNo']:
+                            orderNo_list.append(data_list[i]['outcomeList'][0])
+                            orderNo_list.append(data_list[j]['outcomeList'][0])
+                            count_j = count_j + 1
+                            count_i = count_i + 1
+                            for k in range(count_j, len(data_list)):
+                                if data_list[i]['orderNo'] == data_list[k]['orderNo']:
+                                    orderNo_list.append(data_list[k]['outcomeList'][0])
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                                else:
+                                    new_list[-1]['outcomeList'] = orderNo_list
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                                    break
+                        else:
+                            count_j = count_j + 1
+                            count_i = count_i + 1
+                    else:
+                        continue
+            else:
+                continue
+
+        return new_list
+
+    def get_all_odds(self, odds_list, bet_type):
+        '''
+        串关赔率计算
+        :param odds_list: 赔率已列表形式传入     odds_list = [1.05, 2.05, 3.05,5.05]
+        :param bet_type: 2，3，4，5，6，7 (当传入的type值=赔率个数时候为单串1，当大于个数时候 为最大串关（3串4，4串11...）)
+        :return:
+        '''
+        odds = 0
+        my_len = len(odds_list)
+        combination_list = []
+        for num in range(my_len):
+            i_mum = num + 2
+            if i_mum <= my_len:
+                combination_list.append(list(combinations(odds_list, i_mum)))
+        # print(len(combination_list))
+        if bet_type == 2:
+            if bet_type <= len(combination_list):
+                odds_l = []
+                for i in combination_list[0]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+            elif bet_type == my_len:
+                odds_l = []
+                for i in combination_list[0]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+        elif bet_type == 3:
+            if bet_type <= len(combination_list):  # 3串1
+                odds_l = []
+                for i in combination_list[1]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+            elif bet_type == my_len:
+                odds_l = []
+                for i in combination_list:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+            else:
+                print('不存在这种串关形式，请求确认')
+
+        elif bet_type == 4:
+            if bet_type - 1 <= len(combination_list):  # 4串1
+                odds_l = []
+                for i in combination_list[2]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+            elif bet_type - 1 > len(combination_list):  # 计算 3串 4
+                odds_l = []
+                for odd_tuper in combination_list:
+                    for i in odd_tuper:
+                        odds = reduce(lambda x, y: x * y, i)
+                        odds_l.append(odds)
+                odds = sum(odds_l)
+        elif bet_type == 5:
+            if bet_type - 1 <= len(combination_list):  # 5串1
+                odds_l = []
+                for i in combination_list[3]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+            elif bet_type - 1 > len(combination_list):  # 4串11
+                odds_l = []
+                for odd_tuper in combination_list:
+                    for i in odd_tuper:
+                        odds = reduce(lambda x, y: x * y, i)
+                        odds_l.append(odds)
+                odds = sum(odds_l)
+        elif bet_type == 6:
+            if bet_type - 1 <= len(combination_list):  # 6串1
+                for i in combination_list[4]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds += odds
+            elif bet_type - 1 > len(combination_list):  # 5串 26
+                odds_l = []
+                for odd_tuper in combination_list:
+                    for i in odd_tuper:
+                        odds = reduce(lambda x, y: x * y, i)
+                        odds_l.append(odds)
+                odds = sum(odds_l)
+        elif bet_type == 7:
+            if bet_type - 1 <= len(combination_list):
+                odds_l = []
+                for i in combination_list[5]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+            elif bet_type - 1 > len(combination_list):  # 6串 57
+                odds_l = []
+                for odd_tuper in combination_list:
+                    for i in odd_tuper:
+                        odds = reduce(lambda x, y: x * y, i)
+                        odds_l.append(odds)
+                odds = sum(odds_l)
+        else:
+            print('暂不支持此种赔率计算或者赔率计算要求错误')
+
+        return self.get_cut_float_length(value=odds, length=2)
+
+
 
 
 
