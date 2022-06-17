@@ -7,6 +7,8 @@
 import logging, time, colorlog, os
 from base_dir import log_dir
 from logging.handlers import RotatingFileHandler
+# from concurrent_log_handler import ConcurrentRotatingFileHandler
+# import win32com.client
 
 log_colors_config = {
     'DEBUG': 'green',
@@ -20,7 +22,7 @@ class Bf_log(object):
     def __init__(self, name):
         self.log = logging.getLogger(name)
         self.log.setLevel('DEBUG')
-        self.log.handlers.clear()  # 清除多余的日志，只保留一条
+        # self.log.handlers.clear()  # 清除多余的日志，只保留一条
 
         log_name = log_dir + "\\" + time.strftime("%Y-%m-%d", time.localtime()) + " all.log"
         # print(log_name)
@@ -46,6 +48,7 @@ class Bf_log(object):
         # 给输出渠道设置日志格式
         console_handler.setFormatter(formatter)
         file_handle = RotatingFileHandler(log_name, maxBytes=1024 * 100, backupCount=5, encoding="utf-8")
+        # file_handle = ConcurrentRotatingFileHandler(log_name, maxBytes=1024 * 100, backupCount=5, encoding="utf-8")
         file_handle.setLevel("DEBUG")
         file_handle.setFormatter(formatter)
         self.log.addHandler(console_handler)
