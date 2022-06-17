@@ -1876,7 +1876,7 @@ class Credit_Client(object):
 
     def get_accountHistoryDetail(self, token, dateoffset='-1', sportName=''):
         '''
-        获取信用网-已结算注单详情                    修改于 2022.04.16
+        获取信用网-已结算注单详情                    修改于 2022.06.17
         :param token:
         :param starttime:
         :param endtime:
@@ -1884,7 +1884,7 @@ class Credit_Client(object):
         '''
         sport_id = self.db.get_sportId_sql(sportName=sportName)
         # ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(dateoffset))
-        url = self.auth_url + ":6210/creditPCOrder/settledRecord"
+        url = self.mde_url + "/creditPCOrder/settledRecord"
         head = {"Accept-Encoding": "gzip, deflate",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Connection": "keep-alive",
@@ -1907,23 +1907,39 @@ class Credit_Client(object):
                                           'odds':item['odds'],'outcomeWinOrLoseName':item['outcomeWinOrLoseName']}],
                                           'betAmount':orderDetail['betAmount'], 'profitAmount':orderDetail['profitAmount'],
                                           'backwaterAmount':orderDetail['backwaterAmount'], 'resultAmount':orderDetail['resultAmount']})
-        new_order_list = []
-        print(order_list_Detail)
-        order_dic = {'betTime': '','orderNo': '','sportName': '','outcomeList': [],'betAmount': '','profitAmount': '','backwaterAmount': '', 'resultAmount': ''}
-        for item in order_list_Detail:
-            order_dic['betTime'] = item['betTime']
-            order_dic['orderNo'] = item['orderNo']
-            order_dic['sportName'] = item['sportName']
-            if item['orderNo'] not in order_dic:
-                order_dic['outcomeList'].append(item['outcomeList'][0])
-            order_dic['betAmount'] = item['betAmount']
-            order_dic['profitAmount'] = item['profitAmount']
-            order_dic['backwaterAmount'] = item['backwaterAmount']
-            order_dic['resultAmount'] = item['resultAmount']
-        new_order_list.append(order_dic)
+        new_list = []
+        count_i = 0
+        count_j = 1
+        for i in range(0, len(order_list_Detail)):
+            if i == count_i:
+                orderNo_list = []
+                new_list.append(order_list_Detail[i])
+                for j in range(count_j, len(order_list_Detail)):
+                    if j == count_j:
+                        if order_list_Detail[i]['orderNo'] == order_list_Detail[j]['orderNo']:
+                            orderNo_list.append(order_list_Detail[i]['outcomeList'][0])
+                            orderNo_list.append(order_list_Detail[j]['outcomeList'][0])
+                            count_j = count_j + 1
+                            count_i = count_i + 1
+                            for k in range(count_j, len(order_list_Detail)):
+                                if order_list_Detail[i]['orderNo'] == order_list_Detail[k]['orderNo']:
+                                    orderNo_list.append(order_list_Detail[k]['outcomeList'][0])
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                                else:
+                                    new_list[-1]['outcomeList'] = orderNo_list
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                                    break
+                        else:
+                            count_j = count_j + 1
+                            count_i = count_i + 1
+                    else:
+                        continue
+            else:
+                continue
 
-        return new_order_list
-
+        return new_list
 
     def threading_pool(self):
         return None
@@ -1935,7 +1951,7 @@ if __name__ == "__main__":
     mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['58b6c15fef6142f2972a167a05fad710','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
+    token_list = ['e5f848eccac04b96b22bc7f219199093','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
 
     # match_id_list = bf.get_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     # print(match_id_list)
@@ -1950,16 +1966,16 @@ if __name__ == "__main__":
     #     data = bf.cm.write_to_local_file(content=item, file_name='C:/Users/USER/Desktop/testOdds.txt',mode='w')
 
     # 新增多线程-模拟多用户进行投注
-    start_time = time.perf_counter()
-    user_list = ['a1','a2','a3']
-    for user in user_list:
-        type_list = ['INPLAY', 'TODAY', 'EARLY']
-        type = random.choice(type_list)
-        token = bf.login_client(username=user, password='Bfty123456')
-        sub_thread = threading.Thread(target=bf.submit_all_match, args=(f'{token}', f'{type}', 2, '20', False))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
-        # sub_thread = threading.Thread(target=bf.submit_all_outcome, args=("网球", f'{token}', 3, 'INPLAY') )       # 非复式串关投注：创建线程,target为线程执行的目标方法
-        sub_thread.start()          # 通过start()方法手动来启动线程
-    print(threading.current_thread())
+    # start_time = time.perf_counter()
+    # user_list = ['a1','a2','a3']
+    # for user in user_list:
+    #     type_list = ['INPLAY', 'TODAY', 'EARLY']
+    #     type = random.choice(type_list)
+    #     token = bf.login_client(username=user, password='Bfty123456')
+    #     sub_thread = threading.Thread(target=bf.submit_all_match, args=(f'{token}', f'{type}', 2, '30', False))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
+    #     # sub_thread = threading.Thread(target=bf.submit_all_outcome, args=("网球", f'{token}', 3, 'INPLAY') )       # 非复式串关投注：创建线程,target为线程执行的目标方法
+    #     sub_thread.start()          # 通过start()方法手动来启动线程
+    # print(threading.current_thread())
 
         # with ThreadPoolExecutor(max_workers=5) as task:            # 创建一个最大容纳数量为5的线程池
         #     for item in range(thread_num):
@@ -2017,5 +2033,5 @@ if __name__ == "__main__":
     # searchName = bf.get_search_matchName_list(token=token_list[0], sport_name='足球', teamName='蒂安')
 
 
-    # settled = bf.get_accountHistoryDetail(token=token_list[0], dateoffset='-1', sportName='')
-    # print(settled)
+    settled = bf.get_accountHistoryDetail(token=token_list[0], dateoffset='-0', sportName='')
+    print(settled)
