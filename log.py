@@ -23,6 +23,7 @@ class Bf_log(object):
         self.log = logging.getLogger(name)
         self.log.setLevel('DEBUG')
         self.log.handlers.clear()  # 清除多余的日志，只保留一条
+        # self.log = logging.shutdown()   # 可关闭所有记录器，也就使得日志文件被关闭
 
         log_name = log_dir + "\\" + time.strftime("%Y-%m-%d", time.localtime()) + " all.log"
         # print(log_name)
