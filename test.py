@@ -692,116 +692,116 @@ list2 = [ ['hello',1,12,2,12,1,2,34,1,5],['nothing',0,102,2,15,3,4,35,2,5],['pyt
 #             'zht': '第三節', '_class': 'com.ygty.business.match.entity.DicPeriodScoreDescription'}}], 'tournamentName': '国际世界女子锦标赛', 'tournamentSportId': 'sr:sport:4'}
 
 
-a = 1
-b=6
-sum = a+b
-# print(sum+b)
-
-
-
-
-
-
-
-def compare_two_dict(dict1, dict2, key_list):
-    flag = True
-    keys1 = dict1.keys()
-    keys2 = dict2.keys()
-    if len(key_list) != 0:
-        for key in key_list:
-            if key in keys1 and key in keys2:
-                if dict1[key] == dict2[key]:
-                    flag = flag & True
-                else:
-                    flag = flag & False
-            else:
-                raise Exception('key_list contains error key')
-    else:
-        raise Exception('key_list is null')
-    if flag:
-        result = 'PASS'
-    else:
-        result = 'FAILED'
-    return result
-
-
-if __name__ == '__main__':
-    dict1 = {
-        'a': 1,
-        'b': 2,
-        'c': 3,
-        'd': 4
-    }
-    dict2 = {
-        'a': 1,
-        'b': 2,
-        'c': 3,
-        'd': 4
-    }
-    key_list = ['a', 'c', 'b', 'd']
-    result = compare_two_dict(dict1, dict2, key_list)
-    # print(result)
-
-outcomes_detail_list = []
-# print(len(outcomes_detail_list))
-
-# list = [1]
-# if list:
-#     print('真')
-# else:
-#     print('假')
-
-
-list= ['sr:match:28998944', '2021-09-01 00:30:00', '菲律宾篮球联盟，菲律宾杯', 'Blackwater Bossing', 'Tropang Giga', '已完成'],['sr:match:28999106', '2021-09-01 03:00:00', '菲律宾篮球联盟，菲律宾杯', 'Dyip', '原生力啤酒', '已完成']
-
-
-odds_list = [['sr:match:28083906_1__1', 2.65], ['sr:match:28083906_1__2', 2.2], ['sr:match:28083906_1__3', 3.7],
-             ['sr:match:28083906_16_hcp=-1.5_1714', 4.95], ['sr:match:28083906_16_hcp=-1.5_1715', 1.12], ['sr:match:28083906_16_hcp=-0.5_1714', 2.6],
-             ['sr:match:28083906_16_hcp=-0.5_1715', 1.42], ['sr:match:28083906_16_hcp=0.5_1714', 1.25], ['sr:match:28083906_16_hcp=0.5_1715', 3.45],
-             ['sr:match:28083906_18_total=5.5_12', 1.85], ['sr:match:28083906_18_total=5.5_13', 1.8], ['sr:match:28083906_26__70', 2.3],
-             ['sr:match:28083906_26__72', 1.52], ['sr:match:28083906_406__4', 1.65], ['sr:match:28083906_406__5', 2.1], ['sr:match:28083906_410_hcp=-1.5_1714', 4.95],
-             ['sr:match:28083906_410_hcp=-1.5_1715', 1.12]]
-# for odds in odds_list:
-#     print(odds[1])
-
-
-period_score = [['上半场', 1, 0], ['下半场', 0, 0], ['加时', 0, 0], ['点球', 5, 6]]
-for periodIndex in ['上半场', '下半场']:
-    # for item in period_score:
-    # if period_score[0] == periodIndex:
-    first = period_score[0][1:]
-    second = period_score[0][1:]
-    # print(first)
-
-
-# fullTime_card_num_list = []  # 将两个长度相同的列表所有元素相加
-# for item in range(len(first_card_num_list)):
-#     fullTime_card_num_list.append(first_card_num_list[item] + second_card_num_list[item])
-
-
-
-list11 = [[4, 0], [7, 1], [11, 1], [0, 0], [1, 1], [1, 1]]
-pp = ['上半场角球数','下半场角球数','全场角球数','上半场罚牌数','下半场罚牌数','全场罚牌数']
-for index in range(6):
-    list11[index].insert(0, pp[index])
-# print(list11)
-
-
-
-
-
-macth_dic = {}
-macth_list = []
-n_list = [[['sr:match:28503692_1__1', 4.55], ['sr:match:28503692_1__2', 4.95], ['sr:match:28503692_1__3', 1.61]],
-          [['sr:match:28503698_410_hcp=3.5_1714', 0.15], ['sr:match:28503698_410_hcp=3.5_1715', 4.15]]]
-for item in n_list:
-    macth_id = item[0][0][:17]
-    macth_dic[macth_id] = item
-macth_list.append(macth_dic)
-# print(macth_list)
-
-dic = {'sr:match:28503692': [['sr:match:28503692_1__1', 4.55], ['sr:match:28503692_1__2', 4.95], ['sr:match:28503692_1__3', 1.61]],
-       'sr:match:28503698': [['sr:match:28503698_410_hcp=3.5_1714', 0.15], ['sr:match:28503698_410_hcp=3.5_1715', 4.15]]}
+# a = 1
+# b=6
+# sum = a+b
+# # print(sum+b)
+#
+#
+#
+#
+#
+#
+#
+# def compare_two_dict(dict1, dict2, key_list):
+#     flag = True
+#     keys1 = dict1.keys()
+#     keys2 = dict2.keys()
+#     if len(key_list) != 0:
+#         for key in key_list:
+#             if key in keys1 and key in keys2:
+#                 if dict1[key] == dict2[key]:
+#                     flag = flag & True
+#                 else:
+#                     flag = flag & False
+#             else:
+#                 raise Exception('key_list contains error key')
+#     else:
+#         raise Exception('key_list is null')
+#     if flag:
+#         result = 'PASS'
+#     else:
+#         result = 'FAILED'
+#     return result
+#
+#
+# if __name__ == '__main__':
+#     dict1 = {
+#         'a': 1,
+#         'b': 2,
+#         'c': 3,
+#         'd': 4
+#     }
+#     dict2 = {
+#         'a': 1,
+#         'b': 2,
+#         'c': 3,
+#         'd': 4
+#     }
+#     key_list = ['a', 'c', 'b', 'd']
+#     result = compare_two_dict(dict1, dict2, key_list)
+#     # print(result)
+#
+# outcomes_detail_list = []
+# # print(len(outcomes_detail_list))
+#
+# # list = [1]
+# # if list:
+# #     print('真')
+# # else:
+# #     print('假')
+#
+#
+# list= ['sr:match:28998944', '2021-09-01 00:30:00', '菲律宾篮球联盟，菲律宾杯', 'Blackwater Bossing', 'Tropang Giga', '已完成'],['sr:match:28999106', '2021-09-01 03:00:00', '菲律宾篮球联盟，菲律宾杯', 'Dyip', '原生力啤酒', '已完成']
+#
+#
+# odds_list = [['sr:match:28083906_1__1', 2.65], ['sr:match:28083906_1__2', 2.2], ['sr:match:28083906_1__3', 3.7],
+#              ['sr:match:28083906_16_hcp=-1.5_1714', 4.95], ['sr:match:28083906_16_hcp=-1.5_1715', 1.12], ['sr:match:28083906_16_hcp=-0.5_1714', 2.6],
+#              ['sr:match:28083906_16_hcp=-0.5_1715', 1.42], ['sr:match:28083906_16_hcp=0.5_1714', 1.25], ['sr:match:28083906_16_hcp=0.5_1715', 3.45],
+#              ['sr:match:28083906_18_total=5.5_12', 1.85], ['sr:match:28083906_18_total=5.5_13', 1.8], ['sr:match:28083906_26__70', 2.3],
+#              ['sr:match:28083906_26__72', 1.52], ['sr:match:28083906_406__4', 1.65], ['sr:match:28083906_406__5', 2.1], ['sr:match:28083906_410_hcp=-1.5_1714', 4.95],
+#              ['sr:match:28083906_410_hcp=-1.5_1715', 1.12]]
+# # for odds in odds_list:
+# #     print(odds[1])
+#
+#
+# period_score = [['上半场', 1, 0], ['下半场', 0, 0], ['加时', 0, 0], ['点球', 5, 6]]
+# for periodIndex in ['上半场', '下半场']:
+#     # for item in period_score:
+#     # if period_score[0] == periodIndex:
+#     first = period_score[0][1:]
+#     second = period_score[0][1:]
+#     # print(first)
+#
+#
+# # fullTime_card_num_list = []  # 将两个长度相同的列表所有元素相加
+# # for item in range(len(first_card_num_list)):
+# #     fullTime_card_num_list.append(first_card_num_list[item] + second_card_num_list[item])
+#
+#
+#
+# list11 = [[4, 0], [7, 1], [11, 1], [0, 0], [1, 1], [1, 1]]
+# pp = ['上半场角球数','下半场角球数','全场角球数','上半场罚牌数','下半场罚牌数','全场罚牌数']
+# for index in range(6):
+#     list11[index].insert(0, pp[index])
+# # print(list11)
+#
+#
+#
+#
+#
+# macth_dic = {}
+# macth_list = []
+# n_list = [[['sr:match:28503692_1__1', 4.55], ['sr:match:28503692_1__2', 4.95], ['sr:match:28503692_1__3', 1.61]],
+#           [['sr:match:28503698_410_hcp=3.5_1714', 0.15], ['sr:match:28503698_410_hcp=3.5_1715', 4.15]]]
+# for item in n_list:
+#     macth_id = item[0][0][:17]
+#     macth_dic[macth_id] = item
+# macth_list.append(macth_dic)
+# # print(macth_list)
+#
+# dic = {'sr:match:28503692': [['sr:match:28503692_1__1', 4.55], ['sr:match:28503692_1__2', 4.95], ['sr:match:28503692_1__3', 1.61]],
+#        'sr:match:28503698': [['sr:match:28503698_410_hcp=3.5_1714', 0.15], ['sr:match:28503698_410_hcp=3.5_1715', 4.15]]}
 
 
 # list = [{'awayScore': '1', 'homeScore': '0', 'matchStatusCode': 6, 'number': 1, 'periodDescription': '上半场', 'periodDescriptionDic': {'_id': '6', 'en': '1st half', 'in': '1st half', 'ind': 'फर्स्ट हाफ', 'ja': '前半', 'ko': '전반전', 'lastUpdateTime': 1608960929020, 'th': 'ครึ่งแรก', 'vi': 'Hiệp 1', 'zh': '上半场', 'zht': '上半場', '_class': 'com.ygty.business.match.entity.DicPeriodScoreDescription'}}]
@@ -809,8 +809,6 @@ dic = {'sr:match:28503692': [['sr:match:28503692_1__1', 4.55], ['sr:match:285036
 #     print(i)
 
 
-# 比赛阶段
-# {'_id': 'sr:match:29279880', 'matchScheduled': datetime.datetime(2021, 9, 23, 13, 0), 'matchStatus': 'closed', 'awayScore': '8', 'awayTeamName': '乌迪内斯', 'homeScore': '6', 'homeTeamName': '维琴察', 'periodStatisticsMap': {'1st half': [{'homeAway': 'Home', 'cardNum': 2, 'corner': 8, 'yellow': 2, '_class': 'com.ygty.business.match.entity.LocalStatistics'}, {'homeAway': 'Away', 'cardNum': 3, 'corner': 5, 'yellow': 3, '_class': 'com.ygty.business.match.entity.LocalStatistics'}], '1st extra': [{'homeAway': 'Home', 'cardNum': 0, 'corner': 0, 'yellow': 0, '_class': 'com.ygty.business.match.entity.LocalStatistics'}, {'homeAway': 'Away', 'cardNum': 1, 'corner': 0, 'yellow': 1, '_class': 'com.ygty.business.match.entity.LocalStatistics'}], '2nd extra': [{'homeAway': 'Home', 'cardNum': 0, 'corner': 1, 'yellow': 0, '_class': 'com.ygty.business.match.entity.LocalStatistics'}, {'homeAway': 'Away', 'cardNum': 0, 'corner': 0, 'yellow': 0, '_class': 'com.ygty.business.match.entity.LocalStatistics'}]}, 'tournamentName': '意大利超级杯', 'tournamentSportId': 'sr:sport:1', 'periodScores': [{'awayScore': '1', 'homeScore': '2', 'matchStatusCode': 6, 'number': 1, 'periodDescription': '上半场', 'periodDescriptionDic': {'_id': '6', 'createTime': datetime.datetime(2021, 9, 24, 1, 0, 1, 276000), 'en': '1st half', 'in': '1st half', 'ind': 'फर्स्ट हाफ', 'ja': '前半', 'ko': '전반전', 'lastUpdateTime': 1608960929020, 'th': 'ครึ่งแรก', 'vi': 'Hiệp 1', 'zh': '上半场', 'zht': '上半場', '_class': 'com.ygty.business.match.entity.DicPeriodScoreDescription'}}, {'awayScore': '2', 'homeScore': '1', 'matchStatusCode': 7, 'number': 2, 'periodDescription': '下半场', 'periodDescriptionDic': {'_id': '7', 'createTime': datetime.datetime(2021, 9, 24, 1, 0, 1, 279000), 'en': '2nd half', 'in': '2nd half', 'ind': 'सेकंड हाफ', 'ja': '後半', 'ko': '후반전', 'lastUpdateTime': 1608960929028, 'th': 'ครึ่งหลัง', 'vi': 'Hiệp 2', 'zh': '下半场', 'zht': '下半場', '_class': 'com.ygty.business.match.entity.DicPeriodScoreDescription'}}, {'awayScore': '0', 'homeScore': '0', 'matchStatusCode': 40, 'number': 3, 'periodDescription': '加时', 'periodDescriptionDic': {'_id': '40', 'createTime': datetime.datetime(2021, 9, 24, 1, 0, 21, 84000), 'en': 'Overtime', 'in': 'Overtime', 'ind': 'ओवरटाइम', 'ja': 'オーバータイム', 'ko': '연장전', 'lastUpdateTime': 1608976503216, 'th': 'ทดเวลา', 'vi': 'Quá giờ', 'zh': '加时', 'zht': '加時', '_class': 'com.ygty.business.match.entity.DicPeriodScoreDescription'}}, {'awayScore': '5', 'homeScore': '3', 'matchStatusCode': 50, 'number': 4, 'periodDescription': '点球', 'periodDescriptionDic': {'_id': '50', 'createTime': datetime.datetime(2021, 9, 24, 1, 0, 44, 612000), 'en': 'Penalties', 'in': 'Penalties', 'ind': 'पेनल्टीज़', 'ja': 'ペナルティ', 'ko': '페널티킥', 'lastUpdateTime': 1608984922337, 'th': 'ลูกโทษ', 'vi': 'Phạt đền', 'zh': '点球', 'zht': '點球', '_class': 'com.ygty.business.match.entity.DicPeriodScoreDescription'}}]}
 
 
 
@@ -839,3 +837,130 @@ from scipy import stats
 #              {'odd': '0.57', 'scoreValue': '3-2', 'tradingAmount': 999999999981943.0}, {'odd': '0.14', 'scoreValue': '3-3', 'tradingAmount': 999999999981744.0}]
 # for item in odds_list:
 #     print(item)
+
+
+list_num = [100, 0.2, 0.2, 0.2, 0.1, 0.3, 0.0021, 0.0021, 0.0019, 0.0015, 0.0002]
+data_list = ["efficient_amount", "company_retreat_proportion", "level0_retreat_proportion",
+           "level1_retreat_proportion", "level2_retreat_proportion", "level3_retreat_proportion",
+           "company_actual_percentage", "level0_actual_percentage", "level1_actual_percentage",
+           "level2_actual_percentage", "level3_actual_percentage", ]
+data_dict = {'efficient_amount': [], 'company_retreat_proportion': [], 'level0_retreat_proportion': [],
+           'level1_retreat_proportion': [], 'level2_retreat_proportion': [], 'level3_retreat_proportion': [],
+           'company_actual_percentage': [], 'level0_actual_percentage': [], 'level1_actual_percentage': [],
+           'level2_actual_percentage': [], 'level3_actual_percentage': []}
+for item in range(len(list_num)):
+    data_dict[data_list[item]] = list_num[item]
+# print(data_dict)
+
+
+str1 = "188、187、314、189、190、191、203、204、237、238、246、247、248、256、258、16、18、26、410、460、446、314"
+list_str = str1.split("、")
+# print(list_str)
+
+# list_sum = ['16', '66', '18', '68', '104', '19', '20', '69', '70', '26', '37', '79', '547', '165', '176', '166','177', '172', '183', '139', '152', '116', '117', '127', '120','16', '66', '18', '68', '104', '19', '20', '69', '70', '26', '74', '27', '28', '37', '79', '36', '547','165', '176', '166', '177', '172', '183', '139', '152', '116', '117', '127', '58', '59', '120','223', '225', '227', '228', '229', '66', '68', '69', '70', '74', '303', '236', '756', '757', '304','223', '225', '227', '228', '66', '68', '303', '236', '756', '757','188', '187', '314', '189', '190', '191', '203', '204', '237', '238', '245', '246', '247', '248', '256', '258', '16', '18', '26', '410', '460', '446','188', '187', '314', '189', '190', '191', '203', '204', '237', '238', '246', '247', '248', '256', '258', '16', '18', '26', '410', '460', '446', '314']
+# nw_list = set(list_sum)
+# # print(nw_list)
+#
+# order_dic = {'betTime': '','orderNo': '','sportName': '','outcomeList': [],'betAmount': '','profitAmount': '','backwaterAmount': '', 'resultAmount': ''}
+#
+#
+# new_order_list = []
+# outcomeList = []
+# for item in order_list:
+#     order_dic['betTime'] = item['betTime']
+#     order_dic['orderNo'] = item['orderNo']
+#     order_dic['sportName'] = item['sportName']
+#     if item['orderNo'] not in order_dic:
+#         order_dic['outcomeList'].append(item['outcomeList'][0])
+#     order_dic['betAmount'] = item['betAmount']
+#     order_dic['profitAmount'] = item['profitAmount']
+#     order_dic['backwaterAmount'] = item['backwaterAmount']
+#     order_dic['resultAmount'] = item['resultAmount']
+# print(order_dic)
+# new_order_list.append(order_dic)
+# print(new_order_list)
+
+yyds_list =[ {'betTime': '2022-06-16 23:26:42', 'orderNo': 'XFTztEQGVk9k', 'sportName': '足球', 'outcomeList': [{'tournamentName': '模拟现实联盟K-League 1 SRL', 'TeamName': 'Gimcheon Sangmu (Srl)VsSuwon FC (Srl)', 'betScore': '(1:0) ', 'marketName': '大/小', 'outcomeName': '大2.5/3', 'oddsType': 1, 'odds': 2.35, 'outcomeWinOrLoseName': '输'}], 'betAmount': 100.0, 'profitAmount': -100.0, 'backwaterAmount': 0.0, 'resultAmount': 0.0},
+              {'betTime': '2022-06-16 23:26:42', 'orderNo': 'XFTztEQGVk9k', 'sportName': '足球', 'outcomeList': [{'tournamentName': '模拟现实联盟K-League 1 SRL', 'TeamName': 'Pohang Steelers SRLVsGangwon FC SRL', 'betScore': '(1:0) ', 'marketName': '大/小', 'outcomeName': '小2', 'oddsType': 1, 'odds': 2.42, 'outcomeWinOrLoseName': '赢'}], 'betAmount': 100.0, 'profitAmount': -100.0, 'backwaterAmount': 0.0, 'resultAmount': 0.0},
+              {'betTime': '2022-06-15 22:26:20', 'orderNo': 'XFJqRTSKxrr9', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,塔斯马尼亚', 'TeamName': 'Olympia Warriors HobartVs河岸奥林匹克', 'betScore': None, 'marketName': '双重机会&大/小', 'outcomeName': 'Olympia Warriors Hobart/河岸奥林匹克 & 大 3.5', 'oddsType': 1, 'odds': 2.06, 'outcomeWinOrLoseName': '输'}], 'betAmount': 154.0, 'profitAmount': -154.0, 'backwaterAmount': 0.03, 'resultAmount': 0.03} ]
+orderNo_list=[]
+new_list=[]
+count_i=0
+count_j=1
+
+for i in range(0, len(yyds_list)):
+    if i==count_i:
+        orderNo_list = []
+        new_list.append(yyds_list[i])
+        for j in range(count_j, len(yyds_list)):
+            if j==count_j:
+                 if yyds_list[i]['orderNo']==yyds_list[j]['orderNo']:
+                     orderNo_list.append(yyds_list[i]['outcomeList'][0])
+                     orderNo_list.append(yyds_list[j]['outcomeList'][0])
+                     count_j = count_j + 1
+                     count_i = count_i + 1
+                     for k in range(count_j,len(yyds_list)):
+                         if yyds_list[i]['orderNo'] == yyds_list[k]['orderNo']:
+                             orderNo_list.append(yyds_list[k]['outcomeList'][0])
+                             count_j = count_j + 1
+                             count_i = count_i + 1
+                         else:
+                             new_list[-1]['outcomeList']=orderNo_list
+                             count_j = count_j + 1
+                             count_i = count_i + 1
+                             break
+                 else:
+                     count_j=count_j+1
+                     count_i = count_i + 1
+            else:
+                continue
+    else:
+        continue
+
+
+# print(new_list)
+# print(len(new_list))
+
+# print(new_list)
+# print(len(new_list))
+
+new_item1 = []
+match_list = ['澳大利亚Norzone Premier League', 3.0, 1,2,3.50, None, 0]
+match = match_list[0]
+for aip_data in match_list[1:]:
+    if aip_data == None or aip_data == 0:
+        api_result = 0
+    else:
+        api_result = float(aip_data)
+    new_item1.append(api_result)
+new_item1.insert(0,match)
+print(new_item1)
+
+
+str1 = 'adsdfsaf'
+str2 = 'gdgfd'
+print(str1 + ' vs ' +str2)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

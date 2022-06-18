@@ -216,16 +216,219 @@
 #     agent_list.extend(userDic[key])
 # print(agent_list)
 
-new_list = []
-list =[{'betTime': '2022-04-16 02:49:10', 'orderNo': 'Xwc7JaqCV3cb', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,西澳大利亚', 'TeamName': 'ECU乔达路普VsStirling Macedonia FC', 'betScore': None, 'marketName': '让球', 'outcomeName': 'ECU乔达路普 (-0/0.5)', 'oddsType': 1, 'odds': 1.87, 'outcomeWinOrLoseName': '赢'}], 'betAmount': 300.0, 'profitAmount': 602.81, 'backwaterAmount': 0.0, 'resultAmount': 902.81},
-{'betTime': '2022-04-16 02:49:10', 'orderNo': 'Xwc7JaqCV3cb', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,西澳大利亚', 'TeamName': '科克本市Vs弗罗瑞特', 'betScore': None, 'marketName': '大/小', 'outcomeName': '大3.5', 'oddsType': 1, 'odds': 1.88, 'outcomeWinOrLoseName': '赢'}], 'betAmount': 300.0, 'profitAmount': 602.81, 'backwaterAmount': 0.0, 'resultAmount': 902.81},
-{'betTime': '2022-04-16 02:49:10', 'orderNo': 'Xwc7JaqCV3cb', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,西澳大利亚', 'TeamName': '戈维拉普克罗地亚Vs因勒乌德联', 'betScore': None, 'marketName': '大/小', 'outcomeName': '大3.5', 'oddsType': 1, 'odds': 1.94, 'outcomeWinOrLoseName': '半赢'}], 'betAmount': 300.0, 'profitAmount': 602.81, 'backwaterAmount': 0.0, 'resultAmount': 902.81}]
+# new_list = []
+# list =[{'betTime': '2022-04-16 02:49:10', 'orderNo': 'Xwc7JaqCV3cb', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,西澳大利亚', 'TeamName': 'ECU乔达路普VsStirling Macedonia FC', 'betScore': None, 'marketName': '让球', 'outcomeName': 'ECU乔达路普 (-0/0.5)', 'oddsType': 1, 'odds': 1.87, 'outcomeWinOrLoseName': '赢'}], 'betAmount': 300.0, 'profitAmount': 602.81, 'backwaterAmount': 0.0, 'resultAmount': 902.81},
+# {'betTime': '2022-04-16 02:49:10', 'orderNo': 'Xwc7JaqCV3cb', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,西澳大利亚', 'TeamName': '科克本市Vs弗罗瑞特', 'betScore': None, 'marketName': '大/小', 'outcomeName': '大3.5', 'oddsType': 1, 'odds': 1.88, 'outcomeWinOrLoseName': '赢'}], 'betAmount': 300.0, 'profitAmount': 602.81, 'backwaterAmount': 0.0, 'resultAmount': 902.81},
+# {'betTime': '2022-04-16 02:49:10', 'orderNo': 'Xwc7JaqCV3cb', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,西澳大利亚', 'TeamName': '戈维拉普克罗地亚Vs因勒乌德联', 'betScore': None, 'marketName': '大/小', 'outcomeName': '大3.5', 'oddsType': 1, 'odds': 1.94, 'outcomeWinOrLoseName': '半赢'}], 'betAmount': 300.0, 'profitAmount': 602.81, 'backwaterAmount': 0.0, 'resultAmount': 902.81}]
+#
+# dic = {'betime': '', 'orderNo': '', 'sportName': '', 'outcomeList':[]}
+# for item in list:
+#     dic['betime'] = item['betTime']
+#     dic['orderNo'] = item['orderNo']
+#     dic['sportName'] = item['sportName']
+#     dic['outcomeList'].append(item['outcomeList'][0])
+# new_list.append(dic)
+# print(new_list)
 
-dic = {'betime': '', 'orderNo': '', 'sportName': '', 'outcomeList':[]}
-for item in list:
-    dic['betime'] = item['betTime']
-    dic['orderNo'] = item['orderNo']
-    dic['sportName'] = item['sportName']
-    dic['outcomeList'].append(item['outcomeList'][0])
-new_list.append(dic)
-print(new_list)
+
+
+# test_list = [ ['XzXEhhtwqaec', '40.00', '-30.00', '0.00', '0.0000', '0.00'],['XzWPzGLYFzJL', '100.00', '0.31', '0.31', '0.0031', '0.00'],
+#               ['XzWK8ZjzZkJb', '100.00', '38.81', '0.31', '0.0031', '0.00'] ]
+#
+# new_list = []
+# for item in test_list:
+#     # print(item[1:])
+#     for detail in item[1:]:
+#
+#     new_list.append(item[1:])
+# print(new_list)
+
+from deepdiff import DeepDiff
+import re
+
+actualResult = [{'orderNo': 'XA83DfNncwjK', 'betAmount': 100.0, 'winLose': 132.31, 'Commission': 0.31, 'effect_amount': 0.31},
+                {'orderNo': 'XA7Q2En9MmCW', 'betAmount': 100.0, 'winLose': 834.0, 'Commission': 0.0, 'effect_amount': 0.0}, ]
+expectResult = [{'orderNo': 'XA83DfNncwjK', 'betAmount': 100.0, 'winLose': 132, 'Commission': 0.31, 'effect_amount': 0.31},
+                {'orderNo': 'XA7Q2En9MmCW', 'betAmount': 100.0, 'winLose': 834.0, 'Commission': 0.0, 'effect_amount': 0.0}]
+
+# for index1, item1 in enumerate(actualResult):
+#     order_num = actualResult[index1]['orderNo']
+#     actual_commission = actualResult[index1]['Commission']
+#     actual_effectAmount = actualResult[index1]['effect_amount']
+    # for index2, item2 in enumerate(expectResult):
+    #     expect_commission = expectResult[index2]['Commission']
+    #     expect_effectAmount = expectResult[index2]['effect_amount']
+        # if list(item1.values())[0] == list(item2.values())[0]:
+        #     if list(item1.values()) == list(item2.values()):
+        #         print(f'注单号：{order_num} ---> 执行测试用例 -- 通过')
+        #     else:
+        #         print(f'注单号：{order_num},数据库中佣金为：{expect_commission},有效投注为：{expect_effectAmount}; '
+        #                           f'实际佣金为：{actual_commission},有效投注为：{actual_effectAmount} --->执行测试用例 -- 失败')
+
+
+s1 = '12121wewadfads '
+s2 = 'dasg32121sdfsdf'
+pattern = re.compile('\w+')
+# print(pattern)
+#
+#
+# type_dic = {'3_4': '复式3串4', '4_11': '复式4串11', '5_26': '复式5串26', '6_57': '复式6串57'}
+# typeString = '3_4'
+# if typeString in type_dic:
+#     print('pass')
+# else:
+#     print('fail')
+# value=0.048
+# print("%.2f" % value)
+# print(round(value,2))
+# print("{:.2f}".format(value))
+# print(int(value * 100) / 100.0)
+#
+#
+# def get_two_float(str1, n):
+#     str1 = str(str1)
+#     a,b,c = str1.partition('.')
+#     c = (c+'0'*n)[:n]
+#     return ".".join([a,c])
+#
+# value=0.048
+# print(get_two_float(str1=value,n=2))
+
+
+new_list = []
+odds_list = []
+result_list = []
+orderList = [['XB4mLjJJHmf2', 100.0, -2.5, -2.5, 0.0, 1, 1.78, 5], ['XB4mLjJJHmf2', 100.0, -2.5, -2.5, 0.0, 1, 1.84, 4], ['XB4mLjJJHmf2', 100.0, -2.5, -2.5, 0.0, 1, 2.9, 3]]
+for orderDetail in orderList:
+    odds_list.append([orderDetail[7],orderDetail[6]])
+    for item in orderDetail[:6]:
+        if item not in new_list:
+            new_list.append(item)
+new_list.append(odds_list)
+# print(odds_list)
+# print(new_list)
+
+odds = 0
+for item in odds_list:
+    if item[0] == 1:
+        win_odds = item[1]
+    elif item[0] == 2:
+        lose_odds = 0
+    elif item[0] == 3:
+        halfwin_odds = (item[1]*0.5+0.5)
+    elif item[0] == 4:
+        halflose_odds = 0.5
+    elif item[0] == 5:
+        odds = 1
+    elif item[0] == 6:
+        odds = 1
+    else:
+        raise AssertionError('ERROR,暂不支持该结果')
+    odd = odds*odds
+# result = new_list[1]*odds*halflose_odds*halfwin_odds*odds
+# result = new_list[1]*odds
+# print(result)
+
+# list = ['3', '4', '1']
+# print('_'.join(list))
+# str_num = '3_4_1'
+# print(str_num.split('_'))
+#
+# typeString="sr:match:31801861_24"
+# type_end = re.search("_(\d+)", typeString)
+# print(type_end.group(1))
+
+
+import datetime
+# def Task():
+#   now = datetime.datetime.now()
+#   ts = now.strftime('%Y-%m-%d %H:%M:%S')
+#   print(ts)
+
+from datetime import datetime
+from datetime import date
+# import time
+# from apscheduler.schedulers.blocking import BlockingScheduler
+#
+# def job(text):
+#     t = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))
+#     print('{} --- {}'.format(text, t))
+#
+#
+#
+# if __name__ == "__main__":
+#
+#     scheduler = BlockingScheduler()
+#     # 每隔 1分钟 运行一次 job 方法
+#     # scheduler.add_job(job, 'interval', seconds =10, args=['job1'])
+#     # 在 2019-08-29 22:15:00至2019-08-29 22:17:00期间，每隔1分30秒 运行一次 job 方法
+#     scheduler.add_job(job, 'interval', minutes=2, start_date='2022-06-08 10:19:00',
+#                       end_date='2022-06-10 22:17:00', args=['job2'])
+#     job(text='11')
+#     scheduler.start()
+
+# betType_dic = {'1':'单关', '2':'串关', '3':'复式串关'}
+# print(betType_dic['1'])
+
+# list = [1,2,3,5,6]
+# print(list[:-1])
+# print(list[-1])
+#
+# token_list = ['58b6c15fef6142f2972a167a05fad710','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
+# print(token_list[1])
+#
+# import random
+# event_type = random.choice(['INPLAY', 'TODAY', 'EARLY'])
+# print(event_type)
+
+
+# import threading
+#
+#
+# def handle(sid):
+#     print("Thread {} run, info: {}".format(sid, threading.current_thread()))
+#
+#
+# for i in range(10):
+#     t = threading.Thread(target=handle, args=(i, ))
+#     t.start()  # 这个地方加t.join()是一样的，默认不守护进程，则主线程会等待子线程执行完毕再关闭
+#
+# print(threading.current_thread())
+#
+# list = [1, 2, 3, 4, 5]
+# num = 1
+# for i in list:
+#     num *= i
+# print(num)
+
+
+actualResult = [['足球', 57525.0, 45394.32, 14.32, 120785.54, 1.96, 120787.5, -12078.12, 20.01, -12058.11, -24156.8, 9.62, -24147.18, -24156.8, -3.97, -24160.77, -24156.8, -13.3, -24170.1, -36237.02, -14.32, -36251.34]]
+expectResult = [['足球', '57525.0', '45394.32', '14.32', '120785.54', '1.96', '120787.5', '-12078.12', '20.01', '-12058.11', '-24156.8', '9.62', '-24147.18', '-24156.8', '-3.97', '-24160.77', '-24156.8', '-13.3', '-24170.1', '-36237.02', '-14.32', '-36251.34']]
+# actualResult=[]
+# expectResult=[]
+if actualResult != [] or expectResult != []:
+    for index1, item1 in enumerate(actualResult):
+        for index2, item2 in enumerate(expectResult):
+            if item1[0] == item2[0]:  # 判断球类是否相等,若相等,则校验该条数据
+                new_item1 = []
+                new_item2 = []
+                for aip_data in item1[1:]:
+                    if aip_data == None or aip_data == 0:
+                        api_result = 0
+                    else:
+                        api_result = float(aip_data)
+                    new_item1.append(api_result)
+                for sql_data in item2[1:]:
+                    if sql_data == None or sql_data == 0:
+                        sql_result = 0
+                    else:
+                        sql_result = float(sql_data)
+                    new_item2.append(sql_result)
+                if new_item1 == new_item2:
+                    print('测试通过')
+                else:
+                    print('测试不通过')
+else:
+    print(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过')
+
+
