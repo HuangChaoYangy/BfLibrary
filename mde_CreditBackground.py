@@ -3178,6 +3178,21 @@ class CreditBackGround(object):
         return b_request
 
 
+    def unsettlement(self, Authorization):
+        total_url = self.mde_url + '/mainstation/generalAgentManagement/unCheck/list'
+
+        head = {"LoginDiv": '222333',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": Authorization,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+        param = {"page": 1, "accountStatus": 0,"limit":50,"searchAccountName":""}
+        rsp = self.session.get(total_url, headers=head, params=param)
+        print(rsp.json())
+        if rsp.json()['message'] != 'OK':
+            print("ERROR：" + rsp.json()["message"])
+
+
+
 if __name__ == "__main__":
 
     # mde 环境
@@ -3187,6 +3202,7 @@ if __name__ == "__main__":
 
     # login_loken = bg.login_background(uname='a0child01', password='Bfty123456', securityCode="Agent0", loginDiv='555666')          # 登录信用网代理后台
     login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
+    data = bg.unsettlement(Authorization=login_loken)
     # user = bg.user_management(Authorization=login_loken, userStatus='0', userName='', userAccount='', sortIndex='', sortParameter='')   # 会员管理
     # match = bg.credit_match_result_query(Authorization=login_loken, sportName='足球', tournamentName='', teamName='',offset='0')    # 新赛果查询
 
@@ -3204,12 +3220,12 @@ if __name__ == "__main__":
 
     # report = bg.credit_home_report_query(Authorization=login_loken)
     # Report = bg.credit_sportReport_query(Authorization=login_loken, sportName='足球', queryType='sport', dateType=1, create_time=(-7, -1))
-    Report = bg.credit_sportReport(inData={"startCreateTime":-6, "endCreateTime":-0, "sportName":'',"queryDateType":3 },queryType='sport')[0]
+    # Report = bg.credit_sportReport(inData={"startCreateTime":-6, "endCreateTime":-0, "sportName":'',"queryDateType":3 },queryType='sport')[0]
     # Report = bg.credit_tournamentReport_query(Authorization=login_loken, sportName='足球', dateType=3, create_time=(-7, -1))
     # Report = bg.credit_tournamentReport(inData={"startCreateTime":-9, "endCreateTime":-3, "sportName":'排球',"queryDateType":3 })[1]
     # Report = bg.credit_matchReport(inData={"startCreateTime":-7, "endCreateTime":-1, "sportName":'足球',"matchId":'sr:match:3351183',"queryDateType":3 },queryType='market')
     # Report = bg.credit_multitermReport(inData={"startCreateTime":-7, "endCreateTime":-1, "sportName":'排球',"searchAccount":'', "queryDateType":3 })[1]
-    print(Report)
+    # print(Report)
     # matchReport = bg.credit_matchReport_query(Authorization=login_loken, sportName='', matchId='', queryType='match', dateType=3,create_time=(-7, -1))
     # multitermReport = bg.credit_multitermReport_query(Authorization=login_loken, sportName='', account='', dateType=3,create_time=(-7, -1))
     # match = bg.credit_last_two_days_match_query(Authorization=login_loken)

@@ -1951,7 +1951,7 @@ if __name__ == "__main__":
     mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['e5f848eccac04b96b22bc7f219199093','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
+    token_list = ['4b6c849fa45441dea202e91dd6cb8708','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
 
     # match_id_list = bf.get_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     # print(match_id_list)
@@ -1972,7 +1972,7 @@ if __name__ == "__main__":
     #     type_list = ['INPLAY', 'TODAY', 'EARLY']
     #     type = random.choice(type_list)
     #     token = bf.login_client(username=user, password='Bfty123456')
-    #     sub_thread = threading.Thread(target=bf.submit_all_match, args=(f'{token}', f'{type}', 2, '30', False))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
+    #     sub_thread = threading.Thread(target=bf.submit_all_match, args=(f'{token}', f'{type}', 2, '30', True))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
     #     # sub_thread = threading.Thread(target=bf.submit_all_outcome, args=("网球", f'{token}', 3, 'INPLAY') )       # 非复式串关投注：创建线程,target为线程执行的目标方法
     #     sub_thread.start()          # 通过start()方法手动来启动线程
     # print(threading.current_thread())
@@ -2012,11 +2012,11 @@ if __name__ == "__main__":
     # for match_id in match_info_list:
     #     bf.submit_all_outcome(match_id=match_id, sport_name=sport_name, token=token_list[0], odds_type=1, IsRandom='5')
     # 非复式串关投注
-    # for bet_type in range(10,15):
-    #     bf.submit_all_outcomes(sport_name='足球', token=token_list[0], bet_type=bet_type, event_type='TODAY', IsRandom='')
+    for bet_type in range(3,15):
+        bf.submit_all_outcomes(sport_name='足球', token=token_list[0], bet_type=bet_type, event_type='TODAY', IsRandom='10')
     # 复式串关投注
     # for bet_type in range(3, 7):
-    #     bf.submit_all_complex(sport_name='足球', token=token_list[0], bet_type=bet_type, event_type='TODAY', odds_type=1, oddsChangeType=1, complex='multi', complex_number=2)
+    #     bf.submit_all_complex(sport_name='篮球', token=token_list[0], bet_type=bet_type, event_type='EARLY', odds_type=1, oddsChangeType=1, complex='multi', complex_number=2)
 
 
     # outcome = bf.get_match_all_outcome(match_id="sr:match:28503692", token=token_list[0], sport_name="冰上曲棍球", odds_Type=1)   # 获取所有玩法
@@ -2033,5 +2033,5 @@ if __name__ == "__main__":
     # searchName = bf.get_search_matchName_list(token=token_list[0], sport_name='足球', teamName='蒂安')
 
 
-    settled = bf.get_accountHistoryDetail(token=token_list[0], dateoffset='-0', sportName='')
-    print(settled)
+    # settled = bf.get_accountHistoryDetail(token=token_list[0], dateoffset='-0', sportName='')
+    # print(settled)
