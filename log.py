@@ -48,8 +48,11 @@ class Bf_log(object):
         console_handler.setLevel("DEBUG")
         # 给输出渠道设置日志格式
         console_handler.setFormatter(formatter)
-        file_handle = RotatingFileHandler(log_name, maxBytes=1024 * 100, backupCount=5, encoding="utf-8")
+
+        # 按照日志文件大小进行切割，超过10M时切割，最多保留10个日志文件
+        file_handle = RotatingFileHandler(log_name, maxBytes=1024 * 1024 * 10, backupCount=10, encoding="utf-8", mode="a")
         # file_handle = ConcurrentRotatingFileHandler(log_name, maxBytes=1024 * 100, backupCount=5, encoding="utf-8")
+
         file_handle.setLevel("DEBUG")
         file_handle.setFormatter(formatter)
         self.log.addHandler(console_handler)
