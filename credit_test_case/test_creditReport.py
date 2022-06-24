@@ -22,49 +22,49 @@ mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']
 mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
 
 
-# @allure.story('数据源对账报表-列表详情')
-# class Test_Report01(object):
-#
-#     ya = Yaml_data()
-#     cm = CommonFunc()
-#     yam_data = ya.get_yaml_data(fileDir='../credit_data/dataSourceReport.yaml', isAll=False)
-#     url_data = ya.get_yaml_data(fileDir='../credit_data/dataSourceReport.yaml', isAll=True)
-#     # @pytest.mark.skip(reason="不执行该用例！！因为没写好！！")
-#     @pytest.mark.parametrize('inBody, expData', yam_data)
-#
-#     def test_dataSourceReport(self, inBody, expData, url=url_data):
-#         '''
-#         信用网总台-数据源对账报表  列表
-#         :param inBody:
-#         :param expData:
-#         :return:
-#         '''
-#         allure.dynamic.title(inBody['title'])
-#
-#         actualResult = CreditBackGround(mysql_info,mongo_info).credit_dataSourceReport(inData=inBody,queryType=1)
-#         with allure.step(f"执行测试用例:{inBody['title']}"):
-#             Bf_log('dataSourceReport').info(f"----------------开始执行:{inBody['title']}------------------------")
-#         url = url[0]['mde_ip'] + url[0]['url_detail']
-#         with allure.step(f"请求地址 {url}"):
-#             Bf_log('dataSourceReport').info(f'请求地址为:{url}')
-#
-#         sql = MysqlQuery(mysql_info, mongo_info).credit_dataSourceReport(expData=expData, queryType=1)[1]
-#         with allure.step(f'查询SQL:{sql}'):
-#             Bf_log('dataSourceReport').info(f'执行sql:{sql}')
-#         expectResult = MysqlQuery(mysql_info, mongo_info).credit_dataSourceReport(expData=expData, queryType=1)[0]
-#
-#         if actualResult:
-#             for index1, item1 in enumerate(actualResult):
-#                 for index2, item2 in enumerate(expectResult):
-#                     if list(item1)[0] == list(item2)[0]:  # 判断日期是否相等,若相等,则校验该条数据
-#                         if item1:
-#                             self.cm.check_live_bet_report_new(actualResult, expectResult)
-#                             with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试通过'):
-#                                 Bf_log('test').info(f'实际结果:{item1}, 期望结果：{item2},==》测试通过')
-#                         else:
-#                             if item1 != item2:
-#                                 with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
-#                                     Bf_log('test').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
+@allure.story('数据源对账报表-列表详情')
+class Test_Report01(object):
+
+    ya = Yaml_data()
+    cm = CommonFunc()
+    yam_data = ya.get_yaml_data(fileDir='../credit_data/dataSourceReport.yaml', isAll=False)
+    url_data = ya.get_yaml_data(fileDir='../credit_data/dataSourceReport.yaml', isAll=True)
+    # @pytest.mark.skip(reason="不执行该用例！！因为没写好！！")
+    @pytest.mark.parametrize('inBody, expData', yam_data)
+
+    def test_dataSourceReport(self, inBody, expData, url=url_data):
+        '''
+        信用网总台-数据源对账报表  列表
+        :param inBody:
+        :param expData:
+        :return:
+        '''
+        allure.dynamic.title(inBody['title'])
+
+        actualResult = CreditBackGround(mysql_info,mongo_info).credit_dataSourceReport(inData=inBody,queryType=1)
+        with allure.step(f"执行测试用例:{inBody['title']}"):
+            Bf_log('dataSourceReport').info(f"----------------开始执行:{inBody['title']}------------------------")
+        url = url[0]['mde_ip'] + url[0]['url_detail']
+        with allure.step(f"请求地址 {url}"):
+            Bf_log('dataSourceReport').info(f'请求地址为:{url}')
+
+        sql = MysqlQuery(mysql_info, mongo_info).credit_dataSourceReport(expData=expData, queryType=1)[1]
+        with allure.step(f'查询SQL:{sql}'):
+            Bf_log('dataSourceReport').info(f'执行sql:{sql}')
+        expectResult = MysqlQuery(mysql_info, mongo_info).credit_dataSourceReport(expData=expData, queryType=1)[0]
+
+        if actualResult:
+            for index1, item1 in enumerate(actualResult):
+                for index2, item2 in enumerate(expectResult):
+                    if list(item1)[0] == list(item2)[0]:  # 判断日期是否相等,若相等,则校验该条数据
+                        if item1:
+                            self.cm.check_live_bet_report_new(actualResult, expectResult)
+                            with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试通过'):
+                                Bf_log('test').info(f'实际结果:{item1}, 期望结果：{item2},==》测试通过')
+                        else:
+                            if item1 != item2:
+                                with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
+                                    Bf_log('test').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
 
 
 # @allure.story('数据源对账报表-底部总计')
@@ -714,62 +714,62 @@ mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
 #                 Bf_log('test').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
 
 
-@allure.story('总台-代理报表-球类报表-底部合计')
-class Test_Report16(object):
-    ya = Yaml_data()
-    cm = CommonFunc()
-    yam_data = ya.get_yaml_data(fileDir='../credit_data/Agent_sportReport.yaml', isAll=False)
-    url_data = ya.get_yaml_data(fileDir='../credit_data/Agent_sportReport.yaml', isAll=True)
-    # @pytest.mark.skip(reason="不执行该用例！！因为没写好！！")
-    @pytest.mark.parametrize('inBody, expData', yam_data)
-
-    def test_sportsReportDetail(self, inBody, expData, url=url_data):
-        '''
-        管理后台-代理报表-球类报表-底部合计,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
-        :param inBody:
-        :param expData:
-        :return:
-        '''
-        allure.dynamic.title(inBody['title'])
-        actualResult = CreditBackGround(mysql_info,mongo_info).credit_sportReport(inData=inBody,queryType='sport')[1]
-        with allure.step(f"执行测试用例:{inBody['title']}"):
-            Bf_log('sportReport').info(f"----------------开始执行:{inBody['title']}------------------------")
-        url = url[0]['mde_ip'] + url[0]['url']
-        with allure.step(f"请求地址 {url}"):
-            Bf_log('sportReport').info(f'请求地址为:{url}')
-
-        sql = MysqlQuery(mysql_info, mongo_info).credit_sportReport_query(expData=expData, queryType='sport')[2]
-        with allure.step(f'查询SQL:{sql}'):
-            Bf_log('sportReport').info(f'执行sql:{sql}')
-        expectResult = MysqlQuery(mysql_info, mongo_info).credit_sportReport_query(expData=expData, queryType='sport')[1]
-
-        if actualResult != [] or expectResult != []:
-            if actualResult[0] == expectResult[0]:  # 判断是否为合计,若相等,则校验该条数据
-                new_item1 = []
-                new_item2 = []
-                for aip_data in actualResult[1:]:
-                    if aip_data == None or aip_data == 0:
-                        api_result = 0
-                    else:
-                        api_result = float(aip_data)
-                    new_item1.append(api_result)
-                for sql_data in expectResult[1:]:
-                    if sql_data == None or sql_data == 0:
-                        sql_result = 0
-                    else:
-                        sql_result = float(sql_data)
-                    new_item2.append(sql_result)
-                if new_item1 == new_item2:
-                    with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
-                        Bf_log('test').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
-                else:
-                    with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
-                        Bf_log('test').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
-
-                assert new_item1 == new_item2
-        else:
-            with allure.step(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过'):
-                Bf_log('test').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
+# @allure.story('总台-代理报表-球类报表-底部合计')
+# class Test_Report16(object):
+#     ya = Yaml_data()
+#     cm = CommonFunc()
+#     yam_data = ya.get_yaml_data(fileDir='../credit_data/Agent_sportReport.yaml', isAll=False)
+#     url_data = ya.get_yaml_data(fileDir='../credit_data/Agent_sportReport.yaml', isAll=True)
+#     # @pytest.mark.skip(reason="不执行该用例！！因为没写好！！")
+#     @pytest.mark.parametrize('inBody, expData', yam_data)
+#
+#     def test_sportsReportDetail(self, inBody, expData, url=url_data):
+#         '''
+#         管理后台-代理报表-球类报表-底部合计,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
+#         :param inBody:
+#         :param expData:
+#         :return:
+#         '''
+#         allure.dynamic.title(inBody['title'])
+#         actualResult = CreditBackGround(mysql_info,mongo_info).credit_sportReport(inData=inBody,queryType='sport')[1]
+#         with allure.step(f"执行测试用例:{inBody['title']}"):
+#             Bf_log('sportReport').info(f"----------------开始执行:{inBody['title']}------------------------")
+#         url = url[0]['mde_ip'] + url[0]['url']
+#         with allure.step(f"请求地址 {url}"):
+#             Bf_log('sportReport').info(f'请求地址为:{url}')
+#
+#         sql = MysqlQuery(mysql_info, mongo_info).credit_sportReport_query(expData=expData, queryType='sport')[2]
+#         with allure.step(f'查询SQL:{sql}'):
+#             Bf_log('sportReport').info(f'执行sql:{sql}')
+#         expectResult = MysqlQuery(mysql_info, mongo_info).credit_sportReport_query(expData=expData, queryType='sport')[1]
+#
+#         if actualResult != [] or expectResult != []:
+#             if actualResult[0] == expectResult[0]:  # 判断是否为合计,若相等,则校验该条数据
+#                 new_item1 = []
+#                 new_item2 = []
+#                 for aip_data in actualResult[1:]:
+#                     if aip_data == None or aip_data == 0:
+#                         api_result = 0
+#                     else:
+#                         api_result = float(aip_data)
+#                     new_item1.append(api_result)
+#                 for sql_data in expectResult[1:]:
+#                     if sql_data == None or sql_data == 0:
+#                         sql_result = 0
+#                     else:
+#                         sql_result = float(sql_data)
+#                     new_item2.append(sql_result)
+#                 if new_item1 == new_item2:
+#                     with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
+#                         Bf_log('test').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
+#                 else:
+#                     with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
+#                         Bf_log('test').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
+#
+#                 assert new_item1 == new_item2
+#         else:
+#             with allure.step(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过'):
+#                 Bf_log('test').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
 
 
 # @allure.story('总台-代理报表-联赛报表-主列表详情')

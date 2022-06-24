@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-# @Time    : 2022/6/22 17:29
+# @Time    : 2022/6/24 9:27
 # @Author  : liyang
-# @FileName: test_dailyProfitAndLoss.py
+# @FileName: test_commission.py      未完成,转到test_creditReport文件实现
 # @Software: PyCharm
 
 
@@ -21,20 +21,20 @@ from tools.yamlControl import Yaml_data
 from config import cfile
 
 @allure.feature('总台-报表管理')
-class Test_DailyProfitAndLoss:
+class Test_commission:
 
     # 读取excle 里面的用例
-    de = DoExcel(file_name=main_station_report_path, sheet_name="DailyProfitAndLoss")
+    de = DoExcel(file_name=main_station_report_path, sheet_name="com_ProfitAndLoss")
     case_list1 = de.get_case(de.get_sheet())
-    de = DoExcel(file_name=main_station_report_path, sheet_name='Daily_params')
+    de = DoExcel(file_name=main_station_report_path, sheet_name='com_params')
     case_list2 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
     @pytest.mark.parametrize('sport_params', case_list2)
-    # @pytest.mark.skip(reason='调试代码,暂不执行')
-    @allure.story('总台-报表管理-每日盈亏-列表详情')
-    def test_DailyProfitAndLoss(self, excel_data, sport_params):
+    @pytest.mark.skip(reason='调试代码,暂不执行')
+    @allure.story('总台-报表管理-佣金报表-列表详情')
+    def test_commission(self, excel_data, sport_params):
         '''
-        管理后台-报表管理-每日盈亏-列表详情,为了数据准确就查询头一天的
+        管理后台-报表管理-佣金报表-列表详情,为了数据准确就查询头一天的
         :param excel_data:  excel中的测试用例
         :param sport_params: excel中的参数化数据
         :return:
@@ -66,11 +66,11 @@ class Test_DailyProfitAndLoss:
             title = params_list[4]
             allure.dynamic.title(title)
             with allure.step(f"执行测试用例:{title}"):
-                Bf_log('DailyProfitAndLoss').info(f"----------------开始执行:{title}------------------------")
+                Bf_log('com_ProfitAndLoss').info(f"----------------开始执行:{title}------------------------")
             # 获取接口地址
             request_url = CreditBackGround(mysql_info, mongo_info).mde_url + excel_data[4]
             with allure.step(f"请求地址： {request_url}"):
-                Bf_log('DailyProfitAndLoss').info(f'请求地址为：{request_url}')
+                Bf_log('com_ProfitAndLoss').info(f'请求地址为：{request_url}')
 
             # token = Yaml_data().get_yaml_data(fileDir=token_url, isAll=True)[0]['token']
             # token = cfile.read_yaml(yaml_file=token_url)[0]['token']
@@ -88,13 +88,15 @@ class Test_DailyProfitAndLoss:
             if response_data['message'] == 'OK':
                 APIResult_list = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()['data']['data']
                 for item in APIResult_list:
-                    actualResult.append([item['dateTime'],item['bettingUserNumber'],item['bettingNumber'],item['betAmount'],item['effectiveBetAmount'],
-                                         item['bettingProfitAndLoss'],item['totalRebate'],item['netProfitAndLoss']])
+                    actualResult.append([item['dateTime'],item['totalRebate'],item['levelBackwaterAmount'],item['leve2BackwaterAmount'],item['leve3BackwaterAmount'],
+                                         item['userBackwaterAmount'],item['soccer'],item['basketball'],item['tennis'],item['badminton'],
+                                         item['tableTennis'],item['volleyball'],item['baseball'],item['iceHockey']])
             elif response_data['code'] != '50025':
                 APIResult_list = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()['data']['data']
                 for item in APIResult_list:
-                    actualResult.append([item['dateTime'],item['bettingUserNumber'],item['bettingNumber'],item['betAmount'],item['effectiveBetAmount'],
-                                         item['bettingProfitAndLoss'],item['totalRebate'],item['netProfitAndLoss']])
+                    actualResult.append([item['dateTime'],item['totalRebate'],item['levelBackwaterAmount'],item['leve2BackwaterAmount'],item['leve3BackwaterAmount'],
+                                         item['userBackwaterAmount'],item['soccer'],item['basketball'],item['tennis'],item['badminton'],
+                                         item['tableTennis'],item['volleyball'],item['baseball'],item['iceHockey']])
             elif response_data['data']['data'] == []:
                 actualResult = []
             else:
@@ -108,7 +110,7 @@ class Test_DailyProfitAndLoss:
 
             SQLResult_list = list(MysqlFunc(mysql_info, mongo_info).query_data(sql_str, db_name='bfty_credit'))
             with allure.step(f'查询SQL:{sql_str}'):
-                Bf_log('DailyProfitAndLoss').info(f'执行sql:{sql_str}')
+                Bf_log('com_ProfitAndLoss').info(f'执行sql:{sql_str}')
             expectResult = []
             if not SQLResult_list:
                 expectResult = []
@@ -116,7 +118,8 @@ class Test_DailyProfitAndLoss:
                 for item in SQLResult_list:
                     bet_time = item[0]
                     matchTime = bet_time.strftime("%Y-%m-%d")
-                    expectResult.append([matchTime,item[1],item[2],item[3],item[4],item[5],item[6],item[7]])
+                    expectResult.append([matchTime,item[1],item[2],item[3],item[4],item[5],item[6],item[7],
+                                         item[8],item[9],item[10],item[11],item[12],item[13]])
 
             ctime = CommonFunc().get_current_time_for_client(time_type='currenttime')  # 获取当前时间
             # 校验接口数据和SQL数据的长度
@@ -145,22 +148,22 @@ class Test_DailyProfitAndLoss:
                                 # 判断两个list的值是否一致,并且回写入excel
                                 if new_item1 == new_item2:
                                     with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
-                                        Bf_log('DailyProfitAndLoss').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
-                                        DoExcel(main_station_report_path, "DailyProfitAndLoss").write_result(row=int(excel_data[0]+1),
+                                        Bf_log('com_ProfitAndLoss').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
+                                        DoExcel(main_station_report_path, "com_ProfitAndLoss").write_result(row=int(excel_data[0]+1),
                                                                                                actual_result=f'{actualResult}',expect_result=f'{expectResult}',
                                                                                                is_pass=f"测试通过 \n{ctime}")
                                 else:
                                     with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
-                                        Bf_log('DailyProfitAndLoss').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
-                                        DoExcel(main_station_report_path, "DailyProfitAndLoss").write_result(row=int(excel_data[0]+1),
+                                        Bf_log('com_ProfitAndLoss').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
+                                        DoExcel(main_station_report_path, "com_ProfitAndLoss").write_result(row=int(excel_data[0]+1),
                                                                                                actual_result=f'{actualResult}',expect_result=f'{expectResult}',
                                                                                                is_pass=f"测试不通过 \n{ctime}")
                                 assert new_item1 == new_item2
 
                 else:
                     with allure.step(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过'):
-                        Bf_log('DailyProfitAndLoss').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
-                        DoExcel(main_station_report_path, "DailyProfitAndLoss").write_result(row=int(excel_data[0] + 1),actual_result=f'{actualResult}',
+                        Bf_log('com_ProfitAndLoss').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
+                        DoExcel(main_station_report_path, "com_ProfitAndLoss").write_result(row=int(excel_data[0] + 1),actual_result=f'{actualResult}',
                                                                                    expect_result=f'{expectResult}',is_pass=f"测试通过 \n{ctime}")
             else:
                 raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actualResult)},sql为{len(expectResult)}")
@@ -168,17 +171,17 @@ class Test_DailyProfitAndLoss:
 
 
     # 读取excle 里面的用例
-    de = DoExcel(file_name=main_station_report_path, sheet_name="Daily_total")
+    de = DoExcel(file_name=main_station_report_path, sheet_name="commission_total")
     case_list1 = de.get_case(de.get_sheet())
-    de = DoExcel(file_name=main_station_report_path, sheet_name='Daily_params_t')
+    de = DoExcel(file_name=main_station_report_path, sheet_name='com_params_t')
     case_list2 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
     @pytest.mark.parametrize('sport_params', case_list2)
-    @pytest.mark.skip(reason='调试代码,暂不执行')
-    @allure.story('总台-报表管理-每日盈亏-总计')
-    def test_Daily_total(self, excel_data, sport_params):
+    # @pytest.mark.skip(reason='调试代码,暂不执行')
+    @allure.story('总台-报表管理-佣金报表-总计')
+    def test_commission_total(self, excel_data, sport_params):
         '''
-        管理后台-报表管理-每日盈亏-总计,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
+        管理后台-报表管理-佣金报表-总计,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
         :param excel_data:  excel中的测试用例
         :param sport_params: excel中的参数化数据
         :return:
@@ -208,12 +211,12 @@ class Test_DailyProfitAndLoss:
             title = params_list[2]
             allure.dynamic.title(title)
             with allure.step(f"执行测试用例:{title}"):
-                Bf_log('Daily_total').info(f"----------------开始执行:{title}------------------------")
+                Bf_log('commission_total').info(f"----------------开始执行:{title}------------------------")
 
             # 获取接口地址
             request_url = CreditBackGround(mysql_info, mongo_info).mde_url + excel_data[4]
             with allure.step(f"请求地址： {request_url}"):
-                Bf_log('Daily_total').info(f'请求地址为：{request_url}')
+                Bf_log('commission_total').info(f'请求地址为：{request_url}')
 
             # token = Yaml_data().get_yaml_data(fileDir=token_url, isAll=True)[0]['token']
             # token = cfile.read_yaml(yaml_file=token_url)[0]['token']
@@ -230,12 +233,16 @@ class Test_DailyProfitAndLoss:
             actualResult = []
             if response_data['message'] == 'OK':
                 APIResult_dic = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()['data']
-                actualResult.extend([APIResult_dic['sportName'],APIResult_dic['bettingUserNumber'],APIResult_dic['bettingNumber'],APIResult_dic['betAmount'],
-                                     APIResult_dic['effectiveBetAmount'],APIResult_dic['bettingProfitAndLoss'],APIResult_dic['totalRebate'],APIResult_dic['netProfitAndLoss']])
+                actualResult.extend([APIResult_dic['dateTime'],APIResult_dic['totalRebate'],APIResult_dic['levelBackwaterAmount'],APIResult_dic['leve2BackwaterAmount'],
+                                     APIResult_dic['leve3BackwaterAmount'],APIResult_dic['userBackwaterAmount'],APIResult_dic['soccer'],APIResult_dic['basketball'],
+                                     APIResult_dic['tennis'],APIResult_dic['badminton'],APIResult_dic['tableTennis'],APIResult_dic['volleyball'],
+                                     APIResult_dic['baseball'],APIResult_dic['iceHockey']])
             elif response_data['code'] != '50025':
                 APIResult_dic = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()['data']
-                actualResult.extend([APIResult_dic['sportName'],APIResult_dic['bettingUserNumber'],APIResult_dic['bettingNumber'],APIResult_dic['betAmount'],
-                                     APIResult_dic['effectiveBetAmount'],APIResult_dic['bettingProfitAndLoss'],APIResult_dic['totalRebate'],APIResult_dic['netProfitAndLoss']])
+                actualResult.extend([APIResult_dic['dateTime'],APIResult_dic['totalRebate'],APIResult_dic['levelBackwaterAmount'],APIResult_dic['leve2BackwaterAmount'],
+                                     APIResult_dic['leve3BackwaterAmount'],APIResult_dic['userBackwaterAmount'],APIResult_dic['soccer'],APIResult_dic['basketball'],
+                                     APIResult_dic['tennis'],APIResult_dic['badminton'],APIResult_dic['tableTennis'],APIResult_dic['volleyball'],
+                                     APIResult_dic['baseball'],APIResult_dic['iceHockey']])
             elif response_data['data']['data'] == []:
                 actualResult = []
             else:
@@ -248,7 +255,7 @@ class Test_DailyProfitAndLoss:
 
             SQLResult_list = list(MysqlFunc(mysql_info, mongo_info).query_data(sql_str, db_name='bfty_credit'))[0]
             with allure.step(f'查询SQL:{sql_str}'):
-                Bf_log('Daily_total').info(f'执行sql:{sql_str}')
+                Bf_log('commission_total').info(f'执行sql:{sql_str}')
             if not SQLResult_list:
                 expectResult = []
             else:
@@ -278,22 +285,22 @@ class Test_DailyProfitAndLoss:
                         # 判断两个list的值是否一致,并且回写入excel
                         if new_item1 == new_item2:
                             with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
-                                Bf_log('Daily_total').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
-                                DoExcel(main_station_report_path, "Daily_total").write_result(row=int(excel_data[0]+1),
+                                Bf_log('commission_total').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
+                                DoExcel(main_station_report_path, "commission_total").write_result(row=int(excel_data[0]+1),
                                                                                        actual_result=f'{actualResult}',expect_result=f'{expectResult}',
                                                                                        is_pass=f"测试通过 \n{ctime}")
                         else:
                             with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
-                                Bf_log('Daily_total').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
-                                DoExcel(main_station_report_path, "Daily_total").write_result(row=int(excel_data[0]+1),
+                                Bf_log('commission_total').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
+                                DoExcel(main_station_report_path, "commission_total").write_result(row=int(excel_data[0]+1),
                                                                                        actual_result=f'{actualResult}',expect_result=f'{expectResult}',
                                                                                        is_pass=f"测试不通过 \n{ctime}")
                         assert new_item1 == new_item2
 
                 else:
                     with allure.step(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过'):
-                        Bf_log('Daily_total').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
-                        DoExcel(main_station_report_path, "Daily_total").write_result(row=int(excel_data[0] + 1),actual_result=f'{actualResult}',
+                        Bf_log('commission_total').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
+                        DoExcel(main_station_report_path, "commission_total").write_result(row=int(excel_data[0] + 1),actual_result=f'{actualResult}',
                                                                                    expect_result=f'{expectResult}',is_pass=f"测试通过 \n{ctime}")
             else:
                 raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actualResult)},sql为{len(expectResult)}")
@@ -302,5 +309,5 @@ class Test_DailyProfitAndLoss:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_dailyProfitAndLoss.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir'])
-    # os.system("allure serve ../report/tmp")
+    pytest.main(["test_commission.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir'])
+    os.system("allure serve ../report/tmp")
