@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/6/24 9:27
 # @Author  : liyang
-# @FileName: test_commission.py      未完成,转到test_creditReport文件实现
+# @FileName: test_commission.py
 # @Software: PyCharm
 
 
@@ -30,7 +30,7 @@ class Test_commission:
     case_list2 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
     @pytest.mark.parametrize('sport_params', case_list2)
-    @pytest.mark.skip(reason='调试代码,暂不执行')
+    # @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-报表管理-佣金报表-列表详情')
     def test_commission(self, excel_data, sport_params):
         '''
@@ -308,6 +308,6 @@ class Test_commission:
 
 
 if __name__ == "__main__":
-
-    pytest.main(["test_commission.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir'])
+    #  '-n=4'
+    pytest.main(["test_commission.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir','-n=6'])
     os.system("allure serve ../report/tmp")

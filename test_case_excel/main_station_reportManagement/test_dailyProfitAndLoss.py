@@ -302,5 +302,6 @@ class Test_DailyProfitAndLoss:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_dailyProfitAndLoss.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir'])
-    # os.system("allure serve ../report/tmp")
+    pytest.main(["test_dailyProfitAndLoss.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir', '-n=4'])
+    os.system("allure generate ../report/html -o ../report/html --clean")
+    os.system("allure serve ../report/tmp")

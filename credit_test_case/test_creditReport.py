@@ -1190,7 +1190,7 @@ class Test_Report01(object):
 if __name__ == "__main__":
 
     # '-n=auto' 多进程执行用例参数    windows: 进程默认为1:--workers=1;     --tests-per-worker=n    n是线程数
-    pytest.main(["test_creditReport.py","-vs","--alluredir","../report/tmp",])       # -s  打印 输出  vs     -sq  简化  打印输出内容到../report/tmp
+    pytest.main(["test_creditReport.py","-vs","--alluredir","../report/tmp",'-n=auto'])       # -s  打印 输出  vs     -sq  简化  打印输出内容到../report/tmp
     # test_creditReport.py       表示测试目标文件
     # -s表示控制台打印输出
     # -vs显示用例详细结果
