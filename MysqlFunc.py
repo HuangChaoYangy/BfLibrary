@@ -4501,7 +4501,7 @@ class MysqlQuery(MysqlFunc):
                                       'outcomeList': [{'tournamentName': item[2],'TeamName': item[3],'betScore': item[7], 'marketName': item[6],'outcomeName': item[8],
                                                        'oddsType': item[9], 'odds': item[10], 'outcomeWinOrLoseName': item[11]}],
                                       'betAmount': item[12], 'profitAmount': item[13], 'backwaterAmount': item[14],'resultAmount': item[15]})
-
+        print(rtn)
         return order_list_Detail
 
 
@@ -5449,8 +5449,9 @@ class MysqlQuery(MysqlFunc):
         :return:
         '''
         database_name = "bfty_credit"
-        sql_str = f"SELECT (case when role_id=1 then '登0' when role_id=2 then '登1' when role_id=2 then '登2' when role_id=3 then '登3' when role_id in (4,5) then '子账号' end) " \
+        sql_str = f"SELECT (case when role_id=0 then '登0' when role_id=1 then '登1' when role_id=2 then '登2' when role_id=3 then '登3' when role_id in (4,5) then '子账号' end) " \
                   f"'代理角色' FROM `bfty_credit`.`m_account` WHERE account='{account}'"
+        # print(sql_str)
         rtn = list(self.query_data(sql_str, database_name))
 
         return rtn[0][0]
@@ -8293,7 +8294,7 @@ if __name__ == "__main__":
     # account = mysql.get_accountHistoryStatistics_sql(username='BTeTestuser002')
 
     # id = mysql.query_agentId_sql(agentAccount='a0')
-    # settled = mysql.query_settledOrder(login_account='a1', dateoffset='-1')
+    # settled = mysql.query_settledOrder(login_account='a3', dateoffset='-0')
     # print(settled)
 
     # agentLine = mysql.credit_agentLineManagement_sql(agentName="aw", agentAccount="")
@@ -8311,8 +8312,8 @@ if __name__ == "__main__":
     # data = mysql.get_orderNo_effectAmount_and_commission(user_name='', order_no='XFB6FPtyXDyB', createDate=(), awardDate=())[1]
     # print(data)
 
-    # commission = mysql.get_order_no_commission(order_no='XFB74wbGYMe5')
-    order = mysql.get_order_by_account(account='a2')
+    commission = mysql.get_order_no_commission(order_no='XFB74wbGYMe5')
+    # order = mysql.get_order_by_account(account='a2')
     # dataList = [1000, 0.2, 0.2, 0.2, 0.1, 0.3, 0.0021, 0.0021, 0.0019, 0.0015, 0.0002]
     # commission = mysql.get_list_multiply(data_list=dataList)
 

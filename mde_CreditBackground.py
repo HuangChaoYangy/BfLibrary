@@ -162,19 +162,29 @@ class CreditBackGround(object):
             "Connection": "keep-alive",
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                           "Chrome/85.0.4183.102 Safari/537.36"}
-        data = {
-            "loginDiv": loginDiv,
-            "userName": self.rsa_encrypt(data=uname),              #  前端将账号密码进行加密,后端进行解密后存到数据库
-            "password": self.rsa_encrypt(data=password),
-            "googleCode": securityCode
-        }
+        if loginDiv == 222333:
+            data = {
+                "loginDiv": loginDiv,
+                "userName": self.rsa_encrypt(data=uname),              #  前端将账号密码进行加密,后端进行解密后存到数据库
+                "password": self.rsa_encrypt(data=password),
+                "googleCode": securityCode
+            }
+        elif loginDiv == 555666:
+            data = {
+                "loginDiv": loginDiv,
+                "userName": self.rsa_encrypt(data=uname),
+                "password": self.rsa_encrypt(data=password),
+                "securityCode": securityCode }
+        else:
+            raise AssertionError('暂不支持该类型')
+        # print(data)
         for loop in range(1):
             try:
                 rsp = self.session.post(url, headers=head, json=data)
                 if rsp.json()['message'] == '用户名或密码错误!':
                     print('登录失败,用户名或密码错误,登录失败')
                 elif rsp.json()['message'] != "OK":
-                    raise AssertionError("查询报表数据失败,原因：" + rsp.json()["message"])
+                    raise AssertionError("登录失败,原因：" + rsp.json()["message"])
                 else:
                     # print('-------------------------------------------------------------------------------登录成功,欢迎进入必发体育反波胆管理后台-------------------------------------------------------------------------------')
                     self.Authorization = rsp.json()['data']['token']
@@ -3201,8 +3211,8 @@ if __name__ == "__main__":
     bg = CreditBackGround(mysql_info,mongo_info)            # 创建对象
 
     # login_loken = bg.login_background(uname='a0child01', password='Bfty123456', securityCode="Agent0", loginDiv='555666')          # 登录信用网代理后台
-    login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
-    data = bg.unsettlement(Authorization=login_loken)
+    login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=555666)             # 登录信用网总台
+    # data = bg.unsettlement(Authorization=login_loken)
     # user = bg.user_management(Authorization=login_loken, userStatus='0', userName='', userAccount='', sortIndex='', sortParameter='')   # 会员管理
     # match = bg.credit_match_result_query(Authorization=login_loken, sportName='足球', tournamentName='', teamName='',offset='0')    # 新赛果查询
 
