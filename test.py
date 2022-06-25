@@ -839,18 +839,7 @@ from scipy import stats
 #     print(item)
 
 
-list_num = [100, 0.2, 0.2, 0.2, 0.1, 0.3, 0.0021, 0.0021, 0.0019, 0.0015, 0.0002]
-data_list = ["efficient_amount", "company_retreat_proportion", "level0_retreat_proportion",
-           "level1_retreat_proportion", "level2_retreat_proportion", "level3_retreat_proportion",
-           "company_actual_percentage", "level0_actual_percentage", "level1_actual_percentage",
-           "level2_actual_percentage", "level3_actual_percentage", ]
-data_dict = {'efficient_amount': [], 'company_retreat_proportion': [], 'level0_retreat_proportion': [],
-           'level1_retreat_proportion': [], 'level2_retreat_proportion': [], 'level3_retreat_proportion': [],
-           'company_actual_percentage': [], 'level0_actual_percentage': [], 'level1_actual_percentage': [],
-           'level2_actual_percentage': [], 'level3_actual_percentage': []}
-for item in range(len(list_num)):
-    data_dict[data_list[item]] = list_num[item]
-# print(data_dict)
+
 
 
 str1 = "188、187、314、189、190、191、203、204、237、238、246、247、248、256、258、16、18、26、410、460、446、314"
@@ -880,9 +869,9 @@ list_str = str1.split("、")
 # new_order_list.append(order_dic)
 # print(new_order_list)
 
-yyds_list =[ {'betTime': '2022-06-16 23:26:42', 'orderNo': 'XFTztEQGVk9k', 'sportName': '足球', 'outcomeList': [{'tournamentName': '模拟现实联盟K-League 1 SRL', 'TeamName': 'Gimcheon Sangmu (Srl)VsSuwon FC (Srl)', 'betScore': '(1:0) ', 'marketName': '大/小', 'outcomeName': '大2.5/3', 'oddsType': 1, 'odds': 2.35, 'outcomeWinOrLoseName': '输'}], 'betAmount': 100.0, 'profitAmount': -100.0, 'backwaterAmount': 0.0, 'resultAmount': 0.0},
-              {'betTime': '2022-06-16 23:26:42', 'orderNo': 'XFTztEQGVk9k', 'sportName': '足球', 'outcomeList': [{'tournamentName': '模拟现实联盟K-League 1 SRL', 'TeamName': 'Pohang Steelers SRLVsGangwon FC SRL', 'betScore': '(1:0) ', 'marketName': '大/小', 'outcomeName': '小2', 'oddsType': 1, 'odds': 2.42, 'outcomeWinOrLoseName': '赢'}], 'betAmount': 100.0, 'profitAmount': -100.0, 'backwaterAmount': 0.0, 'resultAmount': 0.0},
-              {'betTime': '2022-06-15 22:26:20', 'orderNo': 'XFJqRTSKxrr9', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,塔斯马尼亚', 'TeamName': 'Olympia Warriors HobartVs河岸奥林匹克', 'betScore': None, 'marketName': '双重机会&大/小', 'outcomeName': 'Olympia Warriors Hobart/河岸奥林匹克 & 大 3.5', 'oddsType': 1, 'odds': 2.06, 'outcomeWinOrLoseName': '输'}], 'betAmount': 154.0, 'profitAmount': -154.0, 'backwaterAmount': 0.03, 'resultAmount': 0.03} ]
+yyds_list = [['a0b1b2b3a3/a3', '李杨会员03', 'XGp7FeRivkYt', '2022-06-20 02:40:38', '足球', '复式串关', ['阿根廷乙级联赛 雷梅迪奥斯塔勒瑞斯 Vs 胡斯托·何塞·德·乌尔基萨', None, '早盘', '上半场 - 让球', '雷梅迪奥斯塔勒瑞斯 ', '1', 1.68, '欧洲盘', '2022-06-20 14:30:00'], 400.0, '未结算', 'mde.betf.io / 台湾省彰化县市谷歌', 400.0, 0.2, 0.2, 0.0, 0.2, 0.0, 0.1, 0.0, 0.3, 0.0, 0.0], ['a0b1b2b3a3/a3', '李杨会员03', 'XGp7FeRivkYt', '2022-06-20 02:40:38', '足球', '复式串关', ['阿根廷足球甲级联赛 葛度尔古斯 Vs 防卫者', None, '早盘', '单/双', '单', '1', 1.88, '欧洲盘', '2022-06-20 15:30:00'], 400.0, '未结算', 'mde.betf.io / 台湾省彰化县市谷歌', 400.0, 0.2, 0.2, 0.0, 0.2, 0.0, 0.1, 0.0, 0.3, 0.0, 0.0], ['a0b1b2b3a3/a3', '李杨会员03', 'XGp7FeRivkYt', '2022-06-20 02:40:38', '足球', '复式串关', ['阿根廷足球甲级联赛 沙士菲 Vs 罗沙里奧中央', None, '早盘', '大/小', '大2/2.5', '1', 1.84, '欧洲盘', '2022-06-20 18:00:00'], 400.0, '未结算', 'mde.betf.io / 台湾省彰化县市谷歌', 400.0, 0.2, 0.2, 0.0, 0.2, 0.0, 0.1, 0.0, 0.3, 0.0, 0.0], ['a0b1b2b3a3/a3', '李杨会员03', 'XFJretdnd6ex', '2022-06-15 22:27:25', '足球', '单关', ['国际欧洲锦标赛，女子 葡萄牙 Vs 瑞士', None, '早盘', '上半场 - 独赢 & 大/小', '瑞士 & 小1.5', '1', 3.85, '欧洲盘', '2022-07-09 12:00:00'], 193.0, '未结算', 'mde.betf.io / 台湾省彰化县市谷歌', 193.0, 0.2, 0.2, 0.0021, 0.2, 0.0019, 0.1, 0.0015, 0.3, 0.0002, 0.0002], ['a0b1b2b3a3/a3', '李杨会员03', 'XFJrdk28Dzty', '2022-06-15 22:27:21', '足球', '单关', ['挪威超级联赛 Stroemsgodset IF Vs Lillestrom SK', None, '早盘', 'Stroemsgodset IF 进球数', '0', '1', 3.9, '欧洲盘', '2022-06-26 12:00:00'], 264.0, '未结算', 'mde.betf.io / 台湾省彰化县市谷歌', 264.0, 0.2, 0.2, 0.0, 0.2, 0.0, 0.1, 0.0, 0.3, 0.0, 0.0]]
+
+# print(len(new_list))
 orderNo_list=[]
 new_list=[]
 count_i=0
@@ -894,18 +883,18 @@ for i in range(0, len(yyds_list)):
         new_list.append(yyds_list[i])
         for j in range(count_j, len(yyds_list)):
             if j==count_j:
-                 if yyds_list[i]['orderNo']==yyds_list[j]['orderNo']:
-                     orderNo_list.append(yyds_list[i]['outcomeList'][0])
-                     orderNo_list.append(yyds_list[j]['outcomeList'][0])
+                 if yyds_list[i][2]==yyds_list[j][2]:
+                     orderNo_list.append(yyds_list[i][6][0])
+                     orderNo_list.append(yyds_list[j][6][0])
                      count_j = count_j + 1
                      count_i = count_i + 1
                      for k in range(count_j,len(yyds_list)):
-                         if yyds_list[i]['orderNo'] == yyds_list[k]['orderNo']:
-                             orderNo_list.append(yyds_list[k]['outcomeList'][0])
+                         if yyds_list[i][2] == yyds_list[k][2]:
+                             orderNo_list.append(yyds_list[k][6][0])
                              count_j = count_j + 1
                              count_i = count_i + 1
                          else:
-                             new_list[-1]['outcomeList']=orderNo_list
+                             new_list[-1][6]=orderNo_list
                              count_j = count_j + 1
                              count_i = count_i + 1
                              break
@@ -934,33 +923,214 @@ for aip_data in match_list[1:]:
         api_result = float(aip_data)
     new_item1.append(api_result)
 new_item1.insert(0,match)
-print(new_item1)
+# print(new_item1)
 
 
-str1 = 'adsdfsaf'
-str2 = 'gdgfd'
-print(str1 + ' vs ' +str2)
+# str1 = 'adsdfsaf'
+# str2 = 'gdgfd'
+# print(str1 + ' vs ' +str2)
+
+str1 = "188、187、314、189、190、191、203、204、237、238、246、247、248、256、258、16、18、26、410、460、446、314"
+# list_str = str1.split("、")
+# print(list_str)
+
+detail_order = "'阿根廷乙级联赛 雷梅迪奥斯塔勒瑞斯 Vs 胡斯托·何塞·德·乌尔基萨', '早盘 上半场 - 让球 雷梅迪奥斯塔勒瑞斯  @ 1.680  欧洲盘 2022-06-20 14:30:00"
+list_str = detail_order[1:].split(" ")
+# print(list_str)
+
+list_num = [100, 0.2, 0.2, 0.2, 0.1, 0.3, 0.0021, 0.0021, 0.0019, 0.0015, 0.0002]
+data_list = ["efficient_amount", "company_retreat_proportion", "level0_retreat_proportion",
+           "level1_retreat_proportion", "level2_retreat_proportion", "level3_retreat_proportion",
+           "company_actual_percentage", "level0_actual_percentage", "level1_actual_percentage",
+           "level2_actual_percentage", "level3_actual_percentage", ]
+data_dict = {'efficient_amount': [], 'company_retreat_proportion': [], 'level0_retreat_proportion': [],
+           'level1_retreat_proportion': [], 'level2_retreat_proportion': [], 'level3_retreat_proportion': [],
+           'company_actual_percentage': [], 'level0_actual_percentage': [], 'level1_actual_percentage': [],
+           'level2_actual_percentage': [], 'level3_actual_percentage': []}
+for item in range(len(list_num)):
+    data_dict[data_list[item]] = list_num[item]
+# print(data_dict)
+
+match_list = [('2022-06-22 00:00:00', 'sr:sport:1', 0, 301), ('2022-06-22 00:00:00', 'sr:sport:2', 0, 15), ('2022-06-22 00:00:00', 'sr:sport:20', 21, 422),
+              ('2022-06-22 00:00:00', 'sr:sport:23', 1, 19), ('2022-06-22 00:00:00', 'sr:sport:3', 0, 37), ('2022-06-22 00:00:00', 'sr:sport:31', 0, 23),
+              ('2022-06-22 00:00:00', 'sr:sport:4', 0, 1), ('2022-06-22 00:00:00', 'sr:sport:5', 5, 411), ('2022-06-21 00:00:00', 'sr:sport:1', 143, 11),
+              ('2022-06-21 00:00:00', 'sr:sport:2', 26, 6), ('2022-06-21 00:00:00', 'sr:sport:20', 608, 8), ('2022-06-21 00:00:00', 'sr:sport:3', 47, 3),
+              ('2022-06-21 00:00:00', 'sr:sport:31', 83, 25), ('2022-06-21 00:00:00', 'sr:sport:5', 439, 22)]
+
+match_dic = {'date': [], 'eventEntered': {}, 'eventNotEntered': {} }
+matchitem_list = ['date','eventEntered','eventNotEntered']
+for item in match_list:
+    match_dic['eventEntered'] = item[1]
+    if item[0] not in match_dic['date']:
+        match_dic['date'] = item[0]
+# print(match_dic)
+
+
+date_list =[['2022-06-22', 586.62, 3119.19], ['2022-06-22', -13.97, 3000.21]]
+new_list = []
+list = []
+# for item in date_list:
+#     new_list.extend(item[1:])
+# new_list.insert(0,date_list[0][0])
+# print(new_list)
+num = 0
+for item in range(len(date_list)):
+    if item == num:
+        new_list.append(date_list[0][0])
+for detail in date_list:
+    new_list.extend(detail[1:])
+list.append(new_list)
+# print(list)
+
+data_dic = {"betAmount":123641.00,"bettingNumber":"3547","bettingProfitAndLoss":3415.31,"bettingUserNumber":"105","dateTime":"合计","effectiveBetAmount":109230.83,"netProfitAndLoss":3283.20,"sportId":None,"sportName":"合计","terminal":"合计","total":None,"totalRebate":-132.11}
+# print(data_dic['betAmount'])
 
 
 
+# yyds_list = [['a0b1b2b3a3/a3', '李杨会员03', 'XGp7FeRivkYt', '2022-06-20 02:40:38', '足球', '复式串关', ['阿根廷乙级联赛 雷梅迪奥斯塔勒瑞斯 Vs 胡斯托·何塞·德·乌尔基萨', None, '早盘',
+#             '上半场 - 让球', '雷梅迪奥斯塔勒瑞斯 ', '1', 1.68, '欧洲盘', '2022-06-20 14:30:00'], 400.0, '未结算', 'mde.betf.io / 台湾省彰化县市谷歌', 400.0, 0.2, 0.2, 0.0, 0.2, 0.0,
+#               0.1, 0.0, 0.3, 0.0, 0.0], ['a0b1b2b3a3/a3', '李杨会员03', 'XGp7FeRivkYt', '2022-06-20 02:40:38', '足球', '复式串关', ['阿根廷足球甲级联赛 葛度尔古斯 Vs 防卫者', None,
+#               '早盘', '单/双', '单', '1', 1.88, '欧洲盘', '2022-06-20 15:30:00'], 400.0, '未结算', 'mde.betf.io / 台湾省彰化县市谷歌', 400.0, 0.2, 0.2, 0.0, 0.2, 0.0, 0.1, 0.0, 0.3,
+#               0.0, 0.0], ['a0b1b2b3a3/a3', '李杨会员03', 'XGp7FeRivkYt', '2022-06-20 02:40:38', '足球', '复式串关', ['阿根廷足球甲级联赛 沙士菲 Vs 罗沙里奧中央', None, '早盘', '大/小',
+#               '大2/2.5', '1', 1.84, '欧洲盘', '2022-06-20 18:00:00'], 400.0, '未结算', 'mde.betf.io / 台湾省彰化县市谷歌', 400.0, 0.2, 0.2, 0.0, 0.2, 0.0, 0.1, 0.0, 0.3, 0.0, 0.0],
+#              ['a0b1b2b3a3/a3', '李杨会员03', 'XFJretdnd6ex', '2022-06-15 22:27:25', '足球', '单关', ['国际欧洲锦标赛，女子 葡萄牙 Vs 瑞士', None, '早盘', '上半场 - 独赢 & 大/小',
+#              '瑞士 & 小1.5', '1', 3.85, '欧洲盘', '2022-07-09 12:00:00'], 193.0, '未结算', 'mde.betf.io / 台湾省彰化县市谷歌', 193.0, 0.2, 0.2, 0.0021, 0.2, 0.0019, 0.1, 0.0015,
+#               0.3, 0.0002, 0.0002], ['a0b1b2b3a3/a3', '李杨会员03', 'XFJrdk28Dzty', '2022-06-15 22:27:21', '足球', '单关', ['挪威超级联赛 Stroemsgodset IF Vs Lillestrom SK', None,
+#               '早盘', 'Stroemsgodset IF 进球数', '0', '1', 3.9, '欧洲盘', '2022-06-26 12:00:00'], 264.0, '未结算', 'mde.betf.io / 台湾省彰化县市谷歌', 264.0, 0.2, 0.2, 0.0, 0.2, 0.0,
+#               0.1, 0.0, 0.3, 0.0, 0.0]]
+
+# yyds_list = [['a0b1b2b3a3/a3', 'XHby72tvjVaw', '2022-06-25 04:04:05', ['澳大利亚Norzone Premier League', '希腊人竞技 Vs 达尔温哈尔茨', '滚球盘', '大/小', 'total=3.75', '大3.5/4', 0.81, '2022-06-25 02:30:00', '香港盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHby72tvjVaw', '2022-06-25 04:04:05', ['澳大利亚NSW League One', '圣乔治市 Vs 圣乔治 圣徒', '滚球盘', '让球', 'hcp=-1', '圣乔治市 ', 0.87, '2022-06-25 04:00:00', '香港盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHby72tvjVaw', '2022-06-25 04:04:05', ['澳大利亚全国超级联赛,塔斯马尼亚', '朗塞斯顿市 Vs 德文波特市', '滚球盘', '独赢', '', '德文波特市', 1.8, '2022-06-25 02:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHaGXbYAxZHN', '2022-06-25 01:46:07', ['澳大利亚全国超级联赛,南澳大利亚', '阿德莱科梅兹 Vs 南阿德莱得黑豹', '滚球盘', '让球', 'hcp=-1.25', '阿德莱科梅兹 ', 2.0, '2022-06-25 01:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHaGXbYAxZHN', '2022-06-25 01:46:07', ['澳大利亚全国超级联赛,南澳大利亚', '坎伯兰联 Vs 白城伍德维尔', '滚球盘', '大/小', 'total=2.5', '大2.5', 1.95, '2022-06-25 01:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHaGXbYAxZHN', '2022-06-25 01:46:07', ['澳大利亚全国超级联赛,南澳大利亚', '斯图特狮子 Vs 阿德萊德奧林匹克', '滚球盘', '大/小', 'total=3', '大3', 1.88, '2022-06-25 01:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHaGQqBXqSXA', '2022-06-25 01:45:45', ['澳大利亚全国超级联赛,南澳大利亚', '阿德莱科梅兹 Vs 南阿德莱得黑豹', '滚球盘', '大/小', 'total=3', '大3', 1.86, '2022-06-25 01:30:00', '欧洲盘'], 100.0, 'mde.betf.io / 台湾省彰化县市谷歌']
+#              ,['a0b1b2b3a3/a3', 'XHby72tvjVaw', '2022-06-25 04:04:05',
+#                            ['澳大利亚Norzone Premier League', '希腊人竞技 Vs 达尔温哈尔茨', '滚球盘', '大/小', 'total=3.75', '大3.5/4', 0.81,
+#                             '2022-06-25 02:30:00', '香港盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'],
+#                           ['a0b1b2b3a3/a3', 'XHby72tvjVaw', '2022-06-25 04:04:05',
+#                            ['澳大利亚NSW League One', '圣乔治市 Vs 圣乔治 圣徒', '滚球盘', '让球', 'hcp=-1', '圣乔治市 ', 0.87,
+#                             '2022-06-25 04:00:00', '香港盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'],
+#                           ['a0b1b2b3a3/a3', 'XHby72tvjVaw', '2022-06-25 04:04:05',
+#                            ['澳大利亚全国超级联赛,塔斯马尼亚', '朗塞斯顿市 Vs 德文波特市', '滚球盘', '独赢', '', '德文波特市', 1.8, '2022-06-25 02:30:00',
+#                             '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'],
+#                           ['a0b1b2b3a3/a3', 'XHaGXbYAxZHN', '2022-06-25 01:46:07',
+#                            ['澳大利亚全国超级联赛,南澳大利亚', '阿德莱科梅兹 Vs 南阿德莱得黑豹', '滚球盘', '让球', 'hcp=-1.25', '阿德莱科梅兹 ', 2.0,
+#                             '2022-06-25 01:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'],
+#                           ['a0b1b2b3a3/a3', 'XHaGXbYAxZHN', '2022-06-25 01:46:07',
+#                            ['澳大利亚全国超级联赛,南澳大利亚', '坎伯兰联 Vs 白城伍德维尔', '滚球盘', '大/小', 'total=2.5', '大2.5', 1.95,
+#                             '2022-06-25 01:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'],
+#                           ['a0b1b2b3a3/a3', 'XHaGXbYAxZHN', '2022-06-25 01:46:07',
+#                            ['澳大利亚全国超级联赛,南澳大利亚', '斯图特狮子 Vs 阿德萊德奧林匹克', '滚球盘', '大/小', 'total=3', '大3', 1.88,
+#                             '2022-06-25 01:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'],
+#                           ['a0b1b2b3a3/a3', 'XHaGQqBXqSXA', '2022-06-25 01:45:45',
+#                            ['澳大利亚全国超级联赛,南澳大利亚', '阿德莱科梅兹 Vs 南阿德莱得黑豹', '滚球盘', '大/小', 'total=3', '大3', 1.86,
+#                             '2022-06-25 01:30:00', '欧洲盘'], 100.0, 'mde.betf.io / 台湾省彰化县市谷歌']
+# ]
 
 
+# 串关合并一条数据---列表形式
+yyds_list = [['a0b1b2b3a3/a3', 'XHby72tvjVaw', '2022-06-25 04:04:05', ['澳大利亚Norzone Premier League', '希腊人竞技 Vs 达尔温哈尔茨', '滚球盘', '大/小', 'total=3.75', '大3.5/4', 0.81, '2022-06-25 02:30:00', '香港盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHby72tvjVaw', '2022-06-25 04:04:05', ['澳大利亚NSW League One', '圣乔治市 Vs 圣乔治 圣徒', '滚球盘', '让球', 'hcp=-1', '圣乔治市 ', 0.87, '2022-06-25 04:00:00', '香港盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHby72tvjVaw', '2022-06-25 04:04:05', ['澳大利亚全国超级联赛,塔斯马尼亚', '朗塞斯顿市 Vs 德文波特市', '滚球盘', '独赢', '', '德文波特市', 1.8, '2022-06-25 02:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHaGXbYAxZHN', '2022-06-25 01:46:07', ['澳大利亚全国超级联赛,南澳大利亚', '阿德莱科梅兹 Vs 南阿德莱得黑豹', '滚球盘', '让球', 'hcp=-1.25', '阿德莱科梅兹 ', 2.0, '2022-06-25 01:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHaGXbYAxZHN', '2022-06-25 01:46:07', ['澳大利亚全国超级联赛,南澳大利亚', '坎伯兰联 Vs 白城伍德维尔', '滚球盘', '大/小', 'total=2.5', '大2.5', 1.95, '2022-06-25 01:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHaGXbYAxZHN', '2022-06-25 01:46:07', ['澳大利亚全国超级联赛,南澳大利亚', '斯图特狮子 Vs 阿德萊德奧林匹克', '滚球盘', '大/小', 'total=3', '大3', 1.88, '2022-06-25 01:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHaGQqBXqSXA', '2022-06-25 01:45:45', ['澳大利亚全国超级联赛,南澳大利亚', '阿德莱科梅兹 Vs 南阿德莱得黑豹', '滚球盘', '大/小', 'total=3', '大3', 1.86, '2022-06-25 01:30:00', '欧洲盘'], 100.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['d0d1d2d37e/fceshi0178', 'XH4yz8zHh5gw', '2022-06-24 08:58:05', ['澳大利亚全国超级联赛,新南威尔士', '马柯尼 Vs 芒特德瑞特城流浪者', '早盘', '平局退款', '', '芒特德瑞特城流浪者', 4.35, '2022-06-25 05:00:00', '欧洲盘'], 10.0, '192.168.10.120 / 局域网'], ['a0b1b2b300/a2', 'XFJrebYTDvZs', '2022-06-15 22:27:24', ['挪威超级联赛', '莫尔德 Vs FK Jerv', '早盘', '莫尔德 进球数', 'variant=sr:exact_goals:3+', '0', 8.95, '2022-06-26 12:00:00', '欧洲盘'], 307.0, 'mde.betf.io / 台湾省彰化县市谷歌']]
+# print(yyds_list)
+
+orderNo_list=[]
+new_list=[]
+count_i = 0
+count_j = 1
+count=0
+for i in range(0, len(yyds_list)):
+    if i==count_i:
+        orderNo_list = []
+        new_list.append(yyds_list[i])
+        for j in range(count_j, len(yyds_list)):
+            if j == count_j:
+                if yyds_list[i][1]==yyds_list[j][1]:
+                    orderNo_list.append(yyds_list[i][3])
+                    orderNo_list.append(yyds_list[j][3])
+                    count_j = count_j + 1
+                    count_i = count_i + 1
+                    if j==len(yyds_list) - 1:
+                        new_list[-1][3] = orderNo_list
+                    else:
+                        for k in range(count_j,len(yyds_list)):
+                            if yyds_list[i][1] == yyds_list[k][1]:
+                                if k == len(yyds_list) - 1:
+                                    count = count + 1
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                                    new_list[-1][3] = orderNo_list
+                                else:
+                                    orderNo_list.append(yyds_list[k][3])
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                            else:
+                                new_list[-1][3]=orderNo_list
+                                count_j = count_j + 1
+                                count_i = count_i + 1
+                                count = count + 1
+                                break
+                else:
+                    count_i = count_i + 1
+                    count_j = count_j + 1
+                    count=count+1
+                    break
+            else:
+                break
+    else:
+        continue
+
+# print(new_list)
+
+# 串关合并一条数据---字典形式
+yyds_list = [ {'betTime': '2022-06-16 23:26:42', 'orderNo': 'XFTztEQGVk9k', 'sportName': '足球', 'outcomeList': [{'tournamentName': '模拟现实联盟K-League 1 SRL', 'TeamName': 'Gimcheon Sangmu (Srl)VsSuwon FC (Srl)', 'betScore': '(1:0) ', 'marketName': '大/小', 'outcomeName': '大2.5/3', 'oddsType': 1, 'odds': 2.35, 'outcomeWinOrLoseName': '输'}], 'betAmount': 100.0, 'profitAmount': -100.0, 'backwaterAmount': 0.0, 'resultAmount': 0.0},{'betTime': '2022-06-16 23:26:42', 'orderNo': 'XFTztEQGVk9k', 'sportName': '足球', 'outcomeList': [{'tournamentName': '模拟现实联盟K-League 1 SRL', 'TeamName': 'Pohang Steelers SRLVsGangwon FC SRL', 'betScore': '(1:0) ', 'marketName': '大/小', 'outcomeName': '小2', 'oddsType': 1, 'odds': 2.42, 'outcomeWinOrLoseName': '赢'}], 'betAmount': 100.0, 'profitAmount': -100.0, 'backwaterAmount': 0.0, 'resultAmount': 0.0},{'betTime': '2022-06-15 22:26:20', 'orderNo': 'XFJqRTSKxrr9', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,塔斯马尼亚', 'TeamName': 'Olympia Warriors HobartVs河岸奥林匹克', 'betScore': None, 'marketName': '双重机会&大/小', 'outcomeName': 'Olympia Warriors Hobart/河岸奥林匹克 & 大 3.5', 'oddsType': 1, 'odds': 2.06, 'outcomeWinOrLoseName': '输'}], 'betAmount': 154.0, 'profitAmount': -154.0, 'backwaterAmount': 0.03, 'resultAmount': 0.03}, {'betTime': '2022-06-15 22:26:20', 'orderNo': 'XFJqRT4444rr9', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,塔斯马尼亚', 'TeamName': 'Olympia Warriors HobartVs河岸奥林匹克', 'betScore': None, 'marketName': '双重机会&大/小', 'outcomeName': 'Olympia Warriors Hobart/河岸奥林匹克 & 大 3.5', 'oddsType': 1, 'odds': 2.06, 'outcomeWinOrLoseName': '输'}], 'betAmount': 154.0, 'profitAmount': -154.0, 'backwaterAmount': 0.03, 'resultAmount': 0.03},{'betTime': '2022-06-15 22:26:20', 'orderNo': 'XFJq3333rr9', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,塔斯马尼亚', 'TeamName': 'Olympia Warriors HobartVs河岸奥林匹克', 'betScore': None, 'marketName': '双重机会&大/小', 'outcomeName': 'Olympia Warriors Hobart/河岸奥林匹克 & 大 3.5', 'oddsType': 1, 'odds': 2.06, 'outcomeWinOrLoseName': '输'}], 'betAmount': 154.0, 'profitAmount': -154.0, 'backwaterAmount': 0.03, 'resultAmount': 0.03} ]
+
+orderNo_list=[]
+new_list=[]
+count_i = 0
+count_j = 1
+count=0
+for i in range(0, len(yyds_list)):
+    print("i循环:",i,count_i)
+    if i==count_i:
+        orderNo_list = []
+        for j in range(count_j, len(yyds_list)):
+            print("j循环:",j,count_j)
+            if j == count_j:
+                new_list.append(yyds_list[i])
+                if yyds_list[i]['orderNo']==yyds_list[j]['orderNo']:
+                    print(yyds_list[i]['orderNo'],yyds_list[j]['orderNo'])
+                    orderNo_list.append(yyds_list[i]['outcomeList'][0])
+                    orderNo_list.append(yyds_list[j]['outcomeList'][0])
+                    count_j = count_j + 1
+                    count_i = count_i + 1
+                    if j==len(yyds_list) - 1:
+                        new_list[-1]['outcomeList'] = orderNo_list
+                        print(f"第{count}次,{count_i},{count_j}")
+                    else:
+                        for k in range(count_j,len(yyds_list)):
+                            print(yyds_list[i]['orderNo'],yyds_list[k]['orderNo'])
+                            if yyds_list[i]['orderNo'] == yyds_list[k]['orderNo']:
+                                if k == len(yyds_list) - 1:
+                                    count = count + 1
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                                    new_list[-1]['outcomeList'] = orderNo_list
+                                    print(f"第{count}次,{count_i},{count_j}")
+                                else:
+                                    orderNo_list.append(yyds_list[k]['outcomeList'][0])
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                            else:
+                                new_list[-1]['outcomeList']=orderNo_list
+                                count_j = count_j + 1
+                                count_i = count_i + 1
+                                count = count + 1
+                                print(f"第{count}次,{count_i},{count_j}")
+                                break
+                else:
+                    count_i = count_i + 1
+                    count_j = count_j + 1
+                    count=count+1
+                    break
+            else:
+                break
+    else:
+        continue
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+print(new_list)
