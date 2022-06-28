@@ -23,9 +23,9 @@ from config import cfile
 class Test_sportReport:
 
     # 读取excle 里面的用例
-    de = DoExcel(file_name=owner_backer_path, sheet_name="sportReport1")
+    de = DoExcel(file_name=owner_backer_path, sheet_name="sportReport")
     case_list1 = de.get_case(de.get_sheet())
-    de = DoExcel(file_name=owner_backer_path, sheet_name='sport_params1')
+    de = DoExcel(file_name=owner_backer_path, sheet_name='sport_params')
     case_list2 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
     @pytest.mark.parametrize('sport_params', case_list2)
@@ -323,6 +323,6 @@ if __name__ == "__main__":
     # -Wignore 忽略所有warning
 
     # 使用allure 产生报告
-    os.system("allure generate ../report -o ../report/html --clean")    # 生成html文件
+    # os.system("allure generate ../report -o ../report/html --clean")    # 生成html文件
     # os.system("copy ../report/environment.properties ../report/tmp/environment.properties")    # 在执行测试用例时将其复制到report/tmp目录下
     os.system("allure serve ../report/tmp")

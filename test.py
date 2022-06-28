@@ -938,6 +938,8 @@ detail_order = "'阿根廷乙级联赛 雷梅迪奥斯塔勒瑞斯 Vs 胡斯托�
 list_str = detail_order[1:].split(" ")
 # print(list_str)
 
+
+# python 字典和列表嵌套
 list_num = [100, 0.2, 0.2, 0.2, 0.1, 0.3, 0.0021, 0.0021, 0.0019, 0.0015, 0.0002]
 data_list = ["efficient_amount", "company_retreat_proportion", "level0_retreat_proportion",
            "level1_retreat_proportion", "level2_retreat_proportion", "level3_retreat_proportion",
@@ -968,7 +970,7 @@ for item in match_list:
 
 date_list =[['2022-06-22', 586.62, 3119.19], ['2022-06-22', -13.97, 3000.21]]
 new_list = []
-list = []
+# list = []
 # for item in date_list:
 #     new_list.extend(item[1:])
 # new_list.insert(0,date_list[0][0])
@@ -1026,8 +1028,8 @@ data_dic = {"betAmount":123641.00,"bettingNumber":"3547","bettingProfitAndLoss":
 
 # 串关合并一条数据---列表形式
 yyds_list = [['a0b1b2b3a3/a3', 'XHby72tvjVaw', '2022-06-25 04:04:05', ['澳大利亚Norzone Premier League', '希腊人竞技 Vs 达尔温哈尔茨', '滚球盘', '大/小', 'total=3.75', '大3.5/4', 0.81, '2022-06-25 02:30:00', '香港盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHby72tvjVaw', '2022-06-25 04:04:05', ['澳大利亚NSW League One', '圣乔治市 Vs 圣乔治 圣徒', '滚球盘', '让球', 'hcp=-1', '圣乔治市 ', 0.87, '2022-06-25 04:00:00', '香港盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHby72tvjVaw', '2022-06-25 04:04:05', ['澳大利亚全国超级联赛,塔斯马尼亚', '朗塞斯顿市 Vs 德文波特市', '滚球盘', '独赢', '', '德文波特市', 1.8, '2022-06-25 02:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHaGXbYAxZHN', '2022-06-25 01:46:07', ['澳大利亚全国超级联赛,南澳大利亚', '阿德莱科梅兹 Vs 南阿德莱得黑豹', '滚球盘', '让球', 'hcp=-1.25', '阿德莱科梅兹 ', 2.0, '2022-06-25 01:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHaGXbYAxZHN', '2022-06-25 01:46:07', ['澳大利亚全国超级联赛,南澳大利亚', '坎伯兰联 Vs 白城伍德维尔', '滚球盘', '大/小', 'total=2.5', '大2.5', 1.95, '2022-06-25 01:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHaGXbYAxZHN', '2022-06-25 01:46:07', ['澳大利亚全国超级联赛,南澳大利亚', '斯图特狮子 Vs 阿德萊德奧林匹克', '滚球盘', '大/小', 'total=3', '大3', 1.88, '2022-06-25 01:30:00', '欧洲盘'], 400.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['a0b1b2b3a3/a3', 'XHaGQqBXqSXA', '2022-06-25 01:45:45', ['澳大利亚全国超级联赛,南澳大利亚', '阿德莱科梅兹 Vs 南阿德莱得黑豹', '滚球盘', '大/小', 'total=3', '大3', 1.86, '2022-06-25 01:30:00', '欧洲盘'], 100.0, 'mde.betf.io / 台湾省彰化县市谷歌'], ['d0d1d2d37e/fceshi0178', 'XH4yz8zHh5gw', '2022-06-24 08:58:05', ['澳大利亚全国超级联赛,新南威尔士', '马柯尼 Vs 芒特德瑞特城流浪者', '早盘', '平局退款', '', '芒特德瑞特城流浪者', 4.35, '2022-06-25 05:00:00', '欧洲盘'], 10.0, '192.168.10.120 / 局域网'], ['a0b1b2b300/a2', 'XFJrebYTDvZs', '2022-06-15 22:27:24', ['挪威超级联赛', '莫尔德 Vs FK Jerv', '早盘', '莫尔德 进球数', 'variant=sr:exact_goals:3+', '0', 8.95, '2022-06-26 12:00:00', '欧洲盘'], 307.0, 'mde.betf.io / 台湾省彰化县市谷歌']]
-# print(yyds_list)
 
+# print(yyds_list)
 orderNo_list=[]
 new_list=[]
 count_i = 0
@@ -1085,32 +1087,32 @@ count_i = 0
 count_j = 1
 count=0
 for i in range(0, len(yyds_list)):
-    print("i循环:",i,count_i)
+    # print("i循环:",i,count_i)
     if i==count_i:
         orderNo_list = []
         for j in range(count_j, len(yyds_list)):
-            print("j循环:",j,count_j)
+            # print("j循环:",j,count_j)
             if j == count_j:
                 new_list.append(yyds_list[i])
                 if yyds_list[i]['orderNo']==yyds_list[j]['orderNo']:
-                    print(yyds_list[i]['orderNo'],yyds_list[j]['orderNo'])
+                    # print(yyds_list[i]['orderNo'],yyds_list[j]['orderNo'])
                     orderNo_list.append(yyds_list[i]['outcomeList'][0])
                     orderNo_list.append(yyds_list[j]['outcomeList'][0])
                     count_j = count_j + 1
                     count_i = count_i + 1
                     if j==len(yyds_list) - 1:
                         new_list[-1]['outcomeList'] = orderNo_list
-                        print(f"第{count}次,{count_i},{count_j}")
+                        # print(f"第{count}次,{count_i},{count_j}")
                     else:
                         for k in range(count_j,len(yyds_list)):
-                            print(yyds_list[i]['orderNo'],yyds_list[k]['orderNo'])
+                            # print(yyds_list[i]['orderNo'],yyds_list[k]['orderNo'])
                             if yyds_list[i]['orderNo'] == yyds_list[k]['orderNo']:
                                 if k == len(yyds_list) - 1:
                                     count = count + 1
                                     count_j = count_j + 1
                                     count_i = count_i + 1
                                     new_list[-1]['outcomeList'] = orderNo_list
-                                    print(f"第{count}次,{count_i},{count_j}")
+                                    # print(f"第{count}次,{count_i},{count_j}")
                                 else:
                                     orderNo_list.append(yyds_list[k]['outcomeList'][0])
                                     count_j = count_j + 1
@@ -1120,7 +1122,7 @@ for i in range(0, len(yyds_list)):
                                 count_j = count_j + 1
                                 count_i = count_i + 1
                                 count = count + 1
-                                print(f"第{count}次,{count_i},{count_j}")
+                                # print(f"第{count}次,{count_i},{count_j}")
                                 break
                 else:
                     count_i = count_i + 1
@@ -1133,4 +1135,113 @@ for i in range(0, len(yyds_list)):
         continue
 
 
-print(new_list)
+# print(new_list)
+
+
+
+# 串关合并一条数据---列表形式-例子2
+yyds_list = [['a0b1b2b3a4/y0', 'a0', 'XHtvFfZUmsNB', '2022-06-26 23:39:31', '篮球', '单关', ['波多黎各BSN', '阿雷西博 Vs 庞塞雄狮', '早盘', '独赢', '', '庞塞雄狮', 2.75, '欧洲盘', '2022-06-27 20:00:00'], '2022-06-26 23:39:59', '输', 'mde.betf.io / 台湾省彰化县市谷歌', 100.0, -100.0, 100.0, 0.2, 20.0, 0, 0.0, 20.0, 0.2, 20.0, 0.0, 0.0, 20.0, 0.2, 20.0, 0.0, 0.0, 20.0, 0.1, 10.0, 0.0, 0.0, 10.0, 0.3, 30.0, 0.0, 0.0, 30.0, -100.0, 0.0, 0.0, -100.0], ['a0b1b2b3a4/y0', 'a0', 'XHtvDXQMBLB7', '2022-06-26 23:39:27', '篮球', '串关', ['波多黎各BSN', '桑图尔塞捕蟹者队 Vs Grises de Humacao', '早盘', '让球', 'hcp=-11.5', 'Grises de Humacao ', 0.8, '香港盘', '2022-06-27 20:00:00'], '2022-06-26 23:39:57', '输', 'mde.betf.io / 台湾省彰化县市谷歌', 100.0, -100.0, 100.0, 0.2, 20.0, 0, 0.0, 20.0, 0.2, 20.0, 0.0, 0.0, 20.0, 0.2, 20.0, 0.0, 0.0, 20.0, 0.1, 10.0, 0.0, 0.0, 10.0, 0.3, 30.0, 0.0, 0.0, 30.0, -100.0, 0.0, 0.0, -100.0], ['a0b1b2b3a4/y0', 'a0', 'XHtvDXQMBLB7', '2022-06-26 23:39:27', '篮球', '串关', ['波多黎各BSN', '克布拉迪亚斯 Vs 梅亚圭兹印第安人', '早盘', '梅亚圭兹印第安人 大/小', 'total=80.5', '小80.5', 0.79, '香港盘', '2022-06-27 20:00:00'], '2022-06-26 23:39:57', '输', 'mde.betf.io / 台湾省彰化县市谷歌', 100.0, -100.0, 100.0, 0.2, 20.0, 0, 0.0, 20.0, 0.2, 20.0, 0.0, 0.0, 20.0, 0.2, 20.0, 0.0, 0.0, 20.0, 0.1, 10.0, 0.0, 0.0, 10.0, 0.3, 30.0, 0.0, 0.0, 30.0, -100.0, 0.0, 0.0, -100.0], ['a0b1b2b3a4/y0', 'a0', 'XHtvCqQsHi8C', '2022-06-26 23:39:22', '篮球', '复式串关', ['波多黎各BSN', '阿雷西博 Vs 庞塞雄狮', '早盘', '阿雷西博 大/小', 'total=91.5', '大91.5', 0.87, '香港盘', '2022-06-27 20:00:00'], '2022-06-26 23:39:54', '输', 'mde.betf.io / 台湾省彰化县市谷歌', 300.0, -200.0, 200.0, 0.2, 40.0, 0, 0.0, 40.0, 0.2, 40.0, 0.0, 0.0, 40.0, 0.2, 40.0, 0.0, 0.0, 40.0, 0.1, 20.0, 0.0, 0.0, 20.0, 0.3, 60.0, 0.0, 0.0, 60.0, -200.0, 0.0, 0.0, -200.0], ['a0b1b2b3a4/y0', 'a0', 'XHtvCqQsHi8C', '2022-06-26 23:39:22', '篮球', '复式串关', ['波多黎各BSN', 'Mets de Guaynabo Vs 巴亚蒙', '早盘', '大/小', 'total=175.5', '大175.5', 0.85, '香港盘', '2022-06-27 20:00:00'], '2022-06-26 23:39:54', '输', 'mde.betf.io / 台湾省彰化县市谷歌', 300.0, -200.0, 200.0, 0.2, 40.0, 0, 0.0, 40.0, 0.2, 40.0, 0.0, 0.0, 40.0, 0.2, 40.0, 0.0, 0.0, 40.0, 0.1, 20.0, 0.0, 0.0, 20.0, 0.3, 60.0, 0.0, 0.0, 60.0, -200.0, 0.0, 0.0, -200.0], ['a0b1b2b3a4/y0', 'a0', 'XHtvCqQsHi8C', '2022-06-26 23:39:22', '篮球', '复式串关', ['波多黎各BSN', '克布拉迪亚斯 Vs 梅亚圭兹印第安人', '早盘', '大/小', 'total=164.5', '大164.5', 0.79, '香港盘', '2022-06-27 20:00:00'], '2022-06-26 23:39:54', '输', 'mde.betf.io / 台湾省彰化县市谷歌', 300.0, -200.0, 200.0, 0.2, 40.0, 0, 0.0, 40.0, 0.2, 40.0, 0.0, 0.0, 40.0, 0.2, 40.0, 0.0, 0.0, 40.0, 0.1, 20.0, 0.0, 0.0, 20.0, 0.3, 60.0, 0.0, 0.0, 60.0, -200.0, 0.0, 0.0, -200.0]]
+
+# print(yyds_list)
+orderNo_list=[]
+new_list=[]
+count_i = 0
+count_j = 1
+count=0
+for i in range(0, len(yyds_list)):
+    if i==count_i:
+        orderNo_list = []
+        new_list.append(yyds_list[i])
+        for j in range(count_j, len(yyds_list)):
+            if j == count_j:
+                if yyds_list[i][2]==yyds_list[j][2]:
+                    orderNo_list.append(yyds_list[i][6])
+                    orderNo_list.append(yyds_list[j][6])
+                    count_j = count_j + 1
+                    count_i = count_i + 1
+                    if j==len(yyds_list) - 1:
+                        new_list[-1][6] = orderNo_list
+                    else:
+                        for k in range(count_j,len(yyds_list)):
+                            if yyds_list[i][2] == yyds_list[k][2]:
+                                orderNo_list.append(yyds_list[k][6])
+                                if k == len(yyds_list) - 1:
+                                    count = count + 1
+                                    count_j = count_j + 1
+                                    count_i = count_i + 2
+                                    new_list[-1][6] = orderNo_list
+                                else:
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                            else:
+                                new_list[-1][6]=orderNo_list
+                                count_j = count_j + 1
+                                count_i = count_i + 1
+                                count = count + 1
+                                break
+                else:
+                    count_i = count_i + 1
+                    count_j = count_j + 1
+                    count=count+1
+                    break
+            else:
+                break
+    else:
+        continue
+
+# print(new_list)
+
+
+# 串关合并一条数据---列表形式-例子3
+yyds_list = [['XHBWcd8LzVE7', 3, '3_4_1', 1, '1.220'], ['XHBWcd8LzVE7', 3, '3_4_1', 2, '1.220'], ['XHBWcd8LzVE7', 3, '3_4_1', 1, '1.100']]
+orderNo_list=[]
+new_list=[]
+count_i = 0
+count_j = 1
+count=0
+for i in range(0, len(yyds_list)):
+    if i==count_i:
+        orderNo_list = []
+        new_list.append(yyds_list[i])
+        for j in range(count_j, len(yyds_list)):
+            if j == count_j:
+                if yyds_list[i][0]==yyds_list[j][0]:
+                    orderNo_list.append(yyds_list[i][4])
+                    orderNo_list.append(yyds_list[j][4])
+                    count_j = count_j + 1
+                    count_i = count_i + 1
+                    if j==len(yyds_list) - 1:
+                        new_list[-1][4] = orderNo_list
+                    else:
+                        for k in range(count_j,len(yyds_list)):
+                            if yyds_list[i][0] == yyds_list[k][0]:
+                                orderNo_list.append(yyds_list[k][4])
+                                if k == len(yyds_list) - 1:
+                                    count = count + 1
+                                    count_j = count_j + 1
+                                    count_i = count_i + 2
+                                    new_list[-1][4] = orderNo_list
+                                else:
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                            else:
+                                new_list[-1][4]=orderNo_list
+                                count_j = count_j + 1
+                                count_i = count_i + 1
+                                count = count + 1
+                                break
+                else:
+                    count_i = count_i + 1
+                    count_j = count_j + 1
+                    count=count+1
+                    break
+            else:
+                break
+    else:
+        continue
+
+
+# print(new_list)
+
+
+

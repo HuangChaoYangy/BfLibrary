@@ -1304,7 +1304,7 @@ if __name__ == "__main__":
 
     # settlement_by_orderNo = bc.generate_settlement_str_by_orderNo(order_no='XCMMRnQ7dJVK', sort=0, certainty='2', result=None)       #根据注单号进行生成结算指令
     # print(settlement_by_orderNo)
-    send = bc.send_message_to_datasourse(username='',order_no='XFJr5mThpLSk', certainty='2', result=None)        # 生成结算指令+注单结算
+    send = bc.send_message_to_datasourse(username='',order_no='XHD4b5fwK42g', certainty='2', result='取消')        # 生成结算指令+注单结算
 
     # data = bc.generate_rollback_bet_cancel_str(match_id='31975607',start_stamp="1641713763000", end_stamp="1649489763000")      # 取消回滚指令
     # print(data)

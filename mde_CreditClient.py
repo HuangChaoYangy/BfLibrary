@@ -1254,7 +1254,7 @@ class Credit_Client(object):
         :param token:
         :param odds_Type:
         :param odds_Type:
-        :param handicap:  默认为false,为True时获取让球/大小/独赢盘口
+        :param handicap:  默认为false,为True时获取让球/大小/独赢盘口    用户后台查询
         :return:
         '''
         match_info_list = []
@@ -1966,16 +1966,16 @@ if __name__ == "__main__":
     #     data = bf.cm.write_to_local_file(content=item, file_name='C:/Users/USER/Desktop/testOdds.txt',mode='w')
 
     # 新增多线程-模拟多用户进行投注
-    # start_time = time.perf_counter()
-    # user_list = ['a1','a2','a3']
-    # for user in user_list:
-    #     type_list = ['INPLAY', 'TODAY', 'EARLY']
-    #     type = random.choice(type_list)
-    #     token = bf.login_client(username=user, password='Bfty123456')
-    #     sub_thread = threading.Thread(target=bf.submit_all_match, args=(f'{token}', f'{type}', 2, '30', True))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
-    #     # sub_thread = threading.Thread(target=bf.submit_all_outcome, args=("网球", f'{token}', 3, 'INPLAY') )       # 非复式串关投注：创建线程,target为线程执行的目标方法
-    #     sub_thread.start()          # 通过start()方法手动来启动线程
-    # print(threading.current_thread())
+    start_time = time.perf_counter()
+    user_list = ['a1','a2','a3']
+    for user in user_list:
+        type_list = ['INPLAY', 'TODAY', 'EARLY']
+        type = random.choice(type_list)
+        token = bf.login_client(username=user, password='Bfty123456')
+        sub_thread = threading.Thread(target=bf.submit_all_match, args=(f'{token}', f'{type}', 2, '30', True))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
+        # sub_thread = threading.Thread(target=bf.submit_all_outcome, args=("网球", f'{token}', 3, 'INPLAY') )       # 非复式串关投注：创建线程,target为线程执行的目标方法
+        sub_thread.start()          # 通过start()方法手动来启动线程
+    print(threading.current_thread())
 
         # with ThreadPoolExecutor(max_workers=5) as task:            # 创建一个最大容纳数量为5的线程池
         #     for item in range(thread_num):
@@ -2012,8 +2012,8 @@ if __name__ == "__main__":
     # for match_id in match_info_list:
     #     bf.submit_all_outcome(match_id=match_id, sport_name=sport_name, token=token_list[0], odds_type=1, IsRandom='5')
     # 非复式串关投注
-    for bet_type in range(3,15):
-        bf.submit_all_outcomes(sport_name='足球', token=token_list[0], bet_type=bet_type, event_type='TODAY', IsRandom='10')
+    # for bet_type in range(3,15):
+    #     bf.submit_all_outcomes(sport_name='足球', token=token_list[0], bet_type=bet_type, event_type='TODAY', IsRandom='10')
     # 复式串关投注
     # for bet_type in range(3, 7):
     #     bf.submit_all_complex(sport_name='篮球', token=token_list[0], bet_type=bet_type, event_type='EARLY', odds_type=1, oddsChangeType=1, complex='multi', complex_number=2)

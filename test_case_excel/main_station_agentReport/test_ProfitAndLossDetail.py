@@ -26,7 +26,6 @@ from config import cfile
 class Test_profitAndLossDetail:
 
     # 读取excle 里面的用例
-
     de = DoExcel(file_name=owner_backer_path, sheet_name="winLoseDetail")
     case_list1 = de.get_case(de.get_sheet())
 
@@ -35,7 +34,7 @@ class Test_profitAndLossDetail:
     @allure.story('总台-代理报表-总代盈亏(详情)')
     def test_profitAndLossDetail(self, excel_data):
         '''
-        管理后台-代理报表-总代盈亏(详情)
+        管理后台-代理报表-总代盈亏(详情)                  // 修改于2022.06.27
         :param excel_data:  excel中的测试用例
         :return:
         '''
@@ -58,6 +57,8 @@ class Test_profitAndLossDetail:
         if excel_data[12] == '是':
             # 读取参数化数据
             request_body = eval(excel_data[6])             # 将字符串转成相应的对象（如list、tuple、dict和string之间的转换）
+            request_body['startTime'] = CommonFunc.get_current_time_for_client(time_type="ctime", day_diff=int(request_body['startTime']))
+            request_body['endTime'] = CommonFunc.get_current_time_for_client(time_type="ctime",day_diff=int(request_body['endTime']))
             title = excel_data[1]
             allure.dynamic.title(title)
             with allure.step(f"执行测试用例:{title}"):
@@ -151,6 +152,8 @@ class Test_profitAndLossDetail:
                                         DoExcel(owner_backer_path, "winLoseDetail").write_result(row=int(excel_data[0]+1),
                                                                                                actual_result=f'{actualResult}',expect_result=f'{expectResult}',
                                                                                                is_pass=f"测试不通过 \n{ctime}")
+                                    continue
+
                                 assert new_item1 == new_item2
 
                 else:
@@ -174,7 +177,7 @@ class Test_profitAndLossDetail:
     @allure.story('总台-代理报表-总代盈亏(详情)-注单详情')
     def test_profitAndLossOrderDetail(self, excel_data, sport_params):
         '''
-        管理后台-代理报表-总代盈亏(详情)-注单详情
+        管理后台-代理报表-总代盈亏(详情)-注单详情             // 修改于2022.06.27
         :param excel_data:  excel中的测试用例
         :param sport_params: excel中的参数化数据
         :return:
@@ -199,9 +202,12 @@ class Test_profitAndLossDetail:
             # 读取参数化数据
             params_list = sport_params
             request_body = eval(excel_data[6])             # 将字符串转成相应的对象（如list、tuple、dict和string之间的转换）
-            request_body['account'] = params_list[0]
-            request_body['parentId'] = params_list[1]
-            title = params_list[2]
+            request_body['account'] = params_list[3]
+            request_body['parentId'] = params_list[0]
+            request_body['startTime'] = CommonFunc.get_current_time_for_client(time_type="ctime", day_diff=int(request_body['startTime']))
+            request_body['endTime'] = CommonFunc.get_current_time_for_client(time_type="ctime",day_diff=int(request_body['endTime']))
+            title = params_list[1]
+            # print(request_body)
             allure.dynamic.title(title)
             with allure.step(f"执行测试用例:{title}"):
                 Bf_log('profitAndLossOrderDetail').info(f"----------------开始执行:{title}------------------------")
@@ -234,46 +240,18 @@ class Test_profitAndLossDetail:
                         bet_type = bet_dic[item['betType']]
                         odds_type = odds_dic[detail['oddsType']]
                         actualResult.append([item['account'],item['name'],item['orderNo'],item['betTimeStr'],item['sportType'],bet_type,
-                                             [detail['tournamentName'] + ' ' + detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['betScore'],detail['matchType'],
-                                             detail['marketName'], detail['outcomeName'],detail['oddsType'],detail['odds'],odds_type, detail['matchTimeStr']], item['settlementTimeStr'],
-                                             item['betResult'],item['betIp'] + ' / ' + item['betIpAddress'],item['betAmount'],item['winOrLose'],item['validAmount'],
-                                             item['companyPercentage'],item['companyWinOrLose'],item['companyCommissionRatio'],item['companyCommission'],item['companyTotal'],
-                                             item['level0Percentage'],item['level0WinOrLose'],item['level0CommissionRatio'],item['level0Commission'],item['level0Total'],
-                                             item['level1Percentage'], item['level1WinOrLose'],item['level1CommissionRatio'], item['level1Commission'],item['level1Total'],
-                                             item['level2Percentage'], item['level2WinOrLose'],item['level2CommissionRatio'], item['level2Commission'],item['level2Total'],
-                                             item['level3Percentage'], item['level3WinOrLose'],item['level3CommissionRatio'], item['level3Commission'],item['level3Total'],
-                                             item['memberWinOrLose'],item['memberCommissionRatio'],item['memberCommission'],item['memberTotal']])
-
-                count_i = 0
-                count_j = 1
-                for i in range(0, len(actualResult)):
-                    if i == count_i:
-                        orderNo_list = []
-                        actual_result.append(actualResult[i])
-                        for j in range(count_j, len(actualResult)):
-                            if j == count_j:
-                                if actualResult[i][2] == actualResult[j][2]:
-                                    orderNo_list.append(actualResult[i][6][0])
-                                    orderNo_list.append(actualResult[j][6][0])
-                                    count_j = count_j + 1
-                                    count_i = count_i + 1
-                                    for k in range(count_j, len(actualResult)):
-                                        if actualResult[i][2] == actualResult[k][2]:
-                                            orderNo_list.append(actualResult[k][6][0])
-                                            count_j = count_j + 1
-                                            count_i = count_i + 1
-                                        else:
-                                            actual_result[-1][6] = orderNo_list
-                                            count_j = count_j + 1
-                                            count_i = count_i + 1
-                                            break
-                                else:
-                                    count_j = count_j + 1
-                                    count_i = count_i + 1
-                            else:
-                                continue
-                    else:
-                        continue
+                                             [detail['tournamentName'],detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'],detail['marketName'],
+                                              detail['specifier'],detail['outcomeName'],detail['odds'],odds_type,detail['matchTimeStr']],
+                                             item['settlementTimeStr'],item['betResult'],item['betIp'] + ' / ' + item['betIpAddress'],item['betAmount'],item['winOrLose'],
+                                             item['validAmount'],item['companyPercentage'],item['companyWinOrLose'],item['companyCommissionRatio'],item['companyCommission'],
+                                             item['companyTotal'],item['level0Percentage'],item['level0WinOrLose'],item['level0CommissionRatio'],item['level0Commission'],
+                                             item['level0Total'],item['level1Percentage'], item['level1WinOrLose'],item['level1CommissionRatio'], item['level1Commission'],
+                                             item['level1Total'],item['level2Percentage'], item['level2WinOrLose'],item['level2CommissionRatio'], item['level2Commission'],
+                                             item['level2Total'],item['level3Percentage'], item['level3WinOrLose'],item['level3CommissionRatio'], item['level3Commission'],
+                                             item['level3Total'],item['memberWinOrLose'],item['memberCommissionRatio'],item['memberCommission'],item['memberTotal']])
+                print(actualResult)
+                print(11111111111111111111111111111111111111111)
+                actual_result = CommonFunc().merge_compelx_02(new_lList=actualResult)
 
             elif response_data['data']['data'] == []:
                 actualResult = []
@@ -281,7 +259,7 @@ class Test_profitAndLossDetail:
                 raise AssertionError(response_data['message'])
 
             # 执行SQL,SQL写法f{"参数"}
-            account_Str = params_list[3]
+            account_Str = params_list[2]
             sql_str = eval(excel_data[7])
             SQLResult_list = list(MysqlFunc(mysql_info, mongo_info).query_data(sql_str, db_name='bfty_credit'))
 
@@ -295,42 +273,16 @@ class Test_profitAndLossDetail:
             else:
                 for item in SQLResult_list:
                     bet_time = item[3]
-                    matchTime = bet_time.strftime("%Y-%m-%d %H:%M:%S")
-                    expectResult.append([item[0],item[1],item[2],matchTime,item[4],item[5],item[6],item[7],item[8],item[9],item[10],item[11]
-                                         ,item[12],item[13],item[14],item[15],item[16],item[17],item[18],item[19],item[20],
-                                         item[21],item[22],item[23],item[24],item[25],item[26],item[27],item[28],item[29],
-                                         item[30],item[31],item[32],item[33],item[34],item[35],item[36],item[37],item[38],item[39],item[40],item[41],item[42]])
+                    create_time = bet_time.strftime("%Y-%m-%d %H:%M:%S")
+                    matchTime = item[14]
+                    match_ime = matchTime.strftime("%Y-%m-%d %H:%M:%S")
+                    expectResult.append([item[0],item[1],item[2],create_time,item[4],item[5],
+                                         [item[6],item[7],item[8],item[9],item[10],item[11],item[12],item[13],match_ime],
+                                         item[15],item[16],item[17],item[18],item[19],item[20],item[21],item[22],item[23],item[24],item[25],item[26],item[27],
+                                         item[28],item[29],item[30],item[31],item[32],item[33],item[34],item[35],item[36],item[37],item[38],item[39],item[40],
+                                         item[41],item[42], item[43],item[44], item[45],item[46], item[47],item[48], item[49]])
 
-                count_i = 0
-                count_j = 1
-                for i in range(0, len(expectResult)):
-                    if i == count_i:
-                        orderNo_list = []
-                        expect_result.append(expectResult[i])
-                        for j in range(count_j, len(expectResult)):
-                            if j == count_j:
-                                if expectResult[i][2] == expectResult[j][2]:
-                                    orderNo_list.append(expectResult[i][6][0])
-                                    orderNo_list.append(expectResult[j][6][0])
-                                    count_j = count_j + 1
-                                    count_i = count_i + 1
-                                    for k in range(count_j, len(expectResult)):
-                                        if expectResult[i][2] == expectResult[k][2]:
-                                            orderNo_list.append(expectResult[k][6][0])
-                                            count_j = count_j + 1
-                                            count_i = count_i + 1
-                                        else:
-                                            expect_result[-1][6] = orderNo_list
-                                            count_j = count_j + 1
-                                            count_i = count_i + 1
-                                            break
-                                else:
-                                    count_j = count_j + 1
-                                    count_i = count_i + 1
-                            else:
-                                continue
-                    else:
-                        continue
+                expect_result = CommonFunc().merge_compelx_02(new_lList=expectResult)
 
             ctime = CommonFunc().get_current_time_for_client(time_type='currenttime')  # 获取当前时间
             # 校验接口数据和SQL数据的长度
@@ -353,9 +305,11 @@ class Test_profitAndLossDetail:
                                 new_item1.insert(3, item1[3])
                                 new_item1.insert(4, item1[4])
                                 new_item1.insert(5, item1[5])
-                                new_item1.insert(6, item1[8])
-                                new_item1.insert(7, item1[9])
-                                for sql_data in item2[11:]:
+                                new_item1.insert(6, item1[6])
+                                new_item1.insert(7, item1[7])
+                                new_item1.insert(8, item1[8])
+                                new_item1.insert(9, item1[9])
+                                for sql_data in item2[10:]:
                                     if sql_data == None or sql_data == 0:
                                         sql_result = 0
                                     else:
@@ -367,8 +321,10 @@ class Test_profitAndLossDetail:
                                 new_item2.insert(3, item2[3])
                                 new_item2.insert(4, item1[4])
                                 new_item2.insert(5, item1[5])
-                                new_item2.insert(6, item1[8])
-                                new_item2.insert(7, item1[9])
+                                new_item2.insert(6, item1[6])
+                                new_item2.insert(7, item1[7])
+                                new_item2.insert(8, item1[8])
+                                new_item2.insert(9, item1[9])
 
                                 # 判断两个list的值是否一致,并且回写入excel
                                 if new_item1 == new_item2:
@@ -383,6 +339,8 @@ class Test_profitAndLossDetail:
                                         DoExcel(owner_backer_path, "winLoseOrderDetail").write_result(row=int(excel_data[0]+1),
                                                                                                actual_result=f'{actualResult}',expect_result=f'{expectResult}',
                                                                                                is_pass=f"测试不通过 \n{ctime}")
+                                    continue
+
                                 with assume:
                                     assert new_item1 == new_item2
 

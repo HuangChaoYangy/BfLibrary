@@ -431,4 +431,56 @@ if actualResult != [] or expectResult != []:
 else:
     print(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过')
 
+import datetime
+list_ordre = ['a0b1b2b3a3/a3', '李杨会员03', 'XGp7FeRivkYt', datetime.datetime(2022, 6, 20, 2, 40, 38), 0.2, 0.2, 0, 0.2, 0, 0.1, 0, 0.3, 0, 0]
+bet_time = list_ordre[3]
+start_time = bet_time.strftime("%Y-%m-%d %H:%M:%S")  # 将字符串转换成datetime时间格式
+# print(start_time)
+
+# da_pn = datetime.datetime.now().date()
+# print(da_pn)
+
+
+import pytest
+from pytest_assume.plugin import assume
+
+@pytest.mark.parametrize(('x', 'y'),[(1, 1), (1, 0), (0, 1)])
+def test_simple_assume(x, y):
+    print("测试数据x=%s, y=%s" % (x, y))
+    with assume: assert x == y
+    with assume: assert x+y > 1
+    with assume: assert x > 1
+    print("测试完成！")
+
+
+
+
+
+a_list = [('XHBWcd8LzVE7', 3, '3_4_1', 1, '1.220'), ('XHBWcd8LzVE7', 3, '3_4_1', 2, '1.220'), ('XHBWcd8LzVE7', 3, '3_4_1', 1, '1.100')]
+
+def tuple_to_list(tuple_in,*agrs): #  *agrs指的是输入的数据类型为元组
+    list_out = []                  #建立一个空列表
+    for item in tuple_in:
+        lt = list(item)              #把元组类型全部变成列表类型
+        list_out.append(lt)        #把输出填充到列表list_out中
+    # print(list_out)
+    return list_out
+
+tuple_to_list(tuple_in=a_list)
+
+
+b = [list(item) for item in a_list]
+print(b)
+
+
+
+
+
+
+
+
+
+
+
+
 
