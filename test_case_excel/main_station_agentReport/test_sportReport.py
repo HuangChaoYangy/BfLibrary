@@ -29,7 +29,7 @@ class Test_sportReport:
     case_list2 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
     @pytest.mark.parametrize('sport_params', case_list2)
-    # @pytest.mark.skip(reason='调试代码,暂不执行')
+    @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-代理报表-球类报表-列表详情')
     def test_sportsReport(self, excel_data, sport_params):
         '''
@@ -61,8 +61,8 @@ class Test_sportReport:
             request_body['begin'] = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=params_list[0])
             request_body['end'] = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=params_list[1])
             request_body['queryDateType'] = params_list[2]
-            request_body['sportId'] = params_list[3]
-            title = params_list[5]
+            title = params_list[3]
+
             allure.dynamic.title(title)
             with allure.step(f"执行测试用例:{title}"):
                 Bf_log('sportReport').info(f"----------------开始执行:{title}------------------------")
@@ -107,11 +107,9 @@ class Test_sportReport:
             # 执行SQL,SQL写法f{"参数"}
             begin = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=params_list[0])
             end = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=params_list[1])
-            sportId = params_list[3]
-            sportId_Str = params_list[4]
-            DateType = params_list[6]
+            DateType = params_list[4]
             sql_str = eval(excel_data[7])
-            # print(sql_str)
+
             SQLResult_list = list(MysqlFunc(mysql_info, mongo_info).query_data(sql_str, db_name='bfty_credit'))
             with allure.step(f'查询SQL:{sql_str}'):
                 Bf_log('sportReport').info(f'执行sql:{sql_str}')
@@ -174,7 +172,7 @@ class Test_sportReport:
     case_list2 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
     @pytest.mark.parametrize('market_params', case_list2)
-    @pytest.mark.skip(reason='调试代码,暂不执行')
+    # @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-代理报表-球类报表-查看盘口详情')
     def test_sportsReportMarket(self, excel_data, market_params):
         '''
@@ -206,8 +204,7 @@ class Test_sportReport:
             request_body['begin'] = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=params_list[0])
             request_body['end'] = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=params_list[1])
             request_body['queryDateType'] = params_list[2]
-            request_body['sportId'] = params_list[3]
-            title = params_list[5]
+            title = params_list[3]
             allure.dynamic.title(title)
             with allure.step(f"执行测试用例:{title}"):
                 Bf_log('sportReportDetail').info(f"----------------开始执行:{title}------------------------")
@@ -253,9 +250,10 @@ class Test_sportReport:
             # 执行SQL,SQL写法f{"参数"}
             begin = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=params_list[0])
             end = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=params_list[1])
-            sportId = params_list[3]
-            DateType = params_list[6]
+            DateType = params_list[5]
+            sportId = params_list[4]
             sql_str = eval(excel_data[7])
+
             SQLResult_list = list(MysqlFunc(mysql_info, mongo_info).query_data(sql_str, db_name='bfty_credit'))
             with allure.step(f'查询SQL:{sql_str}'):
                 Bf_log('sportReportDetail').info(f'执行sql:{sql_str}')
@@ -263,7 +261,8 @@ class Test_sportReport:
                 expectResult = []
             else:
                 expectResult = SQLResult_list
-
+            print(actualResult)
+            print(expectResult)
             ctime = CommonFunc().get_current_time_for_client(time_type='currenttime')  # 获取当前时间
             # 校验接口数据和SQL数据的长度
             if len(actualResult) == len(expectResult):

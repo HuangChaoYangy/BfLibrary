@@ -29,11 +29,11 @@ class Test_unsettledOrder:
     case_list1 = de.get_case(de.get_sheet())
 
     @pytest.mark.parametrize('excel_data', case_list1)
-    # @pytest.mark.skip(reason='调试代码,暂不执行')
+    @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-代理报表-未完成交易')
     def test_unsettledOrder(self, excel_data):
         '''
-        管理后台-代理报表-未完成交易-列表详情
+        管理后台-代理报表-未完成交易-列表详情        // 修改于2022.06.27
         :param excel_data:  excel中的测试用例
         :param sport_params: excel中的参数化数据
         :return:
@@ -170,7 +170,7 @@ class Test_unsettledOrder:
     @allure.story('总台-代理报表-未完成交易-注单详情')
     def test_unsettledOrderDetail(self, excel_data, sport_params):
         '''
-        管理后台-代理报表-未完成交易-注单详情
+        管理后台-代理报表-未完成交易-注单详情        // 修改于2022.06.28
         :param excel_data:  excel中的测试用例
         :param sport_params: excel中的参数化数据
         :return:
@@ -232,42 +232,13 @@ class Test_unsettledOrder:
                         bet_type = bet_dic[item['betType']]
                         odds_type = odds_dic[detail['oddsType']]
                         actualResult.append([item['account'],item['memberName'],item['orderNo'],create_time,item['sportsType'],bet_type,
-                                             [detail['tournamentName'] + ' ' + detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['betScore'],detail['matchType'],
-                                             detail['marketName'], detail['outcomeName'],detail['oddsType'],detail['odds'],odds_type, detail['matchTimeStr']],
+                                             [detail['tournamentName'],detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'], detail['marketName'],
+                                              detail['specifier'], detail['outcomeName'], detail['odds'], odds_type,detail['matchTimeStr']],
                                              item['betAmount'],item['betResult'],item['betIp'] + ' / ' + item['betIpAddress'],item['betAmount'],item['companyPercentage'],
                                              item['level0Percentage'],item['level0CommissionRatio'],item['level1Percentage'],item['level1CommissionRatio'],item['level2Percentage'],
                                              item['level2CommissionRatio'],item['level3Percentage'],item['level3CommissionRatio'],item['memberCommissionRatio']])
 
-                count_i = 0
-                count_j = 1
-                for i in range(0, len(actualResult)):
-                    if i == count_i:
-                        orderNo_list = []
-                        actual_result.append(actualResult[i])
-                        for j in range(count_j, len(actualResult)):
-                            if j == count_j:
-                                if actualResult[i][2] == actualResult[j][2]:
-                                    orderNo_list.append(actualResult[i][6][0])
-                                    orderNo_list.append(actualResult[j][6][0])
-                                    count_j = count_j + 1
-                                    count_i = count_i + 1
-                                    for k in range(count_j, len(actualResult)):
-                                        if actualResult[i][2] == actualResult[k][2]:
-                                            orderNo_list.append(actualResult[k][6][0])
-                                            count_j = count_j + 1
-                                            count_i = count_i + 1
-                                        else:
-                                            actual_result[-1][6] = orderNo_list
-                                            count_j = count_j + 1
-                                            count_i = count_i + 1
-                                            break
-                                else:
-                                    count_j = count_j + 1
-                                    count_i = count_i + 1
-                            else:
-                                continue
-                    else:
-                        continue
+                actual_result = CommonFunc().merge_compelx_02(new_lList=actualResult)
 
             elif response_data['data']['data'] == []:
                 actualResult = []
@@ -289,40 +260,14 @@ class Test_unsettledOrder:
             else:
                 for item in SQLResult_list:
                     bet_time = item[3]
-                    matchTime = bet_time.strftime("%Y-%m-%d %H:%M:%S")
-                    expectResult.append([item[0],item[1],item[2],matchTime,item[4],item[5],item[6],item[7],item[8],item[9],item[10],item[11]
-                                         ,item[12],item[13],item[14],item[15],item[16],item[17],item[18],item[19],item[20],])
+                    create_time = bet_time.strftime("%Y-%m-%d %H:%M:%S")
+                    matchTime = item[14]
+                    match_time = matchTime.strftime("%Y-%m-%d %H:%M:%S")
+                    expectResult.append([item[0],item[1],item[2],create_time,item[4],item[5],
+                                         [item[6], item[7], item[8], item[9], item[10], item[11], item[12], item[13],match_time],
+                                         item[14],item[15],item[16],item[17],item[18],item[19],item[20],item[21],item[22],item[23],item[24],item[25],item[26],item[27]])
 
-                count_i = 0
-                count_j = 1
-                for i in range(0, len(expectResult)):
-                    if i == count_i:
-                        orderNo_list = []
-                        expect_result.append(expectResult[i])
-                        for j in range(count_j, len(expectResult)):
-                            if j == count_j:
-                                if expectResult[i][2] == expectResult[j][2]:
-                                    orderNo_list.append(expectResult[i][6][0])
-                                    orderNo_list.append(expectResult[j][6][0])
-                                    count_j = count_j + 1
-                                    count_i = count_i + 1
-                                    for k in range(count_j, len(expectResult)):
-                                        if expectResult[i][2] == expectResult[k][2]:
-                                            orderNo_list.append(expectResult[k][6][0])
-                                            count_j = count_j + 1
-                                            count_i = count_i + 1
-                                        else:
-                                            expect_result[-1][6] = orderNo_list
-                                            count_j = count_j + 1
-                                            count_i = count_i + 1
-                                            break
-                                else:
-                                    count_j = count_j + 1
-                                    count_i = count_i + 1
-                            else:
-                                continue
-                    else:
-                        continue
+                expect_result = CommonFunc().merge_compelx_02(new_lList=expectResult)
 
             ctime = CommonFunc().get_current_time_for_client(time_type='currenttime')  # 获取当前时间
             # 校验接口数据和SQL数据的长度
@@ -345,6 +290,10 @@ class Test_unsettledOrder:
                                 new_item1.insert(3, item1[3])
                                 new_item1.insert(4, item1[4])
                                 new_item1.insert(5, item1[5])
+                                new_item1.insert(6, item1[6])
+                                new_item1.insert(7, item1[7])
+                                new_item1.insert(8, item1[8])
+                                new_item1.insert(9, item1[9])
                                 for sql_data in item2[11:]:
                                     if sql_data == None or sql_data == 0:
                                         sql_result = 0
@@ -357,11 +306,15 @@ class Test_unsettledOrder:
                                 new_item2.insert(3, item2[3])
                                 new_item2.insert(4, item1[4])
                                 new_item2.insert(5, item1[5])
+                                new_item2.insert(6, item1[6])
+                                new_item2.insert(7, item1[7])
+                                new_item2.insert(8, item1[8])
+                                new_item2.insert(9, item1[9])
                                 # 判断两个list的值是否一致,并且回写入excel
                                 if new_item1 == new_item2:
                                     with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
                                         Bf_log('unsettledOrder').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
-                                        DoExcel(owner_backer_path, "tournamentReport").write_result(row=int(excel_data[0]+1),
+                                        DoExcel(owner_backer_path, "unsettledOrder").write_result(row=int(excel_data[0]+1),
                                                                                                actual_result=f'{actualResult}',expect_result=f'{expectResult}',
                                                                                                is_pass=f"测试通过 \n{ctime}")
                                 else:
