@@ -211,13 +211,13 @@ class Test_tournamentReport:
                 request_body['sportId'] = params_list[2]
                 request_body['queryDateType'] = params_list[3]
                 request_body['dateType'] = params_list[4]
-                tournament_id_list = MysqlQuery(mysql_info, mongo_info).get_market_id_by_sportId_tournamentReport(sport_id=params_list[2],
+                tournament_id_list = MysqlQuery(mysql_info, mongo_info).get_tournament_id_by_sportId_tournamentReport(sport_id=params_list[2],
                                                                                                          time=(params_list[0], params_list[1]),queryDateType=params_list[3])
 
                 testCase_title = f"根据体育类型：'{sport_category_id[params_list[2]]}', 日期类型：'{dateType_dic[request_body['dateType']]}'"
                 allure.dynamic.title(testCase_title)
 
-                for tournament in tournament_id_list:          # 遍历盘口列表
+                for tournament in tournament_id_list:          # 遍历联赛列表
                     request_body['tournamentId'] = tournament
                     if request_body['tournamentId'] != '串关':
                         title = f"根据体育类型：'{sport_category_id[params_list[2]]}', 联赛ID'{tournament}'查看注单详情, 查询日期：'{request_body['begin']} -- {request_body['end']}'"
