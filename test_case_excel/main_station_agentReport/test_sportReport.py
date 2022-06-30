@@ -322,7 +322,7 @@ class Test_sportReport:
     @allure.story('总台-代理报表-球类报表-根据盘口查看注单详情')
     def test_sportsReportMarket(self, excel_data, market_params):
         '''
-        管理后台-代理报表-球类报表-根据盘口查看注单详情,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
+        管理后台-代理报表-球类报表-根据盘口查看注单详情,只验证前200条
         :param excel_data:  excel中的测试用例
         :param sport_params: excel中的参数化数据
         :return:
@@ -511,7 +511,6 @@ class Test_sportReport:
 
                     elif request_body['marketId'] == '串关':
                         title = f"根据体育类型：'{sport_category_id[params_list[2]]}', 盘口ID：'{market}'查看注单详情, 查询时间：'{request_body['begin']} -- {request_body['end']}'"
-                        allure.dynamic.title(title)
                         with allure.step(f"执行测试用例:{title}"):
                             Bf_log('sportOrder_d').info(f"----------------开始执行:{title}------------------------")
 
