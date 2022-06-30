@@ -853,6 +853,66 @@ class CommonFunc(object):
 
         return expect_list
 
+    def merge_compelx_03(self, new_lList):
+        '''
+        传递列表组装数据,列表镶嵌字典格式
+        :param new_lList:
+        :return:
+        '''
+        actual_list = new_lList
+        new_list = []
+        count_i = 0
+        count_j = 1
+        count = 0
+        for i in range(0, len(actual_list)):
+            # print("i循环:",i,count_i)
+            if i == count_i:
+                orderNo_list = []
+                for j in range(count_j, len(actual_list)):
+                    # print("j循环:",j,count_j)
+                    if j == count_j:
+                        new_list.append(actual_list[i])
+                        if actual_list[i]['orderNo'] == actual_list[j]['orderNo']:
+                            # print(yyds_list[i]['orderNo'],yyds_list[j]['orderNo'])
+                            orderNo_list.append(actual_list[i]['outcomeList'][0])
+                            orderNo_list.append(actual_list[j]['outcomeList'][0])
+                            count_j = count_j + 1
+                            count_i = count_i + 1
+                            if j == len(actual_list) - 1:
+                                new_list[-1]['outcomeList'] = orderNo_list
+                                # print(f"第{count}次,{count_i},{count_j}")
+                            else:
+                                for k in range(count_j, len(actual_list)):
+                                    # print(yyds_list[i]['orderNo'],yyds_list[k]['orderNo'])
+                                    if actual_list[i]['orderNo'] == actual_list[k]['orderNo']:
+                                        if k == len(actual_list) - 1:
+                                            count = count + 1
+                                            count_j = count_j + 1
+                                            count_i = count_i + 1
+                                            new_list[-1]['outcomeList'] = orderNo_list
+                                            # print(f"第{count}次,{count_i},{count_j}")
+                                        else:
+                                            orderNo_list.append(actual_list[k]['outcomeList'][0])
+                                            count_j = count_j + 1
+                                            count_i = count_i + 1
+                                    else:
+                                        new_list[-1]['outcomeList'] = orderNo_list
+                                        count_j = count_j + 1
+                                        count_i = count_i + 1
+                                        count = count + 1
+                                        # print(f"第{count}次,{count_i},{count_j}")
+                                        break
+                        else:
+                            count_i = count_i + 1
+                            count_j = count_j + 1
+                            count = count + 1
+                            break
+                    else:
+                        break
+            else:
+                continue
+
+
     def tuple_to_list(self, tuple_in, *agrs): #  *agrs指的是输入的数据类型为元组
         '''
         嵌套的列表转元组，[('XHBWcd8LzVE7', 3, '3_4_1', 1, '1.220'), ('XHBWcd8LzVE7', 3, '3_4_1', 2, '1.220'), ('XHBWcd8LzVE7', 3, '3_4_1', 1, '1.100')]
@@ -905,8 +965,7 @@ if __name__ == "__main__":
     # cf.check_live_bet_report_new(int_data=int_data, sql_data=sql_data)
     # cf.list_data_should_be_equal(data_list_1=int_data,data_list_2=sql_data)
 
-    # data2 = cf.merge_compelx_02(new_lList=[['a0b1b2b3a4/y0', 'a0', 'XHtvFfZUmsNB', '2022-06-26 23:39:31', '篮球', '单关', ['波多黎各BSN', '阿雷西博 Vs 庞塞雄狮', '早盘', '独赢', '', '庞塞雄狮', 2.75, '欧洲盘', '2022-06-27 20:00:00'], '2022-06-26 23:39:59', '输', 'mde.betf.io / 台湾省彰化县市谷歌', 100.0, -100.0, 100.0, 0.2, 20.0, 0, 0.0, 20.0, 0.2, 20.0, 0.0, 0.0, 20.0, 0.2, 20.0, 0.0, 0.0, 20.0, 0.1, 10.0, 0.0, 0.0, 10.0, 0.3, 30.0, 0.0, 0.0, 30.0, -100.0, 0.0, 0.0, -100.0], ['a0b1b2b3a4/y0', 'a0', 'XHtvDXQMBLB7', '2022-06-26 23:39:27', '篮球', '串关', ['波多黎各BSN', '桑图尔塞捕蟹者队 Vs Grises de Humacao', '早盘', '让球', 'hcp=-11.5', 'Grises de Humacao ', 0.8, '香港盘', '2022-06-27 20:00:00'], '2022-06-26 23:39:57', '输', 'mde.betf.io / 台湾省彰化县市谷歌', 100.0, -100.0, 100.0, 0.2, 20.0, 0, 0.0, 20.0, 0.2, 20.0, 0.0, 0.0, 20.0, 0.2, 20.0, 0.0, 0.0, 20.0, 0.1, 10.0, 0.0, 0.0, 10.0, 0.3, 30.0, 0.0, 0.0, 30.0, -100.0, 0.0, 0.0, -100.0], ['a0b1b2b3a4/y0', 'a0', 'XHtvDXQMBLB7', '2022-06-26 23:39:27', '篮球', '串关', ['波多黎各BSN', '克布拉迪亚斯 Vs 梅亚圭兹印第安人', '早盘', '梅亚圭兹印第安人 大/小', 'total=80.5', '小80.5', 0.79, '香港盘', '2022-06-27 20:00:00'], '2022-06-26 23:39:57', '输', 'mde.betf.io / 台湾省彰化县市谷歌', 100.0, -100.0, 100.0, 0.2, 20.0, 0, 0.0, 20.0, 0.2, 20.0, 0.0, 0.0, 20.0, 0.2, 20.0, 0.0, 0.0, 20.0, 0.1, 10.0, 0.0, 0.0, 10.0, 0.3, 30.0, 0.0, 0.0, 30.0, -100.0, 0.0, 0.0, -100.0], ['a0b1b2b3a4/y0', 'a0', 'XHtvCqQsHi8C', '2022-06-26 23:39:22', '篮球', '复式串关', ['波多黎各BSN', '阿雷西博 Vs 庞塞雄狮', '早盘', '阿雷西博 大/小', 'total=91.5', '大91.5', 0.87, '香港盘', '2022-06-27 20:00:00'], '2022-06-26 23:39:54', '输', 'mde.betf.io / 台湾省彰化县市谷歌', 300.0, -200.0, 200.0, 0.2, 40.0, 0, 0.0, 40.0, 0.2, 40.0, 0.0, 0.0, 40.0, 0.2, 40.0, 0.0, 0.0, 40.0, 0.1, 20.0, 0.0, 0.0, 20.0, 0.3, 60.0, 0.0, 0.0, 60.0, -200.0, 0.0, 0.0, -200.0], ['a0b1b2b3a4/y0', 'a0', 'XHtvCqQsHi8C', '2022-06-26 23:39:22', '篮球', '复式串关', ['波多黎各BSN', 'Mets de Guaynabo Vs 巴亚蒙', '早盘', '大/小', 'total=175.5', '大175.5', 0.85, '香港盘', '2022-06-27 20:00:00'], '2022-06-26 23:39:54', '输', 'mde.betf.io / 台湾省彰化县市谷歌', 300.0, -200.0, 200.0, 0.2, 40.0, 0, 0.0, 40.0, 0.2, 40.0, 0.0, 0.0, 40.0, 0.2, 40.0, 0.0, 0.0, 40.0, 0.1, 20.0, 0.0, 0.0, 20.0, 0.3, 60.0, 0.0, 0.0, 60.0, -200.0, 0.0, 0.0, -200.0], ['a0b1b2b3a4/y0', 'a0', 'XHtvCqQsHi8C', '2022-06-26 23:39:22', '篮球', '复式串关', ['波多黎各BSN', '克布拉迪亚斯 Vs 梅亚圭兹印第安人', '早盘', '大/小', 'total=164.5', '大164.5', 0.79, '香港盘', '2022-06-27 20:00:00'], '2022-06-26 23:39:54', '输', 'mde.betf.io / 台湾省彰化县市谷歌', 300.0, -200.0, 200.0, 0.2, 40.0, 0, 0.0, 40.0, 0.2, 40.0, 0.0, 0.0, 40.0, 0.2, 40.0, 0.0, 0.0, 40.0, 0.1, 20.0, 0.0, 0.0, 20.0, 0.3, 60.0, 0.0, 0.0, 60.0, -200.0, 0.0, 0.0, -200.0]])
-    # print(data2)
-
     data = cf.tuple_to_list(tuple_in=[('XHBWcd8LzVE7', 3, '3_4_1', 1, '1.220'), ('XHBWcd8LzVE7', 3, '3_4_1', 2, '1.220'), ('XHBWcd8LzVE7', 3, '3_4_1', 1, '1.100')])
-    print(data)
+    # print(data)
+
+    data3 = cf.merge_compelx_03(new_lList=[ {'betTime': '2022-06-16 23:26:42', 'orderNo': 'XFTztEQGVk9k', 'sportName': '足球', 'outcomeList': [{'tournamentName': '模拟现实联盟K-League 1 SRL', 'TeamName': 'Gimcheon Sangmu (Srl)VsSuwon FC (Srl)', 'betScore': '(1:0) ', 'marketName': '大/小', 'outcomeName': '大2.5/3', 'oddsType': 1, 'odds': 2.35, 'outcomeWinOrLoseName': '输'}], 'betAmount': 100.0, 'profitAmount': -100.0, 'backwaterAmount': 0.0, 'resultAmount': 0.0},{'betTime': '2022-06-16 23:26:42', 'orderNo': 'XFTztEQGVk9k', 'sportName': '足球', 'outcomeList': [{'tournamentName': '模拟现实联盟K-League 1 SRL', 'TeamName': 'Pohang Steelers SRLVsGangwon FC SRL', 'betScore': '(1:0) ', 'marketName': '大/小', 'outcomeName': '小2', 'oddsType': 1, 'odds': 2.42, 'outcomeWinOrLoseName': '赢'}], 'betAmount': 100.0, 'profitAmount': -100.0, 'backwaterAmount': 0.0, 'resultAmount': 0.0},{'betTime': '2022-06-15 22:26:20', 'orderNo': 'XFJqRTSKxrr9', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,塔斯马尼亚', 'TeamName': 'Olympia Warriors HobartVs河岸奥林匹克', 'betScore': None, 'marketName': '双重机会&大/小', 'outcomeName': 'Olympia Warriors Hobart/河岸奥林匹克 & 大 3.5', 'oddsType': 1, 'odds': 2.06, 'outcomeWinOrLoseName': '输'}], 'betAmount': 154.0, 'profitAmount': -154.0, 'backwaterAmount': 0.03, 'resultAmount': 0.03}, {'betTime': '2022-06-15 22:26:20', 'orderNo': 'XFJqRT4444rr9', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,塔斯马尼亚', 'TeamName': 'Olympia Warriors HobartVs河岸奥林匹克', 'betScore': None, 'marketName': '双重机会&大/小', 'outcomeName': 'Olympia Warriors Hobart/河岸奥林匹克 & 大 3.5', 'oddsType': 1, 'odds': 2.06, 'outcomeWinOrLoseName': '输'}], 'betAmount': 154.0, 'profitAmount': -154.0, 'backwaterAmount': 0.03, 'resultAmount': 0.03},{'betTime': '2022-06-15 22:26:20', 'orderNo': 'XFJq3333rr9', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,塔斯马尼亚', 'TeamName': 'Olympia Warriors HobartVs河岸奥林匹克', 'betScore': None, 'marketName': '双重机会&大/小', 'outcomeName': 'Olympia Warriors Hobart/河岸奥林匹克 & 大 3.5', 'oddsType': 1, 'odds': 2.06, 'outcomeWinOrLoseName': '输'}], 'betAmount': 154.0, 'profitAmount': -154.0, 'backwaterAmount': 0.03, 'resultAmount': 0.03} ])
