@@ -3164,28 +3164,99 @@ class CreditBackGround(object):
         except Exception as e:
             print(e)
 
-    def bf_request(self,method,url,head=None ,data = None,*args,**kwargs):
-        '''
-        获取请求方式
-        :param method:
-        :param url:
-        :param head:
-        :param data:
-        :param args:
-        :param kwargs:
-        :return:
-        '''
+    # def bf_request(self,method,url,head=None ,data = None,*args,**kwargs):
+    #     '''
+    #     获取请求方式
+    #     :param method:
+    #     :param url:
+    #     :param head:
+    #     :param data:
+    #     :param args:
+    #     :param kwargs:
+    #     :return:
+    #     '''
+    #     method = method.lower()
+    #     if method == 'get':
+    #         b_request = requests.get(url=url,headers=head,params=data)
+    #
+    #     elif method =='post':
+    #         b_request = requests.post(url=url,headers=head,json=data)
+    #
+    #     else:
+    #         raise AssertionError('ERROE')
+    #
+    #     return b_request
+
+    # def bf_request(self, method, url, head=None, data=None, login_type=None, *args, **kwargs):
+    #     method = method.lower()
+    #     if method == 'get':
+    #         for loop in range(3):
+    #             try:
+    #                 b_request = requests.get(url=url, headers=head, params=data, timeout=600)
+    #                 if b_request.status_code != 200:
+    #                     Bf_log('bf_request').error(f'请求超时:{loop}次,{b_request.json()}')
+    #                     if b_request.json()['message'] == "登录状态已过期，请重新登录" or b_request.json()['code'] == 50014:
+    #                         cfile.clear_yaml(token_yaml_path)
+    #                         self.login_main(login_type)
+    #                         head = {'account_login_identify': cfile.read_yaml(token_yaml_path)['token'],
+    #                                 'logindiv': str(cfile.read_yaml(token_yaml_path)['loginDiv'])}
+    #                 else:
+    #                     return b_request
+    #             except ConnectionError:
+    #                 time.sleep(2)
+    #                 continue
+    #             except Exception as e:
+    #                 Bf_log('bf_request').error(f'当前接口接口调用失败，请求检查接口,失败信息：{e}')
+    #
+    #     elif method == 'post':
+    #         for loop in range(3):
+    #             try:
+    #                 b_request = requests.post(url=url, headers=head, json=data, timeout=600)
+    #                 if b_request.status_code != 200:
+    #                     Bf_log('bf_request').error(f'请求超时:{loop}次,{b_request.json()}')
+    #                     if b_request.json()['message'] == "登录状态已过期，请重新登录" or b_request.json()['code'] == 50014:
+    #                         cfile.clear_yaml(token_yaml_path)
+    #                         self.login_main(login_type)
+    #                         head = {'account_login_identify': cfile.read_yaml(token_yaml_path)['token'],
+    #                                 'logindiv': str(cfile.read_yaml(token_yaml_path)['loginDiv'])}
+    #                 else:
+    #                     return b_request
+    #             except ConnectionError:
+    #                 time.sleep(2)
+    #                 continue
+    #             except Exception as e:
+    #                 Bf_log('bf_request').error(f'当前接口接口调用失败，请求检查接口,失败信息：{e}')
+
+
+    def bf_request(self, method, url, head=None, data=None, *args, **kwargs):
         method = method.lower()
         if method == 'get':
-            b_request = requests.get(url=url,headers=head,params=data)
+            for loop in range(3):
+                try:
+                    b_request = requests.get(url=url, headers=head, params=data, timeout=600)
+                    if b_request.status_code != 200:
+                        raise AssertionError(f'请求超时:{loop}次,{b_request.json()}')
+                    else:
+                        return b_request
+                except ConnectionError:
+                    time.sleep(2)
+                    continue
+                except Exception as e:
+                    raise AssertionError(f'当前接口接口调用失败，请求检查接口,失败信息：{e}')
 
-        elif method =='post':
-            b_request = requests.post(url=url,headers=head,json=data)
-
-        else:
-            raise AssertionError('ERROE')
-
-        return b_request
+        elif method == 'post':
+            for loop in range(3):
+                try:
+                    b_request = requests.post(url=url, headers=head, json=data, timeout=600)
+                    if b_request.status_code != 200:
+                        raise AssertionError(f'请求超时:{loop}次,{b_request.json()}')
+                    else:
+                        return b_request
+                except ConnectionError:
+                    time.sleep(2)
+                    continue
+                except Exception as e:
+                    raise AssertionError(f'当前接口接口调用失败，请求检查接口,失败信息：{e}')
 
 
     def unsettlement(self, Authorization):
