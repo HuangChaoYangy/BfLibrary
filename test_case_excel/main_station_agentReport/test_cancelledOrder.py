@@ -12,7 +12,7 @@ import requests
 sys.path.append(os.getcwd())
 
 from mde_CreditBackground import CreditBackGround
-from MysqlFunc import MysqlFunc
+from MysqlFunc import MysqlFunc,MysqlQuery
 from log import Bf_log
 from common.do_excel import DoExcel
 from CommonFunc import CommonFunc
@@ -89,16 +89,18 @@ class Test_cancelledOrder:
             actualResult = []
             if response_data['message'] == 'OK':
                 APIResult_list = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()['data']['data']['data']
-                print(APIResult_list)
                 for item in APIResult_list:
                     for detail in item['options']:
                         odds_type = odds_dic[detail['oddsType']]
                         actual_result.append([item['account'],item['orderNo'],item['betTime'],[detail['tournamentName'],detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],
                                              detail['matchType'],detail['marketName'],detail['specifier'],detail['outcomeName'],detail['odds'],detail['matchTime'],odds_type],
                                              item['betAmount'],item['betIp'] + ' / ' + item['betIpAddress']])
-                # print(actual_result)
+
+                actualResult = CommonFunc().merge_compelx_01(new_lList=actual_result)
+
                 # count_i = 0
                 # count_j = 1
+                # count = 0
                 # for i in range(0, len(actual_result)):
                 #     if i == count_i:
                 #         orderNo_list = []
@@ -110,67 +112,35 @@ class Test_cancelledOrder:
                 #                     orderNo_list.append(actual_result[j][3])
                 #                     count_j = count_j + 1
                 #                     count_i = count_i + 1
-                #                     for k in range(count_j, len(actual_result)):
-                #                         if actual_result[i][1] == actual_result[k][1]:
-                #                             orderNo_list.append(actual_result[k][3])
-                #                             count_j = count_j + 1
-                #                             count_i = count_i + 1
-                #                         else:
-                #                             actualResult[-1][3] = orderNo_list
-                #                             count_j = count_j + 1
-                #                             count_i = count_i + 1
-                #                             break
+                #                     if j == len(actual_result) - 1:
+                #                         actualResult[-1][3] = orderNo_list
+                #                     else:
+                #                         for k in range(count_j, len(actual_result)):
+                #                             if actual_result[i][1] == actual_result[k][1]:
+                #                                 if k == len(actual_result) - 1:
+                #                                     count = count + 1
+                #                                     count_j = count_j + 1
+                #                                     count_i = count_i + 1
+                #                                     actualResult[-1][3] = orderNo_list
+                #                                 else:
+                #                                     orderNo_list.append(actual_result[k][3])
+                #                                     count_j = count_j + 1
+                #                                     count_i = count_i + 1
+                #                             else:
+                #                                 actualResult[-1][3] = orderNo_list
+                #                                 count_j = count_j + 1
+                #                                 count_i = count_i + 1
+                #                                 count = count + 1
+                #                                 break
                 #                 else:
-                #                     count_j = count_j + 1
                 #                     count_i = count_i + 1
+                #                     count_j = count_j + 1
+                #                     count = count + 1
+                #                     break
                 #             else:
-                #                 continue
+                #                 break
                 #     else:
                 #         continue
-
-                count_i = 0
-                count_j = 1
-                count = 0
-                for i in range(0, len(actual_result)):
-                    if i == count_i:
-                        orderNo_list = []
-                        actualResult.append(actual_result[i])
-                        for j in range(count_j, len(actual_result)):
-                            if j == count_j:
-                                if actual_result[i][1] == actual_result[j][1]:
-                                    orderNo_list.append(actual_result[i][3])
-                                    orderNo_list.append(actual_result[j][3])
-                                    count_j = count_j + 1
-                                    count_i = count_i + 1
-                                    if j == len(actual_result) - 1:
-                                        actualResult[-1][3] = orderNo_list
-                                    else:
-                                        for k in range(count_j, len(actual_result)):
-                                            if actual_result[i][1] == actual_result[k][1]:
-                                                if k == len(actual_result) - 1:
-                                                    count = count + 1
-                                                    count_j = count_j + 1
-                                                    count_i = count_i + 1
-                                                    actualResult[-1][3] = orderNo_list
-                                                else:
-                                                    orderNo_list.append(actual_result[k][3])
-                                                    count_j = count_j + 1
-                                                    count_i = count_i + 1
-                                            else:
-                                                actualResult[-1][3] = orderNo_list
-                                                count_j = count_j + 1
-                                                count_i = count_i + 1
-                                                count = count + 1
-                                                break
-                                else:
-                                    count_i = count_i + 1
-                                    count_j = count_j + 1
-                                    count = count + 1
-                                    break
-                            else:
-                                break
-                    else:
-                        continue
 
             elif response_data['data']['data']['data'] == []:
                 actualResult = []
@@ -194,6 +164,8 @@ class Test_cancelledOrder:
                 expectResult = []
             else:
                 for item in SQLResult_list:
+                    # order_no = item[1]
+                    # total_odds = MysqlQuery(mysql_info, mongo_info).get_odds_by_orderNum(orderNo=order_no)
                     bet_time = item[2]
                     betTime = bet_time.strftime("%Y-%m-%d %H:%M:%S")
                     match_time = item[10]
@@ -201,8 +173,10 @@ class Test_cancelledOrder:
                     expect_result.append([item[0],item[1],betTime,[item[3],item[4],item[5],item[6],item[7],item[8],
                                           float(item[9]),matchTime,item[11]],item[12],item[13]])
 
+                expectResult = CommonFunc().merge_compelx_01(new_lList=actual_result)
                 # count_i = 0
                 # count_j = 1
+                # count = 0
                 # for i in range(0, len(expect_result)):
                 #     if i == count_i:
                 #         orderNo_list = []
@@ -214,67 +188,35 @@ class Test_cancelledOrder:
                 #                     orderNo_list.append(expect_result[j][3])
                 #                     count_j = count_j + 1
                 #                     count_i = count_i + 1
-                #                     for k in range(count_j, len(expect_result)):
-                #                         if expect_result[i][1] == expect_result[k][1]:
-                #                             orderNo_list.append(expect_result[k][3])
-                #                             count_j = count_j + 1
-                #                             count_i = count_i + 1
-                #                         else:
-                #                             expectResult[-1][3] = orderNo_list
-                #                             count_j = count_j + 1
-                #                             count_i = count_i + 1
-                #                             break
+                #                     if j == len(expect_result) - 1:
+                #                         expectResult[-1][3] = orderNo_list
+                #                     else:
+                #                         for k in range(count_j, len(expect_result)):
+                #                             if expect_result[i][1] == expect_result[k][1]:
+                #                                 if k == len(expect_result) - 1:
+                #                                     count = count + 1
+                #                                     count_j = count_j + 1
+                #                                     count_i = count_i + 1
+                #                                     expectResult[-1][3] = orderNo_list
+                #                                 else:
+                #                                     orderNo_list.append(expect_result[k][3])
+                #                                     count_j = count_j + 1
+                #                                     count_i = count_i + 1
+                #                             else:
+                #                                 expectResult[-1][3] = orderNo_list
+                #                                 count_j = count_j + 1
+                #                                 count_i = count_i + 1
+                #                                 count = count + 1
+                #                                 break
                 #                 else:
-                #                     count_j = count_j + 1
                 #                     count_i = count_i + 1
+                #                     count_j = count_j + 1
+                #                     count = count + 1
+                #                     break
                 #             else:
-                #                 continue
+                #                 break
                 #     else:
                 #         continue
-
-                count_i = 0
-                count_j = 1
-                count = 0
-                for i in range(0, len(expect_result)):
-                    if i == count_i:
-                        orderNo_list = []
-                        expectResult.append(expect_result[i])
-                        for j in range(count_j, len(expect_result)):
-                            if j == count_j:
-                                if expect_result[i][1] == expect_result[j][1]:
-                                    orderNo_list.append(expect_result[i][3])
-                                    orderNo_list.append(expect_result[j][3])
-                                    count_j = count_j + 1
-                                    count_i = count_i + 1
-                                    if j == len(expect_result) - 1:
-                                        expectResult[-1][3] = orderNo_list
-                                    else:
-                                        for k in range(count_j, len(expect_result)):
-                                            if expect_result[i][1] == expect_result[k][1]:
-                                                if k == len(expect_result) - 1:
-                                                    count = count + 1
-                                                    count_j = count_j + 1
-                                                    count_i = count_i + 1
-                                                    expectResult[-1][3] = orderNo_list
-                                                else:
-                                                    orderNo_list.append(expect_result[k][3])
-                                                    count_j = count_j + 1
-                                                    count_i = count_i + 1
-                                            else:
-                                                expectResult[-1][3] = orderNo_list
-                                                count_j = count_j + 1
-                                                count_i = count_i + 1
-                                                count = count + 1
-                                                break
-                                else:
-                                    count_i = count_i + 1
-                                    count_j = count_j + 1
-                                    count = count + 1
-                                    break
-                            else:
-                                break
-                    else:
-                        continue
 
             ctime = CommonFunc().get_current_time_for_client(time_type='currenttime')  # 获取当前时间
 

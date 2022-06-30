@@ -62,8 +62,8 @@ class Test_tournamentReport:
             request_body['begin'] = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=params_list[0])
             request_body['end'] = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=params_list[1])
             request_body['queryDateType'] = params_list[2]
-            request_body['sportId'] = params_list[3]
-            title = params_list[5]
+            request_body['sportId'] = params_list[5]
+            title = params_list[3]
             allure.dynamic.title(title)
             with allure.step(f"执行测试用例:{title}"):
                 Bf_log('tournamentReport').info(f"----------------开始执行:{title}------------------------")
@@ -108,9 +108,8 @@ class Test_tournamentReport:
             # 执行SQL,SQL写法f{"参数"}
             begin = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=params_list[0])
             end = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=params_list[1])
-            sportId = params_list[3]
-            sportId_Str = params_list[4]
-            DateType = params_list[6]
+            sportId = params_list[5]
+            DateType = params_list[4]
             sql_str = eval(excel_data[7])
             SQLResult_list = list(MysqlFunc(mysql_info, mongo_info).query_data(sql_str, db_name='bfty_credit'))
             with allure.step(f'查询SQL:{sql_str}'):
