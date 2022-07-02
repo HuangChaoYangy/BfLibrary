@@ -322,7 +322,7 @@ class Test_matchReport:
     @pytest.mark.parametrize('market_params', case_list2)
     # @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-代理报表-赛事盈亏-根据盘口查看注单详情')
-    def test_sportsReportMarket(self, excel_data, market_params):
+    def test_matchReportMarket(self, excel_data, market_params):
         '''
         管理后台-代理报表-赛事盈亏-根据盘口查看注单详情,只验证前200条
         :param excel_data:  excel中的测试用例

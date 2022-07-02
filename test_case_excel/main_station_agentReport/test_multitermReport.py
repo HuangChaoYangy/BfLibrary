@@ -178,7 +178,7 @@ class Test_multitermReport:
     @pytest.mark.parametrize('market_params', case_list2)
     # @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-代理报表-混合串关-根据盘口查看注单详情')
-    def test_sportsReportMarket(self, excel_data, market_params):
+    def test_multitermReportMarket(self, excel_data, market_params):
         '''
         管理后台-代理报表-混合串关-根据盘口查看注单详情,只验证前200条
         :param excel_data:  excel中的测试用例
@@ -223,7 +223,7 @@ class Test_multitermReport:
                 request_body['dateType'] = params_list[4]
                 request_body['queryDateType'] = params_list[5]
 
-                account_id_list = MysqlQuery(mysql_info, mongo_info).get_account_id_by_matchId_matchReport(account_id=params_list[3],  sport_id=params_list[2],
+                account_id_list = MysqlQuery(mysql_info, mongo_info).get_account_id_by_matchId_multitermReport(account_id=params_list[3],  sport_id=params_list[2],
                                                                                                          time=(params_list[0], params_list[1]),queryDateType=params_list[5])
                 testCase_title = f"日期类型：'{dateType_dic[request_body['dateType']]}' 查询混合串关"
                 allure.dynamic.title(testCase_title)
