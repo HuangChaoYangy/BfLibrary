@@ -5680,7 +5680,7 @@ class MysqlQuery(MysqlFunc):
 
     def get_bet_type_by_ordernum(self, order_no):
         '''
-        根据注单号获取注单的注单类型          // 修改于2022.05.13
+        根据注单号获取注单的注单类型          // 修改于2022.07.02
         :param order_no:
         :return:
         '''
@@ -5708,7 +5708,8 @@ class MysqlQuery(MysqlFunc):
             else:
                 type_start = re.search("^(\d)", typeString)
                 type_end = re.search("_(\d+)", typeString)
-                type = str(type_start.group()) + f'串1*{type_end.group(1)}'
+                # type = str(type_start.group()) + f'串1*{type_end.group(1)}'
+                type = str(type_start.group()) + f'串1'
                 bet_type = '复式串关 ' + type
 
         return bet_type
@@ -5989,7 +5990,7 @@ class MysqlQuery(MysqlFunc):
     def get_all_odds(self, odds_list, bet_type):
         '''
         串关赔率计算
-        :param odds_list: 赔率已列表形式传入
+        :param odds_list: 赔率已列表形式传入, 暂时只写到10串1
         :param bet_type: 2，3，4，5，6，7 (当传入的type值=赔率个数时候为单串1，当大于个数时候 为最大串关（3串4，4串11...）)
         :return:
         '''
@@ -6072,7 +6073,7 @@ class MysqlQuery(MysqlFunc):
                         odds = reduce(lambda x, y: x * y, i)
                         odds_l.append(odds)
                 odds = sum(odds_l)
-        elif bet_type == 7:
+        elif bet_type == 7:                         # 7串1
             if bet_type - 1 <= len(combination_list):
                 odds_l = []
                 for i in combination_list[5]:
@@ -6086,8 +6087,31 @@ class MysqlQuery(MysqlFunc):
                         odds = reduce(lambda x, y: x * y, i)
                         odds_l.append(odds)
                 odds = sum(odds_l)
+        elif bet_type == 8:                             # 8串1
+            if bet_type - 1 <= len(combination_list):
+                odds_l = []
+                for i in combination_list[6]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+        elif bet_type == 9:                             # 9串1
+            if bet_type - 1 <= len(combination_list):
+                odds_l = []
+                for i in combination_list[7]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+        elif bet_type == 10:                             # 10串1
+            if bet_type - 1 <= len(combination_list):
+                odds_l = []
+                for i in combination_list[8]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
         else:
-            print('暂不支持此种赔率计算或者赔率计算要求错误')
+            raise AssertionError('暂不支持此种赔率计算或者赔率计算要求错误')
+
+
         return self.get_two_float(odds, 2)
 
     def get_odds_by_orderNum(self,orderNo):
@@ -6160,25 +6184,34 @@ class MysqlQuery(MysqlFunc):
                            "3_20_0": 3, "4_15_0": 4, "5_6_0": 5}         # 复式n串1
 
         if new_odds_list[0][1] == 1:
-            odds = new_odds_list[0][3]
+            odds = new_odds_list[0][4]
+
+            return odds
+
         elif new_odds_list[0][1] == 2:
             odd_list = new_odds_list[0][-1]
             mix_num = new_odds_list[0][2]
-            odd = re.search("^(\d)",mix_num)
+            odd = re.search("^(\d+)",mix_num)
             bet_type = odd.group()
             odds = self.get_all_odds(odds_list=odd_list, bet_type=int(bet_type))
-            print(odds)
+
+            return odds
+
         elif new_odds_list[0][1] == 3:
             if new_odds_list[0][2] in complex_dic:
                 odd_list = new_odds_list[0][-1]
                 bet_type = complex_dic[new_odds_list[0][2]]
                 odds = self.get_all_odds(odds_list=odd_list, bet_type=int(bet_type))
-                print(odds)
+
+                return odds
+
             elif new_odds_list[0][2] in complex_one_dic:
                 odd_list = new_odds_list[0][-1]
                 bet_type = complex_one_dic[new_odds_list[0][2]]
                 odds = self.get_all_odds(odds_list=odd_list, bet_type=int(bet_type))
-                print(odds)
+
+                return odds
+
             else:
                 pass
         else:
@@ -6187,8 +6220,8 @@ class MysqlQuery(MysqlFunc):
         type_dic = {1: "欧洲盘", 2: "香港盘"}
         bet_dic = {1: "单注", 2: "串关", 3: "复式串关"}
 
-        if new_odds_list[0][1] == 1:                #  单注
-            print(f"投注类型为：{bet_dic[new_odds_list[0][1]]}, 盘口类型为：{type_dic[new_odds_list[0][3]]}, 赔率为：{new_odds_list[0][4]} ")
+        # if new_odds_list[0][1] == 1:                #  单注
+        #     print(f"投注类型为：{bet_dic[new_odds_list[0][1]]}, 盘口类型为：{type_dic[new_odds_list[0][3]]}, 赔率为：{new_odds_list[0][4]} ")
 
 
     def get_order_no_commission_result(self, order_no):
@@ -6513,6 +6546,302 @@ class MysqlQuery(MysqlFunc):
         number = rtn[0][0]
 
         return number
+
+    def get_unsettled_orderDetail_num(self):
+        '''
+        查询总代未完成交易-未结算注单详情数量
+        :param account:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        sql_str = f"SELECT COUNT(1) FROM o_account_order WHERE `status`=2 AND award_time is not NULL AND user_name='{account}'"
+        rtn = list(self.query_data(sql_str, database_name))
+        number = rtn[0][0]
+
+        return number
+
+    def get_settled_orderDetail_num(self):
+        '''
+        查询总代盈亏已结算注单详情数量
+        :param account:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        sql_str = f"SELECT COUNT(1) FROM o_account_order WHERE `status`=2 AND award_time is not NULL AND user_name='{account}'"
+        rtn = list(self.query_data(sql_str, database_name))
+        number = rtn[0][0]
+
+        return number
+
+    def get_cancelled_order_num(self, time=(-7,-1), account=''):
+        '''
+        查询总代盈亏已取消注单数量
+        :param account:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        ctime = self.get_current_time_for_client(time_type='ctime', day_diff=time[0])
+        etime = self.get_current_time_for_client(time_type='ctime', day_diff=time[1])
+        if account:
+            account = f"and account='{account}'"
+        else:
+            account = ""
+        sql_str = f"SELECT COUNT(1) '数量' FROM o_account_order WHERE `status`=3 AND DATE_FORMAT(award_time,'%Y-%m-%d') BETWEEN {ctime} AND {etime} {account}"
+        rtn = list(self.query_data(sql_str, database_name))
+        number = rtn[0][0]
+
+        return number
+
+    def get_match_id_by_sportReport(self, time=(-7,-1), queryDateType=3):
+        '''
+        查询总代盈亏已取消注单数量
+        :param account:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        ctime = self.get_current_time_for_client(time_type='ctime', day_diff=time[0])
+        etime = self.get_current_time_for_client(time_type='ctime', day_diff=time[1])
+        if queryDateType == 3:
+            dateType = "AND DATE_FORMAT(a.award_time,'%Y-%m-%d')"
+        elif queryDateType == 2:
+            dateType = "AND DATE_FORMAT(b.match_time,'%Y-%m-%d')"
+        elif queryDateType == 1:
+            dateType = "AND DATE_FORMAT(a.create_time,'%Y-%m-%d')"
+        else:
+            raise AssertionError('暂不支持该类型')
+        sql_str = f"SELECT a.sport_id FROM o_account_order a JOIN v_order_match b ON a.order_no=b.order_no WHERE `status`=2 AND a.award_time is not NULL " \
+                  f"{dateType} BETWEEN '{ctime}' AND '{etime}' GROUP BY a.sport_id"
+        rtn = list(self.query_data(sql_str, database_name))
+        matchId_list = [list(item) for item in rtn]
+        match_id_list = []
+        for item in matchId_list:
+            match_id_list.extend(item)
+
+        return match_id_list
+
+    def get_market_id_by_sportId_sportReport(self,sport_id, time=(-7,-1), queryDateType=3):
+        '''
+        查询总代球类报表-根据球类id获取投注的盘口id
+        :param sport_id:
+        :param time:
+        :param queryDateType:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        ctime = self.get_current_time_for_client(time_type='ctime', day_diff=time[0])
+        etime = self.get_current_time_for_client(time_type='ctime', day_diff=time[1])
+        if queryDateType == 3:
+            dateType = "AND DATE_FORMAT(a.award_time,'%Y-%m-%d')"
+        elif queryDateType == 2:
+            dateType = "AND DATE_FORMAT(b.match_time,'%Y-%m-%d')"
+        elif queryDateType == 1:
+            dateType = "AND DATE_FORMAT(a.create_time,'%Y-%m-%d')"
+        else:
+            raise AssertionError('暂不支持该类型')
+
+        new_list = []
+        if sport_id:
+            sportId = f"AND a.sport_id='{sport_id}'"
+            sql_str = f"SELECT market_id FROM (SELECT market_id,a.sport_id FROM o_account_order a JOIN o_account_order_match b ON a.order_no=b.order_no WHERE bet_type=1 AND `status`=2 " \
+                      f"AND a.award_time is not NULL {sportId} {dateType} BETWEEN '{ctime}' AND '{etime}' GROUP BY market_id) a LEFT JOIN group_market_name b ON " \
+                      f"(a.market_id = b.mark_id AND a.sport_id = b.sport_id) UNION SELECT '串关'as '串关' FROM `bfty_credit`.`o_account_order` a JOIN v_order_match b ON " \
+                      f"a.order_no=b.order_no WHERE bet_type>1 AND `status`=2 AND award_time is not NULL {sportId} {dateType} BETWEEN '{ctime}' AND '{etime}'"
+            rtn = list(self.query_data(sql_str, database_name))
+            new_list = [list(item) for item in rtn]
+            new_list.insert(0, sport_id)
+
+        market_id_list = []
+        for item in new_list[1:]:
+            market_id_list.extend(item)
+
+        return market_id_list
+
+    def get_tournament_id_by_sportId_tournamentReport(self,sport_id, time=(-7,-1), queryDateType=3):
+        '''
+        查询总代联赛报表-根据球类id获取投注的联赛id
+        :param sport_id:
+        :param time:
+        :param queryDateType:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        ctime = self.get_current_time_for_client(time_type='ctime', day_diff=time[0])
+        etime = self.get_current_time_for_client(time_type='ctime', day_diff=time[1])
+        if queryDateType == 3:
+            dateType = "AND DATE_FORMAT(a.award_time,'%Y-%m-%d')"
+        elif queryDateType == 2:
+            dateType = "AND DATE_FORMAT(b.match_time,'%Y-%m-%d')"
+        elif queryDateType == 1:
+            dateType = "AND DATE_FORMAT(a.create_time,'%Y-%m-%d')"
+        else:
+            raise AssertionError('暂不支持该类型')
+
+        new_list = []
+        if sport_id:
+            sportId = f"AND a.sport_id='{sport_id}'"
+            sql_str = f"SELECT tournament_id '联赛ID' FROM o_account_order a JOIN o_account_order_match b ON a.order_no=b.order_no WHERE `status`=2 AND a.award_time is not NULL " \
+                      f"AND bet_type=1 {dateType} BETWEEN '{ctime}' AND '{etime}' {sportId} GROUP BY tournament_id UNION SELECT ('串关') '串关' FROM o_account_order a" \
+                      f" JOIN v_order_match b ON a.order_no=b.order_no WHERE `status`=2 AND a.award_time is not NULL AND bet_type!=1 {dateType} BETWEEN '{ctime}' AND '{etime}' " \
+                      f"{sportId}"
+            rtn = list(self.query_data(sql_str, database_name))
+            new_list = [list(item) for item in rtn]
+            new_list.insert(0, sport_id)
+
+        tournament_id_list = []
+        for item in new_list[1:]:
+            tournament_id_list.extend(item)
+
+        return tournament_id_list
+
+    def get_match_id_by_sportId_matchReport(self,sport_id, time=(-7,-1), queryDateType=3):
+        '''
+        查询总代赛事盈亏-根据球类id获取投注的比赛id
+        :param sport_id:
+        :param time:
+        :param queryDateType:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        ctime = self.get_current_time_for_client(time_type='ctime', day_diff=time[0])
+        etime = self.get_current_time_for_client(time_type='ctime', day_diff=time[1])
+        if queryDateType == 3:
+            dateType = "AND DATE_FORMAT(a.award_time,'%Y-%m-%d')"
+        elif queryDateType == 2:
+            dateType = "AND DATE_FORMAT(b.match_time,'%Y-%m-%d')"
+        elif queryDateType == 1:
+            dateType = "AND DATE_FORMAT(a.create_time,'%Y-%m-%d')"
+        else:
+            raise AssertionError('暂不支持该类型')
+
+        new_list = []
+        if sport_id:
+            sportId = f"AND a.sport_id='{sport_id}'"
+            sql_str = f"SELECT match_id '赛事ID' FROM o_account_order a LEFT JOIN o_account_order_match b ON a.order_no=b.order_no WHERE `status`=2 AND a.award_time is not NULL " \
+                      f"AND bet_type=1 {dateType} BETWEEN '{ctime}' AND '{etime}' {sportId} GROUP BY match_id UNION SELECT '串关' as '串关' FROM o_account_order a JOIN v_order_match b" \
+                      f" ON a.order_no=b.order_no WHERE `status`=2 AND a.award_time is not NULL AND bet_type!=1 {dateType} BETWEEN '{ctime}' AND '{etime}' {sportId}"
+            rtn = list(self.query_data(sql_str, database_name))
+            new_list = [list(item) for item in rtn]
+            new_list.insert(0, sport_id)
+
+        match_id_list = []
+        for item in new_list[1:]:
+            match_id_list.extend(item)
+
+        return match_id_list
+
+
+    def  get_market_id_by_matchId_matchReport(self,match_id, time=(-7,-1), queryDateType=3):
+        '''
+        查询总代赛事盈亏-根据球比赛id获取投注的盘口id
+        :param sport_id:
+        :param time:
+        :param queryDateType:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        ctime = self.get_current_time_for_client(time_type='ctime', day_diff=time[0])
+        etime = self.get_current_time_for_client(time_type='ctime', day_diff=time[1])
+        if queryDateType == 3:
+            dateType = "AND DATE_FORMAT(a.award_time,'%Y-%m-%d')"
+        elif queryDateType == 2:
+            dateType = "AND DATE_FORMAT(b.match_time,'%Y-%m-%d')"
+        elif queryDateType == 1:
+            dateType = "AND DATE_FORMAT(a.create_time,'%Y-%m-%d')"
+        else:
+            raise AssertionError('暂不支持该类型')
+
+        new_list = []
+        if match_id:
+            matchId = f"AND b.match_id='{match_id}'"
+            sql_str = f"SELECT market_id FROM o_account_order a JOIN o_account_order_match b ON a.order_no=b.order_no WHERE bet_type=1 AND `status`=2 AND a.award_time is not NULL " \
+                      f"{matchId} {dateType} BETWEEN '{ctime}' AND '{etime}' GROUP BY market_id"
+            rtn = list(self.query_data(sql_str, database_name))
+            new_list = [list(item) for item in rtn]
+            new_list.insert(0, match_id)
+
+        market_id_list = []
+        for item in new_list[1:]:
+            market_id_list.extend(item)
+
+        return market_id_list
+
+
+    def  get_account_id_by_matchId_multitermReport(self,account_id="", sport_id="", time=(-7,-1), queryDateType=3):
+        '''
+        查询总代混合串关-获取会员账号id
+        :param sport_id:
+        :param time:
+        :param queryDateType:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        ctime = self.get_current_time_for_client(time_type='ctime', day_diff=time[0])
+        etime = self.get_current_time_for_client(time_type='ctime', day_diff=time[1])
+        if queryDateType == 3:
+            dateType = "AND DATE_FORMAT(a.award_time,'%Y-%m-%d')"
+        elif queryDateType == 2:
+            dateType = "AND DATE_FORMAT(b.match_time,'%Y-%m-%d')"
+        elif queryDateType == 1:
+            dateType = "AND DATE_FORMAT(a.create_time,'%Y-%m-%d')"
+        else:
+            raise AssertionError('暂不支持该类型')
+
+        if account_id:
+            accountId = f"AND a.user_name='{account_id}'"
+        else:
+            accountId = ""
+        if sport_id:
+            sportId = f"AND a.sport_id='{sport_id}'"
+        else:
+            sportId = ""
+        sql_str = f"SELECT a.user_name '账号' FROM o_account_order a JOIN v_order_match b ON a.order_no=b.order_no WHERE `status`=2 AND a.award_time is not NULL " \
+                  f"AND bet_type>1 {dateType} BETWEEN '{ctime}' AND '{etime}' {accountId} {sportId} GROUP BY a.user_name"
+
+        rtn = list(self.query_data(sql_str, database_name))
+        new_list = [list(item) for item in rtn]
+
+        accountId_list = []
+        for item in new_list:
+            accountId_list.extend(item)
+
+        return accountId_list
+
+
+    def  get_account_id_by_mixBetReport(self):
+        '''
+        查询总代-总投注-混合串关-获取会员账号
+        :return:
+        '''
+        database_name = "bfty_credit"
+
+        sql_str = f"SELECT d.account '账号' FROM o_account_order a JOIN u_user d ON a.user_id=d.id WHERE a.`status` in (1,2) AND a.award_time is NULL AND bet_type>1"
+
+        rtn = list(self.query_data(sql_str, database_name))
+        new_list = [list(item) for item in rtn]
+
+        accountId_list = []
+        for item in new_list:
+            accountId_list.extend(item)
+        print(accountId_list)
+        return accountId_list
+
+    def  get_order_num_by_mixBetReport(self):
+        '''
+        查询总代-总投注-混合串关-获取注单号
+        :return:
+        '''
+        database_name = "bfty_credit"
+
+        sql_str = f"SELECT a.order_no '账号' FROM o_account_order a JOIN u_user d ON a.user_id=d.id WHERE a.`status` in (1,2) AND a.award_time is NULL AND bet_type>1 limit 200"
+
+        rtn = list(self.query_data(sql_str, database_name))
+        new_list = [list(item) for item in rtn]
+
+        order_num_list = []
+        for item in new_list:
+            order_num_list.extend(item)
+
+        return order_num_list
 
 
     def credit_sportReport_query_sql(self, sportName='', queryType='sport', dateType=3, create_time=(-7, -1)):
@@ -8425,8 +8754,8 @@ if __name__ == "__main__":
     # data = mysql.check_orderNo_effectAmount_and_commission(user_name='', order_no='', createDate=(-1,0), awardDate=())    # 校验信用网注单有效金额和佣金
 
     # check_result = mysql.check_order_no_settlement_result(bet_type=2,user_name='a2j1j2j3j2',order_no='XB4mLjJJHmf2')
-    # betType = mysql.get_bet_type_by_ordernum(order_no='XB4E74xUtRtX')
-
+    # betType = mysql.get_bet_type_by_ordernum(order_no='XHwySEiELFJY')
+    # print(betType)
     # order = mysql.get_unsettled_order(user_name='a01')
     # detail = mysql.get_order_detail(order_no='XDSUd5NzmihG')
     # id = mysql.get_account_id(account='a0')
@@ -8442,11 +8771,22 @@ if __name__ == "__main__":
     # odds_list = [1.88, 1.81, 1.74, 1.81]
     # data = mysql.get_all_odds(odds_list=odds_list, bet_type=4)
     # print(data)
-    odds = mysql.get_odds_by_orderNum(orderNo='XHDxJBJdkQib')
+    odds = mysql.get_odds_by_orderNum(orderNo='XHwPPCTHvKfX')
+    print(odds)
     # N1 = list(combinations(a, 2))
     # N2 = list(permutations(a, 2))
 
+    # number = mysql.get_settled_orderDetail_num()
 
+    # matchNum = mysql.get_match_id_by_sportReport(time=(-7,-1), queryDateType=3)
+    # data = mysql.get_market_id_by_sportId_sportReport(sport_id='sr:sport:1',time=(-7,-1), queryDateType=3)
+    # data = mysql.get_market_id_by_sportId_tournamentReport(sport_id='sr:sport:1',time=(-7,-1), queryDateType=3)
+    # data = mysql.get_match_id_by_sportId_matchReport(sport_id='sr:sport:23', time=(-7, -1), queryDateType=3)
+    # data = mysql.get_market_id_by_matchId_matchReport(match_id='串关', time=(-7, -1), queryDateType=3)
+    # data = mysql.get_account_id_by_matchId_multitermReport(account_id="", sport_id="", time=(-7,-1), queryDateType=3)
+    # data = mysql.get_account_id_by_mixBetReport()
+    data = mysql.get_order_num_by_mixBetReport()
+    # print(data)
 
 
                                                                               # 【反波胆-客户端】
