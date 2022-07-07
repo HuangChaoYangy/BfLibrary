@@ -1,0 +1,10 @@
+-
+  request_body:
+   name: 登录接口
+   mde_ip: https://mdesearch.betf.me
+   url: /user/directUserLogIn
+   method: POST
+   title: 现金网mde环境登录账号配置（验证信用网赔率）
+  data:
+    userName: "smh001"
+    password: "Bf123456"

@@ -1,0 +1,30 @@
+- #test_01用例
+  data:
+    event_type: "INPLAY"
+    sort: 1
+    odds_type: 1
+- #test_02用例
+  data:
+    event_type: "TODAY"
+    sort: 1
+    odds_type: 1
+- #test_03用例
+  data:
+    event_type: "EARLY"
+    sort: 1
+    odds_type: 1
+- #test_04用例
+  data:
+    event_type: "INPLAY"
+    sort: 1
+    odds_type: 2
+- #test_05用例
+  data:
+    event_type: "TODAY"
+    sort: 1
+    odds_type: 2
+- #test_06用例
+  data:
+    event_type: "EARLY"
+    sort: 1
+    odds_type: 2

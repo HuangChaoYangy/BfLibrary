@@ -1,0 +1,10 @@
+-
+  request_body:
+   name: 登录接口
+   mde_ip: https://mdesearch.betf.io
+   url: /creditUser/creditUserLogIn
+   method: POST
+   title: 信用网mde环境登录账号配置
+  data:
+   userName: "a1"
+   password: "Bfty123456"
