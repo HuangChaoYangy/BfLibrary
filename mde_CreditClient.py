@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2022/5/6 15:30
+# @Author  : liyang
+# @FileName: mde环境-信用网
+# @Software: PyCharm
+
 import json
 import threading
 import arrow
@@ -157,7 +163,7 @@ class Credit_Client(object):
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"}
         data = {"userName":username, "password":self.get_md5(password),"loginUrl":loginUrl}
         rsp = self.session.post(url, json=data, headers=head)
-        # print(rsp.json())
+
         if rsp.json()['message'] != "OK":
             raise AssertionError("查询赛事列表失败,原因：" + rsp.json()["message"])
         elif rsp.json()['data']['code'] == -3006:
@@ -411,7 +417,7 @@ class Credit_Client(object):
         elif terminal == 'h5':
             data = {"matchId": match_id, "sportCategoryId": sport_id_dic[sport_name], "oddsType": odds_Type}
             rsp = self.session.post(url, headers=head, params=data)
-            print(rsp.json())
+
             outcome_info_list = []
             outcome_id_list = []
             # market
@@ -595,107 +601,304 @@ class Credit_Client(object):
         else:
             raise AssertionError('传入参数错误,请检查传入的参数')
 
-    def get_credit_outcomes_odds(self, token, sport_name, event_type="INPLAY", sort=1, odds_type=1):
+    def get_credit_actual_outcomes_odds(self, token, sport_name, event_type="INPLAY", terminal='pc', sort=1, odds_type=1):
         '''
-        获取信用网接口中(滚球,今日,早盘)所有盘口下注项的赔率                  /// 修改于2022.02.22
-        :param token:
+        获取当前登录会员信用网接口中(滚球,今日,早盘)所有盘口下注项的实际赔率                  /// 修改于2022.07.07
         :param sport_name:
         :param event_type:
-        :param sort:
+        :param event_type:
+        :param terminal:
         :param odds_type:
         :return:
         '''
         creditOdds_list = []
         if event_type == "INPLAY":
-            match_id_list = self.get_match_list(sport_name=sport_name, token=token_list[0], event_type=event_type, sort=sort,
+            match_id_list = self.get_match_list(sport_name=sport_name, token=token, event_type=event_type, terminal=terminal, sort=sort,
                                    odds_type=odds_type)[0]
 
             for matchId in match_id_list:
                 outcomes_odds_list = []
-                outcome_info_list = self.get_match_all_outcome(match_id=matchId, token=token, sport_name=sport_name,
+                outcome_info_list = self.get_match_all_outcome(match_id=matchId, token=token, terminal=terminal, sport_name=sport_name,
                                                                odds_Type=odds_type)
                 for item in outcome_info_list:
                     outcomes_odds_list.append([item[1]['outcome_id'], item[1]['odds']])
-                creditOdds_list.append(outcomes_odds_list)
+                creditOdds_list.extend(outcomes_odds_list)
 
             return creditOdds_list
 
         elif event_type == "TODAY":
-            match_id_list = self.get_match_list(sport_name=sport_name, token=token, event_type=event_type, sort=sort,
+            match_id_list = self.get_match_list(sport_name=sport_name, token=token, event_type=event_type, terminal=terminal, sort=sort,
                                                    odds_type=odds_type)[0]
 
             for matchId in match_id_list:
                 outcomes_odds_list = []
-                outcome_info_list = self.get_match_all_outcome(match_id=matchId, token=token, sport_name=sport_name,
+                outcome_info_list = self.get_match_all_outcome(match_id=matchId, token=token, terminal=terminal, sport_name=sport_name,
                                                                odds_Type=odds_type)
                 for item in outcome_info_list:
                     outcomes_odds_list.append([item[1]['outcome_id'], item[1]['odds']])
-                creditOdds_list.append(outcomes_odds_list)
-            # print(creditOdds_list)
+                creditOdds_list.extend(outcomes_odds_list)
+
             return creditOdds_list
 
         elif event_type == "EARLY":
-            match_id_list = self.get_match_list(sport_name=sport_name, token=token, event_type=event_type, sort=sort,
+            match_id_list = self.get_match_list(sport_name=sport_name, token=token, event_type=event_type, terminal=terminal, sort=sort,
                                                    odds_type=odds_type)[0]
 
             for matchId in match_id_list:
                 outcomes_odds_list = []
-                outcome_info_list = self.get_match_all_outcome(match_id=matchId, token=token, sport_name=sport_name,
+                outcome_info_list = self.get_match_all_outcome(match_id=matchId, token=token, terminal=terminal, sport_name=sport_name,
                                                                odds_Type=odds_type)
                 for item in outcome_info_list:
                     outcomes_odds_list.append([item[1]['outcome_id'], item[1]['odds']])
-                creditOdds_list.append(outcomes_odds_list)
-            # print(creditOdds_list)
+                creditOdds_list.extend(outcomes_odds_list)
+
             return creditOdds_list
 
         else:
             raise AssertionError('传入参数错误,请检查传入的参数')
 
-    def check_credit_outcomes_odds(self, token, sport_name, handicap_type='A', event_type="INPLAY", sort=1, odds_type=1):
+    def get_credit_outcomes_odds(self, sport_name, event_type="INPLAY", terminal='pc', sort=1, odds_type=1):
         '''
-        验证信用网(滚球,今日,早盘)所有盘口下注项的赔率是否正确              /// 修改于2022.02.22
-        :param token:
+        获取信用网接口中(滚球,今日,早盘)所有盘口下注项的赔率,通过A类原始赔率计算得出信用网赔率                  /// 修改于2022.07.07
         :param sport_name:
-        :param handicap_type: 信用网盘口类型
         :param event_type:
-        :param sort:
+        :param event_type:
+        :param terminal:
         :param odds_type:
         :return:
         '''
-        # 信用网接口中的赔率
-        api_credits_odds = self.get_credit_outcomes_odds(token=token, sport_name=sport_name, event_type=event_type, sort=sort, odds_type=odds_type)
-        # 通过现金网赔率手动计算出的信用网赔率
-        query_credits_odds = self.bfh5.query_credit_outcomes_odds(token='d07c8dfe3a0b4001b41e28683548fbbb',sport_name=sport_name, event_type=event_type,
-                                                                  sort=sort, odds_type=odds_type, handicap_type=handicap_type)
+        # 这里写死,固定是A类盘口的赔率数据
+        token = self.login_client(username='a2', password='Bfty123456')
+        creditOdds_list = []
+        if event_type == "INPLAY":
+            match_id_list = self.get_match_list(sport_name=sport_name, token=token, event_type=event_type, terminal=terminal, sort=sort,
+                                   odds_type=odds_type)[0]
 
-        match_api_dic = {}
-        match_api_list = []
-        for item in api_credits_odds:
-            match_id = item[0][0][:17]
-            match_api_dic[match_id] = item
-        match_api_list.append(match_api_dic)
+            for matchId in match_id_list:
+                outcomes_odds_list = []
+                outcome_info_list = self.get_match_all_outcome(match_id=matchId, token=token, terminal=terminal, sport_name=sport_name,
+                                                               odds_Type=odds_type)
+                for item in outcome_info_list:
+                    outcomes_odds_list.append([item[1]['outcome_id'], item[1]['odds']])
+                creditOdds_list.extend(outcomes_odds_list)
 
-        match_db_dic = {}
-        match_db_list = []
-        for item in query_credits_odds:
-            match_id = item[0][0][:17]
-            match_db_dic[match_id] = item
-        match_db_list.append(match_db_dic)
+            return creditOdds_list
 
-        if len(match_api_list) != len(match_db_list):
-            raise AssertionError("长度不一致!")
+        elif event_type == "TODAY":
+            match_id_list = self.get_match_list(sport_name=sport_name, token=token, event_type=event_type, terminal=terminal, sort=sort,
+                                                   odds_type=odds_type)[0]
 
-        # print(match_api_list)
-        # print("-----")
-        # print(match_db_list)
-        for index, item1 in enumerate(match_api_list):
-            for item2 in match_db_list:
-                if list(item1.keys())[0] == list(item2.keys())[0]:
-                    self.cm.check_live_bet_report_new(list(item1.values())[0], list(item2.values())[0])
-                    print(f'测试通过,该用户对应的盘口类型【{handicap_type}】满足信用网赔率')
-                    break
+            for matchId in match_id_list:
+                outcomes_odds_list = []
+                outcome_info_list = self.get_match_all_outcome(match_id=matchId, token=token, terminal=terminal, sport_name=sport_name,
+                                                               odds_Type=odds_type)
+                for item in outcome_info_list:
+                    outcomes_odds_list.append([item[1]['outcome_id'], item[1]['odds']])
+                creditOdds_list.extend(outcomes_odds_list)
+
+            return creditOdds_list
+
+        elif event_type == "EARLY":
+            match_id_list = self.get_match_list(sport_name=sport_name, token=token, event_type=event_type, terminal=terminal, sort=sort,
+                                                   odds_type=odds_type)[0]
+
+            for matchId in match_id_list:
+                outcomes_odds_list = []
+                outcome_info_list = self.get_match_all_outcome(match_id=matchId, token=token, terminal=terminal, sport_name=sport_name,
+                                                               odds_Type=odds_type)
+                for item in outcome_info_list:
+                    outcomes_odds_list.append([item[1]['outcome_id'], item[1]['odds']])
+                creditOdds_list.extend(outcomes_odds_list)
+
+            return creditOdds_list
+
+        else:
+            raise AssertionError('传入参数错误,请检查传入的参数')
+
+    def get_credit_expect_outcomes_odds(self, token, sport_name, handicap_type='A', event_type="INPLAY", sort=1, odds_type=1):
+        '''
+        通过信用网接口中的赔率来计算信用网赔率              /// 修改于2022.07.07
+        :param token:
+        :param sport_name:
+        :param handicap_type:  默认为A盘口,后台配置的原始赔率
+        :param event_type:
+        :param sort:
+        :param odds_type: 1 欧洲盘   2 香港盘
+        :return:
+        '''
+        if token:
+            originalOdds_list = self.get_credit_outcomes_odds(sport_name=sport_name, event_type=event_type, sort=sort, odds_type=odds_type)     # 首先查询会员是属于ABCD哪类盘口
+
+            marketId_no_change = [1, 60, 45, 81, 25, 21, 71, 29, 75, 26, 74, 8, 47, 15, 10, 31, 32, 33, 34, 37, 35, 36, 146, 52, 56, 57, 547, 546, 48, 49, 50, 51, 172, 163,
+                                  164, 175, 137, 2, 3, 113, 119, 123, 30, 27, 28, 9, 5, 63, 11, 64, 12, 13, 76, 77, 78, 79, 53, 54, 58, 59, 23, 24, 542, 183, 175, 169, 182,
+                                  170, 180, 171, 181, 142, 155, 143, 156, 144, 157, 159, 147, 160,148, 161, 6, 220, 122, 219, 229, 304, 186, 202, 199, 311, 245, 248, 251, 406]
+
+            sql_str = "SELECT handicap,handicap_min_value,handicap_impairment FROM m_handicap_backwater_config"
+            database_name = "bfty_credit"
+            rtn = list(self.ms.query_data(sql_str, database_name))
+            new_list = [list(item) for item in rtn]        #  查询出来的原始数据 [['A', Decimal('1.32'), 8], ['B', Decimal('1.33'), 7], ['C', Decimal('1.34'), 6], ['D', Decimal('1.35'), 5]]
+
+            # 对查询出来的原始数据进行赔率+1,盘口减值/100处理
+            for item in new_list:
+                if item[0] != "A":       # A盘口在后台配置成原始赔率
+                    item[1] += 1
+                    item[2] = item[2]/100
+
+            # 将decimal和其他类型转成浮点数
+            match_info_list = []
+            for index1, item in enumerate(new_list):
+                new_data_list = []
+                for j in item[1:]:
+                    if j == None:
+                        j = 0
+                    else:
+                        j = float(j)
+                    new_data_list.append(j)
+                new_data_list.insert(0, item[0])
+                match_info_list.append(new_data_list)
+
+            # 将盘口类型和赔率/盘口减值添加到字典
+            handcip_management = {'A': [], 'B': [], 'C': [], 'D': []}
+            for item in match_info_list:
+                for type in item:
+                    if type == 'A':
+                        handcip_management['A'].extend(item[1:])
+                    elif type == 'B':
+                        handcip_management['B'].extend(item[1:])
+                    elif type == 'C':
+                        handcip_management['C'].extend(item[1:])
+                    elif type == 'D':
+                        handcip_management['D'].extend(item[1:])
+                    else:
+                        pass
+
+            if handicap_type == 'A':
+                minimum_odds =  handcip_management['A'][0]
+                minimum_uk_odds = minimum_odds                      # 欧洲赔率最小值
+                minimum_hk_odds = minimum_odds - 1                  # 香港赔率最小值
+                handicap_impairment = handcip_management['A'][1]    # 赔率减值
+            elif handicap_type == 'B':
+                minimum_odds =  handcip_management['B'][0]
+                minimum_uk_odds = minimum_odds
+                minimum_hk_odds = minimum_odds - 1
+                handicap_impairment = handcip_management['B'][1]
+            elif handicap_type == 'C':
+                minimum_odds =  handcip_management['C'][0]
+                minimum_uk_odds = minimum_odds
+                minimum_hk_odds = minimum_odds - 1
+                handicap_impairment = handcip_management['C'][1]
+            elif handicap_type == 'D':
+                minimum_odds =  handcip_management['D'][0]
+                minimum_uk_odds = minimum_odds
+                minimum_hk_odds = minimum_odds - 1
+                handicap_impairment = handcip_management['D'][1]
             else:
-                raise AssertionError("没找到元素!")
+                raise AssertionError('ERROR,暂不支持该盘口类型')
+
+            creditOdds_list = []
+
+            if odds_type == 1:
+                for Odds_list in originalOdds_list:
+                    outcomes_odds_list = []
+                    outcome_id = Odds_list[0]
+                    outcome_odds = Odds_list[1]
+                    if outcome_odds < minimum_uk_odds:                                    # 原始赔率小于设置的赔率最小值,直接取原始赔率
+                        outcomes_odds_list.append([outcome_id,round(outcome_odds,2)])
+                    elif outcome_odds > minimum_uk_odds:                                  # 原始赔率大于设置的赔率最小值
+                        if outcome_odds - handicap_impairment > minimum_uk_odds:          # 原始赔率-盘口减值 > 盘口最低值,取原始赔率-盘口减值的差值
+                            outcomes_odds_list.append([outcome_id,round(outcome_odds - handicap_impairment,2)])
+                        elif outcome_odds - handicap_impairment < minimum_uk_odds:        # 原始赔率-盘口减值 < 盘口最低值,取盘口最低值
+                            outcomes_odds_list.append([outcome_id,round(minimum_uk_odds,2)])
+                    else:
+                        outcomes_odds_list.append([outcome_id,round(outcome_odds,2)])
+                    creditOdds_list.extend(outcomes_odds_list)
+
+                return creditOdds_list
+
+            elif odds_type == 2:                           # 若为香港盘,需要判断切换判了类型赔率是否会变
+                for Odds_list in originalOdds_list:
+                    outcomes_odds_list = []
+                    outcome_id = Odds_list[0]
+                    outcome_odds = Odds_list[1]
+                    reg = re.search(r"_(\d+?)_", outcome_id)      # originalodds = ['sr:match:28828430_1__1', 2.24],从originalodds[0]的第一个元素sr:match:28828430_1__1中获取盘口id
+                    market_id = int(reg.group(1))
+                    if int(market_id) in marketId_no_change:                  # 切换盘口类型,赔率不会变,即欧赔
+                        if outcome_odds < minimum_uk_odds:
+                            outcomes_odds_list.append([outcome_id, round(outcome_odds, 2)])
+                        elif outcome_odds > minimum_uk_odds:
+                            if outcome_odds - handicap_impairment > minimum_uk_odds:
+                                outcomes_odds_list.append(
+                                    [outcome_id, round(outcome_odds - handicap_impairment, 2)])
+                            elif outcome_odds - handicap_impairment < minimum_uk_odds:
+                                outcomes_odds_list.append([outcome_id, round(minimum_uk_odds, 2)])
+                        else:
+                            outcomes_odds_list.append([outcome_id, round(outcome_odds, 2)])
+                        creditOdds_list.extend(outcomes_odds_list)
+
+                    else:                                                   # 切换盘口类型,赔率会变,即港赔
+                        if outcome_odds < minimum_hk_odds:
+                            outcomes_odds_list.append([outcome_id, round(outcome_odds, 2)])
+                        elif outcome_odds > minimum_hk_odds:
+                            if outcome_odds - handicap_impairment > minimum_hk_odds:
+                                outcomes_odds_list.append([outcome_id, round(outcome_odds - handicap_impairment, 2)])
+                            elif outcome_odds - handicap_impairment < minimum_hk_odds:
+                                outcomes_odds_list.append([outcome_id, round(minimum_hk_odds, 2)])
+                        else:
+                            outcomes_odds_list.append([outcome_id,round(outcome_odds,2)])
+                        creditOdds_list.extend(outcomes_odds_list)
+
+                return creditOdds_list
+
+            else:
+                raise AssertionError('sorry,暂不支持这种赔率')
+
+
+    # def check_credit_outcomes_odds(self, token, sport_name, handicap_type='A', event_type="INPLAY", terminal='pc', sort=1, odds_type=1):
+    #     '''
+    #     验证信用网(滚球,今日,早盘)所有盘口下注项的赔率是否正确              /// 修改于2022.02.22
+    #     :param token:
+    #     :param sport_name:
+    #     :param handicap_type: 信用网盘口类型
+    #     :param event_type:
+    #     :param terminal:
+    #     :param sort:
+    #     :param odds_type:
+    #     :return:
+    #     '''
+    #     # 信用网接口中的赔率
+    #     api_credits_odds = self.get_credit_outcomes_odds(token=token, sport_name=sport_name, event_type=event_type, terminal=terminal, sort=sort, odds_type=odds_type)
+    #     # 通过现金网赔率手动计算出的信用网赔率
+    #     query_credits_odds = self.bfh5.query_credit_outcomes_odds(token='d07c8dfe3a0b4001b41e28683548fbbb',sport_name=sport_name, event_type=event_type,
+    #                                                               sort=sort, odds_type=odds_type, handicap_type=handicap_type)
+    #
+    #     match_api_dic = {}
+    #     match_api_list = []
+    #     for item in api_credits_odds:
+    #         match_id = item[0][0][:17]
+    #         match_api_dic[match_id] = item
+    #     match_api_list.append(match_api_dic)
+    #
+    #     match_db_dic = {}
+    #     match_db_list = []
+    #     for item in query_credits_odds:
+    #         match_id = item[0][0][:17]
+    #         match_db_dic[match_id] = item
+    #     match_db_list.append(match_db_dic)
+    #
+    #     if len(match_api_list) != len(match_db_list):
+    #         raise AssertionError("长度不一致!")
+    #
+    #     # print(match_api_list)
+    #     # print("-----")
+    #     # print(match_db_list)
+    #     for index, item1 in enumerate(match_api_list):
+    #         for item2 in match_db_list:
+    #             if list(item1.keys())[0] == list(item2.keys())[0]:
+    #                 self.cm.check_live_bet_report_new(list(item1.values())[0], list(item2.values())[0])
+    #                 print(f'测试通过,该用户对应的盘口类型【{handicap_type}】满足信用网赔率')
+    #                 break
+    #         else:
+    #             raise AssertionError("没找到元素!")
 
 
     def get_choose_tourment_list(self, sport_name, token, matchCategory="inplay", highlight="false", sort=1, odds_type=1):
@@ -1944,6 +2147,37 @@ class Credit_Client(object):
     def threading_pool(self):
         return None
 
+    def bf_request(self, method, url, head=None, data=None, *args, **kwargs):
+        method = method.lower()
+        if method == 'get':
+            for loop in range(3):
+                try:
+                    b_request = requests.get(url=url, headers=head, params=data, timeout=600)
+                    if b_request.status_code != 200:
+                        raise AssertionError(f'请求超时:{loop}次,{b_request.json()}')
+                    else:
+                        return b_request
+                except ConnectionError:
+                    time.sleep(2)
+                    continue
+                except Exception as e:
+                    raise AssertionError(f'当前接口接口调用失败，请求检查接口,失败信息：{e}')
+
+        elif method == 'post':
+            for loop in range(3):
+                try:
+                    b_request = requests.post(url=url, headers=head, json=data, timeout=600)
+                    if b_request.status_code != 200:
+                        raise AssertionError(f'请求超时:{loop}次,{b_request.json()}')
+                    else:
+                        return b_request
+                except ConnectionError:
+                    time.sleep(2)
+                    continue
+                except Exception as e:
+                    raise AssertionError(f'当前接口接口调用失败，请求检查接口,失败信息：{e}')
+
+
 
 if __name__ == "__main__":
 
@@ -1951,7 +2185,7 @@ if __name__ == "__main__":
     mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['4b6c849fa45441dea202e91dd6cb8708','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
+    token_list = ['87a5990713fb4976aad1cf9fd9ab79c1','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
 
     # match_id_list = bf.get_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     # print(match_id_list)
@@ -1966,16 +2200,16 @@ if __name__ == "__main__":
     #     data = bf.cm.write_to_local_file(content=item, file_name='C:/Users/USER/Desktop/testOdds.txt',mode='w')
 
     # 新增多线程-模拟多用户进行投注
-    start_time = time.perf_counter()
-    user_list = ['a1','a2','a3']
-    for user in user_list:
-        type_list = ['INPLAY', 'TODAY', 'EARLY']
-        type = random.choice(type_list)
-        token = bf.login_client(username=user, password='Bfty123456')
-        sub_thread = threading.Thread(target=bf.submit_all_match, args=(f'{token}', f'{type}', 2, '30', True))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
-        # sub_thread = threading.Thread(target=bf.submit_all_outcome, args=("网球", f'{token}', 3, 'INPLAY') )       # 非复式串关投注：创建线程,target为线程执行的目标方法
-        sub_thread.start()          # 通过start()方法手动来启动线程
-    print(threading.current_thread())
+    # start_time = time.perf_counter()
+    # user_list = ['a1','a2','a3']
+    # for user in user_list:
+    #     type_list = ['INPLAY', 'TODAY', 'EARLY']
+    #     type = random.choice(type_list)
+    #     token = bf.login_client(username=user, password='Bfty123456')
+    #     sub_thread = threading.Thread(target=bf.submit_all_match, args=(f'{token}', f'{type}', 2, '30', True))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
+    #     # sub_thread = threading.Thread(target=bf.submit_all_outcome, args=("网球", f'{token}', 3, 'INPLAY') )       # 非复式串关投注：创建线程,target为线程执行的目标方法
+    #     sub_thread.start()          # 通过start()方法手动来启动线程
+    # print(threading.current_thread())
 
         # with ThreadPoolExecutor(max_workers=5) as task:            # 创建一个最大容纳数量为5的线程池
         #     for item in range(thread_num):
@@ -2026,9 +2260,11 @@ if __name__ == "__main__":
     # outcome_detail = bf.get_match_all_outcomes_detail(token=token_list[0],sport_name='网球',event_type="INPLAY", sort=1, odds_type=1)              # 检测比赛下注项数量是否一致
     # tournament = bf.get_choose_tourment_list(sport_name='足球', token=token_list[0], matchCategory="today", highlight="false")     # 选择联赛列表数量是否一致
 
-    # credits_odds = bf.get_credit_outcomes_odds(token=token_list[0], sport_name='羽毛球', event_type="TODAY", sort=1, odds_type=2)         # 获取接口中ABCD盘口的信用网赔率
+    credits_odds = bf.get_credit_outcomes_odds(sport_name='棒球', event_type="INPLAY", sort=1, odds_type=1)         # 获取接口中ABCD盘口的信用网赔率
     # check_odds = bf.check_credit_outcomes_odds(token=token_list[0], sport_name='羽毛球', handicap_type='B', event_type="TODAY", sort=1, odds_type=2)  # 验证ABCD盘口的信用网赔率
-
+    # credits_odds = bf.get_credit_expect_outcomes_odds(token=token_list[0], sport_name='棒球', event_type="INPLAY", sort=1,odds_type=1,handicap_type='B')
+    print(credits_odds)
+    # print(len(credits_odds))
     # match_result = bf.get_h5_credit_match_result(token=token_list[0], sportName='篮球', offset='-1')      # 信用网-h5端,新赛果查询
     # searchName = bf.get_search_matchName_list(token=token_list[0], sport_name='足球', teamName='蒂安')
 
