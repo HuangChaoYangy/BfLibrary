@@ -22,6 +22,9 @@ main_station_report_path  = os.path.join(excel_dir,'test_data','报表管理测�
 main_station_totalBet_path  = os.path.join(excel_dir,'test_data','总投注-测试用例.xlsx')
 token_url = os.path.join(excel_dir,'test_data','token.yaml')
 config_url = os.path.join(excel_dir,'config','config.yaml')
+credit_data_path = os.path.join(excel_dir,'test_data','credit_user_data.yaml')
+cash_data_path = os.path.join(excel_dir,'test_data','cash_user_data.yaml')
+test_data_path = os.path.join(excel_dir,'test_data','test_oddsData.yaml')
 
 
 if __name__ =='__main__':
