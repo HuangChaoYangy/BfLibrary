@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/7/2 18:52
 # @Author  : liyang
-# @FileName: test_mixBet.py
+# @FileName: 总投注-混合过关
 # @Software: PyCharm
 
 
