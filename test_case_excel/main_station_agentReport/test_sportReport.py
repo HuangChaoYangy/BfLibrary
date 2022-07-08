@@ -29,7 +29,7 @@ class Test_sportReport:
     case_list2 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
     @pytest.mark.parametrize('sport_params', case_list2)
-    @pytest.mark.skip(reason='调试代码,暂不执行')
+    # @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-代理报表-球类报表-列表详情')
     def test_sportsReport(self, excel_data, sport_params):
         '''
@@ -172,11 +172,11 @@ class Test_sportReport:
     case_list2 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
     @pytest.mark.parametrize('market_params', case_list2)
-    @pytest.mark.skip(reason='调试代码,暂不执行')
+    # @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-代理报表-球类报表-查看盘口详情')
     def test_sportsReportMarket(self, excel_data, market_params):
         '''
-        管理后台-代理报表-球类报表-列表详情,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
+        管理后台-代理报表-球类报表-查看盘口详情,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
         :param excel_data:  excel中的测试用例
         :param sport_params: excel中的参数化数据
         :return:
