@@ -1241,7 +1241,27 @@ for i in range(0, len(yyds_list)):
         continue
 
 
-# print(new_list)
+
+# 串关合并一条数据---列表形式-例子4
+data_match = [['乒乓球', '2022-06-08 05:45:00', '滚球国际TT Cup Hiiemae, Andrus vs Perv, Indrek', 0.0, 0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+              ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', 0.0, 0.0, 0.0, 24.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+              ['乒乓球', '2022-06-08 06:00:00', '滚球国际TT Cup 马克西姆丘克, 伊戈尔 vs 阿赫拉莫夫, 塞尔吉', 0.0, 0.0, 14.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+              ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', 0.0, 0.0, 13.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+              ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 13.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
+data_new_match=[]
+match_info = []
+for item in data_match:
+    if item[2] in match_info:
+        index_num = match_info.index(item[2])
+        for k in range(3, len(item)):
+            number = item[k] + data_new_match[index_num][k]
+            data_new_match[index_num][k] = number
+    else:
+        match_info.append(item[2])
+        data_new_match.append(item)
+
+print(data_new_match)
+
 
 
 
