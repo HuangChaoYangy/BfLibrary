@@ -174,7 +174,7 @@ class Test_DailyProfitAndLoss:
     case_list2 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
     @pytest.mark.parametrize('sport_params', case_list2)
-    @pytest.mark.skip(reason='调试代码,暂不执行')
+    # @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-报表管理-每日盈亏-总计')
     def test_Daily_total(self, excel_data, sport_params):
         '''
@@ -302,6 +302,6 @@ class Test_DailyProfitAndLoss:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_dailyProfitAndLoss.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir', '-n=4'])
-    os.system("allure generate ../report/html -o ../report/html --clean")
+    pytest.main(["test_dailyProfitAndLoss.py",'-vs', '-q', '--alluredir', '../report/tmp', ])  # '--clean-alluredir', '-n=4'
+    # os.system("allure generate ../report/html -o ../report/html --clean")
     os.system("allure serve ../report/tmp")
