@@ -6111,8 +6111,8 @@ class MysqlQuery(MysqlFunc):
         else:
             raise AssertionError('暂不支持此种赔率计算或者赔率计算要求错误')
 
-
         return self.get_two_float(odds, 2)
+
 
     def get_odds_by_orderNum(self,orderNo):
         '''
@@ -6730,7 +6730,7 @@ class MysqlQuery(MysqlFunc):
         return match_id_list
 
 
-    def  get_market_id_by_matchId_matchReport(self,match_id, time=(-7,-1), queryDateType=3):
+    def get_market_id_by_matchId_matchReport(self,match_id, time=(-7,-1), queryDateType=3):
         '''
         查询总代赛事盈亏-根据球比赛id获取投注的盘口id
         :param sport_id:
@@ -6766,7 +6766,7 @@ class MysqlQuery(MysqlFunc):
         return market_id_list
 
 
-    def  get_account_id_by_matchId_multitermReport(self,account_id="", sport_id="", time=(-7,-1), queryDateType=3):
+    def get_account_id_by_matchId_multitermReport(self,account_id="", sport_id="", time=(-7,-1), queryDateType=3):
         '''
         查询总代混合串关-获取会员账号id
         :param sport_id:
@@ -6807,7 +6807,7 @@ class MysqlQuery(MysqlFunc):
         return accountId_list
 
 
-    def  get_account_id_by_mixBetReport(self):
+    def get_account_id_by_mixBetReport(self):
         '''
         查询总代-总投注-混合串关-获取会员账号
         :return:
@@ -6825,7 +6825,7 @@ class MysqlQuery(MysqlFunc):
         print(accountId_list)
         return accountId_list
 
-    def  get_order_num_by_mixBetReport(self):
+    def get_order_num_by_mixBetReport(self):
         '''
         查询总代-总投注-混合串关-获取注单号
         :return:
@@ -6842,6 +6842,137 @@ class MysqlQuery(MysqlFunc):
             order_num_list.extend(item)
 
         return order_num_list
+
+    def get_matchdata_mainBetReport(self, sportName):
+        '''
+        总台-总投注-让球/大小/独赢/滚球-列表
+        :return:
+        '''
+        database_name = "bfty_credit"
+        sql_str = f"SELECT sport_category_id'球类',match_time '比赛时间',match_soccer '赛事',IFNULL(if(outcome_id = 1714 and market_id IN(16,223,188,237,256,16) ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'全场让球盘主队',IFNULL(if(outcome_id = 1715 and market_id IN(16,223,188,237,256,16) ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'全场让球盘客队',IFNULL(if(outcome_id = 12 and market_id IN(18,225,314,238,258,18) ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'全场大小盘大盘',IFNULL(if(outcome_id = 13 and market_id IN(18,225,314,238,258,18) ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'全场大小盘小盘',IFNULL(if(outcome_id IN (1,4) and market_id IN(1,219,186,251) ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'全场独赢盘1',IFNULL(if(outcome_id =2 and market_id IN(1,219,186,251) ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'全场独赢盘x',IFNULL(if(outcome_id IN (3,5) and market_id IN(1,219,186,251) ,sum(bet_amount*company_percentage),' '),0)'全场独赢盘2'," \
+                  f"IFNULL(if(outcome_id  =1714 and market_id =66 ,sum(bet_amount*company_percentage),' '),0)'上半场让球盘主队',IFNULL(if(outcome_id =1715 and market_id =66 ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'上半场让球盘客队',IFNULL(if(outcome_id = 12 and market_id =68 ,sum(bet_amount*company_percentage),' '),0)'上半场大小盘大盘'," \
+                  f"IFNULL(if(outcome_id = 13 and market_id =68 ,sum(bet_amount*company_percentage),' '),0)'上半场大小盘小盘',IFNULL(if(outcome_id IN (1,4) and market_id =60 ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'上半场独赢盘1',IFNULL(if(outcome_id =2  and market_id =60 ,sum(bet_amount*company_percentage),' '),0) '上半场独赢盘x'," \
+                  f"IFNULL(if(outcome_id IN(3,5)  and market_id =60 ,sum(bet_amount*company_percentage),' '),0) '上半场独赢盘2' FROM order_win_handicap_overunder WHERE sport_category_id='{sportName}' " \
+                  f"GROUP BY sport_category_id ,match_time, match_soccer,match_id,market_id,outcome_id ORDER BY sport_category_id desc"
+        rtn = list(self.query_data(sql_str, database_name))
+        new_list = [list(item) for item in rtn]
+
+        # new_list = [['乒乓球', datetime.datetime(2022, 6, 8, 5, 45), '滚球国际TT Cup Hiiemae, Andrus vs Perv, Indrek', ' ', ' ', ' ', '10.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['乒乓球', datetime.datetime(2022, 6, 8, 6, 0), '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', ' ', ' ', ' ', '24.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['乒乓球', datetime.datetime(2022, 6, 8, 6, 0), '滚球国际TT Cup 马克西姆丘克, 伊戈尔 vs 阿赫拉莫夫, 塞尔吉', ' ', ' ', '14.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['乒乓球', datetime.datetime(2022, 6, 8, 6, 0), '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', ' ', ' ', '13.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['乒乓球', datetime.datetime(2022, 6, 8, 6, 0), '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', ' ', ' ', ' ', ' ', ' ', ' ', '13.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]
+
+        # 处理时间类型和" "字符串
+        for item in new_list:
+            matchTime = item[1]
+            match_time = matchTime.strftime("%Y-%m-%d %H:%M:%S")
+            for n in range(len(item)):
+                item[1] = match_time
+                if item[n] == " " or item[n] == "":
+                    item[n] = 0
+
+        # 将字符串转成数字
+        match_info_list = []
+        for index1, item in enumerate(new_list):
+            new_data_list = []
+            for j in item[3:]:
+                if j == None:
+                    j = 0
+                else:
+                    j = float(j)
+                new_data_list.append(j)
+            new_data_list.insert(0, item[0])
+            new_data_list.insert(1, item[1])
+            new_data_list.insert(2, item[2])
+            match_info_list.append(new_data_list)
+
+        # 将相同联赛的数据进行求和
+        data_new_match = []
+        match_info = []
+        for item in match_info_list:
+            if item[2] in match_info:
+                index_num = match_info.index(item[2])
+                for k in range(3, len(item)):
+                    number = item[k] + data_new_match[index_num][k]
+                    data_new_match[index_num][k] = number
+            else:
+                match_info.append(item[2])
+                data_new_match.append(item)
+
+        return data_new_match
+
+
+    def get_sportName_mainBetReport(self):
+        '''
+        总台-总投注-让球/大小/独赢/滚球-获取比赛名称
+        :return:
+        '''
+        database_name = "bfty_credit"
+        sql_str = "SELECT sport_category_id FROM `order_win_handicap_overunder` GROUP BY sport_category_id"
+        data = list(self.query_data(sql_str, database_name))
+
+        sport_name_list = []
+        for item in data:
+            sport_name_list.append(item[0])
+
+        return sport_name_list
+
+
+    def get_matchId_by_sportName_mainBetReport(self, sport_name):
+        '''
+        根据球类名称获取比赛ID-总投注-让球/大小/独赢/滚球-注单详情
+        :param sport_name:
+        :return:
+        '''
+        database_name = "bfty_credit"
+
+        sql_str = f"SELECT match_id FROM order_win_handicap_overunder WHERE sport_category_id='{sport_name}'"
+        rtn = list(self.query_data(sql_str, database_name))
+        new_list = [list(item) for item in rtn]
+        match_id_list = []
+        for item in new_list:
+            match_id_list.extend(item)
+
+        return match_id_list
+
+    def get_marketId_by_matchId_mainBetReport(self, sport_name, match_id):
+        '''
+        根据比赛ID获取盘口ID-总投注-让球/大小/独赢/滚球-注单详情
+        :param sport_name:
+        :return:
+        '''
+        database_name = "bfty_credit"
+
+        sql_str = f"SELECT market_id FROM order_win_handicap_overunder WHERE sport_category_id='{sport_name}' AND match_id='{match_id}'"
+        rtn = list(self.query_data(sql_str, database_name))
+        new_list = [list(item) for item in rtn]
+        market_id_list = []
+        for item in new_list:
+            market_id_list.extend(item)
+
+        return market_id_list
+
+    def get_outcomeId_by_marketId_mainBetReport(self, sport_name, match_id, market_id):
+        '''
+        根据盘口ID获取投注项ID-总投注-让球/大小/独赢/滚球-注单详情
+        :param sport_name:
+        :return:
+        '''
+        database_name = "bfty_credit"
+
+        sql_str = f"SELECT outcome_id FROM order_win_handicap_overunder WHERE sport_category_id='{sport_name}' AND match_id='{match_id}' AND market_id='{market_id}'"
+        rtn = list(self.query_data(sql_str, database_name))
+        new_list = [list(item) for item in rtn]
+        outcome_id_list = []
+        for item in new_list:
+            outcome_id_list.extend(item)
+
+        return outcome_id_list
 
 
     def credit_sportReport_query_sql(self, sportName='', queryType='sport', dateType=3, create_time=(-7, -1)):
@@ -8746,10 +8877,8 @@ if __name__ == "__main__":
     # data = mysql.get_orderNo_effectAmount_and_commission(user_name='', order_no='XFB6FPtyXDyB', createDate=(), awardDate=())[1]
     # print(data)
 
-    # commission = mysql.get_order_no_commission(order_no='XFB74wbGYMe5')
+    # commission = mysql.get_order_no_commission(order_no='XFB74wbGYMe5')            # 总佣金
     # order = mysql.get_order_by_account(account='a2')
-    # dataList = [1000, 0.2, 0.2, 0.2, 0.1, 0.3, 0.0021, 0.0021, 0.0019, 0.0015, 0.0002]
-    # commission = mysql.get_list_multiply(data_list=dataList)
 
     # data = mysql.check_orderNo_effectAmount_and_commission(user_name='', order_no='', createDate=(-1,0), awardDate=())    # 校验信用网注单有效金额和佣金
 
@@ -8771,8 +8900,8 @@ if __name__ == "__main__":
     # odds_list = [1.88, 1.81, 1.74, 1.81]
     # data = mysql.get_all_odds(odds_list=odds_list, bet_type=4)
     # print(data)
-    odds = mysql.get_odds_by_orderNum(orderNo='XHwPPCTHvKfX')
-    print(odds)
+    # odds = mysql.get_odds_by_orderNum(orderNo='XKe96XQFBR5c')          #   通过注单号查询注单的总赔率
+    # print(odds)
     # N1 = list(combinations(a, 2))
     # N2 = list(permutations(a, 2))
 
@@ -8785,8 +8914,13 @@ if __name__ == "__main__":
     # data = mysql.get_market_id_by_matchId_matchReport(match_id='串关', time=(-7, -1), queryDateType=3)
     # data = mysql.get_account_id_by_matchId_multitermReport(account_id="", sport_id="", time=(-7,-1), queryDateType=3)
     # data = mysql.get_account_id_by_mixBetReport()
-    data = mysql.get_order_num_by_mixBetReport()
-    # print(data)
+    # data = mysql.get_order_num_by_mixBetReport()
+    # data = mysql.get_order_num_by_mainBetReport()
+    # data = mysql.get_matchId_by_sportName_mainBetReport(sport_name='足球')
+    # data = mysql.get_outcomeId_by_marketId_mainBetReport(sport_name='足球', match_id='sr:match:32225939', market_id='16')
+    data = mysql.get_matchdata_mainBetReport(sportName='足球')
+    # data = mysql.get_sportName_mainBetReport()
+    print(data)
 
 
                                                                               # 【反波胆-客户端】
