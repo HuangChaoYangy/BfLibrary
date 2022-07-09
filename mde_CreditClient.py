@@ -399,6 +399,7 @@ class Credit_Client(object):
 
             for market in rsp.json()["data"]["marketList"]:
                 market_id = market["marketId"]
+                market_name = market['marketName']
                 for outcome in market["outcomeList"]:
                     for outcome_detail in outcome:
                         outcome_dic = {"market_id": market_id,
@@ -2178,6 +2179,139 @@ class Credit_Client(object):
                     raise AssertionError(f'当前接口接口调用失败，请求检查接口,失败信息：{e}')
 
 
+    def get_all_sports_no_change(self, sport_name):
+        '''
+        定义切换盘口类型后，所有体育类型中不会变的盘口ID                    /// 修改于2021.08.30
+        :param sport_name:
+        :return:
+        '''
+        soccer_market_id_no_change = [1,60,45,81,25,21,71,29,75,26,74,8,47,15,10,31,32,33,34,37,35,36,146,52,56,57,547,546,48,49,50,51,172,163,164,175,137,2,3,113,119,123,
+                                      30,27,28,9,5,63,11,64,12,13,76,77,78,79,53,54,58,59,23,24,542,183,175,169,182,170,180,171,181,142,155,143,156,144,157,159,147,160,
+                                      148,161,6,220,122]
+        basketball_market_id_no_change = [219,229,60,74,304]
+        tennis_market_id_no_change = [186,202,199]
+        volleyball_market_id_no_change = [186,202,311,199]
+        badminton_market_id_no_change = [186,199,245]
+        pingpong_market_id_no_change = [186,199,245,248]
+        baseball_market_id_no_change = [251]
+        other_market_id_no_change = [1,26,406]
+        other_market_id_no_change = set(other_market_id_no_change)
+
+        small_sport_id_dic = {"足球": soccer_market_id_no_change, "篮球": basketball_market_id_no_change, "网球": tennis_market_id_no_change,"排球": volleyball_market_id_no_change,
+                              "羽毛球": badminton_market_id_no_change, "乒乓球": pingpong_market_id_no_change,"棒球": baseball_market_id_no_change, "冰上曲棍球": other_market_id_no_change}
+
+        return small_sport_id_dic[sport_name]
+
+
+    def deal_odds(self, odds, odds_type=""):
+        '''
+        赔率转换算法，基于切换盘口类型后会进行变化的盘口  1、如果欧赔赔率大于2，则马来赔为负数，否则马来赔为正数  2、如果欧赔赔率小于2，则印尼赔为负数，否则印尼赔为正数            /// 修改于2021.08.30
+        :param odds_type:
+        :param odds:
+        :return:
+        '''
+        if odds > 0:
+            return float("%.2f" % odds)
+        else:
+            if odds > 2 and odds_type == "印尼赔":
+                if (-odds * 10000) % 1:
+                    return -((int(-odds * 1000) + 1) / 1000)
+                else:
+                    return -(int((-odds + 0.0001) * 1000) / 1000)
+
+            elif 1 < odds < 2 and odds_type == "马来赔":
+                if (-odds * 1000) % 1:
+                    return -((int(-odds * 1000) + 1) / 1000)
+                else:
+                    return -(int((-odds + 0.0001) * 1000) / 1000)
+
+            else:
+                return -((int(-odds * 1000) + 1) / 1000)
+
+
+    def check_odds(self, match_id, token, odds_type, sport_name, terminal='pc'):
+        '''
+        验证赔率 1、检查切换盘口类型后，赔率是否会变   2、检查切换盘口类型后，赔率变化是否正确             /// 修改于2022.07.09
+        :param match_id:
+        :param token:
+        :param odds_type:
+        :param sport_name:
+        :param terminal: 终端
+        :return:
+        '''
+        odds_type_dic = {"欧赔": 1, "港赔": 2, "马来赔": 3, "印尼赔": 4}
+        Europe_outcomes = self.get_match_all_outcome(match_id=match_id, token=token, odds_Type=1, terminal=terminal, sport_name=sport_name) # 获取欧赔赔率投注项列表
+        odds_type_value = odds_type_dic[odds_type]
+        outcomes_exact = self.get_match_all_outcome(match_id=match_id, token=token, odds_Type=odds_type_value, terminal=terminal,  sport_name=sport_name)   # 获取实际客户端的赔率投注项列表
+
+        print(f"比赛ID：{match_id}, 体育类型：{sport_name}, 赔率类型：{odds_type}")
+        # print("【比赛盘口投注项总共有： %d 项】" % len(outcomes_exact))
+        if len(Europe_outcomes) != len(outcomes_exact):
+            raise AssertionError("【ERR】预期结果与实际结果的投注项数量不一致")
+
+        market_id_no_change = self.get_all_sports_no_change(sport_name)
+
+        market_id_exact = []
+        for outcome in outcomes_exact:
+            odds_type_exact = outcome[1]["oddsType"]
+            outcome_id_exact = outcome[1]["outcome_id"]
+            outcome_odds_exact = outcome[1]["odds"]
+            marketid = outcome[0][18:]
+            if marketid not in market_id_exact:
+                market_id_exact.append(marketid)
+            # 遍历欧洲赔率outcome列表,拿到欧赔赔率
+            for item in Europe_outcomes:
+                outcome_id_uk = item[1]["outcome_id"]
+                outcome_odds_uk = item[1]["odds"]
+                outcome_odds_gang = round((outcome_odds_uk - 1), 4)
+
+                if outcome_id_uk == outcome_id_exact:       # 如果outcome_id相同,则执行下一步,  'outcome_id': 'sr:match:33915627_219__4'
+                    if int(marketid) in market_id_no_change:                                # 验证切换盘口类型后,赔率是否会变
+                        if outcome_odds_exact != outcome_odds_uk:
+                            print("【切换盘口类型之后，赔率会变】Match id: %s, Outcome id: %s , 赔率值预期结果【%s】 与 实际结果【%s】不一致！" %
+                                  (match_id, outcome_id_uk, outcome_odds_uk, outcome_odds_exact))
+                    #     else:
+                    #         print('盘口ID：%s,投注项ID：%s 切换盘口类型之后,【赔率不会变】------------------------测试通过------------------------' % (marketid,outcome_id_uk))
+                    #
+                    # elif int(marketid) not in market_id_no_change:
+                    #         print('盘口ID：%s,投注项ID：%s 切换盘口类型之后,【赔率会变】------------------------测试通过------------------------' % (marketid,outcome_id_uk))
+
+                    else:
+                        # 验证切换盘口类型后,赔率变化是否正确
+                        outcome_odds_expect_end = 0
+                        if odds_type == "欧赔":
+                            outcome_odds_expect = outcome_odds_uk
+                            outcome_odds_expect_end = outcome_odds_expect                 # 预期的赔率
+                        elif odds_type == "港赔":
+                            outcome_odds_expect = round(outcome_odds_uk - 1, 4)
+                            outcome_odds_expect_end = outcome_odds_expect
+                        elif odds_type == "马来赔":
+                            if outcome_odds_gang > 0 and outcome_odds_gang < 1:
+                                outcome_odds_expect = outcome_odds_gang
+                                outcome_odds_expect_end = outcome_odds_expect
+                            else:
+                                outcome_odds_expect = -1 / outcome_odds_gang
+                                outcome_odds_expect_end = self.deal_odds(outcome_odds_expect)
+                        elif odds_type == "印尼赔":
+                            if outcome_odds_gang > 0 and outcome_odds_gang < 1:
+                                outcome_odds_expect = -1 / outcome_odds_gang
+                                outcome_odds_expect_end = self.deal_odds(outcome_odds_expect)
+                            else:
+                                outcome_odds_expect = outcome_odds_gang
+                                outcome_odds_expect_end = outcome_odds_expect
+                        else:
+                            print("这是个什么odds type: " + odds_type)
+
+                        print("投注项ID：%s ,原欧赔赔率: %.2f, 当前【%s】赔率: %.2f" % (outcome_id_uk, outcome_odds_uk, odds_type, outcome_odds_expect_end))
+
+                        if outcome_odds_expect_end != outcome_odds_exact:
+                            print("【需变化】Match id: %s, Outcome id: %s , 赔率值预期结果【%s】 与 实际结果【%s】不一致！" %
+                                  (match_id, item[0], outcome_odds_expect_end, outcome_odds_exact))
+                        else:
+                            pass
+
+
+
 
 if __name__ == "__main__":
 
@@ -2185,7 +2319,7 @@ if __name__ == "__main__":
     mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['87a5990713fb4976aad1cf9fd9ab79c1','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
+    token_list = ['1c0fc2aa5c3e4a47907f780764860afe','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
 
     # match_id_list = bf.get_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     # print(match_id_list)
@@ -2260,10 +2394,10 @@ if __name__ == "__main__":
     # outcome_detail = bf.get_match_all_outcomes_detail(token=token_list[0],sport_name='网球',event_type="INPLAY", sort=1, odds_type=1)              # 检测比赛下注项数量是否一致
     # tournament = bf.get_choose_tourment_list(sport_name='足球', token=token_list[0], matchCategory="today", highlight="false")     # 选择联赛列表数量是否一致
 
-    credits_odds = bf.get_credit_outcomes_odds(sport_name='棒球', event_type="INPLAY", sort=1, odds_type=1)         # 获取接口中ABCD盘口的信用网赔率
+    # credits_odds = bf.get_credit_outcomes_odds(sport_name='棒球', event_type="INPLAY", sort=1, odds_type=1)         # 获取接口中ABCD盘口的信用网赔率
     # check_odds = bf.check_credit_outcomes_odds(token=token_list[0], sport_name='羽毛球', handicap_type='B', event_type="TODAY", sort=1, odds_type=2)  # 验证ABCD盘口的信用网赔率
     # credits_odds = bf.get_credit_expect_outcomes_odds(token=token_list[0], sport_name='棒球', event_type="INPLAY", sort=1,odds_type=1,handicap_type='B')
-    print(credits_odds)
+    # print(credits_odds)
     # print(len(credits_odds))
     # match_result = bf.get_h5_credit_match_result(token=token_list[0], sportName='篮球', offset='-1')      # 信用网-h5端,新赛果查询
     # searchName = bf.get_search_matchName_list(token=token_list[0], sport_name='足球', teamName='蒂安')
@@ -2271,3 +2405,16 @@ if __name__ == "__main__":
 
     # settled = bf.get_accountHistoryDetail(token=token_list[0], dateoffset='-0', sportName='')
     # print(settled)
+
+
+    # 验证单场比赛,赔率是否正确
+    bf.check_odds(match_id="sr:match:33206167", token=token_list[0], odds_type='港赔', sport_name="冰上曲棍球")
+
+    # 验证遍历所有体育类型中的所有比赛
+    # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
+    #     print("----------------------------------------------------------------------------------      " + sport_name + "      ----------------------------------------------------------------------------------------          ")
+    #     match_list = odds.get_match_list(sport_name=sport_name, token=token_list[0], event_type="EARLY", sort=1)[0]
+    #
+    #     for match_id in match_list:                             # 遍历所有match_list列表，检查赔率是否一致
+    #         if match_id not in ["sr:match:27267978"]:           # 此数据有问题,判断比赛ID为有问题的话,跳过该比赛
+    #             odds.check_odds(match_id=match_id, token=token_list[0], odds_type='港赔', sport_name='篮球')
