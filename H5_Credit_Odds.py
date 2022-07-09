@@ -28,7 +28,7 @@ class H5_Credit_Client_odds(object):
 
     def get_h5_match_list(self, sport_name, token, event_type="INPLAY", sort=1, odds_type=1):
         '''
-        获取滚球、今日、早盘、串关赛事列表                  /// 修改于2021.08.31
+        获取滚球、今日、早盘、串关赛事列表                  /// 修改于2022.07.09
         :param sport_name:
         :param token:
         :param event_type:  INPLAY,TODAY、EARLY、PARLAY
@@ -36,10 +36,12 @@ class H5_Credit_Client_odds(object):
         :param odds_type:
         :return:
         '''
-        url = self.auth_url + ':7210/creditMatchH5/matchList'
+        url = self.auth_url + ':6210/creditMatchH5/matchList'
         market_group_dic = {"足球": "100", "篮球": "200", "网球": "300", "排球": "400", "羽毛球": "500", "乒乓球": "600", "棒球": "700",
                             "冰上曲棍球": "10000"}
-        sport_id_dic = {"足球": "1", "篮球": "2", "网球": "3", "排球": "4", "羽毛球": "5", "乒乓球": "6", "棒球": "7", "冰上曲棍球": "100"}
+        # sport_id_dic = {"足球": "1", "篮球": "2", "网球": "3", "排球": "4", "羽毛球": "5", "乒乓球": "6", "棒球": "7", "冰上曲棍球": "100"}
+        sport_id_dic = {"足球": "sr:sport:1", "篮球": "sr:sport:2", "网球": "sr:sport:5", "排球": "sr:sport:23",
+                             "羽毛球": "sr:sport:31", "乒乓球": "sr:sport:20","冰球": "sr:sport:4", "棒球": "sr:sport:3"}
         head = {"accessCode": token,
                 "lang": "ZH",
                 "Accept-Encoding": "gzip, deflate",
@@ -122,15 +124,17 @@ class H5_Credit_Client_odds(object):
 
     def get_h5_match_all_outcomes(self, match_id, token, sport_name, odds_Type):
         '''
-        通过比赛ID获取该比赛所有盘口                         /// 修改于2021.08.30
+        通过比赛ID获取该比赛所有盘口                         /// 修改于2022.07.09
         :param match_id:
         :param token:
         :param sport_name:
         :param odds_Type:
         :return:
         '''
-        url = self.auth_url + ":7210/creditMatchH5/totalMarketList"
-        sport_id_dic = {"足球": "1", "篮球": "2", "网球": "3", "排球": "4", "羽毛球": "5", "乒乓球": "6","棒球": "7", "斯诺克": "8", "冰上曲棍球": "100"}
+        url = self.auth_url + ":6210/creditMatchH5/totalMarketList"
+        # sport_id_dic = {"足球": "1", "篮球": "2", "网球": "3", "排球": "4", "羽毛球": "5", "乒乓球": "6","棒球": "7", "斯诺克": "8", "冰上曲棍球": "100"}
+        sport_id_dic = {"足球": "sr:sport:1", "篮球": "sr:sport:2", "网球": "sr:sport:5", "排球": "sr:sport:23",
+                             "羽毛球": "sr:sport:31", "乒乓球": "sr:sport:20","冰球": "sr:sport:4", "棒球": "sr:sport:3"}
         head = {"lang":"ZH",
                 "accessCode": token,
                 "Accept-Encoding": "gzip, deflate",
@@ -139,6 +143,7 @@ class H5_Credit_Client_odds(object):
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                               "Chrome/85.0.4183.102 Safari/537.36"}
         data = {"matchId": match_id, "sportCategoryId": sport_id_dic[sport_name], "oddsType": odds_Type }
+        print(sport_id_dic[sport_name])
         rsp = self.session.post(url, headers=head, json=data)
 
         outcome_info_list = []
@@ -307,19 +312,19 @@ if __name__ == "__main__":
     mysql_info = ['192.168.10.121', 'root', 's3CDfgfbFZcFEaczstX1VQrdfRFEaXTc', '3306']
     bf = H5_Credit_Client_odds()
 
-    token_list = ['c99b9c173f8043f5a456e31e0ebfafe5']
+    token_list = ['38731ee74c5b454a8e1f68eb0882031c']
     odds_type_dic = {"港赔": '2',}
 
     # 验证遍历所有体育类型中的所有比赛
-    for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
-        print("----------------------------------------------------------------------------------      " + sport_name + "      ----------------------------------------------------------------------------------------          ")
-        match_list = bf.get_h5_match_list(sport_name=sport_name, token=token_list[0], event_type="EARLY", sort=1)[0]
-
-        for match_id in match_list:                             # 遍历所有match_list列表，检查赔率是否一致
-            if match_id not in ["sr:match:27267978"]:           # 此数据有问题,判断比赛ID为有问题的话,跳过该比赛
-                bf.check_odds(match_id=match_id, token=token_list[0], odds_type='港赔', sport_name=sport_name)
+    # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
+    #     print("----------------------------------------------------------------------------------      " + sport_name + "      ----------------------------------------------------------------------------------------          ")
+    #     match_list = bf.get_h5_match_list(sport_name=sport_name, token=token_list[0], event_type="EARLY", sort=1)[0]
+    #
+    #     for match_id in match_list:                             # 遍历所有match_list列表，检查赔率是否一致
+    #         if match_id not in ["sr:match:27267978"]:           # 此数据有问题,判断比赛ID为有问题的话,跳过该比赛
+    #             bf.check_odds(match_id=match_id, token=token_list[0], odds_type='港赔', sport_name=sport_name)
 
     # 验证单场比赛,赔率是否正确
-    # bf.check_odds(match_id ="sr:match:28188402", token=token_list[0], odds_type='港赔', sport_name="足球")
+    bf.check_odds(match_id ="sr:match:31769967", token=token_list[0], odds_type='港赔', sport_name="足球")
 
     # all_outcomes = bf.get_match_all_outcomes(match_id="sr:match:27268012", token=token_list[0], odds_Type=3, sport_name="足球", )
