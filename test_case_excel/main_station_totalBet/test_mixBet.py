@@ -27,7 +27,7 @@ class Test_mixBetReport:
     de = DoExcel(file_name=main_station_totalBet_path, sheet_name="mixBet")
     case_list1 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
-    @pytest.mark.skip(reason='调试代码,暂不执行')
+    # @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-总投注-混合过关')
     def test_mixBetReport(self, excel_data):
         '''
@@ -82,7 +82,7 @@ class Test_mixBetReport:
                 APIResult_list = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()['data']
                 for item in APIResult_list:
                     actualResult.append([item['account'], item['loginAccount'],item['orderNo'],item['sportName'],item['mixType'] + ' ' + item['mix'],item['betTime'],
-                                         item['currency'],item['orderStatus'], item['betIp'] + ' / ' + item['ipAddress'], item['betAmount'],item['odds'],
+                                         item['currency'],item['orderStatus'], item['betIp'] + ' / ' + item['ipAddress'], item['betAmount'],item['odds'], item['companyActualPercentage'],
                                          item['level0ActualPercentage'],item['level1ActualPercentage'],item['level2ActualPercentage'],item['level3ActualPercentage']])
             elif response_data['data']['data'] == []:
                 actualResult = []
@@ -107,7 +107,7 @@ class Test_mixBetReport:
                     orderType = MysqlQuery(mysql_info, mongo_info).get_bet_type_by_ordernum(order_no=order_no)
                     odds = MysqlQuery(mysql_info, mongo_info).get_odds_by_orderNum(orderNo=order_no)
                     expectResult.append([item[0], item[1], item[2], item[3], orderType, create_time, item[5], item[6], item[7],
-                                         item[8], odds, item[9], item[10], item[11], item[12]])
+                                         item[8], odds, item[9], item[10], item[11], item[12], item[13]])
 
             ctime = CommonFunc().get_current_time_for_client(time_type='currenttime')  # 获取当前时间
             # 校验接口数据和SQL数据的长度
@@ -177,7 +177,7 @@ class Test_mixBetReport:
     de = DoExcel(file_name=main_station_totalBet_path, sheet_name="mixBetOrder_d")
     case_list1 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
-    # @pytest.mark.skip(reason='调试代码,暂不执行')
+    @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-总投注-混合过关-注单详情')
     def test_mixBetReportOrder(self, excel_data):
         '''
@@ -295,5 +295,5 @@ class Test_mixBetReport:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_mixBet.py", '-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir'])
+    pytest.main(["test_mixBet.py", '-vs', '-q', '--alluredir', '../report/tmp', ])   # '--clean-alluredir'
     os.system("allure serve ../report/tmp")
