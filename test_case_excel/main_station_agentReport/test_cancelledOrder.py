@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/6/25 10:15
 # @Author  : liyang
-# @FileName: test_cancelledOrder.py
+# @FileName: 总台-代理报表-已取消注单
 # @Software: PyCharm
 
 
@@ -19,6 +19,25 @@ from CommonFunc import CommonFunc
 from base_dir import *
 from tools.yamlControl import Yaml_data
 from config import cfile
+
+
+# 获取环境配置
+configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
+mysql_info = []
+mongo_info = []
+if configure[0]['environment'] == "mde":
+    mysql_dic = configure[1]['mysql_mde']
+    mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
+    mongo_dic = configure[1]['mongodb_mde']
+    mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
+elif configure[0]['environment'] == "120":
+    mysql_dic = configure[1]['mysql_config']
+    mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
+    mongo_dic = configure[1]['mongodb_config']
+    mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
+else:
+    raise AssertionError('ERROR,this environment is not available')
+
 
 @allure.feature('总台-代理报表')
 class Test_cancelledOrder:
@@ -39,22 +58,6 @@ class Test_cancelledOrder:
         :param sport_params: excel中的参数化数据
         :return:
         '''
-        configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
-        mysql_info = []
-        mongo_info = []
-        if configure[0]['environment'] == "http://35.234.4.41:31101/mock/message":
-            mysql_dic = configure[1]['mysql_mde']
-            mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
-            mongo_dic = configure[1]['mongodb_mde']
-            mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
-        elif configure[0]['environment'] == "http://192.168.10.10:8808/mock/message":
-            mysql_dic = configure[1]['mysql_config']
-            mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
-            mongo_dic = configure[1]['mongodb_config']
-            mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
-        else:
-            raise AssertionError('ERROR,this environment is not available')
-
         if excel_data[12] == '是':
             # 读取参数化数据
             params_list = sport_params
@@ -72,9 +75,9 @@ class Test_cancelledOrder:
             with allure.step(f"请求地址： {request_url}"):
                 Bf_log('cancelledOrder').info(f'请求地址为：{request_url}')
 
-            # token = Yaml_data().get_yaml_data(fileDir=token_url, isAll=True)[0]['token']
+            token = Yaml_data().get_yaml_data(fileDir=token_url, isAll=True)[0]['token']
             # token = cfile.read_yaml(yaml_file=token_url)[0]['token']
-            token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',securityCode='111111', loginDiv=222333)
+            # token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',securityCode='111111', loginDiv=222333)
             head = {"LoginDiv": "222333",
                     "Accept-Language": "zh-CN,zh;q=0.9",
                     "Account_Login_Identify": token,
@@ -86,7 +89,6 @@ class Test_cancelledOrder:
 
             odds_dic = {"1": '欧洲盘', "2": '香港盘'}
             actual_result = []
-            actualResult = []
             if response_data['message'] == 'OK':
                 APIResult_list = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()['data']['data']['data']
                 for item in APIResult_list:
@@ -114,7 +116,6 @@ class Test_cancelledOrder:
             with allure.step(f'查询SQL:{sql_str}'):
                 Bf_log('cancelledOrder').info(f'执行sql:{sql_str}')
 
-            expectResult = []
             expect_result = []
             if not SQLResult_list:
                 expectResult = []
@@ -166,30 +167,14 @@ class Test_cancelledOrder:
     de = DoExcel(file_name=owner_backer_path, sheet_name="cancelledOdds")
     case_list1 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
-    # @pytest.mark.skip(reason='调试代码,暂不执行')
-    @allure.story('总台-代理报表-已取消注单-验证总赔率')
+    @pytest.mark.skip(reason='调试代码,暂不执行')
+    # @allure.story('总台-代理报表-已取消注单-验证总赔率')
     def test_cancelledOdds(self, excel_data):
         '''
         管理后台-代理报表-已取消注单-验证总赔率,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
         :param excel_data:  excel中的测试用例
         :return:
         '''
-        configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
-        mysql_info = []
-        mongo_info = []
-        if configure[0]['environment'] == "http://35.234.4.41:31101/mock/message":
-            mysql_dic = configure[1]['mysql_mde']
-            mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
-            mongo_dic = configure[1]['mongodb_mde']
-            mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
-        elif configure[0]['environment'] == "http://192.168.10.10:8808/mock/message":
-            mysql_dic = configure[1]['mysql_config']
-            mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
-            mongo_dic = configure[1]['mongodb_config']
-            mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
-        else:
-            raise AssertionError('ERROR,this environment is not available')
-
         if excel_data[12] == '是':
             # 读取参数化数据,查询执行SQL,SQL写法f{"参数"}
             sql_str = eval(excel_data[7])
@@ -222,7 +207,8 @@ class Test_cancelledOrder:
             with allure.step(f"请求地址： {request_url}"):
                 Bf_log('cancelledOdds').info(f'请求地址为：{request_url}')
 
-            token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',securityCode='111111', loginDiv=222333)
+            token = Yaml_data().get_yaml_data(fileDir=token_url, isAll=True)[0]['token']
+            # token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',securityCode='111111', loginDiv=222333)
             head = {"LoginDiv": "222333",
                     "Accept-Language": "zh-CN,zh;q=0.9",
                     "Account_Login_Identify": token,
@@ -293,5 +279,5 @@ class Test_cancelledOrder:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_cancelledOrder.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir',])     # '-n=1'
+    pytest.main(["test_cancelledOrder.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir'])     # '-n=1'
     os.system("allure serve ../report/tmp")
