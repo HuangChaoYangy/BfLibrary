@@ -772,13 +772,13 @@ class CommonFunc(object):
                             else:
                                 for k in range(count_j, len(actual_list)):
                                     if actual_list[i][1] == actual_list[k][1]:
+                                        orderNo_list.append(actual_list[k][3])
                                         if k == len(actual_list) - 1:
                                             count = count + 1
                                             count_j = count_j + 1
-                                            count_i = count_i + 1
+                                            count_i = count_i + 2
                                             expect_list[-1][3] = orderNo_list
                                         else:
-                                            orderNo_list.append(actual_list[k][3])
                                             count_j = count_j + 1
                                             count_i = count_i + 1
                                     else:
@@ -965,7 +965,8 @@ if __name__ == "__main__":
     # cf.check_live_bet_report_new(int_data=int_data, sql_data=sql_data)
     # cf.list_data_should_be_equal(data_list_1=int_data,data_list_2=sql_data)
 
-    data = cf.tuple_to_list(tuple_in=[('XHBWcd8LzVE7', 3, '3_4_1', 1, '1.220'), ('XHBWcd8LzVE7', 3, '3_4_1', 2, '1.220'), ('XHBWcd8LzVE7', 3, '3_4_1', 1, '1.100')])
+    # data = cf.tuple_to_list(tuple_in=[('XHBWcd8LzVE7', 3, '3_4_1', 1, '1.220'), ('XHBWcd8LzVE7', 3, '3_4_1', 2, '1.220'), ('XHBWcd8LzVE7', 3, '3_4_1', 1, '1.100')])
     # print(data)
 
-    data3 = cf.merge_compelx_03(new_lList=[ {'betTime': '2022-06-16 23:26:42', 'orderNo': 'XFTztEQGVk9k', 'sportName': '足球', 'outcomeList': [{'tournamentName': '模拟现实联盟K-League 1 SRL', 'TeamName': 'Gimcheon Sangmu (Srl)VsSuwon FC (Srl)', 'betScore': '(1:0) ', 'marketName': '大/小', 'outcomeName': '大2.5/3', 'oddsType': 1, 'odds': 2.35, 'outcomeWinOrLoseName': '输'}], 'betAmount': 100.0, 'profitAmount': -100.0, 'backwaterAmount': 0.0, 'resultAmount': 0.0},{'betTime': '2022-06-16 23:26:42', 'orderNo': 'XFTztEQGVk9k', 'sportName': '足球', 'outcomeList': [{'tournamentName': '模拟现实联盟K-League 1 SRL', 'TeamName': 'Pohang Steelers SRLVsGangwon FC SRL', 'betScore': '(1:0) ', 'marketName': '大/小', 'outcomeName': '小2', 'oddsType': 1, 'odds': 2.42, 'outcomeWinOrLoseName': '赢'}], 'betAmount': 100.0, 'profitAmount': -100.0, 'backwaterAmount': 0.0, 'resultAmount': 0.0},{'betTime': '2022-06-15 22:26:20', 'orderNo': 'XFJqRTSKxrr9', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,塔斯马尼亚', 'TeamName': 'Olympia Warriors HobartVs河岸奥林匹克', 'betScore': None, 'marketName': '双重机会&大/小', 'outcomeName': 'Olympia Warriors Hobart/河岸奥林匹克 & 大 3.5', 'oddsType': 1, 'odds': 2.06, 'outcomeWinOrLoseName': '输'}], 'betAmount': 154.0, 'profitAmount': -154.0, 'backwaterAmount': 0.03, 'resultAmount': 0.03}, {'betTime': '2022-06-15 22:26:20', 'orderNo': 'XFJqRT4444rr9', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,塔斯马尼亚', 'TeamName': 'Olympia Warriors HobartVs河岸奥林匹克', 'betScore': None, 'marketName': '双重机会&大/小', 'outcomeName': 'Olympia Warriors Hobart/河岸奥林匹克 & 大 3.5', 'oddsType': 1, 'odds': 2.06, 'outcomeWinOrLoseName': '输'}], 'betAmount': 154.0, 'profitAmount': -154.0, 'backwaterAmount': 0.03, 'resultAmount': 0.03},{'betTime': '2022-06-15 22:26:20', 'orderNo': 'XFJq3333rr9', 'sportName': '足球', 'outcomeList': [{'tournamentName': '澳大利亚全国超级联赛,塔斯马尼亚', 'TeamName': 'Olympia Warriors HobartVs河岸奥林匹克', 'betScore': None, 'marketName': '双重机会&大/小', 'outcomeName': 'Olympia Warriors Hobart/河岸奥林匹克 & 大 3.5', 'oddsType': 1, 'odds': 2.06, 'outcomeWinOrLoseName': '输'}], 'betAmount': 154.0, 'profitAmount': -154.0, 'backwaterAmount': 0.03, 'resultAmount': 0.03} ])
+    data = cf.merge_compelx_01(new_lList=[['t0t1t2t3t4/t4', 'XHYWeyDm9MRb', '2022-06-30 08:04:45', ['国际世界杯预选赛，美洲', '委内瑞拉 Vs 阿根廷', '早盘', '独赢', '', '阿根廷', 1.42, '2022-06-30 19:10:00', '欧洲盘'], ('90.00'), '45.66.134.147 / 日本'], ['t0t1t2t3t4/t4', 'XHYWeyDm9MRb', '2022-06-30 08:04:45', ['国际世界杯预选赛，美洲', '乌拉圭 Vs 巴西', '早盘', '让球', 'hcp=7.5', '巴西 ', 1.87, '2022-06-30 19:10:00', '欧洲盘'], ('90.00'), '45.66.134.147 / 日本'], ['t0t1t2t3t4/t4', 'XHYWeyDm9MRb', '2022-06-30 08:04:45', ['国际世界杯预选赛，美洲', '哥伦比亚 Vs 智利', '早盘', '独赢', '', '哥伦比亚', 1.43, '2022-06-30 21:40:00', '欧洲盘'], ('90.00'), '45.66.134.147 / 日本'], ['t0t1t2t3t4/t4', 'XHt3uU7yY5cX', '2022-06-26 22:22:53', ['阿根廷足球甲级联赛', '帕特洛纳托 Vs 独立队', '早盘', '单/双', '', '单', 1.89, '2022-06-27 14:30:00', '欧洲盘'], ('30.00'), 'mde.betf.io / 台湾省彰化县市谷歌'], ['t0t1t2t3t4/t4', 'XHt3uU7yY5cX', '2022-06-26 22:22:53', ['阿根廷足球甲级联赛', '图库曼体育会 Vs 葛度尔古斯', '早盘', '让球', 'hcp=0', '图库曼体育会 ', 1.96, '2022-06-27 19:00:00', '欧洲盘'], ('30.00'), 'mde.betf.io / 台湾省彰化县市谷歌'], ['t0t1t2t3t4/t4', 'XHt3uU7yY5cX', '2022-06-26 22:22:53', ['阿根廷足球甲级联赛', '科尔多瓦中央队 Vs 小阿根廷人', '早盘', '上半场 - 让球', 'hcp=0', '科尔多瓦中央队 ', 1.91, '2022-07-01 18:00:00', '欧洲盘'], ('30.00'), 'mde.betf.io / 台湾省彰化县市谷歌']])
+    print(data)
