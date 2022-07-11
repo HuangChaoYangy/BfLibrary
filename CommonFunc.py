@@ -2,6 +2,7 @@ import datetime
 import arrow
 import calendar
 import time
+import requests
 import base64
 from tzlocal import get_localzone
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
@@ -929,6 +930,45 @@ class CommonFunc(object):
         return list_out
 
 
+    def request_type(self, method, url, head=None, data=None, *args, **kwargs):
+        '''
+        获取请求返回响应数据，循环3次
+        :param method:
+        :param url:
+        :param head:
+        :param data:
+        :param args:
+        :param kwargs:
+        :return:
+        '''
+        method = method.lower()
+        if method == 'get':
+            for loop in range(3):
+                try:
+                    b_request = requests.get(url=url, headers=head, params=data, timeout=600)
+                    if b_request.status_code != 200:
+                        raise AssertionError(f'请求超时:{loop}次,{b_request.json()}')
+                    else:
+                        return b_request
+                except ConnectionError:
+                    time.sleep(2)
+                    continue
+                except Exception as e:
+                    raise AssertionError(f'当前接口接口调用失败，请求检查接口,失败信息：{e}')
+
+        elif method == 'post':
+            for loop in range(3):
+                try:
+                    b_request = requests.post(url=url, headers=head, json=data, timeout=600)
+                    if b_request.status_code != 200:
+                        raise AssertionError(f'请求超时:{loop}次,{b_request.json()}')
+                    else:
+                        return b_request
+                except ConnectionError:
+                    time.sleep(2)
+                    continue
+                except Exception as e:
+                    raise AssertionError(f'当前接口接口调用失败，请求检查接口,失败信息：{e}')
 
 
 if __name__ == "__main__":
