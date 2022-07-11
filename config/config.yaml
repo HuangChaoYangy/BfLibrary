@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/05/23 19:14
 # @Author  : liyang
-# @FileName: config.yaml
+# @FileName: 数据库配置文件
 # @Software: PyCharm
 
 -
-  environment: http://35.234.4.41:31101/mock/message
-#  environment: http://192.168.10.10:8808/mock/message
+  environment: "mde"
 
 -
 # 测试环境mysql配置
@@ -16,6 +15,9 @@
     password: "s3CDfgfbFZcFEaczstX1VQrdfRFEaXTc"
     port: 3306
     describe: '120测试环境mysql配置'
+# 测试环境消息推送接口配置
+  mock_config_120:
+    mock_url: 'http://192.168.10.10:8808/mock/message'
 # 测试环境mongodb配置
   mongodb_config:
     host: '192.168.10.120'
@@ -23,6 +25,7 @@
     password: "123456"
     port: 27017
     describe: '120测试环境mongodb配置'
+
 # mde环境mysql配置
   mysql_mde:
     host: '35.194.233.30'
@@ -30,6 +33,9 @@
     password: "BB#gCmqf3gTO5b*"
     port: 3306
     describe: 'mde测试环境mysql配置'
+# mde环境消息推送接口配置
+  mock_config_mde:
+    mock_url: 'http://35.185.159.184:31101/mock/message'
 # mde环境mongodb配置
   mongodb_mde:
     host: '35.194.233.30'
