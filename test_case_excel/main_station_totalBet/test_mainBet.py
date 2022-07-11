@@ -19,6 +19,24 @@ from base_dir import *
 from tools.yamlControl import Yaml_data
 from config import cfile
 
+# 获取环境配置
+configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
+mysql_info = []
+mongo_info = []
+if configure[0]['environment'] == "mde":
+    mysql_dic = configure[1]['mysql_mde']
+    mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
+    mongo_dic = configure[1]['mongodb_mde']
+    mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
+elif configure[0]['environment'] == "120":
+    mysql_dic = configure[1]['mysql_config']
+    mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
+    mongo_dic = configure[1]['mongodb_config']
+    mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
+else:
+    raise AssertionError('ERROR,this environment is not available')
+
+
 @allure.feature('总台-总投注')
 class Test_mainBetReport:
 
@@ -35,22 +53,6 @@ class Test_mainBetReport:
         :param sport_params: excel中的参数化数据
         :return:
         '''
-        configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
-        mysql_info = []
-        mongo_info = []
-        if configure[0]['environment'] == "http://35.234.4.41:31101/mock/message":
-            mysql_dic = configure[1]['mysql_mde']
-            mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
-            mongo_dic = configure[1]['mongodb_mde']
-            mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
-        elif configure[0]['environment'] == "http://192.168.10.10:8808/mock/message":
-            mysql_dic = configure[1]['mysql_config']
-            mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
-            mongo_dic = configure[1]['mongodb_config']
-            mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
-        else:
-            raise AssertionError('ERROR,this environment is not available')
-
         sport_id_dic = {"足球": "sr:sport:1", "篮球": "sr:sport:2", "网球": "sr:sport:5", "排球": "sr:sport:23", "羽毛球": "sr:sport:31", "乒乓球": "sr:sport:20",
                         "冰球": "sr:sport:4", "棒球": "sr:sport:3"}
 
@@ -175,22 +177,6 @@ class Test_mainBetReport:
         :param sport_params: excel中的参数化数据
         :return:
         '''
-        configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
-        mysql_info = []
-        mongo_info = []
-        if configure[0]['environment'] == "http://35.234.4.41:31101/mock/message":
-            mysql_dic = configure[1]['mysql_mde']
-            mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
-            mongo_dic = configure[1]['mongodb_mde']
-            mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
-        elif configure[0]['environment'] == "http://192.168.10.10:8808/mock/message":
-            mysql_dic = configure[1]['mysql_config']
-            mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
-            mongo_dic = configure[1]['mongodb_config']
-            mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
-        else:
-            raise AssertionError('ERROR,this environment is not available')
-
         if excel_data[12] == '是':
             if market_params[3] == True:
                 # 读取参数化数据
