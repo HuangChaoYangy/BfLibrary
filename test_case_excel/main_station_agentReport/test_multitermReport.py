@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/6/18 14:18
 # @Author  : liyang
-# @FileName: test_multitermReport.py
+# @FileName: 总台-代理报表-混合串关
 # @Software: PyCharm
 
 import pytest
@@ -18,6 +18,25 @@ from CommonFunc import CommonFunc
 from base_dir import *
 from tools.yamlControl import Yaml_data
 from config import cfile
+
+
+# 获取环境配置
+configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
+mysql_info = []
+mongo_info = []
+if configure[0]['environment'] == "mde":
+    mysql_dic = configure[1]['mysql_mde']
+    mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
+    mongo_dic = configure[1]['mongodb_mde']
+    mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
+elif configure[0]['environment'] == "120":
+    mysql_dic = configure[1]['mysql_config']
+    mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
+    mongo_dic = configure[1]['mongodb_config']
+    mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
+else:
+    raise AssertionError('ERROR,this environment is not available')
+
 
 @allure.feature('总台-代理报表')
 class Test_multitermReport:
@@ -38,22 +57,6 @@ class Test_multitermReport:
     #     :param sport_params: excel中的参数化数据
     #     :return:
     #     '''
-    #     configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
-    #     mysql_info = []
-    #     mongo_info = []
-    #     if configure[0]['environment'] == "http://35.234.4.41:31101/mock/message":
-    #         mysql_dic = configure[1]['mysql_mde']
-    #         mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
-    #         mongo_dic = configure[1]['mongodb_mde']
-    #         mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
-    #     elif configure[0]['environment'] == "http://192.168.10.10:8808/mock/message":
-    #         mysql_dic = configure[1]['mysql_config']
-    #         mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
-    #         mongo_dic = configure[1]['mongodb_config']
-    #         mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
-    #     else:
-    #         raise AssertionError('ERROR,this environment is not available')
-    #
     #     if excel_data[12] == '是':
     #         # 读取参数化数据
     #         params_list = sport_params
@@ -185,22 +188,6 @@ class Test_multitermReport:
         :param sport_params: excel中的参数化数据
         :return:
         '''
-        configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
-        mysql_info = []
-        mongo_info = []
-        if configure[0]['environment'] == "http://35.234.4.41:31101/mock/message":
-            mysql_dic = configure[1]['mysql_mde']
-            mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
-            mongo_dic = configure[1]['mongodb_mde']
-            mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
-        elif configure[0]['environment'] == "http://192.168.10.10:8808/mock/message":
-            mysql_dic = configure[1]['mysql_config']
-            mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
-            mongo_dic = configure[1]['mongodb_config']
-            mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
-        else:
-            raise AssertionError('ERROR,this environment is not available')
-
         sport_category_id = {'sr:sport:1': '足球', 'sr:sport:2': '篮球', 'sr:sport:5': '网球', 'sr:sport:23': '排球',
                              'sr:sport:31': '羽毛球', 'sr:sport:20': '乒乓球', 'sr:sport:3': '棒球', 'sr:sport:4': '冰上曲棍球'}
         dateType_dic = { 1: '投注时间', 2 : '赛事时间', 3 :'结算时间'}
@@ -222,7 +209,6 @@ class Test_multitermReport:
                 request_body['searchAccount'] = params_list[3]
                 request_body['dateType'] = params_list[4]
                 request_body['queryDateType'] = params_list[5]
-
                 account_id_list = MysqlQuery(mysql_info, mongo_info).get_account_id_by_matchId_multitermReport(account_id=params_list[3],  sport_id=params_list[2],
                                                                                                          time=(params_list[0], params_list[1]),queryDateType=params_list[5])
                 testCase_title = f"日期类型：'{dateType_dic[request_body['dateType']]}' 查询混合串关"
@@ -370,5 +356,5 @@ class Test_multitermReport:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_multitermReport.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir'])
+    pytest.main(["test_multitermReport.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir', '-n=4'])
     os.system("allure serve ../report/tmp")
