@@ -29,7 +29,7 @@ class Test_sportReport:
     case_list2 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
     @pytest.mark.parametrize('sport_params', case_list2)
-    # @pytest.mark.skip(reason='调试代码,暂不执行')
+    @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-代理报表-球类报表-列表详情')
     def test_sportsReport(self, excel_data, sport_params):
         '''
@@ -172,7 +172,7 @@ class Test_sportReport:
     case_list2 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
     @pytest.mark.parametrize('market_params', case_list2)
-    # @pytest.mark.skip(reason='调试代码,暂不执行')
+    @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-代理报表-球类报表-查看盘口详情')
     def test_sportsReportMarket(self, excel_data, market_params):
         '''
@@ -257,12 +257,20 @@ class Test_sportReport:
                 sql_str = eval(excel_data[7])
 
                 SQLResult_list = list(MysqlFunc(mysql_info, mongo_info).query_data(sql_str, db_name='bfty_credit'))
+
                 with allure.step(f'查询SQL:{sql_str}'):
                     Bf_log('sportReportDetail').info(f'执行sql:{sql_str}')
+                expectResult = []
                 if not SQLResult_list:
                     expectResult = []
                 else:
-                    expectResult = SQLResult_list
+                    if SQLResult_list == [('串关', None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None)]:
+                        expectResult = []
+                    else:
+                        for item in SQLResult_list:
+                            if item == ('串关', None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None):
+                                SQLResult_list.remove(item)
+                                expectResult = SQLResult_list
 
                 ctime = CommonFunc().get_current_time_for_client(time_type='currenttime')  # 获取当前时间
                 # 校验接口数据和SQL数据的长度
@@ -320,9 +328,9 @@ class Test_sportReport:
     @pytest.mark.parametrize('market_params', case_list2)
     # @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-代理报表-球类报表-根据盘口查看注单详情')
-    def test_sportsReportMarket(self, excel_data, market_params):
+    def test_sportsReportMarketDetail(self, excel_data, market_params):
         '''
-        管理后台-代理报表-球类报表-根据盘口查看注单详情,只验证前200条
+        管理后台-代理报表-球类报表-根据盘口查看注单详情,区分单注和串关,只验证前200条
         :param excel_data:  excel中的测试用例
         :param sport_params: excel中的参数化数据
         :return:
@@ -418,8 +426,8 @@ class Test_sportReport:
                         marketId = market
 
                         sum_yyds = excel_data[7]
-                        yyds = sum_yyds.split("@")
-                        sql_str = eval(yyds[1])                       # 获取第二条查询单注的SQL
+                        sql_str_list = sum_yyds.split("@")
+                        sql_str = eval(sql_str_list[1])                       # 获取第二条查询单注的SQL
                         SQLResult_list = list(MysqlFunc(mysql_info, mongo_info).query_data(sql_str, db_name='bfty_credit'))
                         with allure.step(f'查询SQL:{sql_str}'):
                             Bf_log('sportOrder_d').info(f'执行sql:{sql_str}')
@@ -563,8 +571,8 @@ class Test_sportReport:
                         marketId = market
 
                         sum_yyds = excel_data[7]
-                        yyds = sum_yyds.split("@")
-                        sql_str = eval(yyds[0])                       # 获取第二条查询串关的SQL
+                        sql_str_list = sum_yyds.split("@")
+                        sql_str = eval(sql_str_list[0])                       # 获取第一条查询串关的SQL
                         SQLResult_list = list(MysqlFunc(mysql_info, mongo_info).query_data(sql_str, db_name='bfty_credit'))
                         with allure.step(f'查询SQL:{sql_str}'):
                             Bf_log('sportOrder_d').info(f'执行sql:{sql_str}')
@@ -661,7 +669,7 @@ if __name__ == "__main__":
 
     # '-n=auto' 多进程执行用例参数    windows: 进程默认为1:--workers=1;     --tests-per-worker=n    n是线程数
     # pytest.main(["test_sportReport.py","-s","--alluredir","../report/tmp",'-Wignore'])       # -s  打印 输出  vs 详细打印  -sq  简化  打印输出内容到../allure_report,生成json临时文件
-    pytest.main(["test_sportReport.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir'])
+    pytest.main(["test_sportReport.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir', '-n=4'])
     # test_creditReport.py       表示测试目标文件
     # -s表示控制台打印输出
     # -vs显示用例详细结果
