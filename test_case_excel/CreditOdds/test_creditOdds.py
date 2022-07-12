@@ -7,16 +7,13 @@
 import pytest
 import allure,os
 import sys
-import requests
 sys.path.append(os.getcwd())
 
 from MysqlFunc import MysqlFunc
 from log import Bf_log
-from common.do_excel import DoExcel
 from CommonFunc import CommonFunc
 from base_dir import *
 from tools.yamlControl import Yaml_data
-from mde_BfClient import mde_BfClient
 from mde_CreditClient import Credit_Client
 
 # 获取环境配置
@@ -36,6 +33,8 @@ elif configure[0]['environment'] == "120":
 else:
     raise AssertionError('ERROR,this environment is not available')
 
+# 测试用例失败重跑,作用于类下面的所有用例
+@pytest.mark.flaky(reruns=3, reruns_delay=10)
 @allure.feature('客户端-信用网赔率')
 class Test_creditOdds:
 
