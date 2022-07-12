@@ -11,10 +11,16 @@ import time
 import arrow
 import datetime
 import random
+import allure,os
+import sys
+sys.path.append(os.getcwd())
+from base_dir import *
+
 import math
 from Crypto.Cipher import PKCS1_v1_5 as Cipher_pkcs1_v1_5
 from Crypto.PublicKey import RSA
 from decimal import Decimal
+from tools.yamlControl import Yaml_data
 try:
     from ThridMerchantDetail import Third_Merchant
     from MysqlFunc import MysqlQuery
@@ -41,6 +47,7 @@ class CreditBackGround(object):
         self.mg = MongoFunc(mongo_info)
         self.db = DbQuery(mongo_info)
         self.cm = CommonFunc()
+        self.ya = Yaml_data()
         self.small_sport_id_dic = {"乒乓球": "sr:sport:20","足球": "sr:sport:1","网球": "sr:sport:5","冰上曲棍球": "sr:sport:4","刀塔2": "sr:sport:111","羽毛球": "sr:sport:31",
                                    "棒球": "sr:sport:3","美式橄榄球": "sr:sport:16","排球": "sr:sport:23","英雄联盟": "sr:sport:110","篮球": "sr:sport:2","桌球": "sr:sport:19"}
         self.sport_id_dic = {"足球": 1,"篮球": 2,"网球": 3,"排球": 4,"羽毛球": 5,"乒乓球": 6,"棒球": 7,"斯诺克": 8,"其他": 100}
@@ -3231,7 +3238,7 @@ class CreditBackGround(object):
     def bf_request(self, method, url, head=None, data=None, *args, **kwargs):
         method = method.lower()
         if method == 'get':
-            for loop in range(3):
+            for loop in range(1,4):
                 try:
                     b_request = requests.get(url=url, headers=head, params=data, timeout=600)
                     if b_request.status_code != 200:
@@ -3245,7 +3252,7 @@ class CreditBackGround(object):
                     raise AssertionError(f'当前接口接口调用失败，请求检查接口,失败信息：{e}')
 
         elif method == 'post':
-            for loop in range(3):
+            for loop in range(1,4):
                 try:
                     b_request = requests.post(url=url, headers=head, json=data, timeout=600)
                     if b_request.status_code != 200:
@@ -3257,6 +3264,40 @@ class CreditBackGround(object):
                     continue
                 except Exception as e:
                     raise AssertionError(f'当前接口接口调用失败，请求检查接口,失败信息：{e}')
+
+
+    def get_user_token(self, request_method, request_url, request_body):
+        '''
+        使用token通过调接口判断token是否过期，若过期则获取新的token
+        :param request_method:
+        :param request_url:
+        :param request_body:
+        :return:
+        '''
+        try:
+            token = self.ya.get_yaml_data(fileDir=token_url, isAll=True)[0]['token']
+            head = {"LoginDiv": "222333",
+                    "Accept-Language": "zh-CN,zh;q=0.9",
+                    "Account_Login_Identify": token,
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+            self.bf_request(method=request_method, url=request_url,head=head, data=request_body).json()
+
+            return token
+
+        except:
+            # token过期,清除文件后重新获取token并写入yaml文件
+            Yaml_data().clear_yaml_file(yaml_file=token_url)
+            token_str = self.login_background(uname='Liyang01',password='Bfty123456',securityCode='111111',loginDiv=222333)
+            Yaml_data().write_yaml_file(yaml_file=token_url, data=[{'token': f'{token_str}'}])
+            # 再读取yaml文件中的token
+            token = Yaml_data().get_yaml_data(fileDir=token_url, isAll=True)[0]['token']
+            head = {"LoginDiv": "222333",
+                    "Accept-Language": "zh-CN,zh;q=0.9",
+                    "Account_Login_Identify": token,
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+            self.bf_request(method=request_method, url=request_url, head=head, data=request_body).json()
+
+            return token
 
 
     def unsettlement(self, Authorization):
@@ -3282,7 +3323,7 @@ if __name__ == "__main__":
     bg = CreditBackGround(mysql_info,mongo_info)            # 创建对象
 
     # login_loken = bg.login_background(uname='a0child01', password='Bfty123456', securityCode="Agent0", loginDiv='555666')          # 登录信用网代理后台
-    login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=555666)             # 登录信用网总台
+    # login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=555666)             # 登录信用网总台
     # data = bg.unsettlement(Authorization=login_loken)
     # user = bg.user_management(Authorization=login_loken, userStatus='0', userName='', userAccount='', sortIndex='', sortParameter='')   # 会员管理
     # match = bg.credit_match_result_query(Authorization=login_loken, sportName='足球', tournamentName='', teamName='',offset='0')    # 新赛果查询
@@ -3332,3 +3373,7 @@ if __name__ == "__main__":
     # changeRecord = bg.credit_userAccountChangeRecord_query(Authorization=login_loken)
     # AgentLine = bg.credit_agentLineManagementList(Authorization=login_loken)
     # print(AgentLine)
+
+
+    token = bg.get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
+    print(token)
