@@ -65,11 +65,46 @@ class Yaml_data(object):
         else:
             raise AssertionError('ERROR,参数错误')
 
+    def read_yaml_file(self, yaml_file):
+        '''
+        读取yaml文件
+        :param yaml_file:   文件路径
+        :return:
+        '''
+        with open(yaml_file, mode='r', encoding='utf-8') as f:
+            value = yaml.load(stream=f, Loader=yaml.FullLoader)
+
+            return value
+
+    def write_yaml_file(self, yaml_file, data):
+        '''
+        写入yaml文件
+        :param data:  写入的内容
+        :param yaml_file:   文件路径
+        :return:
+        '''
+        with open(yaml_file, mode='a', encoding='utf-8') as f:
+            yaml.dump(data=data, stream=f, allow_unicode=True)
+
+    def clear_yaml_file(self, yaml_file):
+        '''
+        清除yaml文件
+        :param yaml_file:   文件路径
+        :return:
+        '''
+        with open(yaml_file, 'w', encoding='utf-8') as f:
+            f.truncate()
+
 
 if __name__ == "__main__":
 
     ya = Yaml_data()
     # result = ya.get_yaml_data(fileDir='../credit_data/dataSourceReport.yaml')[1]         # ../data/DailyWinAndLossReport.yaml
     # result = ya.get_yaml_data(fileDir='../credit_data/config.yaml', isAll=True)
-    result = ya.get_yaml_data(fileDir='../test_data/sport_params.yaml', isAll=True)
+    # result = ya.get_yaml_data(fileDir='../test_data/sport_params.yaml', isAll=True)
+
+    result = ya.read_yaml_file(yaml_file='../test_data/token_data.yaml')
     print(result)
+    # result = ya.write_yaml_file(yaml_file='../test_data/token_data.yaml', data=[{'test': 'test'}])
+    # result = ya.clear_yaml_file(yaml_file='../test_data/token_data.yaml')
+
