@@ -4,11 +4,9 @@
 # @FileName: 总投注-混合过关
 # @Software: PyCharm
 
-
 import pytest
 import allure,os
 import sys
-import requests
 sys.path.append(os.getcwd())
 
 from mde_CreditBackground import CreditBackGround
@@ -18,7 +16,6 @@ from common.do_excel import DoExcel
 from CommonFunc import CommonFunc
 from base_dir import *
 from tools.yamlControl import Yaml_data
-from config import cfile
 
 # 获取环境配置
 configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
@@ -37,6 +34,8 @@ elif configure[0]['environment'] == "120":
 else:
     raise AssertionError('ERROR,this environment is not available')
 
+# 测试用例失败重跑,作用于类下面的所有用例
+@pytest.mark.flaky(reruns=3, reruns_delay=10)
 @allure.feature('总台-总投注')
 class Test_mixBetReport:
 
@@ -61,21 +60,20 @@ class Test_mixBetReport:
             with allure.step(f"执行测试用例:{title}"):
                 Bf_log('mixBet').info(f"----------------开始执行:{title}------------------------")
 
-            # 获取接口地址
+            # 获取接口地址和请求方法
             request_url = CreditBackGround(mysql_info, mongo_info).mde_url + excel_data[4]
             with allure.step(f"请求地址： {request_url}"):
                 Bf_log('mixBet').info(f'请求地址为：{request_url}')
+            request_method = excel_data[5]
 
-            # token = Yaml_data().get_yaml_data(fileDir=token_url, isAll=True)[0]['token']
-            # token = cfile.read_yaml(yaml_file=token_url)[0]['token']
-            token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',securityCode='111111', loginDiv=222333)
+            get_token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method=request_method,request_url=request_url,
+                                                                                request_body=request_body)
             head = {"LoginDiv": "222333",
                     "Accept-Language": "zh-CN,zh;q=0.9",
-                    "Account_Login_Identify": token,
+                    "Account_Login_Identify": get_token,
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
 
             # 执行接口的请求
-            request_method = excel_data[5]
             response_data = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()
 
             actualResult = []
@@ -92,7 +90,6 @@ class Test_mixBetReport:
 
             # 执行SQL,SQL写法f{"参数"}
             sql_str = excel_data[7]
-
             SQLResult_list = list(MysqlFunc(mysql_info, mongo_info).query_data(sql_str, db_name='bfty_credit'))
             with allure.step(f'查询SQL:{sql_str}'):
                 Bf_log('mixBet').info(f'执行sql:{sql_str}')
@@ -125,43 +122,33 @@ class Test_mixBetReport:
                                     else:
                                         api_result = float(aip_data)
                                     new_item1.append(api_result)
-                                new_item1.insert(0, item1[0])
-                                new_item1.insert(1, item1[1])
-                                new_item1.insert(2, item1[2])
-                                new_item1.insert(3, item1[3])
-                                new_item1.insert(4, item1[4])
-                                new_item1.insert(5, item1[5])
-                                new_item1.insert(6, item1[6])
-                                new_item1.insert(7, item1[7])
-                                new_item1.insert(8, item1[8])
+                                index = 0
+                                for item in item1[:9]:
+                                    new_item1.insert(index, item)
+                                    index += 1
                                 for sql_data in item2[9:]:
                                     if sql_data == None or sql_data == 0:
                                         sql_result = 0
                                     else:
                                         sql_result = float(sql_data)
                                     new_item2.append(sql_result)
-                                new_item2.insert(0, item2[0])
-                                new_item2.insert(1, item1[1])
-                                new_item2.insert(2, item1[2])
-                                new_item2.insert(3, item1[3])
-                                new_item2.insert(4, item1[4])
-                                new_item2.insert(5, item1[5])
-                                new_item2.insert(6, item1[6])
-                                new_item2.insert(7, item1[7])
-                                new_item2.insert(8, item1[8])
+                                index = 0
+                                for item in item2[:9]:
+                                    new_item2.insert(index, item)
+                                    index += 1
 
                                 # 判断两个list的值是否一致,并且回写入excel
                                 if new_item1 == new_item2:
                                     with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
                                         Bf_log('mixBet').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
                                         DoExcel(main_station_totalBet_path, "mixBet").write_result(row=int(excel_data[0]+1),
-                                                                                               actual_result=f'{actualResult}',expect_result=f'{expectResult}',
+                                                                                               actual_result=f'{new_item1}',expect_result=f'{new_item2}',
                                                                                                is_pass=f"测试通过 \n{ctime}")
                                 else:
                                     with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
                                         Bf_log('mixBet').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
                                         DoExcel(main_station_totalBet_path, "mixBet").write_result(row=int(excel_data[0]+1),
-                                                                                               actual_result=f'{actualResult}',expect_result=f'{expectResult}',
+                                                                                               actual_result=f'{new_item1}',expect_result=f'{new_item2}',
                                                                                                is_pass=f"测试不通过 \n{ctime}")
                                 assert new_item1 == new_item2
 
@@ -178,7 +165,7 @@ class Test_mixBetReport:
     de = DoExcel(file_name=main_station_totalBet_path, sheet_name="mixBetOrder_d")
     case_list1 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
-    @pytest.mark.skip(reason='调试代码,暂不执行')
+    # @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-总投注-混合过关-注单详情')
     def test_mixBetReportOrder(self, excel_data):
         '''
@@ -198,8 +185,9 @@ class Test_mixBetReport:
 
             for order_num in order_list:
                 request_body['orderNo'] = order_num
-                # 获取接口地址
+                # 获取接口地址和请求方法
                 request_url = CreditBackGround(mysql_info, mongo_info).mde_url + excel_data[4]
+                request_method = excel_data[5]
 
                 title = f"注单号：'{order_num}' 查看注单详情"
                 with allure.step(f"执行测试用例:{title}"):
@@ -208,16 +196,14 @@ class Test_mixBetReport:
                 with allure.step(f"请求地址： {request_url}"):
                     Bf_log('mixBetOrder_d').info(f'请求地址为：{request_url}')
 
-                # token = Yaml_data().get_yaml_data(fileDir=token_url, isAll=True)[0]['token']
-                # token = cfile.read_yaml(yaml_file=token_url)[0]['token']
-                token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',securityCode='111111', loginDiv=222333)
+                get_token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method=request_method,request_url=request_url,
+                                                                                    request_body=request_body)
                 head = {"LoginDiv": "222333",
                         "Accept-Language": "zh-CN,zh;q=0.9",
-                        "Account_Login_Identify": token,
+                        "Account_Login_Identify": get_token,
                         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
 
                 # 执行接口的请求
-                request_method = excel_data[5]
                 response_data = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()
 
                 producer_dic = {"1": "滚球盘", "3": "早盘"}
@@ -227,14 +213,14 @@ class Test_mixBetReport:
                     for item in APIResult_list:
                         actualResult.append([item['sportName'], item['matchStartTime'],item['tournamentName'],item['homeTeamName'] + ' Vs ' + item['awayTeamName'],
                                              producer_dic[item['producer']], item['marketName'],item['outComeName'], item['betScore'], item['odds'],item['oddType']])
-                    # actual_result = CommonFunc().merge_compelx_02(new_lList=actualResult)
+
                 elif response_data['data']['data'] == []:
                     actualResult = []
                 else:
                     raise AssertionError(response_data['message'])
+
                 # 执行SQL,SQL写法f{"参数"}
                 sql_str = eval(excel_data[7])
-
                 SQLResult_list = list(MysqlFunc(mysql_info, mongo_info).query_data(sql_str, db_name='bfty_credit'))
                 with allure.step(f'查询SQL:{sql_str}'):
                     Bf_log('mixBetOrder_d').info(f'执行sql:{sql_str}')
@@ -280,5 +266,5 @@ class Test_mixBetReport:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_mixBet.py", '-vs', '-q', '--alluredir', '../report/tmp', ])   # '--clean-alluredir'
+    pytest.main(["test_mixBet.py", '-vs', '-q', '--alluredir', '../report/tmp', '-n=6' ])   # '--clean-alluredir'
     os.system("allure serve ../report/tmp")
