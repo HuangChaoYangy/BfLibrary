@@ -2,6 +2,8 @@ import  arrow
 import pymysql
 import datetime
 import calendar
+import requests
+import time
 from itertools import chain
 from log import Bf_log
 import re
@@ -5680,16 +5682,16 @@ class MysqlQuery(MysqlFunc):
 
     def get_bet_type_by_ordernum(self, order_no):
         '''
-        根据注单号获取注单的注单类型          // 修改于2022.07.02
+        根据注单号获取注单的注单类型          // 修改于2022.07.13
         :param order_no:
         :return:
         '''
         database_name = "bfty_credit"
-        sql_str = f"SELECT order_no,bet_type,bet_mix FROM `o_account_order` WHERE `order_no` = '{order_no}'"
+        sql_str = f"SELECT order_no,bet_type,mix_num FROM `o_account_order` WHERE `order_no` = '{order_no}'"
         data = list(self.query_data(sql_str, db_name=database_name))
 
         bet_type = ''
-        type_dic = {'3_4': '复式3串4', '4_11': '复式4串11', '5_26': '复式5串26', '6_57': '复式6串57'}
+        type_dic = {'3_4_1': '复式3串4', '4_11_1': '复式4串11', '5_26_1': '复式5串26', '6_57_1': '复式6串57'}
         if data[0][1] == 1:
             bet_type = '单关'
         elif data[0][1] == 2:
@@ -8883,8 +8885,8 @@ if __name__ == "__main__":
     # data = mysql.check_orderNo_effectAmount_and_commission(user_name='', order_no='', createDate=(-1,0), awardDate=())    # 校验信用网注单有效金额和佣金
 
     # check_result = mysql.check_order_no_settlement_result(bet_type=2,user_name='a2j1j2j3j2',order_no='XB4mLjJJHmf2')
-    # betType = mysql.get_bet_type_by_ordernum(order_no='XHwySEiELFJY')
-    # print(betType)
+    betType = mysql.get_bet_type_by_ordernum(order_no='XKStLbybZVK5')          # 获取串关的类型
+    print(betType)
     # order = mysql.get_unsettled_order(user_name='a01')
     # detail = mysql.get_order_detail(order_no='XDSUd5NzmihG')
     # id = mysql.get_account_id(account='a0')
@@ -8900,7 +8902,7 @@ if __name__ == "__main__":
     # odds_list = [1.88, 1.81, 1.74, 1.81]
     # data = mysql.get_all_odds(odds_list=odds_list, bet_type=4)
     # print(data)
-    # odds = mysql.get_odds_by_orderNum(orderNo='XKe96XQFBR5c')          #   通过注单号查询注单的总赔率
+    # odds = mysql.get_odds_by_orderNum(orderNo='XKnVLeGUvbFC')          #   通过注单号查询注单的总赔率
     # print(odds)
     # N1 = list(combinations(a, 2))
     # N2 = list(permutations(a, 2))
@@ -8918,9 +8920,10 @@ if __name__ == "__main__":
     # data = mysql.get_order_num_by_mainBetReport()
     # data = mysql.get_matchId_by_sportName_mainBetReport(sport_name='足球')
     # data = mysql.get_outcomeId_by_marketId_mainBetReport(sport_name='足球', match_id='sr:match:32225939', market_id='16')
-    data = mysql.get_matchdata_mainBetReport(sportName='足球')
+    # data = mysql.get_matchdata_mainBetReport(sportName='足球')
     # data = mysql.get_sportName_mainBetReport()
-    print(data)
+    # print(data)
+
 
 
                                                                               # 【反波胆-客户端】
