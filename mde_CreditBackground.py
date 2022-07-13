@@ -3297,6 +3297,7 @@ class CreditBackGround(object):
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
             self.bf_request(method=request_method, url=request_url, head=head, data=request_body).json()
 
+            print(f'赔率已过期,获取新token:{token}')
             return token
 
 
