@@ -8,7 +8,6 @@
 import pytest
 import allure,os
 import sys
-import requests
 sys.path.append(os.getcwd())
 
 from mde_CreditBackground import CreditBackGround
@@ -18,8 +17,6 @@ from common.do_excel import DoExcel
 from CommonFunc import CommonFunc
 from base_dir import *
 from tools.yamlControl import Yaml_data
-from config import cfile
-
 
 # 获取环境配置
 configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
@@ -38,7 +35,8 @@ elif configure[0]['environment'] == "120":
 else:
     raise AssertionError('ERROR,this environment is not available')
 
-
+# 测试用例失败重跑,作用于类下面的所有用例
+@pytest.mark.flaky(reruns=3, reruns_delay=10)
 @allure.feature('总台-代理报表')
 class Test_cancelledOrder:
 
@@ -70,21 +68,20 @@ class Test_cancelledOrder:
             with allure.step(f"执行测试用例:{title}"):
                 Bf_log('cancelledOrder').info(f"----------------开始执行:{title}------------------------")
 
-            # 获取接口地址
+            # 获取接口地址和请求方法
             request_url = CreditBackGround(mysql_info, mongo_info).mde_url + excel_data[4]
             with allure.step(f"请求地址： {request_url}"):
                 Bf_log('cancelledOrder').info(f'请求地址为：{request_url}')
+            request_method = excel_data[5]
 
-            token = Yaml_data().get_yaml_data(fileDir=token_url, isAll=True)[0]['token']
-            # token = cfile.read_yaml(yaml_file=token_url)[0]['token']
-            # token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',securityCode='111111', loginDiv=222333)
+            get_token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method=request_method,request_url=request_url,
+                                                                                request_body=request_body)
             head = {"LoginDiv": "222333",
                     "Accept-Language": "zh-CN,zh;q=0.9",
-                    "Account_Login_Identify": token,
+                    "Account_Login_Identify": get_token,
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
 
             # 执行接口的请求,处理接口数据
-            request_method = excel_data[5]
             response_data = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()
 
             odds_dic = {"1": '欧洲盘', "2": '香港盘'}
@@ -144,13 +141,13 @@ class Test_cancelledOrder:
                                     with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试通过'):
                                         Bf_log('cancelledOrder').info(f'实际结果:{item1}, 期望结果：{item2},==》测试通过')
                                         DoExcel(owner_backer_path, "cancelledOrder").write_result(row=int(excel_data[0]+1),
-                                                                                               actual_result=f'{actualResult}',expect_result=f'{expectResult}',
+                                                                                               actual_result=f'{item1}',expect_result=f'{item2}',
                                                                                                is_pass=f"测试通过 \n{ctime}")
                                 else:
                                     with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
                                         Bf_log('cancelledOrder').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
                                         DoExcel(owner_backer_path, "cancelledOrder").write_result(row=int(excel_data[0]+1),
-                                                                                               actual_result=f'{actualResult}',expect_result=f'{expectResult}',
+                                                                                               actual_result=f'{item1}',expect_result=f'{item2}',
                                                                                                is_pass=f"测试不通过 \n{ctime}")
                                 assert item1 == item2
 
@@ -167,8 +164,8 @@ class Test_cancelledOrder:
     de = DoExcel(file_name=owner_backer_path, sheet_name="cancelledOdds")
     case_list1 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
-    @pytest.mark.skip(reason='调试代码,暂不执行')
-    # @allure.story('总台-代理报表-已取消注单-验证总赔率')
+    # @pytest.mark.skip(reason='调试代码,暂不执行')
+    @allure.story('总台-代理报表-已取消注单-验证总赔率')
     def test_cancelledOdds(self, excel_data):
         '''
         管理后台-代理报表-已取消注单-验证总赔率,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
@@ -202,20 +199,19 @@ class Test_cancelledOrder:
             with allure.step(f"执行测试用例:{title}"):
                 Bf_log('cancelledOdds').info(f"----------------开始执行:{title}------------------------")
 
-            # 获取接口地址
+            # 获取接口地址和请求方法
             request_url = CreditBackGround(mysql_info, mongo_info).mde_url + excel_data[4]
             with allure.step(f"请求地址： {request_url}"):
                 Bf_log('cancelledOdds').info(f'请求地址为：{request_url}')
-
-            token = Yaml_data().get_yaml_data(fileDir=token_url, isAll=True)[0]['token']
-            # token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',securityCode='111111', loginDiv=222333)
+            request_method = excel_data[5]
+            get_token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method=request_method,request_url=request_url,
+                                                                                request_body=request_body)
             head = {"LoginDiv": "222333",
                     "Accept-Language": "zh-CN,zh;q=0.9",
-                    "Account_Login_Identify": token,
+                    "Account_Login_Identify": get_token,
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
 
             # 执行接口的请求,处理接口数据
-            request_method = excel_data[5]
             response_data = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()
 
             actualResult = []
@@ -258,13 +254,13 @@ class Test_cancelledOrder:
                                     with allure.step(f'实际结果：{new_list1}, 期望结果：{new_list2},==》测试通过'):
                                         Bf_log('cancelledOdds').info(f'实际结果:{new_list1}, 期望结果：{new_list2},==》测试通过')
                                         DoExcel(owner_backer_path, "cancelledOdds").write_result(row=int(excel_data[0]+1),
-                                                                                               actual_result=f'{actualResult}',expect_result=f'{expectResult}',
+                                                                                               actual_result=f'{new_list1}',expect_result=f'{new_list2}',
                                                                                                is_pass=f"测试通过 \n{ctime}")
                                 else:
                                     with allure.step(f'实际结果：{new_list1}, 期望结果：{new_list2},==》测试不通过'):
                                         Bf_log('cancelledOdds').error(f'实际结果：{new_list1}, 期望结果：{new_list2},==》测试不通过')
                                         DoExcel(owner_backer_path, "cancelledOdds").write_result(row=int(excel_data[0]+1),
-                                                                                               actual_result=f'{actualResult}',expect_result=f'{expectResult}',
+                                                                                               actual_result=f'{new_list1}',expect_result=f'{new_list2}',
                                                                                                is_pass=f"测试不通过 \n{ctime}")
                                 assert new_list1 == new_list2
 
@@ -279,5 +275,5 @@ class Test_cancelledOrder:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_cancelledOrder.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir'])     # '-n=1'
+    pytest.main(["test_cancelledOrder.py",'-vs', '-q', '--alluredir', '../report/tmp',])     # '-n=1'   '--clean-alluredir'
     os.system("allure serve ../report/tmp")
