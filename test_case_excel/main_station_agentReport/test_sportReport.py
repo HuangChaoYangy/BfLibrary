@@ -589,7 +589,7 @@ class Test_sportReport:
 
 if __name__ == "__main__":
 
-    # '-n=auto' 多进程执行用例参数    windows: 进程默认为1:--workers=1;     --tests-per-worker=n    n是线程数
+    # '-n=auto' 多进程执行用例参数    windows: 进程默认为1:--workers=1;   --tests-per-worker=n    n是线程数
     # pytest.main(["test_sportReport.py","-s","--alluredir","../report/tmp",'-Wignore'])       # -s  打印 输出  vs 详细打印  -sq  简化  打印输出内容到../allure_report,生成json临时文件
     pytest.main(["test_sportReport.py",'-vs', '-q', '--alluredir', '../report/tmp', '-n=4'])   # '--clean-alluredir'
     # test_creditReport.py       表示测试目标文件
