@@ -35,7 +35,7 @@ else:
     raise AssertionError('ERROR,this environment is not available')
 
 # 测试用例失败重跑,作用于类下面的所有用例
-# @pytest.mark.flaky(reruns=3, reruns_delay=10)
+@pytest.mark.flaky(reruns=3, reruns_delay=10)
 @allure.feature('总台-代理报表')
 class Test_tournamentReport:
 
