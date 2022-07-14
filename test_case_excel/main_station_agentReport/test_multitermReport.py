@@ -46,7 +46,7 @@ class Test_multitermReport:
     case_list2 = de.get_case(de.get_sheet())
     @pytest.mark.parametrize('excel_data', case_list1)
     @pytest.mark.parametrize('sport_params', case_list2)
-    @pytest.mark.skip(reason='调试代码,暂不执行')
+    # @pytest.mark.skip(reason='调试代码,暂不执行')
     @allure.story('总台-代理报表-混合过关')
     def test_multitermReport(self, excel_data, sport_params):
         '''
