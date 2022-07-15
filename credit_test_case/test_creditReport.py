@@ -66,6 +66,29 @@ class Test_Report01(object):
                                 with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
                                     Bf_log('test').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
 
+        # if len(actualResult) == len(expectResult):
+        #     if actualResult != [] or expectResult != []:
+        #         for index1, item1 in enumerate(actualResult):
+        #             for index2, item2 in enumerate(expectResult):
+        #                 if item1[0] == item2[0]:     # 判断日期是否相等,若相等,则校验该条数据
+        #
+        #                     # 判断两个list的值是否一致,并且回写入excel
+        #                     if item1 == item2:
+        #                         with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试通过'):
+        #                             Bf_log('dataSource').info(f'实际结果:{item1}, 期望结果：{item2},==》测试通过')
+        #                     else:
+        #                         with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
+        #                             Bf_log('dataSource').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
+        #
+        #                     assert item1 == item2
+        #
+        #     else:
+        #         with allure.step(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过'):
+        #             Bf_log('dataSource').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
+        #
+        # else:
+        #     raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actualResult)},sql为{len(expectResult)}")
+
 
 # @allure.story('数据源对账报表-底部总计')
 # class Test_Report02(object):

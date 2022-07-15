@@ -73,13 +73,12 @@ class Test_DailyProfitAndLoss:
             request_url = CreditBackGround(mysql_info, mongo_info).mde_url + excel_data[4]
             with allure.step(f"请求地址： {request_url}"):
                 Bf_log('dataSource').info(f'请求地址为：{request_url}')
-
-            # token = Yaml_data().get_yaml_data(fileDir=token_url, isAll=True)[0]['token']
-            # token = cfile.read_yaml(yaml_file=token_url)[0]['token']
-            token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',securityCode='111111', loginDiv=222333)
+            request_method = excel_data[5]
+            get_token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method=request_method,request_url=request_url,
+                                                                                request_body=request_body)
             head = {"LoginDiv": "222333",
                     "Accept-Language": "zh-CN,zh;q=0.9",
-                    "Account_Login_Identify": token,
+                    "Account_Login_Identify": get_token,
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
 
             # 查询数据源对账报表近30日的注单数量
@@ -87,7 +86,6 @@ class Test_DailyProfitAndLoss:
             print(f'注单数量为：{order_number}')
 
             # 执行接口的请求
-            request_method = excel_data[5]
             actualResult = []
             for page in range(1, order_number + 1):
                 response_data = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()
@@ -159,13 +157,13 @@ class Test_DailyProfitAndLoss:
                                     with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
                                         Bf_log('dataSource').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
                                         DoExcel(main_station_report_path, "dataSource").write_result(row=int(excel_data[0]+1),
-                                                                                               actual_result=f'{actualResult}',expect_result=f'{expectResult}',
+                                                                                               actual_result=f'{new_item1}',expect_result=f'{new_item2}',
                                                                                                is_pass=f"测试通过 \n{ctime}")
                                 else:
                                     with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
                                         Bf_log('dataSource').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
                                         DoExcel(main_station_report_path, "dataSource").write_result(row=int(excel_data[0]+1),
-                                                                                               actual_result=f'{actualResult}',expect_result=f'{expectResult}',
+                                                                                               actual_result=f'{new_item1}',expect_result=f'{new_item2}',
                                                                                                is_pass=f"测试不通过 \n{ctime}")
                                 assert new_item1 == new_item2
 
@@ -182,5 +180,5 @@ class Test_DailyProfitAndLoss:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_dataSource.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir'])
+    pytest.main(["test_dataSource.py",'-vs', '-q', '--alluredir', '../report/tmp',])  # '--clean-alluredir'
     os.system("allure serve ../report/tmp")
