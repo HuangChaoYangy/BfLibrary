@@ -26,6 +26,9 @@ credit_data_path = os.path.join(excel_dir,'test_data','credit_user_data.yaml')
 cash_data_path = os.path.join(excel_dir,'test_data','cash_user_data.yaml')
 test_data_path = os.path.join(excel_dir,'test_data','test_oddsData.yaml')
 
+client_token_url = os.path.join(excel_dir,'client_data','client_token.yaml')
+client_user_url = os.path.join(excel_dir,'client_data','client_user.yaml')
+
 
 if __name__ =='__main__':
 
