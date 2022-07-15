@@ -4,11 +4,9 @@
 # @FileName: 总台-报表管理-佣金报表
 # @Software: PyCharm
 
-
 import pytest
 import allure,os
 import sys
-import requests
 sys.path.append(os.getcwd())
 
 from mde_CreditBackground import CreditBackGround
@@ -18,7 +16,6 @@ from common.do_excel import DoExcel
 from CommonFunc import CommonFunc
 from base_dir import *
 from tools.yamlControl import Yaml_data
-from config import cfile
 
 # 获取环境配置
 configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
@@ -37,6 +34,8 @@ elif configure[0]['environment'] == "120":
 else:
     raise AssertionError('ERROR,this environment is not available')
 
+# 测试用例失败重跑,作用于类下面的所有用例
+@pytest.mark.flaky(reruns=3, reruns_delay=10)
 @allure.feature('总台-报表管理')
 class Test_commission:
 
@@ -68,31 +67,23 @@ class Test_commission:
             allure.dynamic.title(title)
             with allure.step(f"执行测试用例:{title}"):
                 Bf_log('com_ProfitAndLoss').info(f"----------------开始执行:{title}------------------------")
-            # 获取接口地址
+            # 获取接口地址和请求方法
             request_url = CreditBackGround(mysql_info, mongo_info).mde_url + excel_data[4]
             with allure.step(f"请求地址： {request_url}"):
                 Bf_log('com_ProfitAndLoss').info(f'请求地址为：{request_url}')
-
-            # token = Yaml_data().get_yaml_data(fileDir=token_url, isAll=True)[0]['token']
-            # token = cfile.read_yaml(yaml_file=token_url)[0]['token']
-            token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',securityCode='111111', loginDiv=222333)
+            request_method = excel_data[5]
+            get_token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method=request_method,request_url=request_url,
+                                                                                request_body=request_body)
             head = {"LoginDiv": "222333",
                     "Accept-Language": "zh-CN,zh;q=0.9",
-                    "Account_Login_Identify": token,
+                    "Account_Login_Identify": get_token,
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
 
             # 执行接口的请求
-            request_method = excel_data[5]
             response_data = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()
 
             actualResult = []
             if response_data['message'] == 'OK':
-                APIResult_list = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()['data']['data']
-                for item in APIResult_list:
-                    actualResult.append([item['dateTime'],item['totalRebate'],item['levelBackwaterAmount'],item['leve2BackwaterAmount'],item['leve3BackwaterAmount'],
-                                         item['userBackwaterAmount'],item['soccer'],item['basketball'],item['tennis'],item['badminton'],
-                                         item['tableTennis'],item['volleyball'],item['baseball'],item['iceHockey']])
-            elif response_data['code'] != '50025':
                 APIResult_list = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()['data']['data']
                 for item in APIResult_list:
                     actualResult.append([item['dateTime'],item['totalRebate'],item['levelBackwaterAmount'],item['leve2BackwaterAmount'],item['leve3BackwaterAmount'],
@@ -151,13 +142,13 @@ class Test_commission:
                                     with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
                                         Bf_log('com_ProfitAndLoss').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
                                         DoExcel(main_station_report_path, "com_ProfitAndLoss").write_result(row=int(excel_data[0]+1),
-                                                                                               actual_result=f'{actualResult}',expect_result=f'{expectResult}',
+                                                                                               actual_result=f'{new_item1}',expect_result=f'{new_item2}',
                                                                                                is_pass=f"测试通过 \n{ctime}")
                                 else:
                                     with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
                                         Bf_log('com_ProfitAndLoss').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
                                         DoExcel(main_station_report_path, "com_ProfitAndLoss").write_result(row=int(excel_data[0]+1),
-                                                                                               actual_result=f'{actualResult}',expect_result=f'{expectResult}',
+                                                                                               actual_result=f'{new_item1}',expect_result=f'{new_item2}',
                                                                                                is_pass=f"测试不通过 \n{ctime}")
                                 assert new_item1 == new_item2
 
@@ -198,31 +189,22 @@ class Test_commission:
             with allure.step(f"执行测试用例:{title}"):
                 Bf_log('commission_total').info(f"----------------开始执行:{title}------------------------")
 
-            # 获取接口地址
+            # 获取接口地址和请求方法
             request_url = CreditBackGround(mysql_info, mongo_info).mde_url + excel_data[4]
             with allure.step(f"请求地址： {request_url}"):
                 Bf_log('commission_total').info(f'请求地址为：{request_url}')
-
-            # token = Yaml_data().get_yaml_data(fileDir=token_url, isAll=True)[0]['token']
-            # token = cfile.read_yaml(yaml_file=token_url)[0]['token']
-            token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',securityCode='111111', loginDiv=222333)
+            request_method = excel_data[5]
+            get_token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method=request_method,request_url=request_url,
+                                                                                request_body=request_body)
             head = {"LoginDiv": "222333",
                     "Accept-Language": "zh-CN,zh;q=0.9",
-                    "Account_Login_Identify": token,
+                    "Account_Login_Identify": get_token,
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
 
             # 执行接口的请求
-            request_method = excel_data[5]
             response_data = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()
-
             actualResult = []
             if response_data['message'] == 'OK':
-                APIResult_dic = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()['data']
-                actualResult.extend([APIResult_dic['dateTime'],APIResult_dic['totalRebate'],APIResult_dic['levelBackwaterAmount'],APIResult_dic['leve2BackwaterAmount'],
-                                     APIResult_dic['leve3BackwaterAmount'],APIResult_dic['userBackwaterAmount'],APIResult_dic['soccer'],APIResult_dic['basketball'],
-                                     APIResult_dic['tennis'],APIResult_dic['badminton'],APIResult_dic['tableTennis'],APIResult_dic['volleyball'],
-                                     APIResult_dic['baseball'],APIResult_dic['iceHockey']])
-            elif response_data['code'] != '50025':
                 APIResult_dic = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()['data']
                 actualResult.extend([APIResult_dic['dateTime'],APIResult_dic['totalRebate'],APIResult_dic['levelBackwaterAmount'],APIResult_dic['leve2BackwaterAmount'],
                                      APIResult_dic['leve3BackwaterAmount'],APIResult_dic['userBackwaterAmount'],APIResult_dic['soccer'],APIResult_dic['basketball'],
@@ -272,13 +254,13 @@ class Test_commission:
                             with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
                                 Bf_log('commission_total').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
                                 DoExcel(main_station_report_path, "commission_total").write_result(row=int(excel_data[0]+1),
-                                                                                       actual_result=f'{actualResult}',expect_result=f'{expectResult}',
+                                                                                       actual_result=f'{new_item1}',expect_result=f'{new_item2}',
                                                                                        is_pass=f"测试通过 \n{ctime}")
                         else:
                             with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
                                 Bf_log('commission_total').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
                                 DoExcel(main_station_report_path, "commission_total").write_result(row=int(excel_data[0]+1),
-                                                                                       actual_result=f'{actualResult}',expect_result=f'{expectResult}',
+                                                                                       actual_result=f'{new_item1}',expect_result=f'{new_item2}',
                                                                                        is_pass=f"测试不通过 \n{ctime}")
                         assert new_item1 == new_item2
 
@@ -294,5 +276,5 @@ class Test_commission:
 
 if __name__ == "__main__":
     #  '-n=4'
-    pytest.main(["test_commission.py",'-vs', '-q', '--alluredir', '../report/tmp', '--clean-alluredir','-n=6'])
+    pytest.main(["test_commission.py",'-vs', '-q', '--alluredir', '../report/tmp', ])  # '--clean-alluredir','-n=6'
     os.system("allure serve ../report/tmp")
