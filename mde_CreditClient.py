@@ -19,6 +19,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from tools.yamlControl import Yaml_data
 import pytest
 from log import Bf_log
+from base_dir import *
 try:
     from MongoFunc import MongoFunc, DbQuery
     from MysqlFunc import MysqlFunc,MysqlQuery
@@ -1535,9 +1536,9 @@ class Credit_Client(object):
             return outcome_info_list
 
 
-    def submit_all_match(self, token, event_type='INPLAY', odds_type=1, IsRandom='', handicap=False):
+    def submit_all_match(self, token, event_type=None, odds_type=1, IsRandom='', handicap=False):
         '''
-        投注单注,所有比赛下所有盘口随机投注                    /// 修改于2022.06.04
+        投注单注,所有球类所有比赛下所有盘口随机投注                    /// 修改于2022.06.04
         :param token:
         :param event_type:
         :param odds_type:
@@ -1556,8 +1557,9 @@ class Credit_Client(object):
                 "Connection": "keep-alive",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                               "Chrome/85.0.4183.102 Safari/537.36"}
-        outcome_info_list = self.get_all_match_outcome(token, event_type=event_type, odds_Type=odds_type, handicap=handicap)  # 指定盘口类型，1是欧洲盘，2是香港盘，3是马来盘，4是印尼盘
 
+        outcome_info_list = self.get_all_match_outcome(token, event_type=event_type, odds_Type=odds_type, handicap=handicap)  # 指定盘口类型，1是欧洲盘，2是香港盘，3是马来盘，4是印尼盘
+        # print(outcome_info_list)
         if not IsRandom:
             selection_list = []
             for outcome_info in outcome_info_list:
@@ -2310,6 +2312,139 @@ class Credit_Client(object):
                         else:
                             pass
 
+    def get_client_user_token(self, request_method='get', request_url='https://mdesearch.betf.io/creditUser/getUserAmount', request_body={}):
+        '''
+        使用token通过调接口判断token是否过期，若过期则获取新的token
+        :param request_method:
+        :param request_url:
+        :param request_body:
+        :return:
+        '''
+        try:
+            token = self.ya.read_yaml_file(yaml_file=client_token_url)
+            head = {"LoginDiv": "222333",
+                    "Accept-Language": "zh-CN,zh;q=0.9",
+                    "Account_Login_Identify": token,
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+            self.bf_request(method=request_method, url=request_url,head=head, data=request_body).json()
+
+            return token
+
+        except:
+            # token过期,清除文件后重新获取token并写入yaml文件
+            Yaml_data().clear_yaml_file(yaml_file=client_token_url)
+
+            user_list = self.ya.read_yaml_file(yaml_file=client_user_url)
+            for username in user_list:
+                token_str = self.login_client(username=username, password='Bfty123456')
+                Yaml_data().write_yaml_file(yaml_file=client_token_url, data=[{'token': f'{token_str}'}])
+
+            # 再读取yaml文件中的token
+            new_list = Yaml_data().read_yaml_file(yaml_file=client_token_url)
+            token_list = []
+            for item in new_list:
+                token_list.append(item['token'])
+
+            print(f'赔率已过期,获取新token:{token_list}')
+
+            return token_list
+
+
+class MyThread(threading.Thread):
+
+    def __init__(self):
+        super(MyThread, self).__init__()
+        self.bfc = Credit_Client(mysql_info, mongo_info)
+
+    def thread_submit(self, bet_type=1, sport_name=None, event_type=None, odds_type=1, IsRandom='',handicap=False, complex='multi', complex_number=2):
+        '''
+        多线程投注
+        :param bet_type:    投注类型
+        :param sport_name:  体育类型
+        :param event_type:  赛事类型
+        :param odds_type:   赔率类型
+        :param IsRandom:    随机投注
+        :param handicap:    默认为false,为True时只投注让球/大小/独赢盘口
+        :param complex:     single:复式n串1    multi:复式n串m
+        :param complex_number:   single:复式n串1
+        :return:
+        '''
+        token_list = self.bfc.get_client_user_token()
+        type_list = ['INPLAY', 'EARLY', 'TODAY']
+        sport_name_list = ['足球', '篮球', '网球', '排球', '羽毛球',  '兵乓球', '棒球', '冰球']
+        bet_type_dic = {1:"单注", 2:"串关", 3:"复式串关"}
+        if event_type == None:
+            eventType = random.choice(type_list)
+        else:
+            eventType = event_type
+        if sport_name == None:
+            sportName = random.choice(sport_name_list)
+        else:
+            sportName = sport_name
+
+        for token_str in token_list:
+            if bet_type_dic[bet_type] == "单注":
+                sub_thread = threading.Thread(target=self.bfc.submit_all_match, args=(f'{token_str}', f'{eventType}', odds_type, IsRandom, handicap))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
+                sub_thread.start()          # 通过start()方法手动来启动线程
+                work_thread = threading.Thread(target=self.bfc.submit_all_match, daemon=True)
+                print(threading.current_thread())
+
+            elif bet_type_dic[bet_type] == "串关":
+                for betType in range(3, 15):
+                    sub_thread = threading.Thread(target=self.bfc.submit_all_outcomes, args=(sportName, token_str, betType,
+                                              eventType, odds_type, IsRandom))
+                    sub_thread.start()
+
+            elif bet_type_dic[bet_type] == "复式串关":
+                for betType in range(3, 7):
+                    sub_thread = threading.Thread(target=self.bfc.submit_all_complex, args=(sportName, token_str, betType, eventType,
+                                              odds_type, 1, complex, complex_number))
+                    sub_thread.start()
+            else:
+                raise AssertionError('ERROR,暂不支持该投注类型')
+
+    def thread_pool_submit(self, bet_type=1, sport_name=None, event_type=None, odds_type=1, IsRandom='', handicap=False,complex='multi', complex_number=2):
+        '''
+        线程池的方式进行多线程投注
+        :param bet_type:    投注类型
+        :param sport_name:  体育类型
+        :param event_type:  赛事类型
+        :param odds_type:   赔率类型
+        :param IsRandom:    随机投注
+        :param handicap:    默认为false,为True时只投注让球/大小/独赢盘口
+        :param complex:     single:复式n串1    multi:复式n串m
+        :param complex_number:   single:复式n串1
+        :return:
+        '''
+        token_list = self.bfc.get_client_user_token()
+        type_list = ['INPLAY', 'EARLY', 'TODAY']
+        sport_name_list = ['足球', '篮球', '网球', '排球', '羽毛球',  '兵乓球', '棒球', '冰球']
+        bet_type_dic = {1:"单注", 2:"串关", 3:"复式串关"}
+        if event_type == None:
+            eventType = random.choice(type_list)
+        else:
+            eventType = event_type
+        if sport_name == None:
+            sportName = random.choice(sport_name_list)
+        else:
+            sportName = sport_name
+
+        with ThreadPoolExecutor(max_workers=50) as task:
+            for token_str in token_list:
+                if bet_type_dic[bet_type] == "单注":
+                    sub_thread1 = task.submit(self.bfc.submit_all_match, token_str, eventType, odds_type, IsRandom, handicap)
+
+                elif bet_type_dic[bet_type] == "串关":
+                    for betType in range(3,15):
+                        sub_thread2 = task.submit(self.bfc.submit_all_outcomes, sportName, token_str, betType,
+                                                  eventType, odds_type, IsRandom)
+                elif bet_type_dic[bet_type] == "复式串关":
+                    for betType in range(3, 7):
+                        sub_thread3 = task.submit(self.bfc.submit_all_complex, sportName, token_str, betType, eventType,
+                                                    odds_type, 1, complex, complex_number)
+                else:
+                    raise AssertionError('ERROR,暂不支持该投注类型')
+
 
 
 
@@ -2319,10 +2454,10 @@ if __name__ == "__main__":
     mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    token_list = ['1c0fc2aa5c3e4a47907f780764860afe','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
+    # MyThread().thread_submit(bet_type=2, sport_name=None, event_type=None, odds_type=1, IsRandom='5',handicap=False, complex='multi', complex_number=2)
+    MyThread().thread_pool_submit(bet_type=1,  sport_name=None, event_type=None, odds_type=1, IsRandom='5', handicap=False, complex='multi', complex_number=2)
 
-    # match_id_list = bf.get_match_list(sport_name='足球', token=token_list[0], event_type='INPLAY', odds_type=1)[0]
-    # print(match_id_list)
+    token_list = ['6fa2475d165d41dab8633bbbc45f21b6','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
 
     # for item in ['Testuser001','Testuser002','Testuser003','Testuser004']:
     #     token = bf.login_client(username=item, password='Bfty123456')
@@ -2335,42 +2470,27 @@ if __name__ == "__main__":
 
     # 新增多线程-模拟多用户进行投注
     # start_time = time.perf_counter()
-    # user_list = ['a1','a2','a3']
-    # for user in user_list:
-    #     type_list = ['INPLAY', 'TODAY', 'EARLY']
+    # token_list = bf.get_client_user_token()
+    # for token in token_list:
+    #     type_list = ['INPLAY', 'EARLY', 'TODAY']
     #     type = random.choice(type_list)
-    #     token = bf.login_client(username=user, password='Bfty123456')
-    #     sub_thread = threading.Thread(target=bf.submit_all_match, args=(f'{token}', f'{type}', 2, '30', True))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
-    #     # sub_thread = threading.Thread(target=bf.submit_all_outcome, args=("网球", f'{token}', 3, 'INPLAY') )       # 非复式串关投注：创建线程,target为线程执行的目标方法
+    #     sub_thread = threading.Thread(target=bf.submit_all_match, args=(f'{token_list[0]}', f'{type}', 2, '20', False))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
+    #     # sub_thread = threading.Thread(target=bf.submit_all_outcome, args=("网球", f'{token}', 3, 'INPLAY') )     # 非复式串关投注：创建线程,target为线程执行的目标方法
     #     sub_thread.start()          # 通过start()方法手动来启动线程
-    # print(threading.current_thread())
+    #     print(threading.current_thread())
 
-        # with ThreadPoolExecutor(max_workers=5) as task:            # 创建一个最大容纳数量为5的线程池
-        #     for item in range(thread_num):
-        #         tuple_parameter = ("sr:match:32829111", "足球", f'{token}', 1)
-        #         dict_parameter = {'match_id':'sr:match:31627905', 'token':f'{token}', 'sport_name':'乒乓球'}
-        #         sub_thread1 = task.submit(bf.submit_all_outcome, *tuple_parameter)
-        #         # print(f"task1: {sub_thread1.done()}")
-        #         # time.sleep(3)
-        #         # print(sub_thread1.result())
-        #         # time.sleep(3)
-        #         # task.shutdown()
-        # print(f"task1: {sub_thread1.done()}")
-
-    # data = bf.get_all_match_outcome(token=token_list[0], event_type='INPLAY', odds_Type=2, handicap=True)
-    # data = bf.get_match_list(sport_name='足球', token=token_list[0], event_type="TODAY")
 
     # 所有比赛随机投注：新增定时任务去跑数据
     # starttime = bf.get_current_time_for_client(time_type="s_time", day_diff=0)
     # endtime = bf.get_current_time_for_client(time_type="end_time", day_diff=0)
     # for type in ['INPLAY', 'TODAY', 'EARLY']:
-    #     func = bf.cm.timer_APScheduler(function=bf.submit_all_match, trigger='interval', stime='2022-06-10 12:40:00',
-    #                                    etime='2022-06-10 18:13:00',args=[f'{token_list[1]}', f'{type}', '2', '30', True])
+    #     func = bf.cm.timer_APScheduler(function=bf.submit_all_match, trigger='interval', stime='2022-07-10 12:40:00',
+    #                                    etime='2022-06-10 18:13:00',args=[f'{token_list[0]}', f'{type}', '2', '30', True])
 
     # 所有比赛随机投注
     # for token in token_list:
-    #     # for type in ['INPLAY', 'TODAY', 'EARLY']:
-    #     bf.submit_all_match(token=f'{token}', event_type='INPLAY', odds_type=2, IsRandom='20', handicap=False)
+    #     for type in ['INPLAY', 'TODAY', 'EARLY']:
+    # bf.submit_all_match(token=f'{token_list[0]}', event_type='INPLAY', odds_type=2, IsRandom='20', handicap=False)
 
         # 单注投注
     # match_info_list = []
@@ -2408,7 +2528,7 @@ if __name__ == "__main__":
 
 
     # 验证单场比赛,赔率是否正确
-    bf.check_odds(match_id="sr:match:33206167", token=token_list[0], odds_type='港赔', sport_name="冰上曲棍球")
+    # bf.check_odds(match_id="sr:match:33206167", token=token_list[0], odds_type='港赔', sport_name="冰上曲棍球")
 
     # 验证遍历所有体育类型中的所有比赛
     # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
