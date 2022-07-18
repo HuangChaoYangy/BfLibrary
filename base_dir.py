@@ -26,8 +26,15 @@ credit_data_path = os.path.join(excel_dir,'test_data','credit_user_data.yaml')
 cash_data_path = os.path.join(excel_dir,'test_data','cash_user_data.yaml')
 test_data_path = os.path.join(excel_dir,'test_data','test_oddsData.yaml')
 
+# 客户端账号
 client_token_url = os.path.join(excel_dir,'client_data','client_token.yaml')
 client_user_url = os.path.join(excel_dir,'client_data','client_user.yaml')
+
+# 数据源对账报表
+csv_url_data = os.path.join(excel_dir,'credit_data_new','dataSource.csv')
+data_source_url = os.path.join(excel_dir,'credit_data_new','dataSource.yaml')
+data_source_url_new = os.path.join(excel_dir,'credit_data_new','dataSource_case.yaml')
+
 
 
 if __name__ =='__main__':
