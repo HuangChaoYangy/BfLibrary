@@ -1,0 +1,4 @@
+# DDT（data driver test）数据驱动YAML文件,对应的YAML测试用例文件为dataSource.yaml        （暂时不用）
+#- ['userName','orderNo','sportId','settlementResult','status','betType','betStartTime','betEndTime','settlementStartTime','settlementEndTime','sortBy','sortIndex','sortParameter','title']
+- ['','',[],[],[],[],'','-30','0','-30','0','','','','管理后台-总台-数据源对账报表-总计,默认查询近1个月数据']
+- ['','',[],[],[],[],'','-30','0','-30','0','','','','管理后台-总台-数据源对账报表-总计,默认查询近1个月数据']

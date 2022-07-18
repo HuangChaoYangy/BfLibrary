@@ -1,0 +1,35 @@
+- request:
+    ip: https://mdesearch.betf.best
+    url_detail: /dataSourceCheckReport/getPage
+    url_total: /dataSourceCheckReport/getTotal
+    url_banner: /dataSourceCheckReport/getBannerData
+    method: POST
+  data:
+    userName: $ddt{userName}
+    orderNo: $ddt{orderNo}
+    sportId: $ddt{sportId}
+    settlementResult: $ddt{settlementResult}
+    status: $ddt{status}
+    betType: $ddt{betType}
+    betStartTime: $ddt{betStartTime}
+    betEndTime: $ddt{betEndTime}
+    settlementStartTime: $ddt{settlementStartTime}
+    settlementEndTime: $ddt{settlementEndTime}
+    sortBy: $ddt{sortBy}
+    sortIndex: $ddt{sortIndex}
+    sortParameter: $ddt{sortParameter}
+    title: $ddt{title}
+  resp:
+    userName: $ddt{userName}
+    orderNo: $ddt{orderNo}
+    sportId: $ddt{sportId}
+    settlementResult: $ddt{settlementResult}
+    status: $ddt{status}
+    betType: $ddt{betType}
+    betStartTime: $ddt{betStartTime}
+    betEndTime: $ddt{betEndTime}
+    settlementStartTime: $ddt{settlementStartTime}
+    settlementEndTime: $ddt{settlementEndTime}
+    sortBy: $ddt{sortBy}
+    sortIndex: $ddt{sortIndex}
+    sortParameter: $ddt{sortParameter}

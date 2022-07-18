@@ -1,0 +1,43 @@
+# -*- coding: utf-8 -*-
+# @Time    : 2022/05/04 19:14
+# @Author  : liyang
+# @FileName: dataSourceReport.yaml
+# @Software: PyCharm
+
+- parameterize:
+    userName-orderNo-sportId-settlementResult-status-betType-betStartTime-betEndTime-settlementStartTime-settlementEndTime-sortBy-sortIndex-sortParameter-title: /credit_data_new/dataSource_case.yaml
+  request:
+    ip: https://mdesearch.betf.best
+    url_detail: /dataSourceCheckReport/getPage
+    url_total: /dataSourceCheckReport/getTotal
+    url_banner: /dataSourceCheckReport/getBannerData
+    method: POST
+  data:
+    userName: ${userName}
+    orderNo: ${orderNo}
+    sportId: ${sportId}
+    settlementResult: ${settlementResult}
+    status: ${status}
+    betType: ${betType}
+    betStartTime: ${betStartTime}
+    betEndTime: ${betEndTime}
+    settlementStartTime: ${settlementStartTime}
+    settlementEndTime: ${settlementEndTime}
+    sortBy: ${sortBy}
+    sortIndex: ${sortIndex}
+    sortParameter: ${sortParameter}
+    title: ${title}
+  resp:
+    userName: ${userName}
+    orderNo: ${orderNo}
+    sportId: ${sportId}
+    settlementResult: ${settlementResult}
+    status: ${status}
+    betType: ${betType}
+    betStartTime: ${betStartTime}
+    betEndTime: ${betEndTime}
+    settlementStartTime: ${settlementStartTime}
+    settlementEndTime: ${settlementEndTime}
+    sortBy: ${sortBy}
+    sortIndex: ${sortIndex}
+    sortParameter: ${sortParameter}
