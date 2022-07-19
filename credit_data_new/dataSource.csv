@@ -1,3 +1,3 @@
 userName,orderNo,sportId,settlementResult,status,betType,betStartTime,betEndTime,settlementStartTime,settlementEndTime,sortBy,sortIndex,sortParameter,title
-'','',"[sr:sport:1,sr:sport:2]",[],[],[],'-30','0','-30','0','','','',"管理后台-总台-数据源对账报表-总计,默认查询近1个月数据"
-'','',[],[],[],[],'-30','0','-30','0','','','',"管理后台-总台-数据源对账报表-总计,默认查询近2个月数据"
+'','',"[sr:sport:1]",[],[],'','-30','0','-30','0','','','',"管理后台-总台-数据源对账报表-总计,默认查询近1个月数据"
+'','',[],[],[],'','-30','0','-30','0','','','',"管理后台-总台-数据源对账报表-总计,默认查询近2个月数据"

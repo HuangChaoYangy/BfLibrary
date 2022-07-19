@@ -10,7 +10,7 @@
     sportId: [sr:sport:1,sr:sport:2]
     settlementResult: []
     status: []
-    betType: []
+    betType: ''
     betStartTime: '-30'
     betEndTime: '0'
     settlementStartTime: '-30'
@@ -25,7 +25,7 @@
     sportId: [sr:sport:1,sr:sport:2]
     settlementResult: []
     status: []
-    betType: []
+    betType: ''
     betStartTime: '-30'
     betEndTime: '0'
     settlementStartTime: '-30'
@@ -46,7 +46,7 @@
     sportId: []
     settlementResult: []
     status: []
-    betType: []
+    betType: ''
     betStartTime: '-30'
     betEndTime: '0'
     settlementStartTime: '-30'
@@ -61,7 +61,7 @@
     sportId: []
     settlementResult: []
     status: []
-    betType: []
+    betType: ''
     betStartTime: '-30'
     betEndTime: '0'
     settlementStartTime: '-30'
