@@ -1,0 +1,304 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-30'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-总台-每日盈亏列表,默认查询近30天数据
+  resp:
+    startCreateTime: '-30'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'bettingUserNumber'
+    sortParameter: 'descending'
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注人数”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注人数`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'bettingUserNumber'
+    sortParameter: 'ascending'
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注人数”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注人数`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'bettingNumber'
+    sortParameter: 'descending'
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注量”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注量`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'bettingNumber'
+    sortParameter: 'ascending'
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注量”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注量`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'betAmount'
+    sortParameter: 'descending'
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注金额”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注金额`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'betAmount'
+    sortParameter: 'ascending'
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注金额”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注金额`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'effectiveBetAmount'
+    sortParameter: 'descending'
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“有效投注”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`有效投注`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'effectiveBetAmount'
+    sortParameter: 'ascending'
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“有效投注”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`有效投注`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'bettingProfitAndLoss'
+    sortParameter: 'descending'
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注盈亏”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注盈亏`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'bettingProfitAndLoss'
+    sortParameter: 'ascending'
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“投注盈亏”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注盈亏`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'totalRebate'
+    sortParameter: 'descending'
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“总佣金”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`总返水`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'totalRebate'
+    sortParameter: 'ascending'
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“总佣金”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`总返水`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'netProfitAndLoss'
+    sortParameter: 'descending'
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“净盈亏”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`净盈亏`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'netProfitAndLoss'
+    sortParameter: 'ascending'
+    title: 管理后台-总台-每日盈亏列表,默认查询近7天数据,根据“净盈亏”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`净盈亏`,0)
+    sortParameter: 'ASC'
+

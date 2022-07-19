@@ -1,0 +1,18 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    totalUrl: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: $ddt{startCreateTime}
+    endCreateTime: $ddt{endCreateTime}"
+    sortIndex: $ddt{sortIndex}
+    sortParameter: $ddt{sortParameter}
+    title: $ddt{title}
+  resp:
+    startCreateTime: $ddt{start}
+    endCreateTime: $ddt{end}
+    sortIndex: $ddt{Index}
+    sortParameter: $ddt{Parameter}
