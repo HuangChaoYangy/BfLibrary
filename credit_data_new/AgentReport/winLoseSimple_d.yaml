@@ -1,0 +1,17 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList
+    method: POST
+  data:
+    account: $ddt{account}
+    parentId: $ddt{parentId}"
+    userName: $ddt{userName}
+    begin: $ddt{begin}
+    end: $ddt{end}
+    title: $ddt{title}
+  resp:
+    account: $ddt{account_name}
+    parentId: $ddt{parent_id}"
+    userName: $ddt{user_name}"
+    ctime: $ddt{ctime}
+    etime: $ddt{etime}
