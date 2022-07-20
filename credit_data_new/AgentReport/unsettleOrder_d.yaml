@@ -1,0 +1,15 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryMemberUndoneOrderList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: $ddt{account}
+    parentId: $ddt{parentId}"
+    userName: $ddt{userName}
+    title: $ddt{title}
+  resp:
+    account: $ddt{account_name}
+    parentId: $ddt{parent_id}"
+    userName: $ddt{user_name}"

@@ -1,0 +1,80 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryProxyUndoneTransactionList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: '0'
+    userName: ''
+    title: 总台-代理报表-总代未完成交易,默认查询所有数据
+  resp:
+    account: ''
+    parentId: '0'
+    userName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryProxyUndoneTransactionList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: 'a0'
+    userName: ''
+    title: 总台-代理报表-总代未完成交易,根据登0账号'a0'查询所有数据
+  resp:
+    account: ''
+    parentId: 'a0'
+    userName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryProxyUndoneTransactionList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: 'a0b1'
+    userName: ''
+    title: 总台-代理报表-总代未完成交易,根据登1账号'a0b1'查询所有数据
+  resp:
+    account: ''
+    parentId: 'a0b1'
+    userName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryProxyUndoneTransactionList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: 'a0b1b2'
+    userName: ''
+    title: 总台-代理报表-总代未完成交易,根据登2账号'a0b1b2'查询所有数据
+  resp:
+    account: ''
+    parentId: 'a0b1b2'
+    userName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryProxyUndoneTransactionList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: 'a0b1b2b3'
+    userName: ''
+    title: 总台-代理报表-总代未完成交易,根据登3账号'a0b1b2b3'查询所有数据
+  resp:
+    account: ''
+    parentId: 'a0b1b2b3'
+    userName: ''
+
