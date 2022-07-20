@@ -169,5 +169,5 @@ class Test_dailyReport_yaml(object):
 
 if __name__ == "__main__":
 
-    pytest.main(["dailyReport_ym.py",'-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  # '--clean-alluredir'
+    pytest.main(["dailyReport_ym.py",'-vs', '-q', '--alluredir', '../report/tmp','-n=auto','--clean-alluredir'])  # '--clean-alluredir'
     os.system("allure serve ../report/tmp")
