@@ -228,6 +228,7 @@ class YamlFileData(object):
 
                 return profileList
 
+
     def get_testcase_params(self, csv_path, yaml_file, new_yaml_file):
         '''
         读取csv用例文件,获取测试用例数量,写入新的yaml文件
@@ -273,7 +274,7 @@ if __name__ == "__main__":
 
     # csv_data = yam.get_csv_to_Json(csv_path="../credit_data_new/dataSource.csv")
 
-    data = yam.get_testcase_params(csv_path="../credit_data_new/dataSource.csv", yaml_file="../credit_data_new/dataSource.yaml", new_yaml_file="../credit_data_new/dataSource_case.yaml")
+    data = yam.get_testcase_params(csv_path="../credit_data_new/ReportManagement/dailyReport.csv", yaml_file="../credit_data_new/ReportManagement/dailyReport.yaml", new_yaml_file="../credit_data_new/ReportManagement/dailyReport_case.yaml")
 
     # configure_file = yam.params_yaml_data(data=data, isAll=False)
     # print(configure_file)
@@ -285,7 +286,7 @@ if __name__ == "__main__":
     # result = ya.get_yaml_data(fileDir='../credit_data/dataSourceReportTotal.yaml', isAll=False)
     # result = ya.get_yaml_data(fileDir='../test_data/sport_params.yaml', isAll=True)
 
-    result = ya.read_yaml_file(yaml_file='../credit_data_new/dataSource_case.yaml', isAll=False)
+    result = ya.read_yaml_file(yaml_file='../credit_data_new/ReportManagement/dailyReport_case.yaml', isAll=False)
     # result = yam.load_yaml(yaml_file='../credit_data_new/dataSource_case.yaml')
     print(result)
     # result = ya.write_yaml_file(yaml_file='../test_data/token_data.yaml', data=[{'test': 'test'}])
