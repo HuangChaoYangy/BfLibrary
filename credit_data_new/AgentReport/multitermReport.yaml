@@ -1,0 +1,17 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/multiterm
+    method: POST
+  data:
+    begin: $ddt{begin}
+    end: $ddt{end}
+    queryDateType: $ddt{queryDateType}
+    searchAccount: $ddt{searchAccount}"
+    sportName: $ddt{sportName}
+    title: $ddt{title}
+  resp:
+    ctime: $ddt{ctime}
+    etime: $ddt{etime}
+    queryDateType: $ddt{DateType}
+    searchAccount: $ddt{Account}"
+    sportName: $ddt{sport_name}

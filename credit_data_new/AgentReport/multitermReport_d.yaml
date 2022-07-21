@@ -1,0 +1,19 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/order/details
+    method: post
+  data:
+    account: $ddt{account}
+    begin: $ddt{begin}
+    end: $ddt{end}
+    dateType: $ddt{DateType}
+    sportId: $ddt{sportId}
+    marketId: $ddt{marketId}
+    title: $ddt{title}
+  resp:
+    account: $ddt{account}
+    ctime: $ddt{ctime}
+    etime: $ddt{etime}
+    dateType: $ddt{DateType}
+    sportId: $ddt{sportId}
+    marketId: $ddt{marketId}

@@ -1,0 +1,18 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/multiterm
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 3
+    searchAccount: ''
+    sportName: ''
+    title: 总台-代理报表-混合串关,默认按结算时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 3
+    searchAccount: ''
+    sportName: ''
+

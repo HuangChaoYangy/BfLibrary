@@ -1,0 +1,60 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/order/details
+    method: post
+  data:
+    account: ''
+    begin: -7
+    end: -1
+    dateType: 3
+    sportId: ''
+    marketId: ''
+    title: 总台-代理报表-混合串关-注单详情,默认按结算时间查询近7天数据
+  resp:
+    account: ''
+    ctime: -7
+    etime: -1
+    dateType: 3
+    sportId: ''
+    marketId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/order/details
+    method: post
+  data:
+    account: ''
+    begin: -7
+    end: -1
+    dateType: 2
+    sportId: ''
+    marketId: ''
+    title: 总台-代理报表-混合串关-注单详情,默认按赛事时间查询近7天数据
+  resp:
+    account: ''
+    ctime: -7
+    etime: -1
+    dateType: 2
+    sportId: ''
+    marketId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/order/details
+    method: post
+  data:
+    account: ''
+    begin: -7
+    end: -1
+    dateType: 1
+    sportId: ''
+    marketId: ''
+    title: 总台-代理报表-混合串关-注单详情,默认按比赛时间查询近7天数据
+  resp:
+    account: ''
+    ctime: -7
+    etime: -1
+    dateType: 1
+    sportId: ''
+    marketId: ''
+
