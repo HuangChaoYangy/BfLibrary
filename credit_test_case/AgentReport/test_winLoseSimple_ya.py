@@ -54,14 +54,14 @@ class Test_winLoseSimple_yaml(object):
         actualResult = CreditBackGround(mysql_info,mongo_info).credit_winLose_simple(inData=inBody)
 
         with allure.step(f"执行测试用例:{inBody['title']}"):
-            Bf_log('unsettledOrder').info(f"----------------开始执行:{inBody['title']}------------------------")
+            Bf_log('winLoseSimple').info(f"----------------开始执行:{inBody['title']}------------------------")
         url = url['mde_ip'] + url['url']
         with allure.step(f"请求地址 {url}"):
-            Bf_log('unsettledOrder').info(f'请求地址为:{url}')
+            Bf_log('winLoseSimple').info(f'请求地址为:{url}')
 
         sql = MysqlQuery(mysql_info, mongo_info).credit_winLoseSimple_query(expData=expData)[1]
         with allure.step(f'查询SQL:{sql}'):
-            Bf_log('unsettledOrder').info(f'执行sql:{sql}')
+            Bf_log('winLoseSimple').info(f'执行sql:{sql}')
         expectResult = MysqlQuery(mysql_info, mongo_info).credit_winLoseSimple_query(expData=expData)[0]
 
         # 校验接口数据和SQL数据的长度
@@ -96,16 +96,16 @@ class Test_winLoseSimple_yaml(object):
                             # 判断两个list的值是否一致,并且回写入excel
                             if new_item1 == new_item2:
                                 with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
-                                    Bf_log('unsettledOrder').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
+                                    Bf_log('winLoseSimple').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
                             else:
                                 with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
-                                    Bf_log('unsettledOrder').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
+                                    Bf_log('winLoseSimple').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
 
                             assert new_item1 == new_item2
 
             else:
                 with allure.step(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过'):
-                    Bf_log('unsettledOrder').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
+                    Bf_log('winLoseSimple').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
 
         else:
             raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actualResult)},sql为{len(expectResult)}")
@@ -128,14 +128,14 @@ class Test_winLoseSimple_yaml(object):
         actualResult = CreditBackGround(mysql_info,mongo_info).credit_winLose_simple(inData=inBody)
 
         with allure.step(f"执行测试用例:{inBody['title']}"):
-            Bf_log('unsettledOrder').info(f"----------------开始执行:{inBody['title']}------------------------")
+            Bf_log('winLoseSimple').info(f"----------------开始执行:{inBody['title']}------------------------")
         url = url['mde_ip'] + url['url']
         with allure.step(f"请求地址 {url}"):
-            Bf_log('unsettledOrder').info(f'请求地址为:{url}')
+            Bf_log('winLoseSimple').info(f'请求地址为:{url}')
 
         sql = MysqlQuery(mysql_info, mongo_info).credit_winLoseSimple_query(expData=expData)[1]
         with allure.step(f'查询SQL:{sql}'):
-            Bf_log('unsettledOrder').info(f'执行sql:{sql}')
+            Bf_log('winLoseSimple').info(f'执行sql:{sql}')
         expectResult = MysqlQuery(mysql_info, mongo_info).credit_winLoseSimple_query(expData=expData)[0]
 
         # 校验接口数据和SQL数据的长度
@@ -170,16 +170,16 @@ class Test_winLoseSimple_yaml(object):
                             # 判断两个list的值是否一致,并且回写入excel
                             if new_item1 == new_item2:
                                 with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
-                                    Bf_log('unsettledOrder').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
+                                    Bf_log('winLoseSimple').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
                             else:
                                 with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
-                                    Bf_log('unsettledOrder').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
+                                    Bf_log('winLoseSimple').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
 
                             assert new_item1 == new_item2
 
             else:
                 with allure.step(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过'):
-                    Bf_log('unsettledOrder').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
+                    Bf_log('winLoseSimple').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
 
         else:
             raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actualResult)},sql为{len(expectResult)}")
