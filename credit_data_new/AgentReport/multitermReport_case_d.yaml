@@ -58,3 +58,43 @@
     sportId: ''
     marketId: ''
 
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/order/details
+    method: post
+  data:
+    account: 3
+    begin: '-7'
+    end: '-1'
+    dateType: ''
+    sportId: 'sr:sport:1'
+    marketId: ''
+    title: 总台-代理报表-混合串关-注单详情,按结算时间根据球类'足球'查询近7天数据
+  resp:
+    account: 3
+    ctime: '-7'
+    etime: '-1'
+    dateType: ''
+    sportId: 'sr:sport:1'
+    marketId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/order/details
+    method: post
+  data:
+    account: 3
+    begin: '-7'
+    end: '-1'
+    dateType: 't0t1t2t3t4'
+    sportId: ''
+    marketId: ''
+    title: 总台-代理报表-混合串关-注单详情,按结算时间根据会员账号't0t1t2t3t4'查询近7天数据
+  resp:
+    account: 3
+    ctime: '-7'
+    etime: '-1'
+    dateType: 't0t1t2t3t4'
+    sportId: ''
+    marketId: ''
+

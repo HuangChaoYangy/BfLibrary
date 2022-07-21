@@ -16,3 +16,75 @@
     searchAccount: ''
     sportName: ''
 
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/multiterm
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 2
+    searchAccount: ''
+    sportName: ''
+    title: 总台-代理报表-混合串关,默认按赛事时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 2
+    searchAccount: ''
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/multiterm
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 1
+    searchAccount: ''
+    sportName: ''
+    title: 总台-代理报表-混合串关,默认按投注时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 1
+    searchAccount: ''
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/multiterm
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 3
+    searchAccount: ''
+    sportName: '足球'
+    title: 总台-代理报表-混合串关,按结算时间根据球类'足球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 3
+    searchAccount: ''
+    sportName: '足球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/multiterm
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 3
+    searchAccount: 't0t1t2t3t4'
+    sportName: ''
+    title: 总台-代理报表-混合串关,按结算时间根据会员账号't0t1t2t3t4'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 3
+    searchAccount: 't0t1t2t3t4'
+    sportName: ''
+

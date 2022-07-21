@@ -108,7 +108,6 @@ class Test_multitermReport:
 
     YamlFileData().get_testcase_params(csv_path=csv_url_multiterm_d, yaml_file=multiterm_url_d, new_yaml_file=multiterm_url_new_d)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=multiterm_url_new_d, isAll=False)
-    # print(yaml_data)
     request_data = Yaml_data().read_yaml_file(yaml_file=multiterm_url_new_d, isAll=True)[0]['request']
     # @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
@@ -280,5 +279,5 @@ class Test_multitermReport:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_multiterm_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','-n=4','--clean-alluredir'])  #  '--clean-alluredir', '-n=4'
+    pytest.main(["test_multiterm_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  #  '--clean-alluredir', '-n=4'
     os.system("allure serve ../report/tmp")
