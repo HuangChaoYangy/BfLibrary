@@ -1,0 +1,108 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryProxyProfitAndLossList
+    method: POST
+  data:
+    account: ''
+    parentId: '0'
+    userName: ''
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(详情),默认查询近7天数据
+  resp:
+    account: ''
+    parentId: '0'
+    userName: ''
+    ctime: '-7'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryProxyProfitAndLossList
+    method: POST
+  data:
+    account: ''
+    parentId: '0'
+    userName: ''
+    begin: '-30'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(详情),默认查询近30天数据
+  resp:
+    account: ''
+    parentId: '0'
+    userName: ''
+    ctime: '-30'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryProxyProfitAndLossList
+    method: POST
+  data:
+    account: ''
+    parentId: 'a0'
+    userName: ''
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(详情),根据登0账号'a0'查询所有登1数据
+  resp:
+    account: ''
+    parentId: 'a0'
+    userName: ''
+    ctime: '-7'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryProxyProfitAndLossList
+    method: POST
+  data:
+    account: ''
+    parentId: 'a0b1'
+    userName: ''
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(详情),根据登1账号'a0b1'查询所有登2数据
+  resp:
+    account: ''
+    parentId: 'a0b1'
+    userName: ''
+    ctime: '-7'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryProxyProfitAndLossList
+    method: POST
+  data:
+    account: ''
+    parentId: 'a0b1b2'
+    userName: ''
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(详情),根据登2账号'a0b1b2'查询所有登3数据
+  resp:
+    account: ''
+    parentId: 'a0b1b2'
+    userName: ''
+    ctime: '-7'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryProxyProfitAndLossList
+    method: POST
+  data:
+    account: ''
+    parentId: 'a0b1b2b3'
+    userName: ''
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(详情),根据登3账号'a0b1b2b3'查询所有会员数据
+  resp:
+    account: ''
+    parentId: 'a0b1b2b3'
+    userName: ''
+    ctime: '-7'
+    etime: '-1'
+
