@@ -1,0 +1,15 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/order/tournament
+    method: POST
+  data:
+    begin: $ddt{begin}"
+    end: $ddt{end}
+    queryDateType: $ddt{DateType}
+    sportName: $ddt{sportName}
+    title: $ddt{title}
+  resp:
+    ctime: $ddt{ctime}"
+    etime: $ddt{etime}"
+    queryDateType: $ddt{DateType}
+    sportName: $ddt{sportName}

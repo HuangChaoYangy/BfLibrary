@@ -1,0 +1,48 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/order/tournament
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 3
+    sportName: '羽毛球'
+    title: 总台-代理报表-联赛报表-盘口详情,按照结算时间根据球类'羽毛球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 3
+    sportName: '羽毛球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/order/tournament
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 2
+    sportName: '羽毛球'
+    title: 总台-代理报表-联赛报表-盘口详情,按照赛事时间根据球类'羽毛球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 2
+    sportName: '羽毛球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/order/tournament
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 1
+    sportName: '羽毛球'
+    title: 总台-代理报表-联赛报表-盘口详情,按照投注时间根据球类'羽毛球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 1
+    sportName: '羽毛球'
+
