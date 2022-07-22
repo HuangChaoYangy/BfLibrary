@@ -1,0 +1,16 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 3
+    sportId: 'sr:sport:5'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照结算时间根据球类'网球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 3
+    sportId: 'sr:sport:5'
+
