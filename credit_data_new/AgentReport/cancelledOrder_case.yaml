@@ -1,0 +1,16 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/cancel/order/details
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-已取消注单,默认查询近7天数据
+  resp:
+    account: ''
+    ctime: '-7'
+    etime: '-1'
+
