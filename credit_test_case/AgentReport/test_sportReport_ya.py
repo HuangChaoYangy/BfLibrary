@@ -199,7 +199,6 @@ class Test_sportReport_ya:
                              'sr:sport:31': '羽毛球', 'sr:sport:20': '乒乓球', 'sr:sport:3': '棒球', 'sr:sport:4': '冰上曲棍球'}
         market_id_list = MysqlQuery(mysql_info, mongo_info).get_market_id_by_sportId_sportReport(sport_id=inBody['sportId'],
                                                 time=(inBody['begin'], inBody['end']), queryDateType=inBody['dateType'])
-
         token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',
                                                                           securityCode='111111', loginDiv=222333)
         head = {"LoginDiv": "222333",
@@ -215,6 +214,7 @@ class Test_sportReport_ya:
                                "sportId": inBody['sportId'], "marketId": marketId, "account": "", "tournamentId": None,"matchId": None}
 
                 title = f"根据球类：'{sport_name[inBody['sportId']]}', 盘口ID： 【'{marketId}'】 查看注单详情, 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
+                allure.dynamic.title(title)
                 with allure.step(f"执行测试用例:{title}"):
                     Bf_log('sportReport').info(f"----------------开始执行:{title}------------------------")
                 with allure.step(f"请求地址： {request_url}"):
@@ -352,6 +352,7 @@ class Test_sportReport_ya:
                                 "sportId": inBody['sportId'], "marketId": "串关", "account": "", "tournamentId": None,"matchId": None}
 
                 title = f"根据球类：'{sport_name[inBody['sportId']]}', 盘口ID：'串关' 查看注单详情, 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
+                allure.dynamic.title(title)
                 with allure.step(f"执行测试用例:{title}"):
                     Bf_log('sportReport').info(f"----------------开始执行:{title}------------------------")
                 request_url = ip + url
