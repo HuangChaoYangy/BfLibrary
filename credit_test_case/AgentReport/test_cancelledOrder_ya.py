@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/7/22 10:05
 # @Author  : liyang
-# @FileName: test_cancelledOrder.py
+# @FileName: test_cancelledOrder_ya.py
 # @Software: PyCharm
 
 import pytest
@@ -116,5 +116,5 @@ class Test_cancelledOrder_yaml(object):
 
 if __name__ == "__main__":
 
-    pytest.main(["test_cancelledOrder.py",'-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  # '--clean-alluredir'
+    pytest.main(["test_cancelledOrder_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  # '--clean-alluredir'
     os.system("allure serve ../report/tmp")
