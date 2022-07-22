@@ -275,5 +275,5 @@ class Test_cancelledOrder:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_cancelledOrder.py",'-vs', '-q', '--alluredir', '../report/tmp',])     # '-n=1'   '--clean-alluredir'
+    pytest.main(["test_cancelledOrder_ya.py",'-vs', '-q', '--alluredir', '../report/tmp',])     # '-n=1'   '--clean-alluredir'
     os.system("allure serve ../report/tmp")
