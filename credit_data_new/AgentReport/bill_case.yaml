@@ -1,0 +1,15 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/proxy/bill
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    type: ''
+    begin: '-1'
+    end: '-1'
+    title: 总台-代理报表-账目,默认查询头一天数据
+  resp:
+    ctime: 1
+    etime: 1
+

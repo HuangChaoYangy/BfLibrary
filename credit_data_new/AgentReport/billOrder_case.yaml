@@ -1,0 +1,28 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    begin: '-0'
+    end: '-0'
+    title: 总台-代理报表-账目-注单详情,查询今天数据
+  resp:
+    ctime: '-0'
+    etime: '-0'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    begin: '-1'
+    end: '-1'
+    title: 总台-代理报表-账目-注单详情,查询近1天数据
+  resp:
+    ctime: '-1'
+    etime: '-1'
+
