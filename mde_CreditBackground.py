@@ -1450,7 +1450,7 @@ class CreditBackGround(object):
         except Exception as e:
             print(e)
 
-    def credit_unsettled_winLose_query(self, Authorization, account='', parentId='0', userName=''):
+    def credit_unsettledOrder_query(self, Authorization, account='', parentId='0', userName=''):
         '''
         总台-代理报表-盈亏未完成交易               /// 修改于2022.06.09
         :param Authorization:
@@ -1482,7 +1482,7 @@ class CreditBackGround(object):
                 "Account_Login_Identify": Authorization,
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
         try:
-            if parentId == '0':
+            if parentId == '0':     # 总台查询登0
                 unsettled_winLose = []
                 data = {"page":1,"limit":50,"account":account,"parentId":int(parentId)}
                 rsp = self.session.post(url, headers=head, json=data)
@@ -1496,7 +1496,7 @@ class CreditBackGround(object):
                     print(11111111111111111)
                     return unsettled_winLose
             else:
-                if parent_level == '总代':
+                if parent_level == '总代':     # 登0查询登1
                     unsettled_winLose = []
                     data = {"page":1,"limit":50,"account":account,"parentId":parent_id}
                     rsp = self.session.post(url, headers=head, json=data)
@@ -1510,7 +1510,7 @@ class CreditBackGround(object):
                         print(2222222222222)
                         return unsettled_winLose
 
-                elif parent_level == '一级代理':
+                elif parent_level == '一级代理':   # 登1查询登2
                     unsettled_winLose = []
                     data = {"page":1,"limit":50,"account":account,"parentId":parent_id}
                     rsp = self.session.post(url, headers=head, json=data)
@@ -1523,7 +1523,7 @@ class CreditBackGround(object):
                         print(unsettled_winLose)
                         return unsettled_winLose
 
-                elif parent_level == '二级代理':
+                elif parent_level == '二级代理':   # 登2查询登3
                     unsettled_winLose = []
                     data = {"page":1,"limit":50,"account":account,"parentId":parent_id}
                     rsp = self.session.post(url, headers=head, json=data)
@@ -1537,7 +1537,7 @@ class CreditBackGround(object):
                         print(44444444444444)
                         return unsettled_winLose
 
-                elif parent_level == '三级代理':
+                elif parent_level == '三级代理':    # 登3查询登会员
                     unsettled_winLose = []
                     data = {"page":1,"limit":50,"account":account,"parentId":parent_id}
                     rsp = self.session.post(url, headers=head, json=data)
@@ -1551,13 +1551,13 @@ class CreditBackGround(object):
                         print(555555555555555555555555555)
                         return unsettled_winLose
 
-                elif userName is not None:
+                elif userName is not None:        # 会员查询注单
                     unsettled_winLose = []
                     for page in range(1, pageNum + 1):
                         data = {"page":page,"limit":200,"account":account,"parentId":parent_id}
                         rsp = self.session.post(user_url, headers=head, json=data)
                         if rsp.json()['message'] != 'OK':
-                            print("查询总代未完成交易失败,原因：" + rsp.json()["message"])
+                            print("查询总代未完成交易-注单详情失败,原因：" + rsp.json()["message"])
                         else:
                             for item in rsp.json()['data']['data']:
                                 createTime = item['bettingTime'].replace('T', ' ')
@@ -1572,6 +1572,416 @@ class CreditBackGround(object):
                             print(unsettled_winLose)
                             print(6666666666666666)
                             return unsettled_winLose
+
+                else:
+                    raise AssertionError('ERROR,暂无此类型')
+
+        except Exception as e:
+            print(e)
+
+    def credit_unsettledOrder(self, inData):
+        '''
+        总台-代理报表-盈亏未完成交易,用于自动化测试               /// 修改于2022.07.20
+        :param inData:
+        :param account:
+        :param parentId: 默认为0  0是查询总代账号
+        :param userName:  会员名称
+        :return:
+        '''
+        Authorization = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111", loginDiv=222333)
+        data = inData
+        if data['account']:
+            account = data['account']
+        else:
+            account = ""
+        if data['parentId'] == "0":    # 总台
+            parent_id = data['parentId']
+            parent_level = ''
+        else:
+            if data['userName']:       # 会员
+                parent_id = self.mysql.get_userId(account=data['userName'])
+                parent_level = ""
+            else:                      # 代理
+                parent_id = self.mysql.get_account_id(account=data['parentId'])[0]
+                parent_level = self.mysql.get_account_id(account=data['parentId'])[1]
+
+        orderNum = self.mysql.get_settled_ordernum(account=data['userName'])
+        pageNum = math.ceil(orderNum / 200)  # 向上取整  获取分页数
+
+        url = self.mde_url + '/mainstation/generalAgentUndoneTransaction/queryProxyUndoneTransactionList'
+        user_url = self.mde_url + '/mainstation/generalAgentUndoneTransaction/queryMemberUndoneOrderList'
+        betType_dic = {1:'单注', 2:'串关', 3:'复式串关'}
+        odds_dic = {"1": '欧洲盘', "2": '香港盘'}
+        head = {"LoginDiv": '222333',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": Authorization,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+        try:
+            if parent_id == '0':       # 总台查询登0
+                unsettled_winLose = []
+                data = {"page":1,"limit":50,"account":account,"parentId":int(parent_id)}
+                rsp = self.session.post(url, headers=head, json=data)
+                if rsp.json()['message'] != 'OK':
+                    print("查询总代未完成交易失败,原因：" + rsp.json()["message"])
+                else:
+                    for item in rsp.json()['data']:
+                        account = item['account']
+                        unsettled_winLose.append([account,item['name'],item['levelName'],item['currency'],item['numberOfBets'],
+                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+
+                    return unsettled_winLose
+            else:
+                if parent_level == '登0':   # 登0查询登1
+                    unsettled_winLose = []
+                    data = {"page":1,"limit":50,"account":account,"parentId":parent_id}
+                    rsp = self.session.post(url, headers=head, json=data)
+                    if rsp.json()['message'] != 'OK':
+                        print("查询总代未完成交易失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']:
+                            account = item['account']
+                            unsettled_winLose.append([account,item['name'],item['levelName'],item['currency'],item['numberOfBets'],
+                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+
+                        return unsettled_winLose
+
+                elif parent_level == '登1':   # 登1查询登2
+                    unsettled_winLose = []
+                    data = {"page":1,"limit":50,"account":account,"parentId":parent_id}
+                    rsp = self.session.post(url, headers=head, json=data)
+                    if rsp.json()['message'] != 'OK':
+                        print("查询总代未完成交易失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']:
+                            account = item['account']
+                            unsettled_winLose.append([account,item['name'],item['levelName'],item['currency'],item['numberOfBets'],
+                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+
+                        return unsettled_winLose
+
+                elif parent_level == '登2':   # 登2查询登3
+                    unsettled_winLose = []
+                    data = {"page":1,"limit":50,"account":account,"parentId":parent_id}
+                    rsp = self.session.post(url, headers=head, json=data)
+                    if rsp.json()['message'] != 'OK':
+                        print("查询总代未完成交易失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']:
+                            account = item['account']
+                            unsettled_winLose.append([account,item['name'],item['levelName'],item['currency'],item['numberOfBets'],
+                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+
+                        return unsettled_winLose
+
+                elif parent_level == '登3':   # 登3查询会员
+                    unsettled_winLose = []
+                    data = {"page":1,"limit":50,"account":account,"parentId":parent_id}
+                    rsp = self.session.post(url, headers=head, json=data)
+                    if rsp.json()['message'] != 'OK':
+                        print("查询总代未完成交易失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']:
+                            account = item['account']
+                            unsettled_winLose.append([account,item['name'],item['levelName'],item['currency'],item['numberOfBets'],
+                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+
+                        return unsettled_winLose
+
+                elif data['userName'] != "":      # 会员查询注单
+                    unsettled_winLose = []
+                    for page in range(1, pageNum + 1):
+                        data = {"page":page,"limit":200,"account":account,"parentId":parent_id}
+                        rsp = self.session.post(user_url, headers=head, json=data)
+                        if rsp.json()['message'] != 'OK':
+                            print("查询总代未完成交易-注单详情失败,原因：" + rsp.json()["message"])
+                        else:
+                            for item in rsp.json()['data']['data']:
+                                createTime = item['bettingTime'].replace('T', ' ')
+                                create_time = createTime.replace('.000Z', '')
+                                account = item['account']
+                                for detail in item['options']:
+                                    bet_type = betType_dic[item['betType']]
+                                    odds_type = odds_dic[detail['oddsType']]
+                                    unsettled_winLose.append([account,item['memberName'],item['orderNo'], create_time, item['sportsType'],bet_type,
+                                                              [detail['tournamentName'], detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'],
+                                                               detail['marketName'],detail['specifier'], detail['outcomeName'],detail['odds'], odds_type, detail['matchTimeStr']],
+                                                           item['betResult'],item['betIp'] +' / '+ item['betIpAddress'],item['odds'], item['betAmount'], item['companyPercentage'],
+                                                           item['level0Percentage'],item['level0CommissionRatio'],item['level1Percentage'],item['level1CommissionRatio'],
+                                                           item['level2Percentage'],item['level2CommissionRatio'],item['level3Percentage'],item['level3CommissionRatio'],
+                                                           item['memberCommissionRatio']])
+                            unsettledOrder = self.cm.merge_compelx_02(new_lList=unsettled_winLose)
+
+                            return unsettledOrder
+
+                else:
+                    raise AssertionError('ERROR,暂无此类型')
+
+        except Exception as e:
+            print(e)
+
+    def credit_winLose_simple_query(self, Authorization, account='', parentId='0', userName='', create_time=(-100,0)):
+        '''
+        总台-代理报表-总代盈亏(简易)，默认查询近所有数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的                /// 修改于2022.06.09
+        :param Authorization:
+        :param account:
+        :param parentId: 默认为0  0是查询总代账号
+        :param userName:  会员名称
+        :param create_time:  结算时间
+        :return:
+        '''
+        if create_time:
+            sttime = create_time[0]
+            entime = create_time[1]
+            ctime = self.get_current_time_for_client(time_type="begin", day_diff=int(sttime))
+            etime = self.get_current_time_for_client(time_type="end", day_diff=int(entime))
+        else:
+            ctime = ""
+            etime = ""
+        if parentId == '0':
+            parent_id = ''
+            parent_level = ''
+        else:
+            if userName:
+                parent_id = self.mysql.get_userId(account=userName)
+                parent_level = ""
+            else:
+                parent_id = self.mysql.get_account_id(account=parentId)[0]
+                parent_level = self.mysql.get_account_id(account=parentId)[1]
+                print(f"根据【{parent_level}】查询下级代理数据")
+
+        url = self.mde_url + '/mainstation/generalAgentProfitAndLoss/queryProxyProfitAndLossList'
+        user_url = self.mde_url + '/mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList'
+        betType_dic = {'1':'单关', '2':'串关', '3':'复式串关'}
+        orderNum = self.mysql.get_settled_ordernum(account=userName)
+        print(f'注单数量为：{orderNum}')
+        pageNum = math.ceil(orderNum/200)         # 向上取整  获取分页数
+        head = {"LoginDiv": '222333',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": Authorization,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+        try:
+            if parentId == '0':
+                winLose_simple = []
+                data = {"page":1,"limit":50,"account":account,"parentId":int(parentId),"startTime":ctime,"endTime":etime}
+                rsp = self.session.post(url, headers=head, json=data)
+                if rsp.json()['message'] != 'OK':
+                    print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                else:
+                    for item in rsp.json()['data']:
+                        winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                                                 item['totalCommission'],item['payout'],item['companyWinOrLose'],item['companyCommission'],item['companyTotal']])
+                    return winLose_simple
+            else:
+                if parent_level == '总代':
+                    winLose_simple = []
+                    data = {"page":1,"limit":50,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
+                    rsp = self.session.post(url, headers=head, json=data)
+                    if rsp.json()['message'] != 'OK':
+                        print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']:
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                                                     item['totalCommission'],item['payout'],item['level0WinOrLose'],item['level0Commission'],item['level0Total']])
+                        print(winLose_simple)
+                        print(2222222222222)
+                        return winLose_simple
+
+                elif parent_level == '一级代理':
+                    winLose_simple = []
+                    data = {"page":1,"limit":50,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
+                    rsp = self.session.post(url, headers=head, json=data)
+                    if rsp.json()['message'] != 'OK':
+                        print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']:
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                                                     item['totalCommission'],item['payout'],item['level1WinOrLose'],item['level1Commission'],item['level1Total']])
+                        print(winLose_simple)
+                        return winLose_simple
+
+                elif parent_level == '二级代理':
+                    winLose_simple = []
+                    data = {"page":1,"limit":50,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
+                    rsp = self.session.post(url, headers=head, json=data)
+                    if rsp.json()['message'] != 'OK':
+                        print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']:
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                                                     item['totalCommission'],item['payout'],item['level2WinOrLose'],item['level2Commission'],item['level2Total']])
+                        print(winLose_simple)
+                        print(44444444444444)
+                        return winLose_simple
+
+                elif parent_level == '三级代理':
+                    winLose_simple = []
+                    data = {"page":1,"limit":50,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
+                    rsp = self.session.post(url, headers=head, json=data)
+                    if rsp.json()['message'] != 'OK':
+                        print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']:
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                                                     item['totalCommission'],item['payout'],item['level3WinOrLose'],item['level3Commission'],item['level3Total']])
+                        print(winLose_simple)
+                        print(555555555555555555555555555)
+                        return winLose_simple
+
+                elif userName is not None:
+                    winLose_simple = []
+                    for page in range(1, pageNum + 1):
+                        data = {"page":page,"limit":200,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
+                        rsp = self.session.post(user_url, headers=head, json=data)
+                        if rsp.json()['message'] != 'OK':
+                            print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                        else:
+                            for item in rsp.json()['data']['data']:
+                                winLose_simple.append([item['account'],item['name'],item['orderNo'],item['betTimeStr'],item['sportType'],betType_dic[item['betType']],item['settlementTimeStr'],
+                                                       item['betAmount'],item['betResult'],item['memberWinOrLose'],item['validAmount'],item['betIp'] +' / '+ item['betIpAddress'],
+                                                       item['companyPercentage'],item['companyWinOrLose'],item['companyCommissionRatio'],item['companyCommission'],item['companyTotal'],
+                                                       item['level0Percentage'],item['level0WinOrLose'],item['level0CommissionRatio'],item['level0Commission'],item['level0Total'],
+                                                       item['level1Percentage'],item['level1WinOrLose'],item['level1CommissionRatio'],item['level1Commission'],item['level1Total'],
+                                                       item['level2Percentage'],item['level2WinOrLose'],item['level2CommissionRatio'],item['level2Commission'],item['level2Total'],
+                                                       item['level3Percentage'],item['level3WinOrLose'],item['level3CommissionRatio'],item['level3Commission'],item['level3Total'],
+                                                       item['memberWinOrLose'],item['memberCommissionRatio'],item['memberCommission'],item['memberTotal']])
+                            print(winLose_simple)
+                            print(6666666666666666)
+                            return winLose_simple
+
+                else:
+                    raise AssertionError('ERROR,暂无此类型')
+
+        except Exception as e:
+            print(e)
+
+    def credit_winLose_simple(self, inData):
+        '''
+        总台-代理报表-总代盈亏(简易)，默认查询近所有数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的                /// 修改于2022.07.20
+        :param inData:
+        :return:
+        '''
+        Authorization = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111", loginDiv=222333)
+        data = inData
+        if data['account']:
+            account = data['account']
+        else:
+            account = ""
+        if data['parentId'] == "0":    # 总台
+            parent_id = data['parentId']
+            parent_level = ''
+        else:
+            if data['userName']:       # 会员
+                parent_id = self.mysql.get_userId(account=data['userName'])
+                parent_level = ""
+            else:                      # 代理
+                parent_id = self.mysql.get_account_id(account=data['parentId'])[0]
+                parent_level = self.mysql.get_account_id(account=data['parentId'])[1]
+
+        if data['begin']:
+            ctime = self.get_current_time_for_client(time_type="begin", day_diff=int(data['begin']))
+            etime = self.get_current_time_for_client(time_type="end", day_diff=int(data['end']))
+        else:
+            ctime = ""
+            etime = ""
+
+        orderNum = self.mysql.get_settled_ordernum(account=data['userName'])
+        pageNum = math.ceil(orderNum / 200)  # 向上取整  获取分页数
+
+        url = self.mde_url + '/mainstation/generalAgentProfitAndLoss/queryProxyProfitAndLossList'
+        user_url = self.mde_url + '/mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList'
+        betType_dic = {'1':'单注', '2':'串关', '3':'复式串关'}
+        odds_dic = {"1": '欧洲盘', "2": '香港盘'}
+
+        head = {"LoginDiv": '222333',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": Authorization,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+        try:
+            if parent_id == '0':
+                winLose_simple = []
+                data = {"page":1,"limit":50,"account":account,"parentId":int(parent_id),"startTime":ctime,"endTime":etime}
+                rsp = self.session.post(url, headers=head, json=data)
+                if rsp.json()['message'] != 'OK':
+                    print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                else:
+                    for item in rsp.json()['data']:
+                        winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                                                 item['totalCommission'],item['payout'],item['companyWinOrLose'],item['companyCommission'],item['companyTotal']])
+                    return winLose_simple
+            else:
+                if parent_level == '登0':
+                    winLose_simple = []
+                    data = {"page":1,"limit":50,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
+                    rsp = self.session.post(url, headers=head, json=data)
+                    if rsp.json()['message'] != 'OK':
+                        print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']:
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                                                     item['totalCommission'],item['payout'],item['level0WinOrLose'],item['level0Commission'],item['level0Total']])
+                        return winLose_simple
+
+                elif parent_level == '登1':
+                    winLose_simple = []
+                    data = {"page":1,"limit":50,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
+                    rsp = self.session.post(url, headers=head, json=data)
+                    if rsp.json()['message'] != 'OK':
+                        print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']:
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                                                     item['totalCommission'],item['payout'],item['level1WinOrLose'],item['level1Commission'],item['level1Total']])
+                        return winLose_simple
+
+                elif parent_level == '登2':
+                    winLose_simple = []
+                    data = {"page":1,"limit":50,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
+                    rsp = self.session.post(url, headers=head, json=data)
+                    if rsp.json()['message'] != 'OK':
+                        print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']:
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                                                     item['totalCommission'],item['payout'],item['level2WinOrLose'],item['level2Commission'],item['level2Total']])
+                        return winLose_simple
+
+                elif parent_level == '登3':
+                    winLose_simple = []
+                    data = {"page":1,"limit":50,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
+                    rsp = self.session.post(url, headers=head, json=data)
+                    if rsp.json()['message'] != 'OK':
+                        print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']:
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                                                     item['totalCommission'],item['payout'],item['level3WinOrLose'],item['level3Commission'],item['level3Total']])
+                        return winLose_simple
+
+                elif data['userName'] != "":
+                    winLose_simple = []
+                    for page in range(1, pageNum + 1):
+                        data = {"page":page,"limit":200,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
+                        rsp = self.session.post(user_url, headers=head, json=data)
+                        if rsp.json()['message'] != 'OK':
+                            print("查询总代盈亏(简易)-注单详情失败,原因：" + rsp.json()["message"])
+                        else:
+                            for item in rsp.json()['data']['data']:
+                                for detail in item['options']:
+                                    bet_type = betType_dic[item['betType']]
+                                    odds_type = odds_dic[detail['oddsType']]
+                                    winLose_simple.append([item['account'],item['name'],item['orderNo'],item['betTimeStr'],item['sportType'],bet_type,
+                                                           [detail['tournamentName'],detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'], detail['marketName'],
+                                                            detail['specifier'], detail['outcomeName'], detail['odds'],odds_type, detail['matchTimeStr']],item['settlementTimeStr'],
+                                                           item['betResult'],item['betIp'] +' / '+ item['betIpAddress'],item['odds'],item['betAmount'],item['memberWinOrLose'],
+                                                           item['validAmount'],item['companyPercentage'],item['companyWinOrLose'],item['companyCommissionRatio'],item['companyCommission'],
+                                                           item['companyTotal'],item['level0Percentage'],item['level0WinOrLose'],item['level0CommissionRatio'],item['level0Commission'],
+                                                           item['level0Total'],item['level1Percentage'],item['level1WinOrLose'],item['level1CommissionRatio'],item['level1Commission'],
+                                                           item['level1Total'],item['level2Percentage'],item['level2WinOrLose'],item['level2CommissionRatio'],item['level2Commission'],
+                                                           item['level2Total'],item['level3Percentage'],item['level3WinOrLose'],item['level3CommissionRatio'],item['level3Commission'],
+                                                           item['level3Total'],item['memberWinOrLose'],item['memberCommissionRatio'],item['memberCommission'],item['memberTotal']])
+                            winLose_simple_list = self.cm.merge_compelx_02(new_lList=winLose_simple)
+
+                            return winLose_simple_list
 
                 else:
                     raise AssertionError('ERROR,暂无此类型')
@@ -1726,9 +2136,9 @@ class CreditBackGround(object):
         except Exception as e:
             print(e)
 
-    def credit_winLose_simple_query(self, Authorization, account='', parentId='0', userName='', create_time=(-100,0)):
+    def credit_winLose_detail(self, inData):
         '''
-        总台-代理报表-总代盈亏(简易)，默认查询近所有数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的                /// 修改于2022.06.09
+        总台-代理报表-总代盈亏(详情)，默认查询近所有数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的                /// 修改于2022.06.09
         :param Authorization:
         :param account:
         :param parentId: 默认为0  0是查询总代账号
@@ -1736,124 +2146,143 @@ class CreditBackGround(object):
         :param create_time:  结算时间
         :return:
         '''
-        if create_time:
-            sttime = create_time[0]
-            entime = create_time[1]
-            ctime = self.get_current_time_for_client(time_type="begin", day_diff=int(sttime))
-            etime = self.get_current_time_for_client(time_type="end", day_diff=int(entime))
+        Authorization = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111", loginDiv=222333)
+        data = inData
+        if data['account']:
+            account = data['account']
+        else:
+            account = ""
+        if data['parentId'] == "0":    # 总台
+            parent_id = data['parentId']
+            parent_level = ''
+        else:
+            if data['userName']:       # 会员
+                parent_id = self.mysql.get_userId(account=data['userName'])
+                parent_level = ""
+            else:                      # 代理
+                parent_id = self.mysql.get_account_id(account=data['parentId'])[0]
+                parent_level = self.mysql.get_account_id(account=data['parentId'])[1]
+
+        if data['begin']:
+            ctime = self.get_current_time_for_client(time_type="begin", day_diff=int(data['begin']))
+            etime = self.get_current_time_for_client(time_type="end", day_diff=int(data['end']))
         else:
             ctime = ""
             etime = ""
-        if parentId == '0':
-            parent_id = ''
-            parent_level = ''
-        else:
-            if userName:
-                parent_id = self.mysql.get_userId(account=userName)
-                parent_level = ""
-            else:
-                parent_id = self.mysql.get_account_id(account=parentId)[0]
-                parent_level = self.mysql.get_account_id(account=parentId)[1]
-                print(f"根据【{parent_level}】查询下级代理数据")
+
+        orderNum = self.mysql.get_settled_ordernum(account=data['userName'])
+        pageNum = math.ceil(orderNum / 200)  # 向上取整  获取分页数
 
         url = self.mde_url + '/mainstation/generalAgentProfitAndLoss/queryProxyProfitAndLossList'
         user_url = self.mde_url + '/mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList'
-        betType_dic = {'1':'单关', '2':'串关', '3':'复式串关'}
-        orderNum = self.mysql.get_settled_ordernum(account=userName)
-        print(f'注单数量为：{orderNum}')
-        pageNum = math.ceil(orderNum/200)         # 向上取整  获取分页数
+        betType_dic = {'1':'单注', '2':'串关', '3':'复式串关'}
+        odds_dic = {"1": '欧洲盘', "2": '香港盘'}
+
         head = {"LoginDiv": '222333',
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": Authorization,
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
         try:
-            if parentId == '0':
-                winLose_simple = []
-                data = {"page":1,"limit":50,"account":account,"parentId":int(parentId),"startTime":ctime,"endTime":etime}
+            if parent_id == '0':
+                winLose_detail = []
+                data = {"page":1,"limit":50,"account":account,"parentId":int(parent_id),"startTime":ctime,"endTime":etime}
                 rsp = self.session.post(url, headers=head, json=data)
                 if rsp.json()['message'] != 'OK':
-                    print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                    print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                 else:
                     for item in rsp.json()['data']:
-                        winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
-                                                 item['totalCommission'],item['payout'],item['companyWinOrLose'],item['companyCommission'],item['companyTotal']])
-                    return winLose_simple
+                        winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                                               item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
+                                               item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
+                                               item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
+
+                    return winLose_detail
             else:
-                if parent_level == '总代':
-                    winLose_simple = []
+                if parent_level == '登0':
+                    winLose_detail = []
                     data = {"page":1,"limit":50,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
                     rsp = self.session.post(url, headers=head, json=data)
                     if rsp.json()['message'] != 'OK':
-                        print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                        print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
-                                                     item['totalCommission'],item['payout'],item['level0WinOrLose'],item['level0Commission'],item['level0Total']])
-                        print(winLose_simple)
-                        print(2222222222222)
-                        return winLose_simple
+                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                                               item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
+                                               item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
+                                               item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
 
-                elif parent_level == '一级代理':
-                    winLose_simple = []
+                        return winLose_detail
+
+                elif parent_level == '登1':
+                    winLose_detail = []
                     data = {"page":1,"limit":50,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
                     rsp = self.session.post(url, headers=head, json=data)
                     if rsp.json()['message'] != 'OK':
-                        print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                        print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
-                                                     item['totalCommission'],item['payout'],item['level1WinOrLose'],item['level1Commission'],item['level1Total']])
-                        print(winLose_simple)
-                        return winLose_simple
+                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                                               item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
+                                               item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
+                                               item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
 
-                elif parent_level == '二级代理':
-                    winLose_simple = []
+                        return winLose_detail
+
+                elif parent_level == '登2':
+                    winLose_detail = []
                     data = {"page":1,"limit":50,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
                     rsp = self.session.post(url, headers=head, json=data)
                     if rsp.json()['message'] != 'OK':
-                        print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                        print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
-                                                     item['totalCommission'],item['payout'],item['level2WinOrLose'],item['level2Commission'],item['level2Total']])
-                        print(winLose_simple)
-                        print(44444444444444)
-                        return winLose_simple
+                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                                               item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
+                                               item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
+                                               item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
 
-                elif parent_level == '三级代理':
-                    winLose_simple = []
+                        return winLose_detail
+
+                elif parent_level == '登3':
+                    winLose_detail = []
                     data = {"page":1,"limit":50,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
                     rsp = self.session.post(url, headers=head, json=data)
                     if rsp.json()['message'] != 'OK':
-                        print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                        print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
-                                                     item['totalCommission'],item['payout'],item['level3WinOrLose'],item['level3Commission'],item['level3Total']])
-                        print(winLose_simple)
-                        print(555555555555555555555555555)
-                        return winLose_simple
+                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                                               item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
+                                               item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
+                                               item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
 
-                elif userName is not None:
-                    winLose_simple = []
+                        return winLose_detail
+
+                elif data['userName'] != "":
+                    winLose_detail = []
                     for page in range(1, pageNum + 1):
                         data = {"page":page,"limit":200,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
                         rsp = self.session.post(user_url, headers=head, json=data)
                         if rsp.json()['message'] != 'OK':
-                            print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
+                            print("查询总代盈亏(详情)-注单详情失败,原因：" + rsp.json()["message"])
                         else:
                             for item in rsp.json()['data']['data']:
-                                winLose_simple.append([item['account'],item['name'],item['orderNo'],item['betTimeStr'],item['sportType'],betType_dic[item['betType']],item['settlementTimeStr'],
-                                                       item['betAmount'],item['betResult'],item['memberWinOrLose'],item['validAmount'],item['betIp'] +' / '+ item['betIpAddress'],
-                                                       item['companyPercentage'],item['companyWinOrLose'],item['companyCommissionRatio'],item['companyCommission'],item['companyTotal'],
-                                                       item['level0Percentage'],item['level0WinOrLose'],item['level0CommissionRatio'],item['level0Commission'],item['level0Total'],
-                                                       item['level1Percentage'],item['level1WinOrLose'],item['level1CommissionRatio'],item['level1Commission'],item['level1Total'],
-                                                       item['level2Percentage'],item['level2WinOrLose'],item['level2CommissionRatio'],item['level2Commission'],item['level2Total'],
-                                                       item['level3Percentage'],item['level3WinOrLose'],item['level3CommissionRatio'],item['level3Commission'],item['level3Total'],
-                                                       item['memberWinOrLose'],item['memberCommissionRatio'],item['memberCommission'],item['memberTotal']])
-                            print(winLose_simple)
-                            print(6666666666666666)
-                            return winLose_simple
+                                for detail in item['options']:
+                                    bet_type = betType_dic[item['betType']]
+                                    odds_type = odds_dic[detail['oddsType']]
+                                    winLose_detail.append([item['account'],item['name'],item['orderNo'],item['betTimeStr'],item['sportType'],bet_type,
+                                                           [detail['tournamentName'],detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'], detail['marketName'],
+                                                            detail['specifier'], detail['outcomeName'], detail['odds'],odds_type, detail['matchTimeStr']],item['settlementTimeStr'],
+                                                           item['betResult'],item['betIp'] +' / '+ item['betIpAddress'],item['odds'],item['betAmount'],item['memberWinOrLose'],
+                                                           item['validAmount'],item['companyPercentage'],item['companyWinOrLose'],item['companyCommissionRatio'],item['companyCommission'],
+                                                           item['companyTotal'],item['level0Percentage'],item['level0WinOrLose'],item['level0CommissionRatio'],item['level0Commission'],
+                                                           item['level0Total'],item['level1Percentage'],item['level1WinOrLose'],item['level1CommissionRatio'],item['level1Commission'],
+                                                           item['level1Total'],item['level2Percentage'],item['level2WinOrLose'],item['level2CommissionRatio'],item['level2Commission'],
+                                                           item['level2Total'],item['level3Percentage'],item['level3WinOrLose'],item['level3CommissionRatio'],item['level3Commission'],
+                                                           item['level3Total'],item['memberWinOrLose'],item['memberCommissionRatio'],item['memberCommission'],item['memberTotal']])
+                            winLose_detail_list = self.cm.merge_compelx_02(new_lList=winLose_detail)
+
+                            return winLose_detail_list
 
                 else:
                     raise AssertionError('ERROR,暂无此类型')
@@ -1863,7 +2292,7 @@ class CreditBackGround(object):
 
     def credit_last_two_days_match_query(self, Authorization):
         '''
-        总台-代理报表-球类报表，默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的                /// 修改于2022.06.08
+        总台-代理报表-总代盈亏简易-赛事，默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的                /// 修改于2022.06.08
         :param Authorization:
         :param sportName:
         :param queryType:      sport/market
@@ -1960,7 +2389,7 @@ class CreditBackGround(object):
 
     def credit_sportReport(self, inData, queryType='sport'):
         '''
-        总台-代理报表-球类报表，默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的                /// 修改于2022.06.11
+        总台-代理报表-球类报表，默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的                /// 修改于2022.07.21
         :param queryType:      sport/market
         :param dateType:    1:投注时间  2:比赛时间  3:结算时间
         :param create_time:
@@ -1969,25 +2398,25 @@ class CreditBackGround(object):
         login_loken = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111", loginDiv=222333)
 
         data = inData
-        if data['startCreateTime']:
-            createTime = data['startCreateTime']
-            endTime = data['endCreateTime']
-            ctime = self.get_current_time_for_client(time_type='begin',day_diff=int(createTime))
-            etime = self.get_current_time_for_client(time_type='end', day_diff=int(endTime))
+        if data['begin']:
+            ctime = self.get_current_time_for_client(time_type="begin", day_diff=int(data['begin']))
+            etime = self.get_current_time_for_client(time_type="end", day_diff=int(data['end']))
         else:
             ctime = ""
             etime = ""
+        if data['queryDateType']:
+            date_type = data['queryDateType']
+        else:
+            date_type = ""
         if data['sportName']:
             sportId = self.db.get_sportId_sql(sportName=data['sportName'])
             sport_id = f'{sportId}'
         else:
             sport_id = ""
-        if data['queryDateType']:
-            date_type = data['queryDateType']
-        else:
-            date_type = ""
         url = self.mde_url + '/winOrLost/sport'
         market_url = self.mde_url + '/winOrLost/market'
+        # order_url = self.mde_url + '/winOrLost/order/details'
+        odds_dic = {"1": '欧洲盘', "2": '香港盘'}
         head = {"LoginDiv": '222333',
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": login_loken,
@@ -1998,7 +2427,7 @@ class CreditBackGround(object):
                 sum_list = []
                 sport_total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 data = {"matchId":"", "sportId":sport_id, "queryDateType":date_type, "begin":ctime, "end":etime,
-                        "searchAccount":"", "page":1, "limit":50}
+                        "searchAccount":"", "page":1, "limit":200}
                 rsp = self.session.post(url, headers=head, json=data)
                 if rsp.json()['message'] != 'OK':
                     print("查询球类报表失败,原因：" + rsp.json()["message"])
@@ -2035,12 +2464,43 @@ class CreditBackGround(object):
                     print("查询球类报表失败,原因：" + rsp.json()["message"])
                 else:
                     for item in rsp.json()['data']['data']:
-                        market_list.append([item['marketId'], item['allAmount'],item['allEfficient'], item['allBackwater'], item['memberWinLose'],
+                        market_list.append([item['sportMarketName'], item['allAmount'],item['allEfficient'], item['allBackwater'], item['memberWinLose'],
                              item['memberBackwater'], item['memberFinal'], item['level3WinLose'], item['level3Backwater'], item['level3Final'], item['level2WinLose'],
                              item['level2Backwater'], item['level2Final'],item['level1WinLose'], item['level1Backwater'], item['level1Final'], item['level0WinLose'],
                              item['level0Backwater'], item['level0Final'],item['companyWinOrLose'], item['companyBackwaterAmount'], item['companyFinal']])
 
                     return market_list
+
+            # elif queryType == 'order':
+            #     print(market_id_list)
+            #     order_list = []
+            #     for market in market_id_list:
+            #         data = {"begin":ctime,"end":etime,"dateType":date_type,"page":1,"limit":200,"sportId":sport_id,"marketId":market,"account":None,
+            #                 "tournamentId":None,"matchId":None}
+            #         print(data)
+            #         rsp = self.session.post(order_url, headers=head, json=data)
+            #
+            #         if rsp.json()['message'] != 'OK':
+            #             print("查询球类报表-注单详情失败,原因：" + rsp.json()["message"])
+            #         else:
+            #             for item in rsp.json()['data']['data']['data']:
+            #                 for detail in item['options']:
+            #                     odds_type = odds_dic[detail['oddsType']]
+            #                     order_list.append([item['account'], item['name'], item['orderNo'], item['betTime'], item['sportType'],item['betType'],
+            #                                  [detail['tournamentName'], detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'], detail['marketName'],
+            #                                   detail['specifier'], detail['outcomeName'], detail['odds'], odds_type,detail['matchTime']],
+            #                                  item['settlementTime'], item['betResult'],item['betIp'] + ' / ' + item['betIpAddress'], item['betAmount'], item['winOrLose'],
+            #                                  item['validAmount'], item['companyPercentage'], item['companyWinOrLose'],item['companyCommissionRatio'], item['companyCommission'],
+            #                                  item['companyTotal'], item['level0Percentage'], item['level0WinOrLose'],item['level0CommissionRatio'], item['level0Commission'],
+            #                                  item['level0Total'], item['level1Percentage'], item['level1WinOrLose'],item['level1CommissionRatio'], item['level1Commission'],
+            #                                  item['level1Total'], item['level2Percentage'], item['level2WinOrLose'],item['level2CommissionRatio'], item['level2Commission'],
+            #                                  item['level2Total'], item['level3Percentage'], item['level3WinOrLose'],item['level3CommissionRatio'], item['level3Commission'],
+            #                                  item['level3Total'], item['memberWinOrLose'], item['memberCommissionRatio'], item['memberCommission'], item['memberTotal']])
+            #
+            #             order_result = CommonFunc().merge_compelx_02(new_lList=order_list)
+            #
+            #     return order_result
+
             else:
                 raise AssertionError('抱歉,暂不支持该种类型')
 
@@ -2090,16 +2550,16 @@ class CreditBackGround(object):
 
     def credit_tournamentReport(self, inData):
         '''
-        总台-代理报表-联赛报表，默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的                /// 修改于2022.06.11
+        总台-代理报表-联赛报表，默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的                /// 修改于2022.07.22
         :param inData:
         :return:
         '''
         login_loken = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111", loginDiv=222333)
 
         data = inData
-        if data['startCreateTime']:
-            createTime = data['startCreateTime']
-            endTime = data['endCreateTime']
+        if data['begin']:
+            createTime = data['begin']
+            endTime = data['end']
             ctime = self.get_current_time_for_client(time_type='begin', day_diff=int(createTime))
             etime = self.get_current_time_for_client(time_type='end', day_diff=int(endTime))
         else:
@@ -2130,7 +2590,7 @@ class CreditBackGround(object):
                 print("查询联赛报表失败,原因：" + rsp.json()["message"])
             else:
                 for item in rsp.json()['data']['data']:
-                    tournament_list.append([item['tournamentId'],item['allAmount'],item['allEfficient'],item['allBackwater'],item['memberWinLose'],item['memberBackwater'],item['memberFinal'],
+                    tournament_list.append([item['tournamentName'],item['allAmount'],item['allEfficient'],item['allBackwater'],item['memberWinLose'],item['memberBackwater'],item['memberFinal'],
                                              item['level3WinLose'],item['level3Backwater'],item['level3Final'],item['level2WinLose'],item['level2Backwater'],item['level2Final'],
                                              item['level1WinLose'],item['level1Backwater'],item['level1Final'],item['level0WinLose'],item['level0Backwater'],item['level0Final'],
                                              item['companyWinOrLose'],item['companyBackwaterAmount'],item['companyFinal']])
@@ -2218,17 +2678,15 @@ class CreditBackGround(object):
         '''
         总台-代理报表-赛事盈亏，默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的                /// 修改于2022.06.11
         :param inData:
-        :param queryType:      match/market
+        :param queryType:      match/market/order
         :return:
         '''
         login_loken = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111",
                                             loginDiv=222333)
         data = inData
-        if data['startCreateTime']:
-            createTime = data['startCreateTime']
-            endTime = data['endCreateTime']
-            ctime = self.get_current_time_for_client(time_type='begin', day_diff=int(createTime))
-            etime = self.get_current_time_for_client(time_type='end', day_diff=int(endTime))
+        if data['begin']:
+            ctime = self.get_current_time_for_client(time_type='begin', day_diff=int(data['begin']))
+            etime = self.get_current_time_for_client(time_type='end', day_diff=int(data['end']))
         else:
             ctime = ""
             etime = ""
@@ -2241,12 +2699,10 @@ class CreditBackGround(object):
             date_type = data['queryDateType']
         else:
             date_type = ""
-        if data['matchId']:
-            match_id = data['matchId']
-        else:
-            match_id = ""
+
         url = self.mde_url + '/winOrLost/match'
         market_url = self.mde_url + '/winOrLost/market'
+        order_url = self.mde_url + '/winOrLost/order/details'
         head = {"LoginDiv": '222333',
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": login_loken,
@@ -2256,8 +2712,7 @@ class CreditBackGround(object):
                 match_list = []
                 sum_list = []
                 match_total = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-                data = {"matchId":"", "sportId":sport_id, "queryDateType":date_type, "begin":ctime, "end":etime,
-                        "searchAccount":"", "page":1, "limit":50}
+                data = {"sportId":sport_id, "queryDateType":date_type, "begin":ctime, "end":etime}
                 rsp = self.session.post(url, headers=head, json=data)
                 if rsp.json()['message'] != 'OK':
                     print("查询赛事盈亏报表失败,原因：" + rsp.json()["message"])
@@ -2285,7 +2740,7 @@ class CreditBackGround(object):
                     return match_list,match_Total
 
             elif queryType == 'market':
-                data = {"matchId":match_id, "queryDateType":date_type, "begin":ctime, "end":etime}
+                data = {"matchId":"", "queryDateType":date_type, "begin":ctime, "end":etime}
                 rsp = self.session.post(market_url, headers=head, json=data)
                 market_list = []
                 if rsp.json()['message'] != 'OK':
@@ -2298,8 +2753,35 @@ class CreditBackGround(object):
                              item['level0Backwater'], item['level0Final'],item['companyWinOrLose'], item['companyBackwaterAmount'], item['companyFinal']])
 
                     return market_list
+
+            elif queryType == 'order':
+                data = {"begin":ctime,"end":etime,"dateType":date_type,"page":1,"limit":200,"sportId":sport_id,"marketId":None,
+                        "account":None,"tournamentId":"串关","matchId":"串关"}
+                rsp = self.session.post(order_url, headers=head, json=data)
+                odds_dic = {"1": '欧洲盘', "2": '香港盘'}
+                if rsp.json()['message'] != 'OK':
+                    print("查询赛事盈亏报表-注单详情失败,原因：" + rsp.json()["message"])
+                else:
+                    order_list = []
+                    for item in rsp.json()['data']['data']['data']:
+                        for detail in item['options']:
+                            odds_type = odds_dic[detail['oddsType']]
+                            order_list.append([item['account'], item['name'], item['orderNo'], item['betTime'], item['sportType'],item['betType'],
+                                 [detail['tournamentName'], detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'], detail['marketName'],
+                                  detail['specifier'], detail['outcomeName'], detail['odds'], odds_type,detail['matchTime']],
+                                 item['settlementTime'], item['betResult'],item['betIp'] + ' / ' + item['betIpAddress'], item['odds'], item['betAmount'],item['winOrLose'],
+                                 item['validAmount'], item['companyPercentage'], item['companyWinOrLose'],item['companyCommissionRatio'], item['companyCommission'],
+                                 item['companyTotal'], item['level0Percentage'], item['level0WinOrLose'],item['level0CommissionRatio'], item['level0Commission'],
+                                 item['level0Total'], item['level1Percentage'], item['level1WinOrLose'],item['level1CommissionRatio'], item['level1Commission'],
+                                 item['level1Total'], item['level2Percentage'], item['level2WinOrLose'],item['level2CommissionRatio'], item['level2Commission'],
+                                 item['level2Total'], item['level3Percentage'], item['level3WinOrLose'],item['level3CommissionRatio'], item['level3Commission'],
+                                 item['level3Total'], item['memberWinOrLose'], item['memberCommissionRatio'],item['memberCommission'], item['memberTotal']])
+                    print(order_list)
+                    return order_list
+
             else:
                 raise AssertionError('抱歉,暂不支持该种类型')
+
 
         except Exception as e:
             print(e)
@@ -2353,11 +2835,9 @@ class CreditBackGround(object):
         '''
         login_loken = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111",loginDiv=222333)
         data = inData
-        if data['startCreateTime']:
-            createTime = data['startCreateTime']
-            endTime = data['endCreateTime']
-            ctime = self.get_current_time_for_client(time_type='begin', day_diff=int(createTime))
-            etime = self.get_current_time_for_client(time_type='end', day_diff=int(endTime))
+        if data['begin']:
+            ctime = self.get_current_time_for_client(time_type="begin", day_diff=int(data['begin']))
+            etime = self.get_current_time_for_client(time_type="end", day_diff=int(data['end']))
         else:
             ctime = ""
             etime = ""
@@ -2375,6 +2855,7 @@ class CreditBackGround(object):
         else:
             account = ""
         url = self.mde_url + '/winOrLost/multiterm'
+        order_url = self.mde_url + '/winOrLost/order/details'
         head = {"LoginDiv": '222333',
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": login_loken,
@@ -2411,6 +2892,124 @@ class CreditBackGround(object):
                     multiterm_Total = multiterm_total
 
                 return multiterm_list,multiterm_Total
+
+        except Exception as e:
+            print(e)
+
+    def credit_cancelledOrder(self, inData):
+        '''
+        总台-代理报表-已取消注单，默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的                /// 修改于2022.07.21
+        :param inData:
+        :return:
+        '''
+        login_loken = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111",loginDiv=222333)
+        data = inData
+        if data['begin']:
+            ctime = self.get_current_time_for_client(time_type="begin", day_diff=int(data['begin']))
+            etime = self.get_current_time_for_client(time_type="end", day_diff=int(data['end']))
+        else:
+            ctime = ""
+            etime = ""
+        if data['account']:
+            account = data['account']
+        else:
+            account = ""
+        url = self.mde_url + '/winOrLost/cancel/order/details'
+        odds_dic = {"1": '欧洲盘', "2": '香港盘'}
+        head = {"LoginDiv": '222333',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": login_loken,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+        try:
+            data = {"account":account,"begin":ctime,"end":etime,"page":1,"limit":200}
+            rsp = self.session.post(url, headers=head, json=data)
+            if rsp.json()['message'] != 'OK':
+                print("查询已取消注单失败,原因：" + rsp.json()["message"])
+            else:
+                cancelledOrder = []
+                for item in rsp.json()['data']['data']['data']:
+                    for detail in item['options']:
+                        odds_type = odds_dic[detail['oddsType']]
+                        cancelledOrder.append([item['account'], item['orderNo'], item['betTime'],
+                                               [detail['tournamentName'],detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'], detail['marketName'],
+                                                detail['specifier'],detail['outcomeName'], detail['odds'], detail['matchTime'],odds_type],
+                                               item['odds'],item['betAmount'], item['betIp'] + ' / ' + item['betIpAddress']])
+
+                actualResult = self.cm.merge_compelx_01(new_lList=cancelledOrder)
+
+                return actualResult
+
+        except Exception as e:
+            print(e)
+
+    def credit_bill(self, inData, query_type=1):
+        '''
+        总台-代理报表-账目，默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的                /// 修改于2022.07.21
+        :param inData:
+        :param query_type: 1 列表详情  2 注单详情
+        :return:
+        '''
+        login_loken = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111",loginDiv=222333)
+        data = inData
+        if data['begin']:
+            ctime = self.get_current_time_for_client(time_type="begin", day_diff=int(data['begin']))
+            etime = self.get_current_time_for_client(time_type="end", day_diff=int(data['end']))
+        else:
+            ctime = ""
+            etime = ""
+        url = self.mde_url + '/winOrLost/proxy/bill'
+        order_url = self.mde_url + '/winOrLost/order/details'
+        odds_dic = {"1": '欧洲盘', "2": '香港盘'}
+        head = {"LoginDiv": '222333',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": login_loken,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+        try:
+            if query_type == 1:
+                data = {"type":"","begin":ctime,"end":etime,"page":1,"limit":200}
+                rsp = self.session.post(url, headers=head, json=data)
+                if rsp.json()['message'] != 'OK':
+                    print("查询账目失败,原因：" + rsp.json()["message"])
+                else:
+                    billOrder = []
+                    for item in rsp.json()['data']['data'][:2]:
+                        billOrder.append([item['totalDate'], item['totalAmount'], item['total']])
+
+                    num = 0
+                    actualResult = []
+                    for item in range(len(billOrder)):
+                        if item == num:
+                            actualResult.append(billOrder[0][0])
+                    for detail in billOrder:
+                        actualResult.extend(detail[1:])
+
+                    return actualResult
+
+            elif query_type == 2:
+                data = {"begin":ctime,"end":etime,"page":1,"limit":200}
+                rsp = self.session.post(order_url, headers=head, json=data)
+                if rsp.json()['message'] != 'OK':
+                    print("查询账目失败,原因：" + rsp.json()["message"])
+                else:
+                    billOrder = []
+                    for item in rsp.json()['data']['data']['data']:
+                        for detail in item['options']:
+                            odds_type = odds_dic[detail['oddsType']]
+                            billOrder.append([item['account'], item['name'], item['orderNo'], item['betTime'], item['sportType'],item['betType'],
+                                 [detail['tournamentName'], detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'], detail['marketName'],
+                                  detail['specifier'], detail['outcomeName'], detail['odds'], odds_type, detail['matchTime']],
+                                 item['settlementTime'], item['betResult'],item['betIp'] + ' / ' + item['betIpAddress'], item['odds'],item['betAmount'], item['winOrLose'],item['validAmount'],
+                                 item['companyPercentage'], item['companyWinOrLose'], item['companyCommissionRatio'],item['companyCommission'], item['companyTotal'],
+                                 item['level0Percentage'], item['level0WinOrLose'], item['level0CommissionRatio'],item['level0Commission'], item['level0Total'],
+                                 item['level1Percentage'], item['level1WinOrLose'], item['level1CommissionRatio'],item['level1Commission'], item['level1Total'],
+                                 item['level2Percentage'], item['level2WinOrLose'], item['level2CommissionRatio'],item['level2Commission'], item['level2Total'],
+                                 item['level3Percentage'], item['level3WinOrLose'], item['level3CommissionRatio'],item['level3Commission'], item['level3Total'],
+                                 item['memberWinOrLose'], item['memberCommissionRatio'], item['memberCommission'],item['memberTotal']])
+
+                    return billOrder
+
+            else:
+                raise AssertionError('ERROE,暂不支持该类型')
 
         except Exception as e:
             print(e)
@@ -3316,6 +3915,9 @@ class CreditBackGround(object):
 
 
 
+
+
+
 if __name__ == "__main__":
 
     # mde 环境
@@ -3341,19 +3943,25 @@ if __name__ == "__main__":
     # userBasicInfo = bg.credit_userManagement_query(Authorization=login_loken, userAccount='aLiYYtest02',queryType=3)     # 总台-会员详情
     # orderNo_detail = bg.credit_orderManagement_query(Authorization=login_loken, userAccount='YYlang002',queryTpye=3, betoffset='-1',orderNo='WVyjejXsyvTD')  # 总台-订单详情
 
+    login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE0Mzk4NTA3OTIzNTI3NDM0MjYiLCJleHAiOjE2NTg1NTAzNDEsInVzZXJuYW1lIjoiTGl5YW5nMTIzIn0.O5xL9mUdDxYkA-yMckkSNrF5jM7PrCDg-EE2_soTDkQ"
     # report = bg.credit_home_report_query(Authorization=login_loken)
     # Report = bg.credit_sportReport_query(Authorization=login_loken, sportName='足球', queryType='sport', dateType=1, create_time=(-7, -1))
-    # Report = bg.credit_sportReport(inData={"startCreateTime":-6, "endCreateTime":-0, "sportName":'',"queryDateType":3 },queryType='sport')[0]
+    # data = bg.credit_sportReport(inData={"begin":-6, "end":-0, "sportName":'网球',"queryDateType":3 },queryType='market')
     # Report = bg.credit_tournamentReport_query(Authorization=login_loken, sportName='足球', dateType=3, create_time=(-7, -1))
-    # Report = bg.credit_tournamentReport(inData={"startCreateTime":-9, "endCreateTime":-3, "sportName":'排球',"queryDateType":3 })[1]
-    # Report = bg.credit_matchReport(inData={"startCreateTime":-7, "endCreateTime":-1, "sportName":'足球',"matchId":'sr:match:3351183',"queryDateType":3 },queryType='market')
-    # Report = bg.credit_multitermReport(inData={"startCreateTime":-7, "endCreateTime":-1, "sportName":'排球',"searchAccount":'', "queryDateType":3 })[1]
-    # print(Report)
+    # data = bg.credit_tournamentReport(inData={"begin":-9, "end":-3, "sportName":'羽毛球',"queryDateType":3 })[0]
+    data = bg.credit_matchReport(inData={"begin": -7, "end": -1, "sportName": '冰上曲棍球',"matchId":'', "queryDateType": 3},queryType='order')
     # matchReport = bg.credit_matchReport_query(Authorization=login_loken, sportName='', matchId='', queryType='match', dateType=3,create_time=(-7, -1))
     # multitermReport = bg.credit_multitermReport_query(Authorization=login_loken, sportName='', account='', dateType=3,create_time=(-7, -1))
     # match = bg.credit_last_two_days_match_query(Authorization=login_loken)
-    # winlose_simple = bg.credit_unsettled_winLose_query(Authorization=login_loken, account='',parentId='', userName='a0b1b2b3a3')
-    # print(winlose_simple)
+    # winlose_simple = bg.credit_unsettledOrder_query(Authorization=login_loken, account='',parentId='a0b1', userName='')
+    # data = bg.credit_unsettledOrder(inData={"account": "", "parentId":"", "userName":"a0b1b2b3a3"})
+    # data = bg.credit_winLose_simple(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
+    # data = bg.credit_winLose_detail(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
+    # data = bg.credit_sportReport(inData={"begin":"-7", "end":"-1", "sportName":"乒乓球","queryDateType":3 },queryType='order')
+    # data = bg.credit_multitermReport(inData={"begin":"-7", "end":"-1", "sportName":'',"searchAccount":'', "queryDateType":3 })[0]
+    # data = bg.credit_cancelledOrder(inData={"begin": "-7", "end": "-1", "account": ''})
+    # data = bg.credit_bill(inData={"begin": "-0", "end": "-0"},query_type=2)
+    # print(data)
     # rdata_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=1)   # 总台-报表管理-数据源对账报表
     # daily_report = bg.credit_dailyReport(Authorization=login_loken, create_time=(-6,0), queryType=2)           # 总台-报表管理-每日盈亏
     # daily_report = bg.credit_terminalReport_query(Authorization=login_loken,create_time=(-6, 0), terminal='', queryType=2)       # 总台-报表管理-客户端盈亏
@@ -3376,5 +3984,5 @@ if __name__ == "__main__":
     # print(AgentLine)
 
 
-    token = bg.get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
-    print(token)
+    # token = bg.get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
+    # print(token)

@@ -22,51 +22,51 @@ mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']
 mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
 
 
-@allure.story('数据源对账报表-列表详情')
-class Test_Report01(object):
-
-    ya = Yaml_data()
-    cm = CommonFunc()
-    yam_data = ya.get_yaml_data(fileDir='../credit_data/dataSourceReport.yaml', isAll=False)
-    # yam_data = [({'userName': '', 'orderNo': '', 'sportId': ['sr:sport:1', 'sr:sport:2'], 'settlementResult': [], 'status': [], 'betType': '', 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': '', 'title': '管理后台-总台-数据源对账报表-总计,默认查询近1个月数据'}, {'userName': '', 'orderNo': '', 'sportId': ['sr:sport:1', 'sr:sport:2'], 'settlementResult': [], 'status': [], 'betType': '', 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': ''}), ({'userName': '', 'orderNo': '', 'sportId': [], 'settlementResult': [], 'status': [], 'betType': '', 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': '', 'title': '管理后台-总台-数据源对账报表-总计,默认查询近2个月数据'}, {'userName': '', 'orderNo': '', 'sportId': [], 'settlementResult': [], 'status': [], 'betType': '', 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': ''})]
-    # yam_data = [({'userName': '', 'orderNo': '', 'sportId': ['sr:sport:1', 'sr:sport:2'], 'settlementResult': [], 'status': [], 'betType': [], 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': '', 'title': '管理后台-总台-数据源对账报表-总计,默认查询近1个月数据'}, {'userName': '', 'orderNo': '', 'sportId': ['sr:sport:1', 'sr:sport:2'], 'settlementResult': [], 'status': [], 'betType': [], 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': ''}), ({'userName': '', 'orderNo': '', 'sportId': [], 'settlementResult': [], 'status': [], 'betType': [], 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': '', 'title': '管理后台-总台-数据源对账报表-总计,默认查询近2个月数据'}, {'userName': '', 'orderNo': '', 'sportId': [], 'settlementResult': [], 'status': [], 'betType': [], 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': ''})]
-    url_data = ya.get_yaml_data(fileDir='../credit_data/dataSourceReport.yaml', isAll=True)
-    # @pytest.mark.skip(reason="不执行该用例！！因为没写好！！")
-    @pytest.mark.parametrize('inBody, expData', yam_data)
-
-    def test_dataSourceReport(self, inBody, expData, url=url_data):
-        '''
-        信用网总台-数据源对账报表  列表
-        :param inBody:
-        :param expData:
-        :return:
-        '''
-        allure.dynamic.title(inBody['title'])
-
-        actualResult = CreditBackGround(mysql_info,mongo_info).credit_dataSourceReport(inData=inBody,queryType=1)
-        with allure.step(f"执行测试用例:{inBody['title']}"):
-            Bf_log('dataSourceReport').info(f"----------------开始执行:{inBody['title']}------------------------")
-        url = url[0]['mde_ip'] + url[0]['url_detail']
-        with allure.step(f"请求地址 {url}"):
-            Bf_log('dataSourceReport').info(f'请求地址为:{url}')
-
-        sql = MysqlQuery(mysql_info, mongo_info).credit_dataSourceReport(expData=expData, queryType=1)[1]
-        with allure.step(f'查询SQL:{sql}'):
-            Bf_log('dataSourceReport').info(f'执行sql:{sql}')
-        expectResult = MysqlQuery(mysql_info, mongo_info).credit_dataSourceReport(expData=expData, queryType=1)[0]
-
-        if actualResult:
-            for index1, item1 in enumerate(actualResult):
-                for index2, item2 in enumerate(expectResult):
-                    if list(item1)[0] == list(item2)[0]:  # 判断日期是否相等,若相等,则校验该条数据
-                        if item1:
-                            self.cm.check_live_bet_report_new(actualResult, expectResult)
-                            with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试通过'):
-                                Bf_log('test').info(f'实际结果:{item1}, 期望结果：{item2},==》测试通过')
-                        else:
-                            if item1 != item2:
-                                with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
-                                    Bf_log('test').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
+# @allure.story('数据源对账报表-列表详情')
+# class Test_Report01(object):
+#
+#     ya = Yaml_data()
+#     cm = CommonFunc()
+#     yam_data = ya.get_yaml_data(fileDir='../credit_data/dataSourceReport.yaml', isAll=False)
+#     # yam_data = [({'userName': '', 'orderNo': '', 'sportId': ['sr:sport:1', 'sr:sport:2'], 'settlementResult': [], 'status': [], 'betType': '', 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': '', 'title': '管理后台-总台-数据源对账报表-总计,默认查询近1个月数据'}, {'userName': '', 'orderNo': '', 'sportId': ['sr:sport:1', 'sr:sport:2'], 'settlementResult': [], 'status': [], 'betType': '', 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': ''}), ({'userName': '', 'orderNo': '', 'sportId': [], 'settlementResult': [], 'status': [], 'betType': '', 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': '', 'title': '管理后台-总台-数据源对账报表-总计,默认查询近2个月数据'}, {'userName': '', 'orderNo': '', 'sportId': [], 'settlementResult': [], 'status': [], 'betType': '', 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': ''})]
+#     # yam_data = [({'userName': '', 'orderNo': '', 'sportId': ['sr:sport:1', 'sr:sport:2'], 'settlementResult': [], 'status': [], 'betType': [], 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': '', 'title': '管理后台-总台-数据源对账报表-总计,默认查询近1个月数据'}, {'userName': '', 'orderNo': '', 'sportId': ['sr:sport:1', 'sr:sport:2'], 'settlementResult': [], 'status': [], 'betType': [], 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': ''}), ({'userName': '', 'orderNo': '', 'sportId': [], 'settlementResult': [], 'status': [], 'betType': [], 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': '', 'title': '管理后台-总台-数据源对账报表-总计,默认查询近2个月数据'}, {'userName': '', 'orderNo': '', 'sportId': [], 'settlementResult': [], 'status': [], 'betType': [], 'betStartTime': '-30', 'betEndTime': '0', 'settlementStartTime': '-30', 'settlementEndTime': '0', 'sortBy': '', 'sortIndex': '', 'sortParameter': ''})]
+#     url_data = ya.get_yaml_data(fileDir='../credit_data/dataSourceReport.yaml', isAll=True)
+#     # @pytest.mark.skip(reason="不执行该用例！！因为没写好！！")
+#     @pytest.mark.parametrize('inBody, expData', yam_data)
+#
+#     def test_dataSourceReport(self, inBody, expData, url=url_data):
+#         '''
+#         信用网总台-数据源对账报表  列表
+#         :param inBody:
+#         :param expData:
+#         :return:
+#         '''
+#         allure.dynamic.title(inBody['title'])
+#
+#         actualResult = CreditBackGround(mysql_info,mongo_info).credit_dataSourceReport(inData=inBody,queryType=1)
+#         with allure.step(f"执行测试用例:{inBody['title']}"):
+#             Bf_log('dataSourceReport').info(f"----------------开始执行:{inBody['title']}------------------------")
+#         url = url[0]['mde_ip'] + url[0]['url_detail']
+#         with allure.step(f"请求地址 {url}"):
+#             Bf_log('dataSourceReport').info(f'请求地址为:{url}')
+#
+#         sql = MysqlQuery(mysql_info, mongo_info).credit_dataSourceReport(expData=expData, queryType=1)[1]
+#         with allure.step(f'查询SQL:{sql}'):
+#             Bf_log('dataSourceReport').info(f'执行sql:{sql}')
+#         expectResult = MysqlQuery(mysql_info, mongo_info).credit_dataSourceReport(expData=expData, queryType=1)[0]
+#
+#         if actualResult:
+#             for index1, item1 in enumerate(actualResult):
+#                 for index2, item2 in enumerate(expectResult):
+#                     if list(item1)[0] == list(item2)[0]:  # 判断日期是否相等,若相等,则校验该条数据
+#                         if item1:
+#                             self.cm.check_live_bet_report_new(actualResult, expectResult)
+#                             with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试通过'):
+#                                 Bf_log('test').info(f'实际结果:{item1}, 期望结果：{item2},==》测试通过')
+#                         else:
+#                             if item1 != item2:
+#                                 with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
+#                                     Bf_log('test').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
 
         # if len(actualResult) == len(expectResult):
         #     if actualResult != [] or expectResult != []:
@@ -263,62 +263,62 @@ class Test_Report01(object):
 #                                 Bf_log('test').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
 
 
-# @allure.story('客户端盈亏报表-列表详情')
-# class Test_Report06(object):
-#
-#     ya = Yaml_data()
-#     cm = CommonFunc()
-#     yam_data = ya.get_yaml_data(fileDir='../credit_data/terminalReport.yaml', isAll=False)
-#     url_data = ya.get_yaml_data(fileDir='../credit_data/terminalReport.yaml', isAll=True)
-#     # @pytest.mark.skip(reason="不执行该用例！！因为已经执行通过！！")
-#     @pytest.mark.parametrize('inBody, expData', yam_data)
-#
-#     def test_terminalReport(self, inBody, expData, url=url_data):
-#         '''
-#         管理后台-客户端盈亏报表  主界面详情
-#         :param inBody:
-#         :param expData:
-#         :return:
-#         '''
-#         allure.dynamic.title(inBody['title'])
-#
-#         actualResult = CreditBackGround(mysql_info,mongo_info).credit_terminalReport(inData=inBody,queryType=1)
-#         with allure.step(f"执行测试用例:{inBody['title']}"):
-#             Bf_log('terminalReport').info(f"----------------开始执行:{inBody['title']}------------------------")
-#         url = url[0]['mde_ip'] + url[0]['url']
-#         with allure.step(f"请求地址 {url}"):
-#             Bf_log('terminalReport').info(f'请求地址为:{url}')
-#
-#         sql = MysqlQuery(mysql_info, mongo_info).credit_terminalReport_query(expData=expData, queryType=1)[1]
-#         with allure.step(f'查询SQL:{sql}'):
-#             Bf_log('terminalReport').info(f'执行sql:{sql}')
-#         expectResult = MysqlQuery(mysql_info, mongo_info).credit_terminalReport_query(expData=expData, queryType=1)[0]
-#
-#         try:
-#             if actualResult:
-#                 for index1, item1 in enumerate(actualResult):
-#                     for index2, item2 in enumerate(expectResult):
-#                         if list(item1)[0] == list(item2)[0]:  # 判断客户端是否相等,若相等,则校验该条数据
-#                             if item1:
-#                                 self.cm.check_live_bet_report_new(actualResult, expectResult)
-#                                 with allure.step(f'实际结果：{item1},不是 期望结果：{item2},==》测试通过'):
-#                                     Bf_log('test').info(f'实际结果:{item1}, 期望结果：{item2},==》测试通过')
-#                             else:
-#                                 with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
-#                                     Bf_log('test').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
-#         except Exception as e:
-#             print(e)
-#             print(11111111111111111111111111)
-#             if actualResult:
-#                 for index1, item1 in enumerate(actualResult):
-#                     for index2, item2 in enumerate(expectResult):
-#                         if item1:
-#                             self.cm.check_live_bet_report_new(actualResult, expectResult)
-#                             with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试通过'):
-#                                 Bf_log('test').info(f'实际结果:{item1}, 期望结果：{item2},==》测试通过')
-#                         else:
-#                             with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
-#                                 Bf_log('test').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
+@allure.story('客户端盈亏报表-列表详情')
+class Test_Report06(object):
+
+    ya = Yaml_data()
+    cm = CommonFunc()
+    yam_data = ya.get_yaml_data(fileDir='../credit_data/terminalReport.yaml', isAll=False)
+    url_data = ya.get_yaml_data(fileDir='../credit_data/terminalReport.yaml', isAll=True)
+    # @pytest.mark.skip(reason="不执行该用例！！因为已经执行通过！！")
+    @pytest.mark.parametrize('inBody, expData', yam_data)
+
+    def test_terminalReport(self, inBody, expData, url=url_data):
+        '''
+        管理后台-客户端盈亏报表  主界面详情
+        :param inBody:
+        :param expData:
+        :return:
+        '''
+        allure.dynamic.title(inBody['title'])
+
+        actualResult = CreditBackGround(mysql_info,mongo_info).credit_terminalReport(inData=inBody,queryType=1)
+        with allure.step(f"执行测试用例:{inBody['title']}"):
+            Bf_log('terminalReport').info(f"----------------开始执行:{inBody['title']}------------------------")
+        url = url[0]['mde_ip'] + url[0]['url']
+        with allure.step(f"请求地址 {url}"):
+            Bf_log('terminalReport').info(f'请求地址为:{url}')
+
+        sql = MysqlQuery(mysql_info, mongo_info).credit_terminalReport_query(expData=expData, queryType=1)[1]
+        with allure.step(f'查询SQL:{sql}'):
+            Bf_log('terminalReport').info(f'执行sql:{sql}')
+        expectResult = MysqlQuery(mysql_info, mongo_info).credit_terminalReport_query(expData=expData, queryType=1)[0]
+
+        try:
+            if actualResult:
+                for index1, item1 in enumerate(actualResult):
+                    for index2, item2 in enumerate(expectResult):
+                        if list(item1)[0] == list(item2)[0]:  # 判断客户端是否相等,若相等,则校验该条数据
+                            if item1:
+                                self.cm.check_live_bet_report_new(actualResult, expectResult)
+                                with allure.step(f'实际结果：{item1},不是 期望结果：{item2},==》测试通过'):
+                                    Bf_log('test').info(f'实际结果:{item1}, 期望结果：{item2},==》测试通过')
+                            else:
+                                with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
+                                    Bf_log('test').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
+        except Exception as e:
+            print(e)
+            print(11111111111111111111111111)
+            if actualResult:
+                for index1, item1 in enumerate(actualResult):
+                    for index2, item2 in enumerate(expectResult):
+                        if item1:
+                            self.cm.check_live_bet_report_new(actualResult, expectResult)
+                            with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试通过'):
+                                Bf_log('test').info(f'实际结果:{item1}, 期望结果：{item2},==》测试通过')
+                        else:
+                            with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
+                                Bf_log('test').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
 
 
 # @allure.story('客户端盈亏报表-总计')

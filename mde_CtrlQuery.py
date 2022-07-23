@@ -175,13 +175,18 @@ class CtrlIoDocs(object):
 class BetController(object):
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
 
-    def __init__(self, mysql_info, mongo_info, *args):
+    def __init__(self, mysql_info, mongo_info, environment='mde',  *args):
         """
         模拟ctrl给我司推送数据
         """
         self.ya = Yaml_data()
         result = self.ya.get_yaml_data(fileDir='D:\project\BfLibrary\config\config.yaml', isAll=True)
-        self.bc_host = f"{result[0]['environment']}"
+        if environment == 'mde':
+            self.bc_host = f"{result[1]['mock_config_mde']['mock_url']}"
+        elif environment == "120":
+            self.bc_host = f"{result[1]['mock_config_120']['mock_url']}"
+        else:
+            raise AssertionError('ERROR,暂不支持该环境')
         self.session = requests.session()
         self.dbq = DbQuery(mongo_info)
         # self.ctrl_docs = CtrlIoDocs(mysql_info, mongo_info)
@@ -1193,18 +1198,18 @@ class BetController(object):
 
         return sort_num[0][0]
 
-    def send_message_to_datasourse(self, username='', order_no="", certainty='2', result=None):
+    def send_message_to_datasourse(self, login_account='', order_no="", certainty='2', result=None):
         """
         注单结算                         // 修改于2022.05.28
-        :param username:
+        :param login_account:
         :param order_no:
         :param sort:  单注/串关
         :param certainty:  1|3
         :param result:  输|赢|赢一半|输一半|走盘
         :return:
         """
-        if username:
-            orderList = self.mysql.get_unsettled_order(user_name=username)
+        if login_account:
+            orderList = self.mysql.get_unsettled_order(user_name=login_account)
             order_num = len(orderList)
             loop = 1
             for order in orderList:
@@ -1260,12 +1265,12 @@ if __name__ == "__main__":
     result = ya.get_yaml_data(fileDir='D:\project\BfLibrary\config\config.yaml', isAll=True)
     mysql_info = []          #读取yaml文件,获取mysql和MongoDB配置
     mongo_info = []
-    if result[0]['environment'] == "http://35.234.4.41:31101/mock/message":
+    if result[0]['environment'] == "mde":
         mysql_dic = result[1]['mysql_mde']
         mysql_info.extend([mysql_dic['host'],mysql_dic['user'],mysql_dic['password'],mysql_dic['port']])
         mongo_dic = result[1]['mongodb_mde']
         mongo_info.extend([mongo_dic['user'],mongo_dic['password'],mongo_dic['host'],mongo_dic['port']])
-    elif result[0]['environment'] == "http://192.168.10.10:8808/mock/message":
+    elif result[0]['environment'] == "120":
         mysql_dic = result[1]['mysql_config']
         mysql_info.extend([mysql_dic['host'],mysql_dic['user'],mysql_dic['password'],mysql_dic['port']])
         mongo_dic = result[1]['mongodb_config']
@@ -1304,7 +1309,7 @@ if __name__ == "__main__":
 
     # settlement_by_orderNo = bc.generate_settlement_str_by_orderNo(order_no='XCMMRnQ7dJVK', sort=0, certainty='2', result=None)       #根据注单号进行生成结算指令
     # print(settlement_by_orderNo)
-    send = bc.send_message_to_datasourse(username='',order_no='XHD4b5fwK42g', certainty='2', result='取消')        # 生成结算指令+注单结算
+    send = bc.send_message_to_datasourse(login_account='',order_no='XMhmeV9dnBWw', certainty='2', result='取消')        # 生成结算指令+注单结算
 
     # data = bc.generate_rollback_bet_cancel_str(match_id='31975607',start_stamp="1641713763000", end_stamp="1649489763000")      # 取消回滚指令
     # print(data)

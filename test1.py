@@ -424,10 +424,10 @@ if actualResult != [] or expectResult != []:
                     else:
                         sql_result = float(sql_data)
                     new_item2.append(sql_result)
-                if new_item1 == new_item2:
-                    print('测试通过')
-                else:
-                    print('测试不通过')
+                # if new_item1 == new_item2:
+                #     print('测试通过')
+                # else:
+                #     print('测试不通过')
 else:
     print(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过')
 
@@ -470,17 +470,367 @@ tuple_to_list(tuple_in=a_list)
 
 
 b = [list(item) for item in a_list]
-print(b)
+# print(b)
+
+new_list = []
+ne_lisr = ['sr:sport:1', ['542'], ['23'], ['1'], ['16'], ['26'], ['19'], ['5'], ['12'], ['13'], ['24'], ['547'], ['2'], ['8'], ['18'], ['30'], ['29'], ['75'], ['20'], ['69'], ['70'], ['47'], ['15'], ['10'], ['63'], ['11'], ['64'], ['76'], ['31'], ['32'], ['77'], ['33'], ['34'], ['37'], ['79'], ['35'], ['78'], ['36'], ['52'], ['53'], ['54'], ['58'], ['59'], ['56'], ['57'], ['546'], ['48'], ['49'], ['50'], ['51'], ['220'], ['122'], ['9'], ['45'], ['25'], ['27'], ['28'], ['60'], ['66'], ['68'], ['81'], ['71'], ['74'], ['182'], ['181'], ['175'], ['串关']]
+for item in ne_lisr[1:]:
+    new_list.extend(item)
+new_list.insert(0,ne_lisr[0])
+# print(new_list)
 
 
 
 
+# matchId_list = ['sr:match:34212641', 'sr:match:34037479', 'sr:match:34355629', 'sr:match:34037477', 'sr:match:34380737', 'sr:match:34380739', 'sr:match:32956409', '串关']
+# for item in matchId_list:
+#     print(item)
 
 
+empty_check = [' ', ' ', ' ', '10.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']
+# empty_check = ['', '', '', '10.0000', '', '', '', '', '', '', '', '', '', '']
+list111 = ['乒乓球', datetime.datetime(2022, 6, 8, 5, 45), '滚球国际TT Cup Hiiemae, Andrus vs Perv, Indrek', 0, 0, 0, '10.0000', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+# empty_check = ['1000', '', '', '5']
+for item in range(len(empty_check)):
+    if empty_check[item] == " " or empty_check[item] == "":
+        empty_check[item] = 0
+# print(empty_check)
+list111[1] = 2
+# print(list111)
 
 
+list_data = [['乒乓球', datetime.datetime(2022, 6, 8, 5, 45), '滚球国际TT Cup Hiiemae, Andrus vs Perv, Indrek', ' ', ' ', ' ', '10.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+             ['乒乓球', datetime.datetime(2022, 6, 8, 6, 0), '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', ' ', ' ', ' ', '24.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+             ['乒乓球', datetime.datetime(2022, 6, 8, 6, 0), '滚球国际TT Cup 马克西姆丘克, 伊戈尔 vs 阿赫拉莫夫, 塞尔吉', ' ', ' ', '14.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+             ['乒乓球', datetime.datetime(2022, 6, 8, 6, 0), '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', ' ', ' ', '13.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+             ['乒乓球', datetime.datetime(2022, 6, 8, 6, 0), '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', ' ', ' ', ' ', ' ', ' ', ' ', '13.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]
+for item in list_data:
+    matchTime = item[1]
+    match_time = matchTime.strftime("%Y-%m-%d %H:%M:%S")
+    for n in range(len(item)):
+        item[1] = match_time
+        if item[n] == " " or item[n] == "":
+            item[n] = 0
+
+match_info_list = []
+for index1, item in enumerate(list_data):
+    new_data_list = []
+    for j in item[3:]:
+        if j == None:
+            j = 0
+        else:
+            j = float(j)
+        new_data_list.append(j)
+    new_data_list.insert(0, item[0])
+    new_data_list.insert(1, item[1])
+    new_data_list.insert(2, item[2])
+    match_info_list.append(new_data_list)
+# print(match_info_list)
+
+match_data_list = []
+sport_info = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+for item in match_info_list:
+    # print(item[2])
+    if item[2] not in match_data_list:
+        match_data_list.append(item[3:])
+# print(match_data_list)
+
+# for item in match_info_list:
+#     for index in range(len(item[3:])):
+#         if item[index] == item[index]:
+#             number = item[index]
+#             sport_info[index] += number
 
 
+# data_match = [['乒乓球', '2022-06-08 05:45:00', '滚球国际TT Cup Hiiemae, Andrus vs Perv, Indrek', 0.0, 0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+#               ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', 0.0, 0.0, 0.0, 24.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+#               ['乒乓球', '2022-06-08 06:00:00', '滚球国际TT Cup 马克西姆丘克, 伊戈尔 vs 阿赫拉莫夫, 塞尔吉', 0.0, 0.0, 14.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+#               ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', 0.0, 0.0, 13.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+#               ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 13.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
+
+list_num = [[555.0, 555.0, 9.66, -545.34], [2420.0, 2410.0, 5.51, -1090.49],
+ [1270.0, 1205.0, 12.99, 19.24]]
+
+sum_list = [0, 0, 0, 0]
+for item in list_num:
+    for index in range(len(item)):
+        # print(item[index])
+        sum_list[index] += item[index]
+# print(sum_list)
 
 
+sport_info = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+# data_match = [['乒乓球', '2022-06-08 05:45:00', '滚球国际TT Cup Hiiemae, Andrus vs Perv, Indrek', 0.0, 0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+#               ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', 0.0, 0.0, 0.0, 24.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+#               ['乒乓球', '2022-06-08 06:00:00', '滚球国际TT Cup 马克西姆丘克, 伊戈尔 vs 阿赫拉莫夫, 塞尔吉', 0.0, 0.0, 14.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+#               ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', 0.0, 0.0, 13.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+#               ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 13.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
+# match_data_list = []
+# new_list = []
+# index_data = [0,1,2]
+# count_i = 0
+# count_j = 1
+# count = 0
+# for index1 in range(len(data_match)):
+#     if index1 == count_i:
+#         match_data_list = []
+#         new_list.append(data_match[index1])
+#         # print(new_list)
+#         for index2 in range(len(data_match)):
+#             if index2 == count_j:
+#                 print(1111111111111111111111)
+#                 if data_match[index1][2] == data_match[index2][2]:
+#                     # index1[3:] += index2[3:]
+#                     match_data_list.append(data_match[index1])
+#                     # match_data_list.insert(0,data_match[index1][:2])
+#                     print(match_data_list)
+#                     count_i = count_i + 1
+#                     count_j = count_j + 1
+#                 else:
+#                     match_data_list.append(data_match[index1])
+#                     count_i = count_i + 1
+#                     count_j = count_j + 1
+#                     count=count+1
+#                     break
 
+# data_match = [['乒乓球', '2022-06-08 05:45:00', '滚球国际TT Cup Hiiemae, Andrus vs Perv, Indrek', 0.0, 0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+#               ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', 0.0, 0.0, 0.0, 24.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+#               ['乒乓球', '2022-06-08 06:00:00', '滚球国际TT Cup 马克西姆丘克, 伊戈尔 vs 阿赫拉莫夫, 塞尔吉', 0.0, 0.0, 14.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+#               ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', 0.0, 0.0, 13.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+#               ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 13.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]
+# data_new_match=[]
+# match_info = []
+# for item in match_info_list:
+#     if item[2] in match_info:
+#         index_num = match_info.index(item[2])
+#         print(index_num)
+#         for k in range(3, len(item)):
+#             number = item[k] + data_new_match[index_num][k]
+#             data_new_match[index_num][k] = number
+#     else:
+#         match_info.append(item[2])
+#         print(match_info)
+#         data_new_match.append(item)
+
+# print(data_new_match)
+
+
+# index = 0
+# for item in [6,7,7,7]:
+#     test_list.insert(index, item)
+#     index += 1
+# print(test_list)
+test_list=[1,2,3,4,5]
+test_list = test_list[:2] + [6,7,7,7] + test_list[2:]
+# print(test_list)
+
+
+# new_data_list = []
+# for item in data_match:
+#     new_data_list.append([item[0],item[1],item[2],item[3:]])
+# # print('----------------------------')
+# # print(new_data_list)
+# # print('----------------------------\n')
+# orderNo_list=[]
+# new_list=[]
+# count_i = 0
+# count_j = 1
+# count=0
+# new_data_list = [['乒乓球', '2022-06-08 05:45:00', '滚球国际TT Cup Hiiemae, Andrus vs Perv, Indrek', [0.0, 0.0, 0.0, 10.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', [0.0, 0.0, 0.0, 24.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], ['乒乓球', '2022-06-08 06:00:00', '滚球国际TT Cup 马克西姆丘克, 伊戈尔 vs 阿赫拉莫夫, 塞尔吉', [0.0, 0.0, 14.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', [0.0, 0.0, 13.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], ['乒乓球', '2022-06-08 06:00:00', '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 13.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]]
+# for i in range(0, len(new_data_list)):
+#     if i==count_i:
+#         orderNo_list = []
+#         new_list.append(new_data_list[i])
+#         for j in range(count_j, len(new_data_list)):
+#             if j == count_j:
+#                 if new_data_list[i][2]==new_data_list[j][2]:
+#                     orderNo_list.append(new_data_list[i][3])
+#                     orderNo_list.append(new_data_list[j][3])
+#                     count_j = count_j + 1
+#                     count_i = count_i + 1
+#                     if j==len(new_data_list) - 1:
+#                         new_list[-1][3] = orderNo_list
+#                     else:
+#                         for k in range(count_j,len(new_data_list)):
+#                             if new_data_list[i][2] == new_data_list[k][2]:
+#                                 orderNo_list.append(new_data_list[k][3])
+#                                 if k == len(new_data_list) - 1:
+#                                     count = count + 1
+#                                     count_j = count_j + 1
+#                                     count_i = count_i + 2
+#                                     new_list[-1][3] = orderNo_list
+#                                 else:
+#                                     count_j = count_j + 1
+#                                     count_i = count_i + 1
+#                             else:
+#                                 new_list[-1][3]=orderNo_list
+#                                 count_j = count_j + 1
+#                                 count_i = count_i + 1
+#                                 count = count + 1
+#                                 break
+#                 else:
+#                     count_i = count_i + 1
+#                     count_j = count_j + 1
+#                     count=count+1
+#                     break
+#             else:
+#                 break
+#     else:
+#         continue
+# print(new_list)
+
+
+new_lList = [['t0t1t2t3z4/z4', 'awen2', 'XJKqP3Wgt9Dj', '2022-07-05 04:06:41', '足球', '复式串关', [['阿根廷足球甲级联赛', '罗沙里奧中央 Vs 萨尔门托', '早盘', '大/小', 'total=2.25', '大2/2.5', 1.93, '欧洲盘', '2022-07-08 19:00:00'], ['爱尔兰甲级联赛', '亚隆城 Vs 布雷', '早盘', '让球', 'hcp=0.5', '亚隆城 ', 1.8, '欧洲盘', '2022-07-08 14:45:00'], ['爱尔兰甲级联赛', '戈尔韦联 Vs Cobh Ramblers', '早盘', '大/小', 'total=3', '大3', 1.94, '欧洲盘', '2022-07-08 14:45:00']], '2022-07-08 20:57:15', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 90.0, -90.0, 90.0, 0.3, 27.0, 0, 0.0, 27.0, 0.2, 18.0, 0.0, 0.0, 18.0, 0.2, 18.0, 0.0, 0.0, 18.0, 0.2, 18.0, 0.0, 0.0, 18.0, 0.1, 9.0, 0.0, 0.0, 9.0, -90.0, 0.0, 0.0, -90.0], ['t0t1t2t3z4/z4', 'awen2', 'XJKqP3Wgt9Dj', '2022-07-05 04:06:41', '足球', '复式串关', ['爱尔兰甲级联赛', '亚隆城 Vs 布雷', '早盘', '让球', 'hcp=0.5', '亚隆城 ', 1.8, '欧洲盘', '2022-07-08 14:45:00'], '2022-07-08 20:57:15', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 90.0, -90.0, 90.0, 0.3, 27.0, 0, 0.0, 27.0, 0.2, 18.0, 0.0, 0.0, 18.0, 0.2, 18.0, 0.0, 0.0, 18.0, 0.2, 18.0, 0.0, 0.0, 18.0, 0.1, 9.0, 0.0, 0.0, 9.0, -90.0, 0.0, 0.0, -90.0], ['t0t1t2t3z4/z4', 'awen2', 'XJKqP3Wgt9Dj', '2022-07-05 04:06:41', '足球', '复式串关', ['爱尔兰甲级联赛', '戈尔韦联 Vs Cobh Ramblers', '早盘', '大/小', 'total=3', '大3', 1.94, '欧洲盘', '2022-07-08 14:45:00'], '2022-07-08 20:57:15', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 90.0, -90.0, 90.0, 0.3, 27.0, 0, 0.0, 27.0, 0.2, 18.0, 0.0, 0.0, 18.0, 0.2, 18.0, 0.0, 0.0, 18.0, 0.2, 18.0, 0.0, 0.0, 18.0, 0.1, 9.0, 0.0, 0.0, 9.0, -90.0, 0.0, 0.0, -90.0], ['t0t1t2t3z4/z4', 'awen2', 'XJKqMrDCwqZA', '2022-07-05 04:06:36', '足球', '串关', [['阿根廷足球甲级联赛', '罗沙里奧中央 Vs 萨尔门托', '早盘', '大/小', 'total=2.25', '大2/2.5', 1.93, '欧洲盘', '2022-07-08 19:00:00'], ['爱尔兰甲级联赛', '亚隆城 Vs 布雷', '早盘', '让球', 'hcp=0.5', '亚隆城 ', 1.8, '欧洲盘', '2022-07-08 14:45:00'], ['爱尔兰甲级联赛', '戈尔韦联 Vs Cobh Ramblers', '早盘', '大/小', 'total=3', '大3', 1.94, '欧洲盘', '2022-07-08 14:45:00']], '2022-07-08 20:57:15', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 30.0, -30.0, 30.0, 0.3, 9.0, 0, 0.0, 9.0, 0.2, 6.0, 0.0, 0.0, 6.0, 0.2, 6.0, 0.0, 0.0, 6.0, 0.2, 6.0, 0.0, 0.0, 6.0, 0.1, 3.0, 0.0, 0.0, 3.0, -30.0, 0.0, 0.0, -30.0], ['t0t1t2t3z4/z4', 'awen2', 'XJKqMrDCwqZA', '2022-07-05 04:06:36', '足球', '串关', ['爱尔兰甲级联赛', '亚隆城 Vs 布雷', '早盘', '让球', 'hcp=0.5', '亚隆城 ', 1.8, '欧洲盘', '2022-07-08 14:45:00'], '2022-07-08 20:57:15', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 30.0, -30.0, 30.0, 0.3, 9.0, 0, 0.0, 9.0, 0.2, 6.0, 0.0, 0.0, 6.0, 0.2, 6.0, 0.0, 0.0, 6.0, 0.2, 6.0, 0.0, 0.0, 6.0, 0.1, 3.0, 0.0, 0.0, 3.0, -30.0, 0.0, 0.0, -30.0], ['t0t1t2t3z4/z4', 'awen2', 'XJKqMrDCwqZA', '2022-07-05 04:06:36', '足球', '串关', ['爱尔兰甲级联赛', '戈尔韦联 Vs Cobh Ramblers', '早盘', '大/小', 'total=3', '大3', 1.94, '欧洲盘', '2022-07-08 14:45:00'], '2022-07-08 20:57:15', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 30.0, -30.0, 30.0, 0.3, 9.0, 0, 0.0, 9.0, 0.2, 6.0, 0.0, 0.0, 6.0, 0.2, 6.0, 0.0, 0.0, 6.0, 0.2, 6.0, 0.0, 0.0, 6.0, 0.1, 3.0, 0.0, 0.0, 3.0, -30.0, 0.0, 0.0, -30.0], ['t0t1t2t3z4/z4', 'awen2', 'XJKqFVnQFNqS', '2022-07-05 04:06:19', '足球', '串关', [['阿根廷足球甲级联赛', '罗沙里奧中央 Vs 萨尔门托', '早盘', '大/小', 'total=2.25', '大2/2.5', 1.93, '欧洲盘', '2022-07-08 19:00:00'], ['爱尔兰甲级联赛', '亚隆城 Vs 布雷', '早盘', '让球', 'hcp=0.5', '亚隆城 ', 1.8, '欧洲盘', '2022-07-08 14:45:00']], '2022-07-08 20:57:15', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 40.0, -40.0, 40.0, 0.3, 12.0, 0, 0.0, 12.0, 0.2, 8.0, 0.0, 0.0, 8.0, 0.2, 8.0, 0.0, 0.0, 8.0, 0.2, 8.0, 0.0, 0.0, 8.0, 0.1, 4.0, 0.0, 0.0, 4.0, -40.0, 0.0, 0.0, -40.0], ['t0t1t2t3z4/z4', 'awen2', 'XJKqFVnQFNqS', '2022-07-05 04:06:19', '足球', '串关', ['爱尔兰甲级联赛', '亚隆城 Vs 布雷', '早盘', '让球', 'hcp=0.5', '亚隆城 ', 1.8, '欧洲盘', '2022-07-08 14:45:00'], '2022-07-08 20:57:15', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 40.0, -40.0, 40.0, 0.3, 12.0, 0, 0.0, 12.0, 0.2, 8.0, 0.0, 0.0, 8.0, 0.2, 8.0, 0.0, 0.0, 8.0, 0.2, 8.0, 0.0, 0.0, 8.0, 0.1, 4.0, 0.0, 0.0, 4.0, -40.0, 0.0, 0.0, -40.0]]
+actual_list = new_lList
+expect_list = []
+count_i = 0
+count_j = 1
+count = 0
+for i in range(0, len(actual_list)):
+    if i == count_i:
+        orderNo_list = []
+        expect_list.append(actual_list[i])
+        for j in range(count_j, len(actual_list)):
+            if j == count_j:
+                if actual_list[i][2] == actual_list[j][2]:
+                    orderNo_list.append(actual_list[i][6])
+                    orderNo_list.append(actual_list[j][6])
+                    count_j = count_j + 1
+                    count_i = count_i + 1
+                    if j == len(actual_list) - 1:
+                        expect_list[-1][6] = orderNo_list
+                    else:
+                        for k in range(count_j, len(actual_list)):
+                            if actual_list[i][2] == actual_list[k][2]:
+                                orderNo_list.append(actual_list[k][6])  # 区分上一个方法
+                                if k == len(actual_list) - 1:
+                                    count = count + 1
+                                    count_j = count_j + 1
+                                    count_i = count_i + 2  # 区分上一个方法
+                                    expect_list[-1][6] = orderNo_list
+                                else:
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                            else:
+                                expect_list[-1][6] = orderNo_list
+                                count_j = count_j + 1
+                                count_i = count_i + 1
+                                count = count + 1
+                                break
+                else:
+                    count_i = count_i + 1
+                    count_j = count_j + 1
+                    count = count + 1
+                    break
+            else:
+                break
+    else:
+        continue
+# print(expect_list)
+
+
+# data_dic = {"userName":"", "orderNo":"", "sportId":[], "settlementResult":[], "status":[], "betType":"", "betStartTime":"-30", "betEndTime":"0", "settlementStartTime":"-30",
+#             "settlementEndTime":"0", "sortBy":"","sortIndex":"","sortParameter":"","title":""}
+# data_list = [['', '', [], [], [], [], '', '-30', '0', '-30', '0', '', '', '', '管理后台-总台-数据源对账报表-总计,默认查询近1个月数据']]
+# for key, value in data_dic.items():
+#     for item in data_list:
+#         for index in range(len(item)):
+#             print(key, value)
+import re
+
+str_num = "a0/y0"
+str_num1 = "a0/"
+str_num2 = "a0"
+num = str_num.replace('/', '')
+
+# print(str_num.split('/')[0])
+odds_dic = {"1": '欧洲盘', "2": '香港盘'}
+order_list = []
+matchInfo = [{"account":"t0t1t2t3y4/y4","betAmount":80.00,"betIp":"mde.betf.io","betIpAddress":"台湾省彰化县Google云计算数据中心","betMix":"2串1","betResult":"输","betTime":"2022-07-22 04:35:41","betType":"串关","companyCommission":0.00,"companyCommissionRatio":0,"companyPercentage":0.29,"companyTotal":23.20,"companyWinOrLose":23.20,"level0Commission":0.00,"level0CommissionRatio":0.0000,"level0Percentage":0.20,"level0Total":16.00,"level0WinOrLose":16.00,"level1Commission":0.00,"level1CommissionRatio":0.0000,"level1Percentage":0.20,"level1Total":16.00,"level1WinOrLose":16.00,"level2Commission":0.00,"level2CommissionRatio":0.0000,"level2Percentage":0.20,"level2Total":16.00,"level2WinOrLose":16.00,"level3Commission":0.00,"level3CommissionRatio":0.0000,"level3Percentage":0.11,"level3Total":8.80,"level3WinOrLose":8.80,"memberCommission":0.00,"memberCommissionRatio":0.0000,"memberTotal":-80.00,"memberWinOrLose":-80.00,"mixNum":"2_1_0","name":"y4","odds":3.28,"oddsType":"1","options":[{"awayTeamName":"纽卡斯尔北极星","betScore":None,"homeTeamName":"堪培拉勇士","marketName":"让球","matchTime":"2022-07-24 03:00:00","matchType":"早盘","odds":1.990,"oddsType":"1","orderNo":"XMqWr374u44B","outcomeName":"堪培拉勇士 ","specifier":"-2.5","tournamentName":"澳大利亚冰球联盟"},{"awayTeamName":"墨尔本冰","betScore":None,"homeTeamName":"墨尔本野马","marketName":"让球","matchTime":"2022-07-23 03:00:00","matchType":"早盘","odds":1.650,"oddsType":"1","orderNo":"XMqWr374u44B","outcomeName":"墨尔本冰 ","specifier":"+3.5","tournamentName":"澳大利亚冰球联盟"}],"orderNo":"XMqWr374u44B","settlementTime":"2022-07-22 04:36:39","sportId":"sr:sport:4","sportType":"冰球","validAmount":80.00,"winOrLose":-80.00}]
+for item in matchInfo:
+    for detail in item['options']:
+        odds_type = odds_dic[detail['oddsType']]
+        order_list.append(
+            [item['account'], item['name'], item['orderNo'], item['betTime'], item['sportType'], item['betType'],
+             [detail['tournamentName'], detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'], detail['matchType'],
+              detail['marketName'],
+              detail['specifier'], detail['outcomeName'], detail['odds'], odds_type, detail['matchTime']],
+             item['settlementTime'], item['betResult'], item['betIp'] + ' / ' + item['betIpAddress'], item['odds'],
+             item['betAmount'], item['winOrLose'],
+             item['validAmount'], item['companyPercentage'], item['companyWinOrLose'], item['companyCommissionRatio'],
+             item['companyCommission'],
+             item['companyTotal'], item['level0Percentage'], item['level0WinOrLose'], item['level0CommissionRatio'],
+             item['level0Commission'],
+             item['level0Total'], item['level1Percentage'], item['level1WinOrLose'], item['level1CommissionRatio'],
+             item['level1Commission'],
+             item['level1Total'], item['level2Percentage'], item['level2WinOrLose'], item['level2CommissionRatio'],
+             item['level2Commission'],
+             item['level2Total'], item['level3Percentage'], item['level3WinOrLose'], item['level3CommissionRatio'],
+             item['level3Commission'],
+             item['level3Total'], item['memberWinOrLose'], item['memberCommissionRatio'], item['memberCommission'],
+             item['memberTotal']])
+# print(order_list)
+new_lList = [['t0t1t2t3y4/y4', 'y4', 'XMqWr374u44B', '2022-07-22 04:35:41', '冰球', '串关', ['澳大利亚冰球联盟', '堪培拉勇士 Vs 纽卡斯尔北极星', '早盘', '让球', '-2.5', '堪培拉勇士 ', 1.99, '欧洲盘', '2022-07-24 03:00:00'], '2022-07-22 04:36:39', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 3.28, 80.0, -80.0, 80.0, 0.29, 23.2, 0, 0.0, 23.2, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.11, 8.8, 0.0, 0.0, 8.8, -80.0, 0.0, 0.0, -80.0], ['t0t1t2t3y4/y4', 'y4', 'XMqWr374u44B', '2022-07-22 04:35:41', '冰球', '串关', ['澳大利亚冰球联盟', '墨尔本野马 Vs 墨尔本冰', '早盘', '让球', '+3.5', '墨尔本冰 ', 1.65, '欧洲盘', '2022-07-23 03:00:00'], '2022-07-22 04:36:39', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 3.28, 80.0, -80.0, 80.0, 0.29, 23.2, 0, 0.0, 23.2, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.11, 8.8, 0.0, 0.0, 8.8, -80.0, 0.0, 0.0, -80.0]]
+actual_list = new_lList
+expect_list = []
+count_i = 0
+count_j = 1
+count = 0
+for i in range(0, len(actual_list)):
+    if i == count_i:
+        orderNo_list = []
+        expect_list.append(actual_list[i])
+        for j in range(count_j, len(actual_list)):
+            if j == count_j:
+                if actual_list[i][2] == actual_list[j][2]:
+                    orderNo_list.append(actual_list[i][6])
+                    orderNo_list.append(actual_list[j][6])
+                    count_j = count_j + 1
+                    count_i = count_i + 1
+                    if j == len(actual_list) - 1:
+                        expect_list[-1][6] = orderNo_list
+                    else:
+                        for k in range(count_j, len(actual_list)):
+                            if actual_list[i][2] == actual_list[k][2]:
+                                orderNo_list.append(actual_list[k][6])  # 区分上一个方法
+                                if k == len(actual_list) - 1:
+                                    count = count + 1
+                                    count_j = count_j + 1
+                                    count_i = count_i + 2  # 区分上一个方法
+                                    expect_list[-1][6] = orderNo_list
+                                else:
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                            else:
+                                expect_list[-1][6] = orderNo_list
+                                count_j = count_j + 1
+                                count_i = count_i + 1
+                                count = count + 1
+                                break
+                else:
+                    count_i = count_i + 1
+                    count_j = count_j + 1
+                    count = count + 1
+                    break
+            else:
+                break
+    else:
+        continue
+
+if len(expect_list) == 2:
+    if expect_list[0][2] == expect_list[1][2]:
+        expect_list.remove(expect_list[-1])
+    else:
+        expect_list=expect_list
+else:
+    expect_list=expect_list
+# new_list = []
+# for index1, item1 in enumerate(expect_list):
+#     print(item1)
+#     if item1[2] == item1[2]:
+#         print(item1[2])
+#         # new_list.append(item)
+
+print(expect_list)
+
+# matchInfo = [['t0t1t2t3y4/y4', 'y4', 'XMqWr374u44B', '2022-07-22 04:35:41', '冰球', '串关', [['澳大利亚冰球联盟', '堪培拉勇士 Vs 纽卡斯尔北极星', '早盘', '让球', '-2.5', '堪培拉勇士 ', 1.99, '欧洲盘', '2022-07-24 03:00:00'], ['澳大利亚冰球联盟', '墨尔本野马 Vs 墨尔本冰', '早盘', '让球', '+3.5', '墨尔本冰 ', 1.65, '欧洲盘', '2022-07-23 03:00:00']], '2022-07-22 04:36:39', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 3.28, 80.0, -80.0, 80.0, 0.29, 23.2, 0, 0.0, 23.2, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.11, 8.8, 0.0, 0.0, 8.8, -80.0, 0.0, 0.0, -80.0], ['t0t1t2t3y4/y4', 'y4', 'XMqWr374u44B', '2022-07-22 04:35:41', '冰球', '串关', ['澳大利亚冰球联盟', '墨尔本野马 Vs 墨尔本冰', '早盘', '让球', '+3.5', '墨尔本冰 ', 1.65, '欧洲盘', '2022-07-23 03:00:00'], '2022-07-22 04:36:39', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 3.28, 80.0, -80.0, 80.0, 0.29, 23.2, 0, 0.0, 23.2, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.11, 8.8, 0.0, 0.0, 8.8, -80.0, 0.0, 0.0, -80.0]]

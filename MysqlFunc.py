@@ -4705,7 +4705,9 @@ class MysqlQuery(MysqlFunc):
         else:
             order_no = ''
         if resp['sportId']:
-            sport_name = f"and a.sport_id in {resp['sportId']}"
+            sport_list = resp['sportId']
+            sport_tuple = tuple(sport_list)
+            sport_name = f"and a.sport_id in {sport_tuple}"
         else:
             sport_name = ''
         if resp['settlementResult']:
@@ -4736,7 +4738,7 @@ class MysqlQuery(MysqlFunc):
                       f"account_win_or_lose,NULL) as '原始输/赢',if(a.`status`=2,handicap_win_or_lose,NULL) as '盘口输/赢' FROM o_account_order a JOIN u_user b ON a.user_id = b.id " \
                       f"WHERE DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' AND DATE_FORMAT(a.award_time,'%Y-%m-%d') BETWEEN '{set_ctime}' AND '{set_etime}' " \
                       f"{account} {order_no} {sport_name} {result} {status} {bet_type} AND a.`status`>=0 {sort}"
-            # print(sql_str)
+            print(sql_str)
             rtn = list(self.query_data(sql_str, database_name))
 
             dataSourceReport_list = []
@@ -6441,6 +6443,34 @@ class MysqlQuery(MysqlFunc):
             return actual_commission_list, expect_commission_list
 
 
+    def get_account_totalCommission(self,account):
+        '''
+        计算总佣金    // 2022.07.14
+        :param user_name:
+        :param order_no:
+        :param createDate:
+        :param awardDate:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        sql_str = f"SELECT efficient_amount,company_retreat_proportion FROM o_account_order a JOIN m_account b ON a.proxy0_id=b.id WHERE role_id= 0 AND `status`=2 AND award_time is not null AND DATE_FORMAT(award_time,'%Y-%m-%d') BETWEEN date_sub(DATE_FORMAT(CONVERT_TZ(NOW(),'+00:00','-04:00'),'%Y-%m-%d'), interval 7 day) AND date_sub(DATE_FORMAT(CONVERT_TZ(NOW(),'+00:00','-04:00'),'%Y-%m-%d'), interval 1 day) AND account='{account}'"
+        commission_data = list(self.query_data(sql_str, db_name=database_name))
+        new_list = [list(item) for item in commission_data]
+
+        commission_list = []
+        for item in new_list:
+            effeicent_amount = item[0]
+            retreat_proportion = item[1]
+            comission = effeicent_amount * retreat_proportion
+            commission_list.append(comission)
+
+        sum_commission = 0
+        for item in commission_list:
+            sum_commission += float(item)
+
+        totalCommission = self.cf.get_cut_float_length(value=sum_commission, length=2)
+        print(totalCommission)
+
     def get_list_multiply(self, data_list):
         dataList = data_list
         commission_list = []
@@ -6515,7 +6545,7 @@ class MysqlQuery(MysqlFunc):
         :return:
         '''
         database_name = "bfty_credit"
-        sql_str = f"SELECT id,(case when role_id=0 then '总代' when role_id=1 then '一级代理' when role_id=2 then '二级代理' when role_id=3 then '三级代理' end ) '级别' " \
+        sql_str = f"SELECT id,(case when role_id=0 then '登0' when role_id=1 then '登1' when role_id=2 then '登2' when role_id=3 then '登3' end ) '级别' " \
                   f"FROM `m_account` WHERE account = '{account}'"
         rtn = list(self.query_data(sql_str, database_name))
         id = rtn[0][0]
@@ -6630,8 +6660,8 @@ class MysqlQuery(MysqlFunc):
         :return:
         '''
         database_name = "bfty_credit"
-        ctime = self.get_current_time_for_client(time_type='ctime', day_diff=time[0])
-        etime = self.get_current_time_for_client(time_type='ctime', day_diff=time[1])
+        ctime = self.get_current_time_for_client(time_type='ctime', day_diff=int(time[0]))
+        etime = self.get_current_time_for_client(time_type='ctime', day_diff=int(time[1]))
         if queryDateType == 3:
             dateType = "AND DATE_FORMAT(a.award_time,'%Y-%m-%d')"
         elif queryDateType == 2:
@@ -6697,7 +6727,7 @@ class MysqlQuery(MysqlFunc):
 
     def get_match_id_by_sportId_matchReport(self,sport_id, time=(-7,-1), queryDateType=3):
         '''
-        查询总代赛事盈亏-根据球类id获取投注的比赛id
+        查询总代赛事盈亏-根据球类id获取投注的比赛id,包含比赛ID和串关,用于查询注单详情
         :param sport_id:
         :param time:
         :param queryDateType:
@@ -6728,6 +6758,44 @@ class MysqlQuery(MysqlFunc):
         match_id_list = []
         for item in new_list[1:]:
             match_id_list.extend(item)
+
+        return match_id_list
+
+    def get_matchId_by_sportId_matchReport(self,sport_id, time=(-7,-1), queryDateType=3):
+        '''
+        查询总代赛事盈亏-根据球类id获取投注的比赛id,只含比赛ID,用于查询比赛的盘口详情
+        :param sport_id:
+        :param time:
+        :param queryDateType:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        ctime = self.get_current_time_for_client(time_type='ctime', day_diff=time[0])
+        etime = self.get_current_time_for_client(time_type='ctime', day_diff=time[1])
+        if queryDateType == 3:
+            dateType = "AND DATE_FORMAT(a.award_time,'%Y-%m-%d')"
+        elif queryDateType == 2:
+            dateType = "AND DATE_FORMAT(b.match_time,'%Y-%m-%d')"
+        elif queryDateType == 1:
+            dateType = "AND DATE_FORMAT(a.create_time,'%Y-%m-%d')"
+        else:
+            raise AssertionError('暂不支持该类型')
+
+        new_list = []
+        if sport_id:
+            sportId = f"AND a.sport_id='{sport_id}'"
+            sql_str = f"SELECT match_id '赛事ID' FROM o_account_order a LEFT JOIN o_account_order_match b ON a.order_no=b.order_no WHERE `status`=2 AND a.award_time is not NULL " \
+                      f"AND bet_type=1 {dateType} BETWEEN '{ctime}' AND '{etime}' {sportId} GROUP BY match_id UNION SELECT '串关' as '串关' FROM o_account_order a JOIN v_order_match b" \
+                      f" ON a.order_no=b.order_no WHERE `status`=2 AND a.award_time is not NULL AND bet_type!=1 {dateType} BETWEEN '{ctime}' AND '{etime}' {sportId}"
+            rtn = list(self.query_data(sql_str, database_name))
+            new_list = [list(item) for item in rtn]
+            new_list.insert(0, sport_id)
+
+        match_id_list = []
+        for item in new_list[1:]:
+            match_id_list.extend(item)
+        if '串关' in match_id_list:
+            match_id_list.remove('串关')
 
         return match_id_list
 
@@ -7068,19 +7136,488 @@ class MysqlQuery(MysqlFunc):
         else:
             raise AssertionError('暂不支持该类型')
 
+    def credit_unsettledOrder_query(self, expData={}):
+        '''
+        总台-代理报表-总代未完成交易                               /// 修改于2022.07.20
+        :param expData:
+        :return:
+        '''
+        resp = expData
+        if resp['account']:
+            account = f"and a.account={resp['account']}"
+        else:
+            account = ""
+        if resp['parentId'] == "0":    # 总台
+            parent_id = resp['parentId']
+            parent_level = ''
+        else:
+            if resp['userName']:       # 会员
+                parent_id = self.get_userId(account=resp['userName'])
+                parent_level = ""
+            else:                      # 代理
+                parent_id = self.get_account_id(account=resp['parentId'])[0]
+                parent_level = self.get_account_id(account=resp['parentId'])[1]
+
+        database_name = "bfty_credit"
+        if parent_id == '0':           # 总台
+            sql_str = f"SELECT CONCAT(a.account,'/',IFNULL(a.login_account,'')) as '账号/登入账号',a.`name` '代理线名称',(case when role_id=0 then '登0' when role_id=1 then '登1' " \
+                      f"when role_id=2 then '登2' when role_id=3 then '登3' end) '等级',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额'," \
+                      f"sum(ROUND(bet_amount*level0_actual_percentage,2)) '总代理占成',sum(ROUND(bet_amount*company_actual_percentage,2)) '公司占成' FROM `m_account` a JOIN " \
+                      f"m_account_credits b ON a.id = b.account_id LEFT JOIN o_account_order c ON a.id = c.proxy0_id WHERE a.role_id= 0 AND c.`status` in (1,2) AND c.award_time is " \
+                      f"NULL {account} GROUP BY CONCAT(a.account,'/',IFNULL(a.login_account,'')),a.`name`,role_id,b.currency,a.create_time ORDER BY a.create_time DESC"
+            rtn = list(self.query_data(sql_str, database_name))
+            unsettledOrder_list = []
+            for item in rtn:
+                unsettledOrder_list.append([item[0], item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
+
+            return unsettledOrder_list,sql_str
+
+        else:
+            if parent_level == '登0':   # 登0查询登1
+                sql_str = f"SELECT CONCAT(a.account,'/',IFNULL(a.login_account,'')) as '账号/登入账号',a.`name` '代理线名称',(case when role_id=0 then '登0' when role_id=1 then '登1' " \
+                          f"when role_id=2 then '登2' when role_id=3 then '登3' end) '等级',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额'," \
+                          f"sum(ROUND(bet_amount*company_actual_percentage,2)) '公司占成',sum(ROUND(bet_amount*level0_actual_percentage,2)) '总代理占成' FROM `m_account` a JOIN " \
+                          f"m_account_credits b ON a.id = b.account_id LEFT JOIN o_account_order c ON a.id = c.proxy1_id WHERE a.role_id= 1 AND c.proxy0_id=(SELECT id FROM m_account " \
+                          f"WHERE account='{resp['parentId']}') AND c.`status` in (1,2) AND c.award_time is NULL {account} GROUP BY CONCAT(a.account,'/',IFNULL(a.login_account,'')),a.`name`,role_id," \
+                          f"b.currency,a.create_time ORDER BY a.create_time DESC"
+                rtn = list(self.query_data(sql_str, database_name))
+                unsettledOrder_list = []
+                for item in rtn:
+                    unsettledOrder_list.append(
+                        [item[0], item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
+
+                return unsettledOrder_list, sql_str
+
+            elif parent_level == '登1':  # 登1查询登2
+                sql_str = f"SELECT CONCAT(a.account,'/',IFNULL(a.login_account,'')) as '账号/登入账号',a.`name` '代理线名称',(case when role_id=0 then '登0' when role_id=1 then '登1' " \
+                          f"when role_id=2 then '登2' when role_id=3 then '登3' end) '等级',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额'," \
+                          f"sum(ROUND(bet_amount*level0_actual_percentage,2)) '总代理占成',sum(ROUND(bet_amount*company_actual_percentage,2)) '公司占成' FROM `m_account` a JOIN " \
+                          f"m_account_credits b ON a.id = b.account_id LEFT JOIN o_account_order c ON a.id = c.proxy2_id WHERE a.role_id= 2 AND c.proxy1_id=(SELECT id FROM m_account " \
+                          f"WHERE account='{resp['parentId']}') AND c.`status` in (1,2) AND c.award_time is NULL {account} GROUP BY CONCAT(a.account,'/',IFNULL(a.login_account,''))," \
+                          f"a.`name`,role_id,b.currency,a.create_time ORDER BY a.create_time DESC"
+                rtn = list(self.query_data(sql_str, database_name))
+                unsettledOrder_list = []
+                for item in rtn:
+                    unsettledOrder_list.append(
+                        [item[0], item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
+
+                return unsettledOrder_list, sql_str
+
+            elif parent_level == '登2':  # 登2查询登3
+                sql_str = f"SELECT CONCAT(a.account,'/',IFNULL(a.login_account,'')) as '账号/登入账号',a.`name` '代理线名称',(case when role_id=0 then '登0' when role_id=1 then '登1' " \
+                          f"when role_id=2 then '登2' when role_id=3 then '登3' end) '等级',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额'," \
+                          f"sum(ROUND(bet_amount*level0_actual_percentage,2)) '总代理占成',sum(ROUND(bet_amount*company_actual_percentage,2)) '公司占成' FROM `m_account` a JOIN " \
+                          f"m_account_credits b ON a.id = b.account_id LEFT JOIN o_account_order c ON a.id = c.proxy3_id WHERE a.role_id= 3 AND c.proxy2_id=(SELECT id FROM m_account " \
+                          f"WHERE account='{resp['parentId']}') AND c.`status` in (1,2) AND c.award_time is NULL {account} GROUP BY CONCAT(a.account,'/',IFNULL(a.login_account,''))," \
+                          f"a.`name`,role_id,b.currency,a.create_time ORDER BY a.create_time DESC"
+                rtn = list(self.query_data(sql_str, database_name))
+                unsettledOrder_list = []
+                for item in rtn:
+                    unsettledOrder_list.append(
+                        [item[0], item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
+
+                return unsettledOrder_list, sql_str
+
+            elif parent_level == '登3':  # 登3查询会员
+                sql_str = f"SELECT CONCAT(a.user_name,'/',a.login_account) '账号/登入账号',b.`name` '名称','会员' as '级别',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '投注金额'," \
+                          f"sum(ROUND(bet_amount*level0_actual_percentage,2)) '总代理占成',sum(ROUND(bet_amount*company_actual_percentage,2)) '公司占成' FROM o_account_order a JOIN " \
+                          f"u_user b ON a.user_id=b.id WHERE a.`status` in (1,2) AND a.award_time is NULL {account} AND a.proxy3_id=(SELECT id FROM m_account WHERE account='{resp['parentId']}') GROUP BY " \
+                          f"CONCAT(a.user_name,'/',a.login_account),b.`name`,b.currency"
+                rtn = list(self.query_data(sql_str, database_name))
+                unsettledOrder_list = []
+                for item in rtn:
+                    unsettledOrder_list.append(
+                        [item[0], item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
+
+                return unsettledOrder_list, sql_str
+
+            elif resp['userName'] != "":  # 会员查询注单
+                sql_str = f"SELECT CONCAT(d.account,'/',d.login_account) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id= 1 " \
+                          f"then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 " \
+                          f"THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰球' END)as '球类'," \
+                          f"(case when a.bet_type=1 then '单注' when a.bet_type=2 then '串关' when a.bet_type=3 then '复式串关' end ) as '注单类型',tournament_name '联赛名称'," \
+                          f"CONCAT( home_team_name, ' Vs ', away_team_name ) '赛事名称',IF(is_live=3,'早盘','滚球盘') '赛事类型',market_name '盘口名称',hcp_for_the_rest '亚盘口'," \
+                          f"outcome_name '投注项名称',cast(credit_odds as char) '赔率',if(odds_type=1,'欧洲盘','香港盘') '盘口类型',match_time '赛事时间',bet_amount as '投注金额'," \
+                          f"(CASE WHEN a.`status`=2 then '已结算' WHEN a.`status`=3 then '已取消' ELSE '未结算' END) as '注单状态',CONCAT(bet_ip,' / ',ip_address) '下注IP地址'," \
+                          f"company_actual_percentage,level0_actual_percentage,company_retreat_proportion,level1_actual_percentage,level0_retreat_proportion,level2_actual_percentage," \
+                          f"level1_retreat_proportion,level3_actual_percentage,level2_retreat_proportion,level3_retreat_proportion 'user_retreat_proportion' FROM o_account_order a " \
+                          f"JOIN o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON (a.order_no=c.order_no AND b.match_id=c.match_id)JOIN " \
+                          f"u_user d ON a.user_id=d.id WHERE a.`status` in (1,2) AND a.award_time is NULL AND d.account='{resp['userName']}' ORDER BY a.create_time DESC"
+                rtn = list(self.query_data(sql_str, database_name))
+                unsettledOrder_list = []
+                for item in rtn:
+                    order_num = item[2]
+                    odds = self.get_odds_by_orderNum(orderNo=order_num)
+                    bet_time = item[3]
+                    create_time = bet_time.strftime("%Y-%m-%d %H:%M:%S")
+                    matchTime = item[14]
+                    match_time = matchTime.strftime("%Y-%m-%d %H:%M:%S")
+                    unsettledOrder_list.append([item[0],item[1],item[2],create_time,item[4],item[5],
+                                         [item[6], item[7], item[8], item[9], item[10], item[11], float(item[12]), item[13],match_time],
+                                         item[16],item[17],float(odds), float(item[15]), float(item[18]),item[19],item[20],item[21],item[22],item[23],
+                                         item[24],item[25],item[26],item[27]])
+
+                unsettledOrder = self.cf.merge_compelx_02(new_lList=unsettledOrder_list)
+
+                return unsettledOrder, sql_str
+
+            else:
+                raise AssertionError('ERROR,暂无此类型')
+
+    def credit_winLoseSimple_query(self, expData={}):
+        '''
+        总台-代理报表-总代盈亏(简易)                              /// 修改于2022.07.20
+        :param expData:
+        :return:
+        '''
+        resp = expData
+        if resp['account']:
+            account = f"and a.account={resp['account']}"
+        else:
+            account = ""
+        if resp['parentId'] == "0":    # 总台
+            parent_id = resp['parentId']
+            parent_level = ''
+        else:
+            if resp['userName']:       # 会员
+                parent_id = self.get_userId(account=resp['userName'])
+                parent_level = ""
+            else:                      # 代理
+                parent_id = self.get_account_id(account=resp['parentId'])[0]
+                parent_level = self.get_account_id(account=resp['parentId'])[1]
+        if resp['ctime']:
+            ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['ctime']))
+            etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['etime']))
+        else:
+            ctime = ""
+            etime = ""
+
+        database_name = "bfty_credit"
+        if parent_id == '0':           # 总台
+            sql_str = f"SELECT `账号/登入账号`,`代理线名称`,`等级`,`货币`,`注单数量`,`总投注额`,`总有效金额`,`总佣金`,`派彩`,`公司输赢`,`公司佣金`,`公司总计` FROM (SELECT CONCAT(a.account,'/'," \
+                      f"IFNULL(a.login_account,'')) as '账号/登入账号',a.`id`,a.`name` '代理线名称',(case when role_id=0 then '登0' when role_id=1 then '登1' when role_id=2 then '登2' " \
+                      f"when role_id=3 then '登3' end) '等级',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额',sum(efficient_amount) '总有效金额'," \
+                      f"TRUNCATE(sum(efficient_amount*company_retreat_proportion),2) '总佣金',sum(company_win_or_lose-company_backwater_amount) '公司输赢'," \
+                      f"sum(IFNULL(company_backwater_amount,0)) '公司佣金',sum(company_win_or_lose) '公司总计' FROM `m_account` a JOIN m_account_credits b ON a.id = b.account_id LEFT " \
+                      f"JOIN o_account_order c ON a.id = c.proxy0_id WHERE a.role_id= 0 AND c.`status`=2 AND c.award_time is not null AND DATE_FORMAT(c.award_time,'%Y-%m-%d') " \
+                      f"BETWEEN '{ctime}' AND '{etime}' {account} GROUP BY a.account,a.login_account,a.`name`,role_id,b.currency,a.create_time ORDER BY a.create_time DESC) a LEFT JOIN (SELECT " \
+                      f"proxy0_id,-sum(company_win_or_lose) '派彩' FROM o_account_order a JOIN m_account_unsettlement_amount_record b ON a.order_no = b.order_no WHERE a.status=2 " \
+                      f"AND a.award_time is not null AND DATE_FORMAT(a.award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' AND role_id=0 GROUP BY proxy0_id) b ON a.`id`=b.`proxy0_id`"
+            rtn = list(self.query_data(sql_str, database_name))
+            winLoseSimple_list = []
+            for item in rtn:
+                winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]), float(item[7]),
+                                            float(item[8]), float(item[9]), float(item[10]), float(item[11])])
+
+            return winLoseSimple_list,sql_str
+
+        else:
+            if parent_level == '登0':   # 登0查询登1
+                sql_str = f"SELECT `账号/登入账号`,`代理线名称`,`等级`,`货币`,`注单数量`,`总投注额`,`总有效金额`,`总佣金`,`派彩`,`总代理输赢`,`总代理佣金`,`总代理总计` FROM (SELECT " \
+                          f"CONCAT(a.account,'/',IFNULL(a.login_account,'')) as '账号/登入账号',a.`id`,a.`name` '代理线名称',(case when role_id=0 then '登0' when role_id=1 then '登1'" \
+                          f" when role_id=2 then '登2' when role_id=3 then '登3' end) '等级',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额',sum(efficient_amount) " \
+                          f"'总有效金额',TRUNCATE(sum(efficient_amount*level0_retreat_proportion),2) '总佣金',sum(level0_win_or_lose-level0_backwater_amount) '总代理输赢'," \
+                          f"sum(IFNULL(level0_backwater_amount,0)) '总代理佣金',sum(level0_win_or_lose) '总代理总计' FROM `m_account` a JOIN m_account_credits b ON a.id = b.account_id " \
+                          f"LEFT JOIN o_account_order c ON a.id = c.proxy1_id WHERE a.role_id=1 AND c.`status`=2 AND c.award_time is not null AND DATE_FORMAT(c.award_time,'%Y-%m-%d') " \
+                          f"BETWEEN '{ctime}' AND '{etime}' {account} AND c.proxy0_id=(SELECT id FROM m_account WHERE account='{resp['parentId']}') GROUP BY a.account,a.login_account,a.`name`,role_id,b.currency,a.create_time " \
+                          f"ORDER BY a.create_time DESC) a LEFT JOIN (SELECT proxy1_id,-sum(company_win_or_lose+level0_win_or_lose) '派彩' FROM o_account_order a JOIN m_account_unsettlement_amount_record b " \
+                          f"ON a.order_no = b.order_no WHERE a.status=2 AND a.award_time is not null AND DATE_FORMAT(a.award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' " \
+                          f"AND role_id=1 GROUP BY proxy1_id) b ON a.`id`=b.`proxy1_id`"
+                rtn = list(self.query_data(sql_str, database_name))
+                winLoseSimple_list = []
+                for item in rtn:
+                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                         float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11])])
+
+                return winLoseSimple_list, sql_str
+
+            elif parent_level == '登1':  # 登1查询登2
+                sql_str = f"SELECT `账号/登入账号`,`代理线名称`,`等级`,`货币`,`注单数量`,`总投注额`,`总有效金额`,`总佣金`,`派彩`,`一级代理输赢`,`一级代理佣金`,`一级代理总计` FROM (SELECT " \
+                          f"CONCAT(a.account,'/',IFNULL(a.login_account,'')) as '账号/登入账号',a.`id`,a.`name` '代理线名称',(case when role_id=0 then '登0' when role_id=1 then '登1' " \
+                          f"when role_id=2 then '登2' when role_id=3 then '登3' end) '等级',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额',sum(efficient_amount) " \
+                          f"'总有效金额',TRUNCATE(sum(efficient_amount*level1_retreat_proportion),2) '总佣金',sum(level1_win_or_lose-level1_backwater_amount) '一级代理输赢'," \
+                          f"sum(IFNULL(level1_backwater_amount,0)) '一级代理佣金',sum(level1_win_or_lose) '一级代理总计' FROM `m_account` a JOIN m_account_credits b ON a.id = b.account_id" \
+                          f" LEFT JOIN o_account_order c ON a.id = c.proxy2_id WHERE a.role_id=2 AND c.`status`=2 AND c.award_time is not null AND DATE_FORMAT(c.award_time,'%Y-%m-%d') " \
+                          f"BETWEEN '{ctime}' AND '{etime}' {account} AND c.proxy1_id=(SELECT id FROM m_account WHERE account='{resp['parentId']}') GROUP BY a.account,a.login_account,a.`name`," \
+                          f"role_id,b.currency,a.create_time ORDER BY a.create_time DESC) a LEFT JOIN (SELECT proxy2_id,-sum(company_win_or_lose+level0_win_or_lose+level1_win_or_lose) '派彩' " \
+                          f"FROM o_account_order a JOIN m_account_unsettlement_amount_record b ON a.order_no = b.order_no WHERE a.status=2 AND a.award_time is not null AND " \
+                          f"DATE_FORMAT(a.award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' AND role_id=2 GROUP BY proxy2_id) b ON a.`id`=b.`proxy2_id`"
+                rtn = list(self.query_data(sql_str, database_name))
+                winLoseSimple_list = []
+                for item in rtn:
+                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                         float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11])])
+
+                return winLoseSimple_list, sql_str
+
+            elif parent_level == '登2':  # 登2查询登3
+                sql_str = f"SELECT `账号/登入账号`,`代理线名称`,`等级`,`货币`,`注单数量`,`总投注额`,`总有效金额`,`总佣金`,`派彩`,`二级代理输赢`,`二级代理佣金`,`二级代理总计` FROM (SELECT " \
+                          f"CONCAT(a.account,'/',IFNULL(a.login_account,'')) as '账号/登入账号',a.`id`,a.`name` '代理线名称',(case when role_id=0 then '登0' when role_id=1 then '登1' " \
+                          f"when role_id=2 then '登2' when role_id=3 then '登3' end) '等级',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额',sum(efficient_amount) '总有效金额'," \
+                          f"TRUNCATE(sum(efficient_amount*level2_retreat_proportion),2) '总佣金',sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢'," \
+                          f"sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金',sum(level2_win_or_lose) '二级代理总计' FROM `m_account` a JOIN m_account_credits b ON a.id = b.account_id " \
+                          f"LEFT JOIN o_account_order c ON a.id = c.proxy3_id WHERE a.role_id=3 AND c.`status`=2 AND c.award_time is not null AND DATE_FORMAT(c.award_time,'%Y-%m-%d') " \
+                          f"BETWEEN '{ctime}' AND '{etime}' {account} AND c.proxy2_id=(SELECT id FROM m_account WHERE account='{resp['parentId']}') GROUP BY a.account,a.login_account,a.`name`,role_id," \
+                          f"b.currency,a.create_time ORDER BY a.create_time DESC) a LEFT JOIN (SELECT proxy3_id,-sum(company_win_or_lose+level0_win_or_lose+level1_win_or_lose+level2_win_or_lose) '派彩' " \
+                          f"FROM o_account_order a JOIN m_account_unsettlement_amount_record b ON a.order_no = b.order_no WHERE a.status=2 AND a.award_time is not null AND " \
+                          f"DATE_FORMAT(a.award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' AND role_id=3 GROUP BY proxy3_id) b ON a.`id`=b.`proxy3_id`"
+                rtn = list(self.query_data(sql_str, database_name))
+                winLoseSimple_list = []
+                for item in rtn:
+                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                         float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11])])
+
+                return winLoseSimple_list, sql_str
+
+            elif parent_level == '登3':  # 登3查询会员
+                sql_str = f"SELECT `账号/登入账号`,`名称`,`级别`,`货币`,`注单数量`,`总投注额`,`总有效金额`,`总佣金`,`派彩`,`三级代理输赢`,`三级代理佣金`,`三级代理总计` FROM (SELECT " \
+                          f"CONCAT(a.account,'/',a.login_account) '账号/登入账号',b.user_id,`name` '名称','会员' as '级别',a.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额'," \
+                          f"sum(efficient_amount) '总有效金额',TRUNCATE(sum(efficient_amount*level3_retreat_proportion),2) '总佣金',sum(level3_win_or_lose-level3_backwater_amount) " \
+                          f"'三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计' FROM u_user a LEFT JOIN o_account_order b ON " \
+                          f"a.`id`=b.`user_id` WHERE b.`status`=2 AND b.award_time is not null AND DATE_FORMAT(b.award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {account}" \
+                          f" AND b.proxy3_id=(SELECT id FROM m_account WHERE account='{resp['parentId']}') GROUP BY a.account,a.login_account,`name`) a LEFT JOIN (SELECT user_id," \
+                          f"-sum(company_win_or_lose+level0_win_or_lose+level1_win_or_lose+level2_win_or_lose+level3_win_or_lose) '派彩' FROM o_account_order a JOIN " \
+                          f"m_account_unsettlement_amount_record b ON a.order_no = b.order_no WHERE a.status=2 AND a.award_time is not null AND DATE_FORMAT(a.award_time,'%Y-%m-%d') " \
+                          f"BETWEEN '{ctime}' AND '{etime}' AND role_id=100 GROUP BY user_id) b ON a.user_id=b.user_id"
+                rtn = list(self.query_data(sql_str, database_name))
+                winLoseSimple_list = []
+                for item in rtn:
+                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                         float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11])])
+                return winLoseSimple_list, sql_str
+
+            elif resp['userName'] != "":  # 会员查询注单
+                sql_str = f"SELECT CONCAT(d.account,'/',d.login_account) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id= 1 " \
+                          f"then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 " \
+                          f"THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰球' END)as '球类'," \
+                          f"(case when a.bet_type=1 then '单注' when a.bet_type=2 then '串关' when a.bet_type=3 then '复式串关' end ) as '注单类型',tournament_name '联赛名称'," \
+                          f"CONCAT( home_team_name, ' Vs ', away_team_name ) '赛事名称',IF(is_live=3,'早盘','滚球盘') '赛事类型',market_name '盘口名称',hcp_for_the_rest '亚盘口',outcome_name '投注项名称'," \
+                          f"cast(credit_odds as char) '赔率',if(odds_type=1,'欧洲盘','香港盘') '盘口类型',match_time '赛事时间',ifnull(award_time,'--') as '结算时间',(CASE WHEN a.settlement_result=1 " \
+                          f"then '赢' WHEN a.settlement_result=2 then '输' WHEN a.settlement_result=5 then '平局走水' WHEN a.settlement_result=1 then '注单取消' END) as '注单结果'," \
+                          f"CONCAT(bet_ip, +' / ',+ ip_address) '下注IP地址',bet_amount as '投注金额',handicap_win_or_lose '注单输赢',efficient_amount '有效金额',company_actual_percentage," \
+                          f"company_win_or_lose-company_backwater_amount 'company_winlose',0 as 'company_retreat',company_backwater_amount,company_win_or_lose,level0_actual_percentage," \
+                          f"level0_win_or_lose-level0_backwater_amount 'level0_winlose',company_retreat_proportion 'level0_retreat',level0_backwater_amount,level0_win_or_lose," \
+                          f"level1_actual_percentage,level1_win_or_lose-level1_backwater_amount 'level1_winlose',level0_retreat_proportion 'level1_retreat',level1_backwater_amount," \
+                          f"level1_win_or_lose,level2_actual_percentage,level2_win_or_lose-level2_backwater_amount 'level2_winlose',level1_retreat_proportion 'level2_retreat'," \
+                          f"level2_backwater_amount,level2_win_or_lose,level3_actual_percentage,level3_win_or_lose-level3_backwater_amount 'level3_winlose',level2_retreat_proportion 'level3_retreat'," \
+                          f"level3_backwater_amount,level3_win_or_lose,handicap_final_win_or_lose-backwater_amount 'user_winlose',level3_retreat_proportion 'user_retreat'," \
+                          f"backwater_amount,handicap_final_win_or_lose FROM o_account_order a JOIN o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c " \
+                          f"ON (a.order_no=c.order_no AND b.match_id=c.match_id)JOIN u_user d ON a.user_id=d.id WHERE a.`status`=2 AND a.award_time is not NULL AND DATE_FORMAT(a.award_time,'%Y-%m-%d') " \
+                          f"BETWEEN '{ctime}' AND '{etime}' AND d.account='{resp['userName']}' ORDER BY a.create_time DESC"
+                rtn = list(self.query_data(sql_str, database_name))
+                winLoseSimple_list = []
+                for item in rtn:
+                    order_num = item[2]
+                    odds = self.get_odds_by_orderNum(orderNo=order_num)
+                    bet_time = item[3]
+                    create_time = bet_time.strftime("%Y-%m-%d %H:%M:%S")
+                    matchTime = item[14]
+                    match_time = matchTime.strftime("%Y-%m-%d %H:%M:%S")
+                    winLoseSimple_list.append([item[0],item[1],item[2],create_time,item[4],item[5],
+                                         [item[6],item[7],item[8],item[9],item[10],item[11],float(item[12]),item[13],match_time],
+                                         item[15],item[16],item[17],float(odds), item[18],item[19],item[20],item[21],item[22],item[23],item[24],item[25],item[26],item[27],
+                                         item[28],item[29],item[30],item[31],item[32],item[33],item[34],item[35],item[36],item[37],item[38],item[39],item[40],
+                                         item[41],item[42], item[43],item[44], item[45],item[46], item[47],item[48], item[49]])
+
+                winLoseSimple = self.cf.merge_compelx_02(new_lList=winLoseSimple_list)
+
+                return winLoseSimple, sql_str
+
+            else:
+                raise AssertionError('ERROR,暂无此类型')
+
+    def credit_winLoseDetail_query(self, expData={}):
+        '''
+        总台-代理报表-总代盈亏(详情)                              /// 修改于2022.07.21
+        :param expData:
+        :return:
+        '''
+        resp = expData
+        if resp['account']:
+            account = f"and a.account={resp['account']}"
+        else:
+            account = ""
+        if resp['parentId'] == "0":    # 总台
+            parent_id = resp['parentId']
+            parent_level = ''
+        else:
+            if resp['userName']:       # 会员
+                parent_id = self.get_userId(account=resp['userName'])
+                parent_level = ""
+            else:                      # 代理
+                parent_id = self.get_account_id(account=resp['parentId'])[0]
+                parent_level = self.get_account_id(account=resp['parentId'])[1]
+        if resp['ctime']:
+            ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['ctime']))
+            etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['etime']))
+        else:
+            ctime = ""
+            etime = ""
+
+        database_name = "bfty_credit"
+        if parent_id == '0':           # 总台
+            sql_str = f"SELECT CONCAT(a.account,'/',IFNULL(a.login_account,'')) as '账号/登入账号',a.`name` '代理线名称',(case when role_id=0 then '登0' when role_id=1 then '登1' " \
+                      f"when role_id=2 then '登2' when role_id=3 then '登3' end) '等级',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额',sum(efficient_amount) '总有效金额'," \
+                      f"TRUNCATE(sum(efficient_amount*company_retreat_proportion),2) '总佣金',sum(handicap_win_or_lose) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金'," \
+                      f"sum(handicap_final_win_or_lose) '会员总计',sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金'," \
+                      f"sum(level3_win_or_lose) '三级代理总计',sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢',sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金'," \
+                      f"sum(level2_win_or_lose) '二级代理总计',sum(level1_win_or_lose-level1_backwater_amount) '一级代理输赢',sum(IFNULL(level1_backwater_amount,0)) '一级代理佣金'," \
+                      f"sum(level1_win_or_lose) '一级代理总计',sum(level0_win_or_lose-level0_backwater_amount) '总代理输赢',sum(IFNULL(level0_backwater_amount,0)) '总代理佣金'," \
+                      f"sum(level0_win_or_lose) '总代理总计',sum(company_win_or_lose-company_backwater_amount) '公司输赢',sum(IFNULL(company_backwater_amount,0)) '公司佣金'," \
+                      f"sum(company_win_or_lose) '公司总计' FROM `m_account` a JOIN m_account_credits b ON a.id = b.account_id LEFT JOIN o_account_order c ON a.id = c.proxy0_id " \
+                      f"WHERE a.role_id= 0 AND c.`status`=2 AND c.award_time is not null AND DATE_FORMAT(c.award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {account} " \
+                      f"GROUP BY CONCAT(a.account,'/',IFNULL(a.login_account,'')),a.`name`,role_id,b.currency,a.create_time ORDER BY a.create_time DESC"
+            rtn = list(self.query_data(sql_str, database_name))
+            winLoseSimple_list = []
+            for item in rtn:
+                winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),float(item[7]), float(item[8]),
+                     float(item[9]), float(item[10]), float(item[11]), float(item[12]),float(item[13]), float(item[14]), float(item[15]), float(item[16]),
+                     float(item[17]), float(item[18]),float(item[19]), float(item[20]),float(item[21]), float(item[22]), float(item[23]), float(item[24]), float(item[25])])
+
+            return winLoseSimple_list,sql_str
+
+        else:
+            if parent_level == '登0':   # 登0查询登1
+                sql_str = f"SELECT CONCAT(a.account,'/',IFNULL(a.login_account,'')) as '账号/登入账号',a.`name` '代理线名称',(case when role_id=0 then '登0' when role_id=1 then '登1' " \
+                          f"when role_id=2 then '登2' when role_id=3 then '登3' end) '等级',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额',sum(efficient_amount) '总有效金额'," \
+                          f"TRUNCATE(sum(efficient_amount*level0_retreat_proportion),2) '总佣金',sum(handicap_win_or_lose) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金'," \
+                          f"sum(handicap_final_win_or_lose) '会员总计',sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金'," \
+                          f"sum(level3_win_or_lose) '三级代理总计',sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢',sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金'," \
+                          f"sum(level2_win_or_lose) '二级代理总计',sum(level1_win_or_lose-level1_backwater_amount) '一级代理输赢',sum(IFNULL(level1_backwater_amount,0)) '一级代理佣金'," \
+                          f"sum(level1_win_or_lose) '一级代理总计',sum(level0_win_or_lose-level0_backwater_amount) '总代理输赢',sum(IFNULL(level0_backwater_amount,0)) '总代理佣金'," \
+                          f"sum(level0_win_or_lose) '总代理总计',sum(company_win_or_lose-company_backwater_amount) '公司输赢',sum(IFNULL(company_backwater_amount,0)) '公司佣金'," \
+                          f"sum(company_win_or_lose) '公司总计' FROM `m_account` a JOIN m_account_credits b ON a.id = b.account_id LEFT JOIN o_account_order c ON a.id = c.proxy1_id WHERE " \
+                          f"a.role_id= 1 AND c.proxy0_id=(SELECT id FROM m_account WHERE account='{resp['parentId']}') AND c.`status`=2 AND c.award_time is not null AND " \
+                          f"DATE_FORMAT(c.award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {account} GROUP BY CONCAT(a.account,'/',IFNULL(a.login_account,'')),a.`name`,role_id," \
+                          f"b.currency,a.create_time ORDER BY a.create_time DESC"
+                rtn = list(self.query_data(sql_str, database_name))
+                winLoseSimple_list = []
+                for item in rtn:
+                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                         float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11]),float(item[12]),float(item[13]),
+                         float(item[14]),float(item[15]), float(item[16]),float(item[17]),float(item[18]), float(item[19]), float(item[20]),
+                                               float(item[21]),float(item[22]),float(item[23]), float(item[24]), float(item[25])])
+
+                return winLoseSimple_list, sql_str
+
+            elif parent_level == '登1':  # 登1查询登2
+                sql_str = f"SELECT CONCAT(a.account,'/',IFNULL(a.login_account,'')) as '账号/登入账号',a.`name` '代理线名称',(case when role_id=0 then '登0' when role_id=1 then '登1' " \
+                          f"when role_id=2 then '登2' when role_id=3 then '登3' end) '等级',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额',sum(efficient_amount) '总有效金额'," \
+                          f"TRUNCATE(sum(efficient_amount*level1_retreat_proportion),2) '总佣金',sum(handicap_win_or_lose) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金'," \
+                          f"sum(handicap_final_win_or_lose) '会员总计',sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金'," \
+                          f"sum(level3_win_or_lose) '三级代理总计',sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢',sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金'," \
+                          f"sum(level2_win_or_lose) '二级代理总计',sum(level1_win_or_lose-level1_backwater_amount) '一级代理输赢',sum(IFNULL(level1_backwater_amount,0)) '一级代理佣金'," \
+                          f"sum(level1_win_or_lose) '一级代理总计',sum(level0_win_or_lose-level0_backwater_amount) '总代理输赢',sum(IFNULL(level0_backwater_amount,0)) '总代理佣金'," \
+                          f"sum(level0_win_or_lose) '总代理总计',sum(company_win_or_lose-company_backwater_amount) '公司输赢',sum(IFNULL(company_backwater_amount,0)) '公司佣金'," \
+                          f"sum(company_win_or_lose) '公司总计' FROM `m_account` a JOIN m_account_credits b ON a.id = b.account_id LEFT JOIN o_account_order c ON a.id = c.proxy2_id WHERE " \
+                          f"a.role_id= 2 AND c.proxy1_id=(SELECT id FROM m_account WHERE account='{resp['parentId']}') AND c.`status`=2 AND c.award_time is not null AND " \
+                          f"DATE_FORMAT(c.award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {account} GROUP BY CONCAT(a.account,'/',IFNULL(a.login_account,'')),a.`name`,role_id," \
+                          f"b.currency,a.create_time ORDER BY a.create_time DESC"
+                rtn = list(self.query_data(sql_str, database_name))
+                winLoseSimple_list = []
+                for item in rtn:
+                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                         float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11]),float(item[12]),float(item[13]),
+                         float(item[14]),float(item[15]), float(item[16]),float(item[17]),float(item[18]), float(item[19]), float(item[20]),
+                                               float(item[21]),float(item[22]),float(item[23]), float(item[24]), float(item[25])])
+
+                return winLoseSimple_list, sql_str
+
+            elif parent_level == '登2':  # 登2查询登3
+                sql_str = f"SELECT CONCAT(a.account,'/',IFNULL(a.login_account,'')) as '账号/登入账号',a.`name` '代理线名称',(case when role_id=0 then '登0' when role_id=1 then '登1' " \
+                          f"when role_id=2 then '登2' when role_id=3 then '登3' end) '等级',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额',sum(efficient_amount) '总有效金额'," \
+                          f"TRUNCATE(sum(efficient_amount*level2_retreat_proportion),2) '总佣金',sum(handicap_win_or_lose) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金'," \
+                          f"sum(handicap_final_win_or_lose) '会员总计',sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金'," \
+                          f"sum(level3_win_or_lose) '三级代理总计',sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢',sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金'," \
+                          f"sum(level2_win_or_lose) '二级代理总计',sum(level1_win_or_lose-level1_backwater_amount) '一级代理输赢',sum(IFNULL(level1_backwater_amount,0)) '一级代理佣金'," \
+                          f"sum(level1_win_or_lose) '一级代理总计',sum(level0_win_or_lose-level0_backwater_amount) '总代理输赢',sum(IFNULL(level0_backwater_amount,0)) '总代理佣金'," \
+                          f"sum(level0_win_or_lose) '总代理总计',sum(company_win_or_lose-company_backwater_amount) '公司输赢',sum(IFNULL(company_backwater_amount,0)) '公司佣金'," \
+                          f"sum(company_win_or_lose) '公司总计' FROM `m_account` a JOIN m_account_credits b ON a.id = b.account_id LEFT JOIN o_account_order c ON a.id = c.proxy3_id " \
+                          f"WHERE a.role_id= 3 AND c.proxy2_id=(SELECT id FROM m_account WHERE account='{resp['parentId']}') AND c.`status`=2 AND c.award_time is not null AND " \
+                          f"DATE_FORMAT(c.award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {account} GROUP BY CONCAT(a.account,'/',IFNULL(a.login_account,'')),a.`name`," \
+                          f"role_id,b.currency,a.create_time ORDER BY a.create_time DESC"
+                rtn = list(self.query_data(sql_str, database_name))
+                winLoseSimple_list = []
+                for item in rtn:
+                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                         float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11]),float(item[12]),float(item[13]),
+                         float(item[14]),float(item[15]), float(item[16]),float(item[17]),float(item[18]), float(item[19]), float(item[20]),
+                                               float(item[21]),float(item[22]),float(item[23]), float(item[24]), float(item[25])])
+
+                return winLoseSimple_list, sql_str
+
+            elif parent_level == '登3':  # 登3查询会员
+                sql_str = f"SELECT CONCAT(a.account,'/',a.login_account) '账号/登入账号',`name` '名称','会员' as '级别',a.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额'," \
+                          f"sum(efficient_amount) '总有效金额',TRUNCATE(sum(efficient_amount*level3_retreat_proportion),2) '总佣金',sum(handicap_win_or_lose) '会员输赢'," \
+                          f"sum(IFNULL(level3_backwater_amount+backwater_amount,0)) '会员佣金',sum(level3_backwater_amount+handicap_final_win_or_lose) '会员总计'," \
+                          f"sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计'," \
+                          f"sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢',sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金',sum(level2_win_or_lose) '二级代理总计'," \
+                          f"sum(level1_win_or_lose-level1_backwater_amount) '一级代理输赢',sum(IFNULL(level1_backwater_amount,0)) '一级代理佣金',sum(level1_win_or_lose) '一级代理总计'," \
+                          f"sum(level0_win_or_lose-level0_backwater_amount) '总代理输赢',sum(IFNULL(level0_backwater_amount,0)) '总代理佣金',sum(level0_win_or_lose) '总代理总计'," \
+                          f"sum(company_win_or_lose-company_backwater_amount) '公司输赢',sum(IFNULL(company_backwater_amount,0)) '公司佣金',sum(company_win_or_lose) '公司总计' FROM " \
+                          f"u_user a LEFT JOIN o_account_order b ON a.`id`=b.`user_id` WHERE b.`status`=2 AND b.award_time is not NULL AND DATE_FORMAT(b.award_time,'%Y-%m-%d') " \
+                          f"BETWEEN '{ctime}' AND '{etime}' {account} AND b.proxy3_id=(SELECT id FROM m_account WHERE account='{resp['parentId']}') GROUP BY a.account,a.login_account,`name`"
+                rtn = list(self.query_data(sql_str, database_name))
+                winLoseSimple_list = []
+                for item in rtn:
+                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                         float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11]),float(item[12]),float(item[13]),
+                         float(item[14]),float(item[15]), float(item[16]),float(item[17]),float(item[18]), float(item[19]), float(item[20]),
+                                               float(item[21]),float(item[22]),float(item[23]), float(item[24]), float(item[25])])
+
+                return winLoseSimple_list, sql_str
+
+            elif resp['userName'] != "":  # 会员查询注单
+                sql_str = f"SELECT CONCAT(d.account,'/',d.login_account) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id= 1 " \
+                          f"then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 " \
+                          f"THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰球' END)as '球类'," \
+                          f"(case when a.bet_type=1 then '单注' when a.bet_type=2 then '串关' when a.bet_type=3 then '复式串关' end ) as '注单类型',tournament_name '联赛名称'," \
+                          f"CONCAT( home_team_name, ' Vs ', away_team_name ) '赛事名称',IF(is_live=3,'早盘','滚球盘') '赛事类型',market_name '盘口名称',hcp_for_the_rest '亚盘口',outcome_name '投注项名称'," \
+                          f"cast(credit_odds as char) '赔率',if(odds_type=1,'欧洲盘','香港盘') '盘口类型',match_time '赛事时间',ifnull(award_time,'--') as '结算时间',(CASE WHEN a.settlement_result=1 " \
+                          f"then '赢' WHEN a.settlement_result=2 then '输' WHEN a.settlement_result=5 then '平局走水' WHEN a.settlement_result=1 then '注单取消' END) as '注单结果'," \
+                          f"CONCAT(bet_ip, +' / ',+ ip_address) '下注IP地址',bet_amount as '投注金额',handicap_win_or_lose '注单输赢',efficient_amount '有效金额',company_actual_percentage," \
+                          f"company_win_or_lose-company_backwater_amount 'company_winlose',0 as 'company_retreat',company_backwater_amount,company_win_or_lose,level0_actual_percentage," \
+                          f"level0_win_or_lose-level0_backwater_amount 'level0_winlose',company_retreat_proportion 'level0_retreat',level0_backwater_amount,level0_win_or_lose," \
+                          f"level1_actual_percentage,level1_win_or_lose-level1_backwater_amount 'level1_winlose',level0_retreat_proportion 'level1_retreat',level1_backwater_amount," \
+                          f"level1_win_or_lose,level2_actual_percentage,level2_win_or_lose-level2_backwater_amount 'level2_winlose',level1_retreat_proportion 'level2_retreat'," \
+                          f"level2_backwater_amount,level2_win_or_lose,level3_actual_percentage,level3_win_or_lose-level3_backwater_amount 'level3_winlose',level2_retreat_proportion 'level3_retreat'," \
+                          f"level3_backwater_amount,level3_win_or_lose,handicap_final_win_or_lose-backwater_amount 'user_winlose',level3_retreat_proportion 'user_retreat'," \
+                          f"backwater_amount,handicap_final_win_or_lose FROM o_account_order a JOIN o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c " \
+                          f"ON (a.order_no=c.order_no AND b.match_id=c.match_id)JOIN u_user d ON a.user_id=d.id WHERE a.`status`=2 AND a.award_time is not NULL AND DATE_FORMAT(a.award_time,'%Y-%m-%d') " \
+                          f"BETWEEN '{ctime}' AND '{etime}' AND d.account='{resp['userName']}' ORDER BY a.create_time DESC"
+                rtn = list(self.query_data(sql_str, database_name))
+                winLoseSimple_list = []
+                for item in rtn:
+                    order_num = item[2]
+                    odds = self.get_odds_by_orderNum(orderNo=order_num)
+                    bet_time = item[3]
+                    create_time = bet_time.strftime("%Y-%m-%d %H:%M:%S")
+                    matchTime = item[14]
+                    match_time = matchTime.strftime("%Y-%m-%d %H:%M:%S")
+                    winLoseSimple_list.append([item[0],item[1],item[2],create_time,item[4],item[5],
+                                         [item[6],item[7],item[8],item[9],item[10],item[11],float(item[12]),item[13],match_time],
+                                         item[15],item[16],item[17],float(odds), item[18],item[19],item[20],item[21],item[22],item[23],item[24],item[25],item[26],item[27],
+                                         item[28],item[29],item[30],item[31],item[32],item[33],item[34],item[35],item[36],item[37],item[38],item[39],item[40],
+                                         item[41],item[42], item[43],item[44], item[45],item[46], item[47],item[48], item[49]])
+
+                winLoseSimple = self.cf.merge_compelx_02(new_lList=winLoseSimple_list)
+
+                return winLoseSimple, sql_str
+
+            else:
+                raise AssertionError('ERROR,暂无此类型')
+
     def credit_sportReport_query(self, expData={}, queryType='sport'):
         '''
-        总台-代理报表-球类报表                                   /// 修改于2022.06.10
+        总台-代理报表-球类报表                                   /// 修改于2022.07.22
         :param expData:
         :param queryType:   sport/market
         :return:
         '''
         resp = expData
-        if resp['startCreateTime']:
-            createTime = resp['startCreateTime']
-            endTime = resp['endCreateTime']
-            ctime = self.get_current_time_for_client(time_type='ctime', day_diff=int(createTime))
-            etime = self.get_current_time_for_client(time_type='etime', day_diff=int(endTime))
+        if resp['ctime']:
+            ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['ctime']))
+            etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['etime']))
         else:
             ctime = ""
             etime = ""
@@ -7103,8 +7640,8 @@ class MysqlQuery(MysqlFunc):
         if queryType == 'sport':
             sql_str = f"SELECT coalesce((CASE WHEN sport_category_id= 1 then '足球' WHEN sport_category_id = 2 THEN '篮球' WHEN sport_category_id = 3 THEN '网球' WHEN sport_category_id " \
                       f"= 4 THEN '排球' WHEN sport_category_id = 5 THEN '羽毛球' WHEN sport_category_id = 6 THEN '乒乓球' WHEN sport_category_id = 7 THEN '棒球' WHEN sport_category_id = 100 " \
-                      f"THEN '冰球' END), '合计') '球类',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额',sum(level0_backwater_amount+level1_backwater_amount+" \
-                      f"level2_backwater_amount+level3_backwater_amount+backwater_amount) '总佣金',sum(handicap_final_win_or_lose-backwater_amount) '会员输赢'," \
+                      f"THEN '冰球' END), '合计') '球类',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额',TRUNCATE(sum(efficient_amount*company_retreat_proportion),2) '总佣金'," \
+                      f"sum(handicap_final_win_or_lose-backwater_amount) '会员输赢'," \
                       f"sum(IFNULL(backwater_amount,0)) '会员佣金',sum(handicap_final_win_or_lose) '会员总计',sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢'," \
                       f"sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计',sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢'," \
                       f"sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金',sum(level2_win_or_lose) '二级代理总计',sum(level1_win_or_lose-level1_backwater_amount) '一级代理输赢'," \
@@ -7128,10 +7665,9 @@ class MysqlQuery(MysqlFunc):
             return single_list,complex_list,sql_str
 
         elif queryType == 'market':
-            sql_str = f"SELECT market_id,`总投注金额`,`总有效金额`,`总佣金`,`会员输赢`,`会员佣金`,`会员总计`,`三级代理输赢`,`三级代理佣金`,`三级代理总计`,`二级代理输赢`,`二级代理佣金`,`二级代理总计`," \
+            sql_str = f"SELECT mark_name,`总投注金额`,`总有效金额`,`总佣金`,`会员输赢`,`会员佣金`,`会员总计`,`三级代理输赢`,`三级代理佣金`,`三级代理总计`,`二级代理输赢`,`二级代理佣金`,`二级代理总计`," \
                       f"`一级代理输赢`,`一级代理佣金`,`一级代理总计`,`总代理输赢`,`总代理佣金`,`总代理总计`,`公司输赢`,`公司佣金`,`公司总计` FROM (SELECT market_id,a.sport_id,sum(bet_amount) '总投注金额'," \
-                      f"sum(IFNULL(efficient_amount,0)) '总有效金额',sum(level0_backwater_amount+level1_backwater_amount+level2_backwater_amount+level3_backwater_amount+" \
-                      f"backwater_amount) '总佣金',sum(handicap_final_win_or_lose-backwater_amount) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金'," \
+                      f"sum(IFNULL(efficient_amount,0)) '总有效金额',TRUNCATE(sum(efficient_amount*company_retreat_proportion),2) '总佣金',sum(handicap_final_win_or_lose-backwater_amount) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金'," \
                       f"sum(handicap_final_win_or_lose) '会员总计',sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金'," \
                       f"sum(level3_win_or_lose) '三级代理总计',sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢',sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金'," \
                       f"sum(level2_win_or_lose) '二级代理总计',sum(level1_win_or_lose-level1_backwater_amount) '一级代理输赢',sum(IFNULL(level1_backwater_amount,0)) '一级代理佣金'," \
@@ -7150,36 +7686,37 @@ class MysqlQuery(MysqlFunc):
                       f"`o_account_order` a JOIN v_order_match b ON a.order_no=b.order_no WHERE bet_type>1 AND a.`status`=2 AND a.award_time is not NULL {sport_id} AND " \
                       f"{date_type} BETWEEN '{ctime}' AND '{etime}'"
             rtn = list(self.query_data(sql_str, database_name))
-
             sportReport_list = []
             for item in rtn:
                 sportReport_list.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8], item[9], item[10], item[11],
                                           item[12], item[13], item[14], item[15], item[16], item[17], item[18], item[19], item[20], item[21]])
-            if not sportReport_list:
-                single_list = []
-                complex_list = []
+            sportReport = []
+            if sportReport_list == [['串关', None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]]:
+                sportReport = []
             else:
-                single_list = sportReport_list[:-1]
-                complex_list = sportReport_list[-1]
+                for item in sportReport_list:
+                    if item == ['串关', None, None, None, None, None, None, None, None, None, None, None, None, None, None, None,None, None, None, None, None, None]:
+                        sportReport_list.remove(item)
+                        sportReport = sportReport_list
+                    else:
+                        sportReport = sportReport_list
 
-            return single_list,complex_list,sql_str
+            return sportReport,sql_str
 
         else:
             raise AssertionError('暂不支持该类型')
 
-    def credit_tournamentReport_query(self, expData={}, queryType='detail'):
+    def credit_tournamentReport_query(self, expData={}, queryType='match'):
         '''
-        总台-代理报表-联赛报表                                   /// 修改于2022.06.11
+        总台-代理报表-联赛报表                                   /// 修改于2022.07.22
         :param expData:
         :param queryType:   detail/total
         :return:
         '''
         resp = expData
-        if resp['startCreateTime']:
-            createTime = resp['startCreateTime']
-            endTime = resp['endCreateTime']
-            ctime = self.get_current_time_for_client(time_type='ctime', day_diff=int(createTime))
-            etime = self.get_current_time_for_client(time_type='etime', day_diff=int(endTime))
+        if resp['ctime']:
+            ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['ctime']))
+            etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['etime']))
         else:
             ctime = ""
             etime = ""
@@ -7199,8 +7736,8 @@ class MysqlQuery(MysqlFunc):
                 date_type =""
 
         database_name = "bfty_credit"
-        if queryType == 'detail':
-            sql_str = f"SELECT tournament_id '联赛ID',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额',sum(level0_backwater_amount+level1_backwater_amount+level2_backwater_amount+level3_backwater_amount+backwater_amount) '总佣金'," \
+        if queryType == 'match':
+            sql_str = f"SELECT tournament_name '联赛名称',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额',TRUNCATE(sum(efficient_amount*company_retreat_proportion),2) '总佣金'," \
                       f"sum(handicap_final_win_or_lose-backwater_amount) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金',sum(handicap_final_win_or_lose) '会员总计',sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢'," \
                       f"sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计',sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢'," \
                       f"sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金',sum(level2_win_or_lose) '二级代理总计',sum(level1_win_or_lose-level1_backwater_amount) '一级代理输赢'," \
@@ -7208,7 +7745,7 @@ class MysqlQuery(MysqlFunc):
                       f"sum(IFNULL(level0_backwater_amount,0)) '总代理佣金',sum(level0_win_or_lose) '总代理总计',sum(company_win_or_lose-company_backwater_amount) '公司输赢'," \
                       f"sum(company_backwater_amount) '公司佣金',sum(company_win_or_lose) '公司总计' FROM o_account_order a JOIN " \
                       f"o_account_order_match b ON a.order_no=b.order_no WHERE `status`=2 AND a.award_time is not NULL AND bet_type=1 {sport_id} AND {date_type} BETWEEN '{ctime}' AND '{etime}' " \
-                      f"GROUP BY tournament_id UNION SELECT ('串关') '串关',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额',sum(level0_backwater_amount+level1_backwater_amount+level2_backwater_amount+level3_backwater_amount+backwater_amount) '总佣金'," \
+                      f"GROUP BY tournament_name UNION SELECT ('串关') '串关',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额',sum(level0_backwater_amount+level1_backwater_amount+level2_backwater_amount+level3_backwater_amount+backwater_amount) '总佣金'," \
                       f"sum(handicap_final_win_or_lose-backwater_amount) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金',sum(handicap_final_win_or_lose) '会员总计'," \
                       f"sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计'," \
                       f"sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢',sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金',sum(level2_win_or_lose) '二级代理总计'," \
@@ -7224,15 +7761,21 @@ class MysqlQuery(MysqlFunc):
                 tournamentReport_list.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8], item[9], item[10], item[11],
                                           item[12], item[13], item[14], item[15], item[16], item[17], item[18], item[19], item[20], item[21]])
 
+            tournamentReport = []
             if tournamentReport_list == [['串关', None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]]:
-                tournamentReportList = []
+                tournamentReport = []
             else:
-                tournamentReportList = tournamentReport_list
+                for item in tournamentReport_list:
+                    if item == ['串关', None, None, None, None, None, None, None, None, None, None, None, None, None, None, None,None, None, None, None, None, None]:
+                        tournamentReport_list.remove(item)
+                        tournamentReport = tournamentReport_list
+                    else:
+                        tournamentReport = tournamentReport_list
 
-            return tournamentReportList,sql_str
+            return tournamentReport,sql_str
 
         elif queryType == 'total':
-            sql_str = f"SELECT '合计' as '合计',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额',sum(level0_backwater_amount+level1_backwater_amount+level2_backwater_amount+level3_backwater_amount+backwater_amount) '总佣金'," \
+            sql_str = f"SELECT '合计' as '合计',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额',TRUNCATE(sum(efficient_amount*company_retreat_proportion),2) '总佣金'," \
                       f"sum(handicap_final_win_or_lose-backwater_amount) '会员输赢'," \
                       f"sum(IFNULL(backwater_amount,0)) '会员佣金',sum(handicap_final_win_or_lose) '会员总计',sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢'," \
                       f"sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计',sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢'," \
@@ -7259,17 +7802,15 @@ class MysqlQuery(MysqlFunc):
 
     def credit_matchReport_query(self, expData={}, queryType='match'):
         '''
-        总台-代理报表-赛事盈亏                               /// 修改于2022.06.13
+        总台-代理报表-赛事盈亏                               /// 修改于2022.07.22
         :param expData:
         :param queryType:   match/total/market
         :return:
         '''
         resp = expData
-        if resp['startCreateTime']:
-            createTime = resp['startCreateTime']
-            endTime = resp['endCreateTime']
-            ctime = self.get_current_time_for_client(time_type='ctime', day_diff=int(createTime))
-            etime = self.get_current_time_for_client(time_type='etime', day_diff=int(endTime))
+        if resp['ctime']:
+            ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['ctime']))
+            etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['etime']))
         else:
             ctime = ""
             etime = ""
@@ -7295,7 +7836,7 @@ class MysqlQuery(MysqlFunc):
         database_name = "bfty_credit"
         if queryType == 'match':
             sql_str = f"SELECT match_id '赛事ID',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额'," \
-                      f"sum(level0_backwater_amount+level1_backwater_amount+level2_backwater_amount+level3_backwater_amount+backwater_amount) '总佣金'," \
+                      f"TRUNCATE(sum(efficient_amount*company_retreat_proportion),2) '总佣金'," \
                       f"sum(handicap_final_win_or_lose-backwater_amount) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金',sum(handicap_final_win_or_lose) '会员总计'," \
                       f"sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计'," \
                       f"sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢',sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金',sum(level2_win_or_lose) '二级代理总计'," \
@@ -7318,11 +7859,22 @@ class MysqlQuery(MysqlFunc):
                 matchReport_list.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8], item[9], item[10], item[11],
                                           item[12], item[13], item[14], item[15], item[16], item[17], item[18], item[19], item[20], item[21]])
 
-            return matchReport_list,sql_str
+            matchReport = []
+            if matchReport_list == [['串关', None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None, None]]:
+                matchReport = []
+            else:
+                for item in matchReport_list:
+                    if item == ['串关', None, None, None, None, None, None, None, None, None, None, None, None, None, None, None,None, None, None, None, None, None]:
+                        matchReport_list.remove(item)
+                        matchReport = matchReport_list
+                    else:
+                        matchReport = matchReport_list
+
+            return matchReport,sql_str
 
         elif queryType == 'total':
             sql_str = f"SELECT '合计' as '合计',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额'," \
-                      f"sum(level0_backwater_amount+level1_backwater_amount+level2_backwater_amount+level3_backwater_amount+backwater_amount) '总佣金',sum(handicap_final_win_or_lose-backwater_amount) '会员输赢'," \
+                      f"TRUNCATE(sum(efficient_amount*company_retreat_proportion),2) '总佣金',sum(handicap_final_win_or_lose-backwater_amount) '会员输赢'," \
                       f"sum(IFNULL(backwater_amount,0)) '会员佣金',sum(handicap_final_win_or_lose) '会员总计',sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢'," \
                       f"sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计',sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢'," \
                       f"sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金',sum(level2_win_or_lose) '二级代理总计',sum(level1_win_or_lose-level1_backwater_amount) '一级代理输赢'," \
@@ -7347,7 +7899,7 @@ class MysqlQuery(MysqlFunc):
             sql_str = f"SELECT market_id,`总投注金额`,`总有效金额`,`总佣金`,`会员输赢`,`会员佣金`,`会员总计`,`三级代理输赢`,`三级代理佣金`,`三级代理总计`,`二级代理输赢`,`二级代理佣金`," \
                       f"`二级代理总计`,`一级代理输赢`,`一级代理佣金`,`一级代理总计`,`总代理输赢`,`总代理佣金`,`总代理总计`,`公司输赢`,`公司佣金`,`公司总计` " \
                       f"FROM (SELECT market_id,a.sport_id,b.match_id,sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额'," \
-                      f"sum(level0_backwater_amount+level1_backwater_amount+level2_backwater_amount+level3_backwater_amount+backwater_amount) '总佣金'," \
+                      f"TRUNCATE(sum(efficient_amount*company_retreat_proportion),2) '总佣金'," \
                       f"sum(handicap_final_win_or_lose-backwater_amount) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金',sum(handicap_final_win_or_lose) '会员总计'," \
                       f"sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计'," \
                       f"sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢',sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金',sum(level2_win_or_lose) '二级代理总计'," \
@@ -7371,17 +7923,15 @@ class MysqlQuery(MysqlFunc):
 
     def credit_multitermReport_query(self, expData={}, queryType='detail'):
         '''
-        总台-代理报表-混合串关                              /// 修改于2022.06.11
+        总台-代理报表-混合串关                              /// 修改于2022.07.21
         :param expData:
         :param queryType:   detail/total
         :return:
         '''
         resp = expData
-        if resp['startCreateTime']:
-            createTime = resp['startCreateTime']
-            endTime = resp['endCreateTime']
-            ctime = self.get_current_time_for_client(time_type='ctime', day_diff=int(createTime))
-            etime = self.get_current_time_for_client(time_type='etime', day_diff=int(endTime))
+        if resp['ctime']:
+            ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['ctime']))
+            etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['etime']))
         else:
             ctime = ""
             etime = ""
@@ -7391,7 +7941,7 @@ class MysqlQuery(MysqlFunc):
         else:
             sport_id = ""
         if resp['searchAccount']:
-            account = f"AND a.login_account='{resp['searchAccount']}'"
+            account = f"AND a.user_name='{resp['searchAccount']}'"
         else:
             account = ""
         if resp['queryDateType']:
@@ -7407,7 +7957,7 @@ class MysqlQuery(MysqlFunc):
         database_name = "bfty_credit"
         if queryType == 'detail':
             sql_str = f"SELECT CONCAT(a.user_name,'/',login_account) '账号/登入账号',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额'," \
-                      f"sum(level0_backwater_amount+level1_backwater_amount+level2_backwater_amount+level3_backwater_amount+backwater_amount) '总佣金'," \
+                      f"TRUNCATE(sum(efficient_amount*company_retreat_proportion),2) '总佣金'," \
                       f"sum(handicap_final_win_or_lose-backwater_amount) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金',sum(handicap_final_win_or_lose) '会员总计'," \
                       f"sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计'," \
                       f"sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢',sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金',sum(level2_win_or_lose) '二级代理总计'," \
@@ -7425,8 +7975,8 @@ class MysqlQuery(MysqlFunc):
             return multitermReport_list,sql_str
 
         elif queryType == 'total':
-            sql_str = f"SELECT '合计' as '合计',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额',sum(level0_backwater_amount+level1_backwater_amount+level2_backwater_amount+" \
-                      f"level3_backwater_amount+backwater_amount) '总佣金',sum(handicap_final_win_or_lose-backwater_amount) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金'," \
+            sql_str = f"SELECT '合计' as '合计',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额',TRUNCATE(sum(efficient_amount*company_retreat_proportion),2) '总佣金'," \
+                      f"sum(handicap_final_win_or_lose-backwater_amount) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金'," \
                       f"sum(handicap_final_win_or_lose) '会员总计',sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金'," \
                       f"sum(level3_win_or_lose) '三级代理总计',sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢',sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金'," \
                       f"sum(level2_win_or_lose) '二级代理总计',sum(level1_win_or_lose-level1_backwater_amount) '一级代理输赢',sum(IFNULL(level1_backwater_amount,0)) '一级代理佣金'," \
@@ -7448,7 +7998,117 @@ class MysqlQuery(MysqlFunc):
         else:
             raise AssertionError('暂不支持该类型')
 
+    def credit_cancelledOrder_query(self, expData={}):
+        '''
+        总台-代理报表-已取消注单                              /// 修改于2022.07.21
+        :param expData:
+        :param queryType:   detail/total
+        :return:
+        '''
+        resp = expData
+        if resp['ctime']:
+            ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['ctime']))
+            etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['etime']))
+        else:
+            ctime = ""
+            etime = ""
+        if resp['account']:
+            account = f"AND d.account='{resp['account']}'"
+        else:
+            account = ""
 
+        database_name = "bfty_credit"
+        sql_str = f"SELECT CONCAT(d.account,'/',d.login_account) '账号/登入账号',a.order_no '注单号',a.create_time '投注时间',tournament_name '联赛名称',CONCAT( home_team_name, ' Vs '," \
+                  f" away_team_name ) '赛事名称',IF(is_live=3,'早盘','滚球盘') '赛事类型',market_name  '盘口名称',specifier '亚盘口',outcome_name  '投注项名称',cast(credit_odds as char) " \
+                  f"'赔率',match_time '赛事时间',if(odds_type=1,'欧洲盘','香港盘') '盘口类型',bet_amount '投注金额',CONCAT(bet_ip,' / ',ip_address) 'IP地址' FROM o_account_order a JOIN " \
+                  f"o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON (a.order_no=c.order_no AND b.match_id=c.match_id) JOIN u_user d ON " \
+                  f"a.user_id=d.id WHERE a.`status`=3 AND DATE_FORMAT(award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {account} ORDER BY a.create_time DESC"
+        rtn = list(self.query_data(sql_str, database_name))
+        cancelledOrder = []
+        for item in rtn:
+            order_num = item[1]
+            odds = self.get_odds_by_orderNum(orderNo=order_num)
+            bet_time = item[2]
+            betTime = bet_time.strftime("%Y-%m-%d %H:%M:%S")
+            match_time = item[10]
+            matchTime = match_time.strftime("%Y-%m-%d %H:%M:%S")
+            cancelledOrder.append([item[0], item[1], betTime, [item[3], item[4], item[5], item[6], item[7], item[8],
+                                  float(item[9]), matchTime, item[11]], float(odds), float(item[12]), item[13]])
+
+        expectResult = self.cf.merge_compelx_01(new_lList=cancelledOrder)
+
+        return expectResult,sql_str
+
+    def credit_bill_query(self, expData={}, query_type=1):
+        '''
+        总台-代理报表-账目                              /// 修改于2022.07.21
+        :param expData:
+        :param queryType:   detail/total
+        :return:
+        '''
+        resp = expData
+        ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['ctime']))
+        etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['etime']))
+        time = resp['ctime']
+        database_name = "bfty_credit"
+        if query_type == 1:
+            sql_str = f"SELECT b.`日期`,`赢亏金额`,`赢亏现金余额`,`佣金金额`,`佣金现金余额` FROM (SELECT IFNULL(DATE_FORMAT(any_value(a.award_time),'%Y-%m-%d')," \
+                      f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d') )'date' ,ifnull(SUM(company_win_or_lose-company_backwater_amount),0)'赢亏金额'," \
+                      f"ifnull(SUM(company_backwater_amount),0)'佣金金额' FROM o_account_order a  WHERE `status` = 2  and  DATE_FORMAT(a.award_time ,'%Y-%m-%d') = " \
+                      f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d') GROUP BY IFNULL(DATE_FORMAT(any_value(a.award_time),'%Y-%m-%d')," \
+                      f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d'))) a JOIN (SELECT DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00')," \
+                      f"INTERVAL {time} DAY),'%Y-%m-%d') '日期',(`当日结账赢亏现金余额`+`截至当日未结账赢亏现金余额`) '赢亏现金余额',(`当日结账佣金现金余额`+`截至当日未账佣金现金余额`) '佣金现金余额' FROM " \
+                      f"(SELECT sum(IF (DATE_FORMAT(b.checkout_time,'%Y-%m-%d')=DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d')," \
+                      f"(a.company_win_or_lose-a.company_backwater_amount),0)) '当日结账赢亏现金余额',sum(IF (b.payment_status=0,(a.company_win_or_lose-a.company_backwater_amount),0)) " \
+                      f"'截至当日未结账赢亏现金余额',sum(IF (DATE_FORMAT(b.checkout_time,'%Y-%m-%d')=DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d')," \
+                      f"a.company_win_or_lose,0)) '当日结账佣金现金余额',sum(IF (b.payment_status=0,a.company_win_or_lose,0)) '截至当日未账佣金现金余额' FROM o_account_order a LEFT JOIN " \
+                      f"m_account_unsettlement_amount_record b ON a.order_no=b.order_no AND a.proxy0_id=b.account_id AND b.role_id=0 WHERE a.`status`=2 AND " \
+                      f"DATE_FORMAT(a.award_time,'%Y-%m-%d')<=DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d')) a ) b ON a.date=b.`日期`"
+            rtn = list(self.query_data(sql_str, database_name))
+            billOrder = [list(item) for item in rtn][0]
+
+            return billOrder,sql_str
+
+        elif query_type == 2:
+            sql_str = f" SELECT CONCAT(d.account,'/',d.login_account) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id=" \
+                      f" 1 then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id" \
+                      f" = 5 THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰上曲棍球' END)as " \
+                      f"'球类',(case when a.bet_type=1 then '单注' when a.bet_type=2 then '串关' when a.bet_type=3 then '复式串关' end ) as '注单类型',tournament_name '联赛名称'," \
+                      f"CONCAT( home_team_name, ' Vs ', away_team_name ) '赛事名称',IF(is_live=3,'早盘','滚球盘') '赛事类型',market_name '盘口名称',hcp_for_the_rest '亚盘口',outcome_name " \
+                      f"'投注项名称',cast(credit_odds as char) '赔率',if(odds_type=1,'欧洲盘','香港盘') '盘口类型',match_time '赛事时间',ifnull(award_time,'--') as '结算时间',(CASE WHEN " \
+                      f"a.settlement_result=1 then '赢' WHEN a.settlement_result=2 then '输' WHEN a.settlement_result=5 then '平局走水' WHEN a.settlement_result=1 then '注单取消' END) " \
+                      f"as '注单结果',CONCAT(bet_ip, +' / ',+ ip_address) '下注IP地址',bet_amount as '投注金额',handicap_win_or_lose '注单输赢',efficient_amount '有效金额'," \
+                      f"company_actual_percentage,company_win_or_lose-company_backwater_amount 'company_winlose',0  as 'company_retreat',company_backwater_amount,company_win_or_lose," \
+                      f"level0_actual_percentage,level0_win_or_lose-level0_backwater_amount 'level0_winlose',company_retreat_proportion 'level0_retreat',level0_backwater_amount," \
+                      f"level0_win_or_lose,level1_actual_percentage,level1_win_or_lose-level1_backwater_amount 'level1_winlose',level0_retreat_proportion 'level1_retreat'," \
+                      f"level1_backwater_amount,level1_win_or_lose,level2_actual_percentage,level2_win_or_lose-level2_backwater_amount 'level2_winlose',level1_retreat_proportion " \
+                      f"'level2_retreat',level2_backwater_amount,level2_win_or_lose,level3_actual_percentage,level3_win_or_lose-level3_backwater_amount 'level3_winlose'," \
+                      f"level2_retreat_proportion 'level3_retreat',level3_backwater_amount,level3_win_or_lose,handicap_final_win_or_lose-backwater_amount 'user_winlose'," \
+                      f"level3_retreat_proportion 'user_retreat',backwater_amount,handicap_final_win_or_lose FROM o_account_order a JOIN o_account_order_match b ON a.order_no = " \
+                      f"b.order_no JOIN o_account_order_match_update c ON (a.order_no=c.order_no AND b.match_id=c.match_id)JOIN u_user d ON a.user_id=d.id WHERE a.`status`=2  AND " \
+                      f"a.award_time is not null AND DATE_FORMAT(a.award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' ORDER BY a.create_time DESC"
+            # print(sql_str)
+            rtn = list(self.query_data(sql_str, database_name))
+            cancelledOrder = []
+            for item in rtn:
+                order_num = item[2]
+                odds = self.get_odds_by_orderNum(orderNo=order_num)
+                bet_time = item[3]
+                create_time = bet_time.strftime("%Y-%m-%d %H:%M:%S")
+                matchTime = item[14]
+                match_time = matchTime.strftime("%Y-%m-%d %H:%M:%S")
+                cancelledOrder.append([item[0], item[1], item[2], create_time, item[4], item[5],
+                                           [item[6], item[7], item[8], item[9], item[10], item[11], float(item[12]),item[13], match_time],
+                                           item[15], item[16], item[17], float(odds), item[18], item[19], item[20],item[21], item[22], item[23], item[24], item[25], item[26],
+                                           item[27],item[28], item[29], item[30], item[31], item[32], item[33], item[34],item[35], item[36], item[37], item[38], item[39], item[40],
+                                           item[41], item[42], item[43], item[44], item[45], item[46], item[47],item[48], item[49]])
+
+            expectResult = self.cf.merge_compelx_02(new_lList=cancelledOrder)
+
+            return expectResult, sql_str
+
+        else:
+            raise AssertionError('ERROE,暂不支持该类型')
 
 
 
@@ -8881,20 +9541,29 @@ if __name__ == "__main__":
 
     # commission = mysql.get_order_no_commission(order_no='XFB74wbGYMe5')            # 总佣金
     # order = mysql.get_order_by_account(account='a2')
+    # total = mysql.get_account_totalCommission(account="a0")
 
     # data = mysql.check_orderNo_effectAmount_and_commission(user_name='', order_no='', createDate=(-1,0), awardDate=())    # 校验信用网注单有效金额和佣金
 
     # check_result = mysql.check_order_no_settlement_result(bet_type=2,user_name='a2j1j2j3j2',order_no='XB4mLjJJHmf2')
-    betType = mysql.get_bet_type_by_ordernum(order_no='XKStLbybZVK5')          # 获取串关的类型
-    print(betType)
+    # betType = mysql.get_bet_type_by_ordernum(order_no='XHXrWXc2SsDc')          # 获取串关的类型
+    # print(betType)
     # order = mysql.get_unsettled_order(user_name='a01')
-    # detail = mysql.get_order_detail(order_no='XDSUd5NzmihG')
-    # id = mysql.get_account_id(account='a0')
-    # data = mysql.credit_sportReport_query_sql(sportName='足球', queryType='sport', dateType=3, create_time=(-7, -1))[0]
-    # data = mysql.credit_sportReport_query(expData={"startCreateTime":-6, "endCreateTime":-0, "sportName":'',"queryDateType":3 },queryType='sport')[0]
-    # data = mysql.credit_tournamentReport_query(expData={"startCreateTime":-9, "endCreateTime":-3, "sportName":'排球',"queryDateType":3 },queryType='total')[0]
-    # data = mysql.credit_matchReport_query(expData={"startCreateTime": -7, "endCreateTime": -1, "sportName": '',"matchId":'', "queryDateType": 3}, queryType='total')[0]
-    # data = mysql.credit_multitermReport_query(expData={"startCreateTime": -7, "endCreateTime": -1, "sportName": '排球',"searchAccount":'', "queryDateType": 3}, queryType='total')[0]
+    # user_name,bet_amount,sport_name,team_name,market_name = mysql.get_order_detail(order_no='XLjatmChCUUy')
+    # print(user_name,bet_amount,sport_name,team_name,market_name)
+    # id = mysql.get_account_id(account='a0b1b2b300')
+    # print(id)
+
+
+    # data = mysql.credit_unsettledOrder_query(expData={"account": "", "parentId":"0", "userName":"a0b1b2b3a3"})[0]
+    # data = mysql.credit_winLoseSimple_query(expData={"account": "", "parentId":"a0b1b2b3", "userName":"","ctime": "-7", "etime":"-1"})[0]
+    # data = mysql.credit_winLoseDetail_query(expData={"account": "", "parentId": "", "userName": "a0b1b2b300", "ctime": "-7", "etime": "-1"})[0]
+    # data = mysql.credit_sportReport_query(expData={"ctime":'-6', "ctime":'-0', "sportName":'网球',"queryDateType":3 },queryType='market')[0]
+    # data = mysql.credit_tournamentReport_query(expData={"ctime":-9, "etime":-3, "sportName":'羽毛球',"queryDateType":3 },queryType='detail')[0]
+    # data = mysql.credit_matchReport_query(expData={"ctime": -7, "etime": -1, "sportName": '冰上曲棍球',"matchId":'', "queryDateType": 3}, queryType='match')[0]
+    # data = mysql.credit_multitermReport_query(expData={"ctime":-6, "etime":-0, "sportName":'',"searchAccount":"", "queryDateType":3 },queryType='detail')[0]
+    # data = mysql.credit_cancelledOrder_query(expData={"ctime": "-7", "etime": "-1", "account": ''})[0]
+    data = mysql.credit_bill_query(expData={"ctime": '-0', "etime": '-0'},query_type=2)[0]
     # print(data)
 
 
@@ -8902,7 +9571,7 @@ if __name__ == "__main__":
     # odds_list = [1.88, 1.81, 1.74, 1.81]
     # data = mysql.get_all_odds(odds_list=odds_list, bet_type=4)
     # print(data)
-    # odds = mysql.get_odds_by_orderNum(orderNo='XKnVLeGUvbFC')          #   通过注单号查询注单的总赔率
+    # odds = mysql.get_odds_by_orderNum(orderNo='XLjkGuy8u2Ut')          #   通过注单号查询注单的总赔率
     # print(odds)
     # N1 = list(combinations(a, 2))
     # N2 = list(permutations(a, 2))
@@ -8912,8 +9581,9 @@ if __name__ == "__main__":
     # matchNum = mysql.get_match_id_by_sportReport(time=(-7,-1), queryDateType=3)
     # data = mysql.get_market_id_by_sportId_sportReport(sport_id='sr:sport:1',time=(-7,-1), queryDateType=3)
     # data = mysql.get_market_id_by_sportId_tournamentReport(sport_id='sr:sport:1',time=(-7,-1), queryDateType=3)
-    # data = mysql.get_match_id_by_sportId_matchReport(sport_id='sr:sport:23', time=(-7, -1), queryDateType=3)
-    # data = mysql.get_market_id_by_matchId_matchReport(match_id='串关', time=(-7, -1), queryDateType=3)
+    # data = mysql.get_match_id_by_sportId_matchReport(sport_id='sr:sport:3', time=(-7, -1), queryDateType=3)
+    # data = mysql.get_matchId_by_sportId_matchReport(sport_id='sr:sport:3', time=(-7, -1), queryDateType=3)
+    data = mysql.get_market_id_by_matchId_matchReport(match_id='串关', time=(-7, -1), queryDateType=3)
     # data = mysql.get_account_id_by_matchId_multitermReport(account_id="", sport_id="", time=(-7,-1), queryDateType=3)
     # data = mysql.get_account_id_by_mixBetReport()
     # data = mysql.get_order_num_by_mixBetReport()
@@ -8922,7 +9592,7 @@ if __name__ == "__main__":
     # data = mysql.get_outcomeId_by_marketId_mainBetReport(sport_name='足球', match_id='sr:match:32225939', market_id='16')
     # data = mysql.get_matchdata_mainBetReport(sportName='足球')
     # data = mysql.get_sportName_mainBetReport()
-    # print(data)
+    print(data)
 
 
 
