@@ -799,9 +799,13 @@ class CommonFunc(object):
                 continue
 
         if len(expect_list) == 2:
-            expect_list.remove(expect_list[-1])
+            if expect_list[0][2] == expect_list[1][2]:
+                expect_list.remove(expect_list[-1])
+            else:
+                expect_list = expect_list
         else:
             expect_list = expect_list
+
         return expect_list
 
     def merge_compelx_02(self, new_lList):
@@ -857,7 +861,10 @@ class CommonFunc(object):
                 continue
 
         if len(expect_list) == 2:
-            expect_list.remove(expect_list[-1])
+            if expect_list[0][2] == expect_list[1][2]:
+                expect_list.remove(expect_list[-1])
+            else:
+                expect_list = expect_list
         else:
             expect_list = expect_list
 
