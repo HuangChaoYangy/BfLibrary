@@ -281,7 +281,7 @@ class Test_matchReport_ya:
                 request_body = {"begin":begin,"end":end,"dateType":inBody['dateType'],"page":1,"limit":200,"sportId":inBody['sportId'],
                                 "marketId":marketId,"account":None,"tournamentId":None,"matchId":match_id}
 
-                total_title = f"根据球类：'{sport_name[inBody['sportId']]}',查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}, '单注'"
+                total_title = f"根据球类：'{sport_name[inBody['sportId']]}',查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
                 allure.dynamic.title(total_title)
                 title = f"根据球类：'{sport_name[inBody['sportId']]}', 比赛ID： 【'{match_id}'】, 盘口ID： 【'{marketId}'】查看注单详情, " \
                         f"查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
@@ -421,7 +421,7 @@ class Test_matchReport_ya:
         request_body = {"begin":begin,"end":end,"dateType":inBody['dateType'],"page":1,"limit":200,"sportId":inBody['sportId'],
                         "marketId":None,"account":None,"tournamentId":"串关","matchId":"串关"}
 
-        total_title = f"根据球类：'{sport_name[inBody['sportId']]}',查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}, '串关'"
+        total_title = f"根据球类：'{sport_name[inBody['sportId']]}',查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
         allure.dynamic.title(total_title)
         title = f"根据球类：'{sport_name[inBody['sportId']]}', 比赛ID：'串关'查看注单详情, " \
                 f"查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
@@ -565,5 +565,5 @@ class Test_matchReport_ya:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_matchReport_ya.py", '-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  # '--clean-alluredir', '-n=4'
+    pytest.main(["test_matchReport_ya.py", '-vs', '-q', '--alluredir', '../report/tmp','-n=auto','--clean-alluredir'])  # '--clean-alluredir', '-n=4'
     os.system("allure serve ../report/tmp")
