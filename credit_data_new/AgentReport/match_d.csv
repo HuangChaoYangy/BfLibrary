@@ -1,0 +1,2 @@
+begin,end,DateType,sportId,title,ctime,etime,DateType
+-7,-1,3,'sr:sport:4',"总台-代理报表-赛事盈亏-注单详情,默认按结算时间查询近7天数据",-7,-1,3

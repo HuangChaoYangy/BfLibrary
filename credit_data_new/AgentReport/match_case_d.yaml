@@ -1,0 +1,16 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/order/details
+    method: post
+  data:
+    begin: -7
+    end: -1
+    dateType: 3
+    sportId: 'sr:sport:4'
+    title: 总台-代理报表-赛事盈亏-注单详情,默认按结算时间查询近7天数据
+  resp:
+    ctime: -7
+    etime: -1
+    dateType: 3
+    sportId: 'sr:sport:4'
+

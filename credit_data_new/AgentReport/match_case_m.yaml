@@ -1,0 +1,72 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/market
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 3
+    sportId: 'sr:sport:4'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏-盘口详情,默认按照结算时间查询近7天数据
+  resp:
+    ctime: $ddt{ctime}"
+    etime: $ddt{etime}"
+    dateType: 3
+    sportId: 'sr:sport:4'
+    matchId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/market
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 2
+    sportId: 'sr:sport:4'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏-盘口详情,默认按照赛事时间查询近7天数据
+  resp:
+    ctime: $ddt{ctime}"
+    etime: $ddt{etime}"
+    dateType: 2
+    sportId: 'sr:sport:4'
+    matchId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/market
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 1
+    sportId: 'sr:sport:4'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏-盘口详情,默认按照投注时间查询近7天数据
+  resp:
+    ctime: $ddt{ctime}"
+    etime: $ddt{etime}"
+    dateType: 1
+    sportId: 'sr:sport:4'
+    matchId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/market
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 3
+    sportId: 'sr:sport:23'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏-盘口详情,默认按照结算时间查询近7天数据
+  resp:
+    ctime: $ddt{ctime}"
+    etime: $ddt{etime}"
+    dateType: 3
+    sportId: 'sr:sport:23'
+    matchId: ''
+
