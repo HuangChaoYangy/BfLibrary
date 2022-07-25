@@ -1,0 +1,420 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-30'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-客户端盈亏,默认查询近30天数据
+  resp:
+    startCreateTime: '-30'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: 'APP-android'
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-客户端盈亏,根据客户端类型'APP-android'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    terminal: 'APP-android'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: 'H5-android'
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-客户端盈亏,根据客户端类型'H5-android'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    terminal: 'H5-android'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: 'pc'
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-客户端盈亏,根据客户端类型'pc'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    terminal: 'pc'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: 'H5-IOS'
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-客户端盈亏,根据客户端类型'H5-IOS'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    terminal: 'H5-IOS'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: 'APP-IOS'
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-客户端盈亏,根据客户端类型'APP-IOS'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    terminal: 'APP-IOS'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: 'bettingUserNumber'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据,根据“投注人数”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注人数`,0)
+    sortParameter: 'DESC'
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: 'bettingUserNumber'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据,根据“投注人数”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注人数`,0)
+    sortParameter: 'ASC'
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: 'bettingNumber'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据,根据“投注量”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注量`,0)
+    sortParameter: 'DESC'
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: 'bettingNumber'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据,根据“投注量”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注量`,0)
+    sortParameter: 'ASC'
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: 'betAmount'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据,根据“投注金额”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注金额`,0)
+    sortParameter: 'DESC'
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: 'betAmount'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据,根据“投注金额”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注金额`,0)
+    sortParameter: 'ASC'
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: 'effectiveBetAmount'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据,根据“有效投注”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`有效投注`,0)
+    sortParameter: 'DESC'
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: 'effectiveBetAmount'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据,根据“有效投注”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`有效投注`,0)
+    sortParameter: 'ASC'
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: 'bettingProfitAndLoss'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据,根据“投注盈亏”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注盈亏`,0)
+    sortParameter: 'DESC'
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: 'bettingProfitAndLoss'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据,根据“投注盈亏”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注盈亏`,0)
+    sortParameter: 'ASC'
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: 'totalRebate'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据,根据“总佣金”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`总返水`,0)
+    sortParameter: 'DESC'
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: 'totalRebate'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据,根据“总佣金”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`总返水`,0)
+    sortParameter: 'ASC'
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: 'netProfitAndLoss'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据,根据“净盈亏”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`净盈亏`,0)
+    sortParameter: 'DESC'
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryClientProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    sortIndex: 'netProfitAndLoss'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-客户端盈亏,默认查询近7天数据,根据“净盈亏”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`净盈亏`,0)
+    sortParameter: 'ASC'
+    terminal: ''
+

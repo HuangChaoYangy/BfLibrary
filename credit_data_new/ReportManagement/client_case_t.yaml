@@ -1,0 +1,147 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: ''
+    mark: 2
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-客户端盈亏-总计,默认查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-30'
+    endCreateTime: '-1'
+    terminal: ''
+    mark: 2
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-客户端盈亏-总计,默认查询近30天数据
+  resp:
+    startCreateTime: '-30'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    terminal: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: 'APP-android'
+    mark: 2
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-客户端盈亏-总计,根据客户端类型'APP-android'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    terminal: 'APP-android'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: 'H5-android'
+    mark: 2
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-客户端盈亏-总计,根据客户端类型'H5-android'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    terminal: 'H5-android'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: 'pc'
+    mark: 2
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-客户端盈亏-总计,根据客户端类型'pc'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    terminal: 'pc'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: 'H5-IOS'
+    mark: 2
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-客户端盈亏-总计,根据客户端类型'H5-IOS'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    terminal: 'H5-IOS'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    terminal: 'APP-IOS'
+    mark: 2
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-客户端盈亏-总计,根据客户端类型'APP-IOS'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    terminal: 'APP-IOS'
+
