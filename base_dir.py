@@ -58,7 +58,27 @@ csv_url_client_d = os.path.join(excel_dir,'credit_data_new\ReportManagement','cl
 client_report_url_d = os.path.join(excel_dir,'credit_data_new\ReportManagement','client_d.yaml')
 client_report_url_new_d = os.path.join(excel_dir,'credit_data_new\ReportManagement','client_case_d.yaml')
 
+# 球类盈亏 - 列表详情
+csv_url_sports = os.path.join(excel_dir,'credit_data_new\ReportManagement','sports.csv')
+sports_url = os.path.join(excel_dir,'credit_data_new\ReportManagement','sports.yaml')
+sports_url_new = os.path.join(excel_dir,'credit_data_new\ReportManagement','sports_case.yaml')
+# 球类盈亏 - 总计
+csv_url_sports_t = os.path.join(excel_dir,'credit_data_new\ReportManagement','sports_t.csv')
+sports_url_t = os.path.join(excel_dir,'credit_data_new\ReportManagement','sports_t.yaml')
+sports_url_new_t = os.path.join(excel_dir,'credit_data_new\ReportManagement','sports_case_t.yaml')
+# 球类盈亏 - 查看球类详情
+csv_url_sports_d = os.path.join(excel_dir,'credit_data_new\ReportManagement','sports_d.csv')
+sports_url_d = os.path.join(excel_dir,'credit_data_new\ReportManagement','sports_d.yaml')
+sports_url_new_d = os.path.join(excel_dir,'credit_data_new\ReportManagement','sports_case_d.yaml')
 
+# 佣金报表 - 列表详情
+csv_url_commission = os.path.join(excel_dir,'credit_data_new\ReportManagement','commission.csv')
+commission_url = os.path.join(excel_dir,'credit_data_new\ReportManagement','commission.yaml')
+commission_url_new = os.path.join(excel_dir,'credit_data_new\ReportManagement','commission_case.yaml')
+# 佣金报表 - 总计
+csv_url_commission_t = os.path.join(excel_dir,'credit_data_new\ReportManagement','commission_t.csv')
+commission_url_t = os.path.join(excel_dir,'credit_data_new\ReportManagement','commission_t.yaml')
+commission_url_new_t = os.path.join(excel_dir,'credit_data_new\ReportManagement','commission_case_t.yaml')
 
 
 
