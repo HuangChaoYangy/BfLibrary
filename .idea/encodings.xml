@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/billOrder_case.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/bill_case.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/cancelledOrder_case.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/match_case.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/match_case_d.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/match_case_m.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/multitermReport_case.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/multitermReport_case_d.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/sport_case.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/sport_case_d.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/sport_case_m.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/tournament_case.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/tournament_case_d.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/unsettleOrder_case.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/unsettleOrder_case_d.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/winLoseSimple_case.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/winLoseSimple_case_d.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/winloseDetail_case.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/AgentReport/winloseDetail_case_d.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/ReportManagement/client_case.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/ReportManagement/client_case_d.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/ReportManagement/client_case_t.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/ReportManagement/commission_case.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/ReportManagement/commission_case_t.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/ReportManagement/dailyReport_case.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/ReportManagement/dailyReport_case_t.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/ReportManagement/sports_case.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/ReportManagement/sports_case_d.yaml" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/credit_data_new/ReportManagement/sports_case_t.yaml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/credit_data_new/dataSource.csv" charset="GBK" />
     <file url="file://$PROJECT_DIR$/credit_data_new/dataSource_case.yaml" charset="GBK" />
     <file url="file://$PROJECT_DIR$/credit_data_new/new_test.yaml" charset="GBK" />
