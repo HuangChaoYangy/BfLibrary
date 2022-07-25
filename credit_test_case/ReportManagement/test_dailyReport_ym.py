@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/07/15 14:15
 # @Author  : liyang
-# @FileName: dailyReport_ym.py  yaml文件参数化
+# @FileName: test_dailyReport_ym.py  yaml文件参数化
 # @Software: PyCharm
 
 import pytest
@@ -169,5 +169,5 @@ class Test_dailyReport_yaml(object):
 
 if __name__ == "__main__":
 
-    pytest.main(["dailyReport_ym.py",'-vs', '-q', '--alluredir', '../report/tmp','-n=auto','--clean-alluredir'])  # '--clean-alluredir'
+    pytest.main(["test_dailyReport_ym.py",'-vs', '-q', '--alluredir', '../report/tmp','-n=auto','--clean-alluredir'])  # '--clean-alluredir'
     os.system("allure serve ../report/tmp")
