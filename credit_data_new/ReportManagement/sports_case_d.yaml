@@ -1,0 +1,160 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sportName: '足球'
+    sortParameter: ''
+    title: 管理后台-报表管理-球类盈亏-根据球类查看详情,根据球类'足球'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    sportName: '足球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sportName: '篮球'
+    sortParameter: ''
+    title: 管理后台-报表管理-球类盈亏-根据球类查看详情,根据球类'篮球'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    sportName: '篮球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sportName: '网球'
+    sortParameter: ''
+    title: 管理后台-报表管理-球类盈亏-根据球类查看详情,根据球类'网球'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    sportName: '网球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sportName: '排球'
+    sortParameter: ''
+    title: 管理后台-报表管理-球类盈亏-根据球类查看详情,根据球类'排球'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    sportName: '排球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sportName: '乒乓球'
+    sortParameter: ''
+    title: 管理后台-报表管理-球类盈亏-根据球类查看详情,根据球类'乒乓球'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    sportName: '乒乓球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sportName: '羽毛球'
+    sortParameter: ''
+    title: 管理后台-报表管理-球类盈亏-根据球类查看详情,根据球类'羽毛球'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    sportName: '羽毛球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sportName: '棒球'
+    sortParameter: ''
+    title: 管理后台-报表管理-球类盈亏-根据球类查看详情,根据球类'棒球'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    sportName: '棒球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/queryDailyProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sportName: '冰上曲棍球'
+    sortParameter: ''
+    title: 管理后台-报表管理-球类盈亏-根据球类查看详情,根据球类'冰上曲棍球'查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    sportName: '冰上曲棍球'
+

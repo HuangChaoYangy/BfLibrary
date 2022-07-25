@@ -1,0 +1,320 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sportName: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-30'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sportName: ''
+    sortParameter: ''
+    title: 管理后台-报表管理-球类盈亏,默认查询近30天数据
+  resp:
+    startCreateTime: '-30'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'bettingUserNumber'
+    sportName: ''
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据,根据“投注人数”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注人数`,0)
+    sortParameter: 'DESC'
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'bettingUserNumber'
+    sportName: ''
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据,根据“投注人数”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注人数`,0)
+    sortParameter: 'ASC'
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'bettingNumber'
+    sportName: ''
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据,根据“投注量”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注量`,0)
+    sortParameter: 'DESC'
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'bettingNumber'
+    sportName: ''
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据,根据“投注量”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注量`,0)
+    sortParameter: 'ASC'
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'betAmount'
+    sportName: ''
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据,根据“投注金额”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注金额`,0)
+    sortParameter: 'DESC'
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'betAmount'
+    sportName: ''
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据,根据“投注金额”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注金额`,0)
+    sortParameter: 'ASC'
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'effectiveBetAmount'
+    sportName: ''
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据,根据“有效投注”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`有效投注`,0)
+    sortParameter: 'DESC'
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'effectiveBetAmount'
+    sportName: ''
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据,根据“有效投注”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`有效投注`,0)
+    sortParameter: 'ASC'
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'bettingProfitAndLoss'
+    sportName: ''
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据,根据“投注盈亏”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注盈亏`,0)
+    sortParameter: 'DESC'
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'bettingProfitAndLoss'
+    sportName: ''
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据,根据“投注盈亏”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`投注盈亏`,0)
+    sortParameter: 'ASC'
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'totalRebate'
+    sportName: ''
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据,根据“总佣金”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`总返水`,0)
+    sortParameter: 'DESC'
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'totalRebate'
+    sportName: ''
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据,根据“总佣金”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`总返水`,0)
+    sortParameter: 'ASC'
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'netProfitAndLoss'
+    sportName: ''
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据,根据“净盈亏”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`净盈亏`,0)
+    sortParameter: 'DESC'
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'netProfitAndLoss'
+    sportName: ''
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-球类盈亏,默认查询近7天数据,根据“净盈亏”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`净盈亏`,0)
+    sortParameter: 'ASC'
+    sportName: ''
+

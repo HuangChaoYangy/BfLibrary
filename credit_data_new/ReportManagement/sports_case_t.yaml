@@ -1,0 +1,42 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sportName: ''
+    mark: 3
+    sortParameter: ''
+    title: 管理后台-报表管理-球类盈亏-总计,默认查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    sportName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/totalDailyProfitAndLoss
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-30'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sportName: ''
+    mark: 3
+    sortParameter: ''
+    title: 管理后台-报表管理-球类盈亏-总计,默认查询近30天数据
+  resp:
+    startCreateTime: '-30'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    sportName: ''
+

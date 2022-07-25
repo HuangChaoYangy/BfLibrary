@@ -1,0 +1,19 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/sportsProfitAndLossList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: $ddt{startCreateTime}
+    endCreateTime: $ddt{endCreateTime}"
+    sortIndex: $ddt{sortIndex}
+    sportName: $ddt{sportName}
+    sortParameter: $ddt{sortParameter}
+    title: $ddt{title}
+  resp:
+    startCreateTime: $ddt{start}
+    endCreateTime: $ddt{end}
+    sortIndex: $ddt{Index}
+    sortParameter: $ddt{Parameter}
+    sportName: $ddt{sportName}
