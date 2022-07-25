@@ -2455,7 +2455,7 @@ if __name__ == "__main__":
     bf = Credit_Client(mysql_info, mongo_info)
 
     # MyThread().thread_submit(bet_type=2, sport_name=None, event_type=None, odds_type=1, IsRandom='5',handicap=False, complex='multi', complex_number=2)
-    MyThread().thread_pool_submit(bet_type=1,  sport_name=None, event_type=None, odds_type=1, IsRandom='5', handicap=False, complex='multi', complex_number=2)
+    MyThread().thread_pool_submit(bet_type=1,  sport_name=None, event_type=None, odds_type=1, IsRandom='30', handicap=False, complex='multi', complex_number=2)
 
     token_list = ['6fa2475d165d41dab8633bbbc45f21b6','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
 
