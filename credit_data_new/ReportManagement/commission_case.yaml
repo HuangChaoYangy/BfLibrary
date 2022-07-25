@@ -1,0 +1,532 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-总台-佣金报表,默认查询近7天数据
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-30'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-总台-佣金报表,默认查询近30天数据
+  resp:
+    startCreateTime: '-30'
+    endCreateTime: '-1'
+    sortIndex: ''
+    sortParameter: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'totalRebate'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“总佣金”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`total_backwater`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'totalRebate'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“总佣金”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`total_backwater`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'levelBackwaterAmount'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“登1”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`level1_backwater`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'levelBackwaterAmount'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“登1”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`level1_backwater`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'leve2BackwaterAmount'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“登2”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`level2_backwater`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'leve2BackwaterAmount'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“登2”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`level2_backwater`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'leve3BackwaterAmount'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“登3”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`level3_backwater`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'leve3BackwaterAmount'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“登3”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`level3_backwater`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'userBackwaterAmount'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“会员”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`user_backwater`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'userBackwaterAmount'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“会员”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`user_backwater`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'soccer'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“足球”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`scoccer`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'soccer'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“足球”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`scoccer`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'basketball'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“篮球”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`basketball`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'basketball'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“篮球”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`basketball`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'tennis'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“网球”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`tennis`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'tennis'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“网球”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`tennis`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'badminton'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“羽毛球”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`badminton`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'badminton'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“羽毛球”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`badminton`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'tableTennis'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“乒乓球”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`table_tennis`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'tableTennis'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“乒乓球”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`table_tennis`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'volleyball'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“排球”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`volleyball`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'volleyball'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“排球”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`volleyball`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'baseball'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“棒球”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`baseball`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'baseball'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“棒球”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`baseball`,0)
+    sortParameter: 'ASC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'iceHockey'
+    sortParameter: 'descending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“冰球”进行升序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`icd_hockey`,0)
+    sortParameter: 'DESC'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /backendReport/rebateReportList
+    totalUrl: /backendReport/totalRebateReport
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: 'iceHockey'
+    sortParameter: 'ascending'
+    title: 管理后台-报表管理-佣金报表,默认查询近7天数据,根据“冰球”进行降序排序
+  resp:
+    startCreateTime: '-7'
+    endCreateTime: '-1'
+    sortIndex: IFNULL(`icd_hockey`,0)
+    sortParameter: 'ASC'
+
