@@ -109,10 +109,10 @@ class Test_sportReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_sport_m, yaml_file=sport_url_m, new_yaml_file=sport_url_new_m)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new_m, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new_m, isAll=True)[0]['request']
-    # @pytest.mark.skip(reason="调试代码,暂不执行")
+    @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-球类报表-盘口详情')
-    def test_sportReport(self, inBody, expData, url=url_data):
+    def test_sportReportMarket(self, inBody, expData, url=url_data):
         '''
         管理后台-代理报表-球类报表-盘口详情,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
         :param excel_data:  excel中的测试用例
@@ -179,10 +179,10 @@ class Test_sportReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_sport_d, yaml_file=sport_url_d, new_yaml_file=sport_url_new_d)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new_d, isAll=False)
     request_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new_d, isAll=True)[0]['request']
-    # @pytest.mark.skip(reason="调试代码,暂不执行")
+    @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-球类报表-注单详情')
-    def test_sportReport(self, inBody, expData, request=request_data):
+    def test_sportReportOrder(self, inBody, expData, request=request_data):
         '''
         管理后台-代理报表-球类报表-注单详情,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
         :param excel_data:  excel中的测试用例
