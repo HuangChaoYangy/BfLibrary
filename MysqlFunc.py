@@ -5391,16 +5391,16 @@ class MysqlQuery(MysqlFunc):
         database_name = "bfty_credit"
 
         if queryType == 1:
-            sql_str = f"SELECT `day` '日期',IFNULL(`level1_backwater`,0)+IFNULL(`level2_backwater`,0)+IFNULL(`level3_backwater`,0)+IFNULL(`user_backwater`,0) total_backwater," \
+            sql_str = f"SELECT `day` '日期',total_backwater as total_backwater," \
                       f"IFNULL(`level1_backwater`,0) level1_backwater,IFNULL(`level2_backwater`,0) level2_backwater,IFNULL(`level3_backwater`,0) level3_backwater," \
                       f"IFNULL(`user_backwater`,0) user_backwater,IFNULL(`scoccer`,0) scoccer,IFNULL(`basketball`,0) basketball,IFNULL(`tennis`,0) tennis,IFNULL(`badminton`,0) " \
                       f"badminton,IFNULL(`table_tennis`,0) table_tennis,IFNULL(`volleyball`,0) volleyball,IFNULL(`baseball`,0) baseball,IFNULL(`icd_hockey`,0) icd_hockey FROM s_day a " \
-                      f"LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day,sum(level0_backwater_amount) as total_backwater,sum(level1_backwater_amount) as level1_backwater," \
+                      f"LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day,sum(company_backwater_amount) as total_backwater,sum(level1_backwater_amount) as level1_backwater," \
                       f"sum(level2_backwater_amount) as level2_backwater,sum(level3_backwater_amount) as level3_backwater,sum(backwater_amount) as user_backwater," \
-                      f"sum(case when sport_id='sr:sport:1' then level0_backwater_amount end) as scoccer,sum(case when sport_id='sr:sport:2' then level0_backwater_amount end) as " \
-                      f"basketball,sum(case when sport_id='sr:sport:5' then level0_backwater_amount end) as tennis,sum(case when sport_id='sr:sport:31' then level0_backwater_amount end) as badminton," \
-                      f"sum(case when sport_id='sr:sport:20' then level0_backwater_amount end) as table_tennis,sum(case when sport_id='sr:sport:23' then level0_backwater_amount end) as volleyball," \
-                      f"sum(case when sport_id='sr:sport:3' then level0_backwater_amount end) as baseball,sum(case when sport_id='sr:sport:4' then level0_backwater_amount end) as " \
+                      f"sum(case when sport_id='sr:sport:1' then company_backwater_amount end) as scoccer,sum(case when sport_id='sr:sport:2' then company_backwater_amount end) as " \
+                      f"basketball,sum(case when sport_id='sr:sport:5' then company_backwater_amount end) as tennis,sum(case when sport_id='sr:sport:31' then company_backwater_amount end) as badminton," \
+                      f"sum(case when sport_id='sr:sport:20' then company_backwater_amount end) as table_tennis,sum(case when sport_id='sr:sport:23' then company_backwater_amount end) as volleyball," \
+                      f"sum(case when sport_id='sr:sport:3' then company_backwater_amount end) as baseball,sum(case when sport_id='sr:sport:4' then company_backwater_amount end) as " \
                       f"icd_hockey FROM o_account_order WHERE `status`= 2 AND award_time is not NULL GROUP BY DATE_FORMAT(award_time,'%Y-%m-%d')) b ON a.`day` = b.bet_day WHERE " \
                       f"a.`day` BETWEEN '{ctime}' AND '{etime}' ORDER BY a.`day` DESC"
             # print(sql_str)
@@ -5416,19 +5416,20 @@ class MysqlQuery(MysqlFunc):
             return rebateReport_list,sql_str
 
         elif queryType == 2:
-            sql_str = f"SELECT cast(sum(IFNULL(`level1_backwater`,0)+IFNULL(`level2_backwater`,0)+IFNULL(`level3_backwater`,0)+IFNULL(`user_backwater`,0)) as char) total_backwater," \
+            sql_str = f"SELECT cast(sum(IFNULL(total_backwater,0)) as char) total_backwater," \
                       f"cast(sum(IFNULL(`level1_backwater`,0)) as char) level1_backwater,cast(sum(IFNULL(`level2_backwater`,0)) as char) level2_backwater,cast(sum(IFNULL(`level3_backwater`,0)) as char) level3_backwater," \
                       f"cast(sum(IFNULL(`user_backwater`,0)) as char) user_backwater,cast(sum(IFNULL(`scoccer`,0)) as char) scoccer,cast(sum(IFNULL(`basketball`,0)) as char) basketball,cast(sum(IFNULL(`tennis`,0)) as char) tennis," \
                       f"cast(sum(IFNULL(`badminton`,0)) as char) badminton,cast(sum(IFNULL(`table_tennis`,0)) as char) table_tennis,cast(sum(IFNULL(`volleyball`,0)) as char) volleyball,cast(sum(IFNULL(`baseball`,0)) as char) baseball," \
-                      f"cast(sum(IFNULL(`icd_hockey`,0)) as char) icd_hockey FROM s_day a LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day,sum(level0_backwater_amount) as " \
+                      f"cast(sum(IFNULL(`icd_hockey`,0)) as char) icd_hockey FROM s_day a LEFT JOIN (SELECT DATE_FORMAT(award_time,'%Y-%m-%d') as bet_day,sum(company_backwater_amount) as " \
                       f"total_backwater,sum(level1_backwater_amount) as level1_backwater,sum(level2_backwater_amount) as level2_backwater,sum(level3_backwater_amount) as " \
-                      f"level3_backwater,sum(backwater_amount) as user_backwater,sum(case when sport_id='sr:sport:1' then level0_backwater_amount end) as scoccer," \
-                      f"sum(case when sport_id='sr:sport:2' then level0_backwater_amount end) as basketball,sum(case when sport_id='sr:sport:5' then level0_backwater_amount end) " \
-                      f"as tennis,sum(case when sport_id='sr:sport:31' then level0_backwater_amount end) as badminton,sum(case when sport_id='sr:sport:20' then " \
-                      f"level0_backwater_amount end) as table_tennis,sum(case when sport_id='sr:sport:23' then level0_backwater_amount end) as volleyball," \
-                      f"sum(case when sport_id='sr:sport:3' then level0_backwater_amount end) as baseball,sum(case when sport_id='sr:sport:4' then level0_backwater_amount end) as " \
+                      f"level3_backwater,sum(backwater_amount) as user_backwater,sum(case when sport_id='sr:sport:1' then company_backwater_amount end) as scoccer," \
+                      f"sum(case when sport_id='sr:sport:2' then company_backwater_amount end) as basketball,sum(case when sport_id='sr:sport:5' then company_backwater_amount end) " \
+                      f"as tennis,sum(case when sport_id='sr:sport:31' then company_backwater_amount end) as badminton,sum(case when sport_id='sr:sport:20' then " \
+                      f"company_backwater_amount end) as table_tennis,sum(case when sport_id='sr:sport:23' then company_backwater_amount end) as volleyball," \
+                      f"sum(case when sport_id='sr:sport:3' then company_backwater_amount end) as baseball,sum(case when sport_id='sr:sport:4' then company_backwater_amount end) as " \
                       f"icd_hockey FROM o_account_order WHERE `status`= 2 AND award_time is not NULL GROUP BY DATE_FORMAT(award_time,'%Y-%m-%d')) b ON a.`day` = b.bet_day " \
                       f"WHERE a.`day` BETWEEN '{ctime}' AND '{etime}'"
+            # print(sql_str)
             rtn = list(self.query_data(sql_str, database_name))
 
             rebateReport_list = []
@@ -9531,9 +9532,10 @@ if __name__ == "__main__":
     # data = mysql.credit_dailyReport_query_sql(create_time=(-6,0), queryType=2)
     # data = mysql.credit_terminalReport_query_sql(create_time=(-6, 0), terminal="", queryType=3)
     # data = mysql.credit_sportsReport_query_sql(create_time=(-6, 0), sportName="足球", queryType=3)
-    # data = mysql.credit_rebateReport_query_sql(create_time=(-6, 0), queryType=2)
+    # data = mysql.credit_sportsReport_query(expData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200,"sportName": "足球" }, queryType=1)
+    data = mysql.credit_rebateReport_query(expData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200}, queryType=1)[1]
     # account = mysql.query_account_role_sql(account='a0b1')
-
+    print(data)
     # num = mysql.credit_dataSourceRepot_number(betTime=(-29,0), settleTime=(-29,0))
 
     # data = mysql.get_orderNo_effectAmount_and_commission(user_name='', order_no='XFB6FPtyXDyB', createDate=(), awardDate=())[1]
@@ -9563,7 +9565,7 @@ if __name__ == "__main__":
     # data = mysql.credit_matchReport_query(expData={"ctime": -7, "etime": -1, "sportName": '冰上曲棍球',"matchId":'', "queryDateType": 3}, queryType='match')[0]
     # data = mysql.credit_multitermReport_query(expData={"ctime":-6, "etime":-0, "sportName":'',"searchAccount":"", "queryDateType":3 },queryType='detail')[0]
     # data = mysql.credit_cancelledOrder_query(expData={"ctime": "-7", "etime": "-1", "account": ''})[0]
-    data = mysql.credit_bill_query(expData={"ctime": '-0', "etime": '-0'},query_type=2)[0]
+    # data = mysql.credit_bill_query(expData={"ctime": '-0', "etime": '-0'},query_type=2)[0]
     # print(data)
 
 
@@ -9583,7 +9585,7 @@ if __name__ == "__main__":
     # data = mysql.get_market_id_by_sportId_tournamentReport(sport_id='sr:sport:1',time=(-7,-1), queryDateType=3)
     # data = mysql.get_match_id_by_sportId_matchReport(sport_id='sr:sport:3', time=(-7, -1), queryDateType=3)
     # data = mysql.get_matchId_by_sportId_matchReport(sport_id='sr:sport:3', time=(-7, -1), queryDateType=3)
-    data = mysql.get_market_id_by_matchId_matchReport(match_id='串关', time=(-7, -1), queryDateType=3)
+    # data = mysql.get_market_id_by_matchId_matchReport(match_id='串关', time=(-7, -1), queryDateType=3)
     # data = mysql.get_account_id_by_matchId_multitermReport(account_id="", sport_id="", time=(-7,-1), queryDateType=3)
     # data = mysql.get_account_id_by_mixBetReport()
     # data = mysql.get_order_num_by_mixBetReport()
@@ -9592,7 +9594,7 @@ if __name__ == "__main__":
     # data = mysql.get_outcomeId_by_marketId_mainBetReport(sport_name='足球', match_id='sr:match:32225939', market_id='16')
     # data = mysql.get_matchdata_mainBetReport(sportName='足球')
     # data = mysql.get_sportName_mainBetReport()
-    print(data)
+    # print(data)
 
 
 

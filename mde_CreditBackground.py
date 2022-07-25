@@ -3412,7 +3412,7 @@ class CreditBackGround(object):
 
     def credit_terminalReport(self, inData, queryType=1):
         '''
-        总台-报表管理-客户端盈亏    用于自动化测试                                /// 修改于2022.06.02
+        总台-报表管理-客户端盈亏    用于自动化测试                                /// 修改于2022.07.25
         :param inData:   客户端只有五类：H5-android/pc/H5-IOS/APP-android/APP-IOS
         :param queryType: 1:主界面详情  2：总计  3:根据客户端类型查看详情
         :return:
@@ -3458,7 +3458,7 @@ class CreditBackGround(object):
                 data = {"mark": 2, "startCreateTime": ctime, "endCreateTime": etime, "terminal":terminal}
                 rsp = self.session.post(total_url, headers=head, json=data)
                 if rsp.json()['message'] != 'OK':
-                    print("查询客户端盈亏失败,原因：" + rsp.json()["message"])
+                    print("查询客户端盈亏-总计失败,原因：" + rsp.json()["message"])
                 else:
                     Total_terminalReport_list = []
                     data = rsp.json()['data']
@@ -3474,7 +3474,7 @@ class CreditBackGround(object):
                     data = {"page":page, "limit":limit, "terminal":terminal, "startCreateTime":ctime, "endCreateTime":etime}
                     rsp = self.session.post(detail_url, headers=head, json=data)
                     if rsp.json()['message'] != 'OK':
-                        print("查询客户端盈亏失败,原因：" + rsp.json()["message"])
+                        print("查询客户端盈亏-注单详情失败,原因：" + rsp.json()["message"])
                     else:
                         Detail_terminalReport_list = []
                         for item in rsp.json()['data']['data']:
@@ -3597,7 +3597,9 @@ class CreditBackGround(object):
         try:
             if queryType == 1:
                 data = {"page":page, "limit":limit,"sortIndex":sortIndex, "sortParameter":sortParameter, "startCreateTime":ctime, "endCreateTime":etime}
+                # print(data)
                 rsp = self.session.post(url, headers=head, json=data)
+                # print(rsp.json())
                 if rsp.json()['message'] != 'OK':
                     print("查询客户端盈亏失败,原因：" + rsp.json()["message"])
                 else:
@@ -3754,7 +3756,7 @@ class CreditBackGround(object):
                 data = {"startCreateTime": ctime, "endCreateTime": etime}
                 rsp = self.session.post(total_url, headers=head, json=data)
                 if rsp.json()['message'] != 'OK':
-                    print("查询返水报表失败,原因：" + rsp.json()["message"])
+                    print("查询返水报表-总计失败,原因：" + rsp.json()["message"])
                 else:
                     Total_rebatesReport_list = []
                     data = rsp.json()['data']
@@ -3943,13 +3945,13 @@ if __name__ == "__main__":
     # userBasicInfo = bg.credit_userManagement_query(Authorization=login_loken, userAccount='aLiYYtest02',queryType=3)     # 总台-会员详情
     # orderNo_detail = bg.credit_orderManagement_query(Authorization=login_loken, userAccount='YYlang002',queryTpye=3, betoffset='-1',orderNo='WVyjejXsyvTD')  # 总台-订单详情
 
-    login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE0Mzk4NTA3OTIzNTI3NDM0MjYiLCJleHAiOjE2NTg1NTAzNDEsInVzZXJuYW1lIjoiTGl5YW5nMTIzIn0.O5xL9mUdDxYkA-yMckkSNrF5jM7PrCDg-EE2_soTDkQ"
+    login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE0Mzk4NTA3OTIzNTI3NDM0MjYiLCJleHAiOjE2NTg3MjY0MTAsInVzZXJuYW1lIjoiTGl5YW5nMTIzIn0.f2L3WVZ13nsQuVy-J-eTxNyzV5yogB5pUpavhqRZyJo"
     # report = bg.credit_home_report_query(Authorization=login_loken)
     # Report = bg.credit_sportReport_query(Authorization=login_loken, sportName='足球', queryType='sport', dateType=1, create_time=(-7, -1))
     # data = bg.credit_sportReport(inData={"begin":-6, "end":-0, "sportName":'网球',"queryDateType":3 },queryType='market')
     # Report = bg.credit_tournamentReport_query(Authorization=login_loken, sportName='足球', dateType=3, create_time=(-7, -1))
     # data = bg.credit_tournamentReport(inData={"begin":-9, "end":-3, "sportName":'羽毛球',"queryDateType":3 })[0]
-    data = bg.credit_matchReport(inData={"begin": -7, "end": -1, "sportName": '冰上曲棍球',"matchId":'', "queryDateType": 3},queryType='order')
+    # data = bg.credit_matchReport(inData={"begin": -7, "end": -1, "sportName": '冰上曲棍球',"matchId":'', "queryDateType": 3},queryType='order')
     # matchReport = bg.credit_matchReport_query(Authorization=login_loken, sportName='', matchId='', queryType='match', dateType=3,create_time=(-7, -1))
     # multitermReport = bg.credit_multitermReport_query(Authorization=login_loken, sportName='', account='', dateType=3,create_time=(-7, -1))
     # match = bg.credit_last_two_days_match_query(Authorization=login_loken)
@@ -3961,12 +3963,13 @@ if __name__ == "__main__":
     # data = bg.credit_multitermReport(inData={"begin":"-7", "end":"-1", "sportName":'',"searchAccount":'', "queryDateType":3 })[0]
     # data = bg.credit_cancelledOrder(inData={"begin": "-7", "end": "-1", "account": ''})
     # data = bg.credit_bill(inData={"begin": "-0", "end": "-0"},query_type=2)
-    # print(data)
     # rdata_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=1)   # 总台-报表管理-数据源对账报表
     # daily_report = bg.credit_dailyReport(Authorization=login_loken, create_time=(-6,0), queryType=2)           # 总台-报表管理-每日盈亏
-    # daily_report = bg.credit_terminalReport_query(Authorization=login_loken,create_time=(-6, 0), terminal='', queryType=2)       # 总台-报表管理-客户端盈亏
-    # sports_report = bg.credit_sportsReport_query(Authorization=login_loken, starttime='', endtime='',sportName='', queryType=1)    # 总台-报表管理-体育项盈亏
-    # rebate_report = bg.credit_rebateReport_query(Authorization=login_loken, starttime='', endtime='', queryType=2)   # 总台-报表管理-返水报表
+    # data = bg.credit_terminalReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "terminal":"","sortIndex":"","sortParameter":"","page":1,"limit":200 },queryType=2)       # 总台-报表管理-客户端盈亏
+    # data = bg.credit_sportsReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200 }, queryType=1)    # 总台-报表管理-体育项盈亏
+    data = bg.credit_rebateReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200 }, queryType=2)   # 总台-报表管理-返水报表
+    print(data)
+
 
     # 后台注册会员
     # for uname in range(7,8):
