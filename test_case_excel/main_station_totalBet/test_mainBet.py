@@ -104,7 +104,7 @@ class Test_mainBetReport:
                     raise AssertionError(response_data['message'])
 
                 # 获取SQL数据
-                expectResult = MysqlQuery(mysql_info, mongo_info).get_matchdata_mainBetReport(sportName=sport_name)
+                expectResult = MysqlQuery(mysql_info, mongo_info).get_matchdata_mainBetReport(sportName=sport_name)[0]
 
                 ctime = CommonFunc().get_current_time_for_client(time_type='currenttime')  # 获取当前时间
                 # 校验接口数据和SQL数据的长度
