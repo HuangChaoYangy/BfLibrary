@@ -30,6 +30,13 @@ test_data_path = os.path.join(excel_dir,'test_data','test_oddsData.yaml')
 client_token_url = os.path.join(excel_dir,'client_data','client_token.yaml')
 client_user_url = os.path.join(excel_dir,'client_data','client_user.yaml')
 
+                                        # [ 总台-代理管理 ]
+# 总代结账
+csv_url_uncheck = os.path.join(excel_dir,'credit_data_new\AgentManagement','uncheck.csv')
+uncheck_url = os.path.join(excel_dir,'credit_data_new\AgentManagement','uncheck.yaml')
+uncheck_url_new = os.path.join(excel_dir,'credit_data_new\AgentManagement','uncheck_case.yaml')
+
+
                                         # [ 总台-报表管理 ]
 # 数据源对账报表
 csv_url_data = os.path.join(excel_dir,'credit_data_new','dataSource.csv')
