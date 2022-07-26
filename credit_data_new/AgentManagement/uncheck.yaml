@@ -1,0 +1,13 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentManagement/unCheck/list
+    method: get
+  data:
+    page: 1
+    limit: 200
+    accountStatus: $ddt{accountStatus}
+    searchAccountName: $ddt{searchAccountName}
+    title: $ddt{title}
+  resp:
+    accountStatus: $ddt{status}
+    searchAccountName: $ddt{accountName}

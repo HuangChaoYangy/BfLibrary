@@ -1,0 +1,84 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentManagement/unCheck/list
+    method: get
+  data:
+    page: 1
+    limit: 200
+    accountStatus: 0
+    searchAccountName: ''
+    title: 总台-代理管理-总代结账,默认按照'启用'状态查询所有数据
+  resp:
+    accountStatus: 0
+    searchAccountName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentManagement/unCheck/list
+    method: get
+  data:
+    page: 1
+    limit: 200
+    accountStatus: 1
+    searchAccountName: ''
+    title: 总台-代理管理-总代结账,按照'停用'状态查询所有数据
+  resp:
+    accountStatus: 1
+    searchAccountName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentManagement/unCheck/list
+    method: get
+  data:
+    page: 1
+    limit: 200
+    accountStatus: 2
+    searchAccountName: ''
+    title: 总台-代理管理-总代结账,按照'只能看账'状态查询所有数据
+  resp:
+    accountStatus: 2
+    searchAccountName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentManagement/unCheck/list
+    method: get
+  data:
+    page: 1
+    limit: 200
+    accountStatus: 3
+    searchAccountName: ''
+    title: 总台-代理管理-总代结账,按照'禁止登入'状态查询所有数据
+  resp:
+    accountStatus: 3
+    searchAccountName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentManagement/unCheck/list
+    method: get
+  data:
+    page: 1
+    limit: 200
+    accountStatus: ''
+    searchAccountName: ''
+    title: 总台-代理管理-总代结账,按照'全部'状态查询所有数据
+  resp:
+    accountStatus: ''
+    searchAccountName: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentManagement/unCheck/list
+    method: get
+  data:
+    page: 1
+    limit: 200
+    accountStatus: ''
+    searchAccountName: 'a0'
+    title: 总台-代理管理-总代结账,根据登0代理'a0'默认按照'启用'状态查询所有数据
+  resp:
+    accountStatus: ''
+    searchAccountName: 'a0'
+
