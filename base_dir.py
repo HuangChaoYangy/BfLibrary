@@ -37,6 +37,26 @@ uncheck_url = os.path.join(excel_dir,'credit_data_new\AgentManagement','uncheck.
 uncheck_url_new = os.path.join(excel_dir,'credit_data_new\AgentManagement','uncheck_case.yaml')
 
 
+                                        # [ 总台-总投注 ]
+# 总投注-让球/大小/独赢/滚球
+csv_url_mainBet = os.path.join(excel_dir,'credit_data_new\TotalBet','mainBet.csv')
+mainBet_url = os.path.join(excel_dir,'credit_data_new\TotalBet','mainBet.yaml')
+mainBet_url_new = os.path.join(excel_dir,'credit_data_new\TotalBet','mainBet_case.yaml')
+# 总投注-让球/大小/独赢/滚球-注单详情
+csv_url_mainBet_d = os.path.join(excel_dir,'credit_data_new\TotalBet','mainBet_d.csv')
+mainBet_url_d = os.path.join(excel_dir,'credit_data_new\TotalBet','mainBet_d.yaml')
+mainBet_url_new_d = os.path.join(excel_dir,'credit_data_new\TotalBet','mainBet_case_d.yaml')
+
+# 总投注-混合串关
+csv_url_mixBet = os.path.join(excel_dir,'credit_data_new\TotalBet','mixBet.csv')
+mixBet_url = os.path.join(excel_dir,'credit_data_new\TotalBet','mixBet.yaml')
+mixBet_url_new = os.path.join(excel_dir,'credit_data_new\TotalBet','mixBet_case.yaml')
+# 总投注-混合串关-注单详情
+csv_url_mixBetOrder = os.path.join(excel_dir,'credit_data_new\TotalBet','mixBetOrder.csv')
+mixBetOrder_url = os.path.join(excel_dir,'credit_data_new\TotalBet','mixBetOrder.yaml')
+mixBetOrder_url_new = os.path.join(excel_dir,'credit_data_new\TotalBet','mixBetOrder_case.yaml')
+
+
                                         # [ 总台-报表管理 ]
 # 数据源对账报表
 csv_url_data = os.path.join(excel_dir,'credit_data_new','dataSource.csv')
