@@ -1,0 +1,136 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /betManagement/agent/mainBetOrderInfo
+    method: POST
+  data:
+    sportId: 'sr:sport:3'
+    sportName: '棒球'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+    title: 管理后台-总投注-让球/大小/独赢/滚球,默认所有数据
+  resp:
+    sportId: 'sr:sport:3'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /betManagement/agent/mainBetOrderInfo
+    method: POST
+  data:
+    sportId: 'sr:sport:1'
+    sportName: '足球'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+    title: 管理后台-总投注-让球/大小/独赢/滚球,默认所有数据
+  resp:
+    sportId: 'sr:sport:1'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /betManagement/agent/mainBetOrderInfo
+    method: POST
+  data:
+    sportId: 'sr:sport:2'
+    sportName: '篮球'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+    title: 管理后台-总投注-让球/大小/独赢/滚球,默认所有数据
+  resp:
+    sportId: 'sr:sport:2'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /betManagement/agent/mainBetOrderInfo
+    method: POST
+  data:
+    sportId: 'sr:sport:5'
+    sportName: '网球'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+    title: 管理后台-总投注-让球/大小/独赢/滚球,默认所有数据
+  resp:
+    sportId: 'sr:sport:5'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /betManagement/agent/mainBetOrderInfo
+    method: POST
+  data:
+    sportId: 'sr:sport:23'
+    sportName: '排球'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+    title: 管理后台-总投注-让球/大小/独赢/滚球,默认所有数据
+  resp:
+    sportId: 'sr:sport:23'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /betManagement/agent/mainBetOrderInfo
+    method: POST
+  data:
+    sportId: 'sr:sport:31'
+    sportName: '羽毛球'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+    title: 管理后台-总投注-让球/大小/独赢/滚球,默认所有数据
+  resp:
+    sportId: 'sr:sport:31'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /betManagement/agent/mainBetOrderInfo
+    method: POST
+  data:
+    sportId: 'sr:sport:20'
+    sportName: '乒乓球'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+    title: 管理后台-总投注-让球/大小/独赢/滚球,默认所有数据
+  resp:
+    sportId: 'sr:sport:20'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /betManagement/agent/mainBetOrderInfo
+    method: POST
+  data:
+    sportId: 'sr:sport:4'
+    sportName: '冰上曲棍球'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+    title: 管理后台-总投注-让球/大小/独赢/滚球,默认所有数据
+  resp:
+    sportId: 'sr:sport:4'
+    matchId: ''
+    marketId: ''
+    outcomeId: ''
+

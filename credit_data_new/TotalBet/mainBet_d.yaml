@@ -1,0 +1,16 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /betManagement/agent/mainBetOrderInfo
+    method: POST
+  data:
+    sportId: $ddt{sportId}
+    sportName: $ddt{sportName}
+    matchId: $ddt{matchId}
+    marketId: $ddt{marketId}
+    outcomeId: $ddt{outcomeId}
+    title: $ddt{title}
+  resp:
+    sportId: $ddt{sportId}
+    matchId: $ddt{matchId}
+    marketId: $ddt{marketId}
+    outcomeId: $ddt{outcomeId}

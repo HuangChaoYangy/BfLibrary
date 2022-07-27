@@ -1,0 +1,13 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /betManagement/agent/mainBet
+    method: POST
+  data:
+    flag: 0
+    sportId: '-7'
+    matchId: '-1'
+    title: 管理后台-总投注-让球/大小/独赢/滚球,默认所有数据
+  resp:
+    sportId: '-7'
+    matchId: '-1'
+
