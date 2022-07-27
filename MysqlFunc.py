@@ -5445,6 +5445,56 @@ class MysqlQuery(MysqlFunc):
         else:
             raise AssertionError('暂不支持该类型')
 
+    def credit_uncheckList_query(self, expData={}):
+        '''
+        总台-报表管理-总代结账                                  /// 修改于2022.07.26
+        :param expData:
+        :return:
+        '''
+        resp = expData
+        if resp['accountStatus'] == 0:
+            account_str = f"AND account_status=0"
+        elif resp['accountStatus'] == 1:
+            account_str = f"AND account_status=1"
+        elif resp['accountStatus'] == 2:
+            account_str = f"AND account_status=2"
+        elif resp['accountStatus'] == 3:
+            account_str = f"AND account_status=3"
+        else:
+            account_str = ""
+        if resp['searchAccountName']:
+            accountName = f"AND a.account='{resp['searchAccountName']}'"
+        else:
+            accountName = ""
+
+        database_name = "bfty_credit"
+        sql_str = f"SELECT `账号/登入账号`,'登0' as '级别',`账号状态`,IFNULL(`昨日余额`,0) '昨日余额',IFNULL(`余额`,0) '余额',IFNULL(`昨日现金余额`,0) '昨日现金余额'," \
+                  f"IFNULL(`现金余额`,0) '现金余额',`未完成交易`,`总有效金额`,`信用额度`,`已用额度` FROM (SELECT CONCAT(a.account,'/',IFNULL(a.login_account,'')) as '账号/登入账号',a.`id`," \
+                  f"a.`name` '代理线名称',(case when account_status=0 then '启用' when account_status=1 then '只能看账' when account_status=2 then '停用' when account_status=3 then " \
+                  f"'禁止登入' end) as '账号状态',(case when role_id=0 then '登0' when role_id=1 then '登1' when role_id=2 then '登2' when role_id=3 then '登3' end) '等级'," \
+                  f"sum(if(`status`in(1,2) AND award_time is NULL,bet_amount,0)) '未完成交易',sum(if(`status`=2,efficient_amount,0)) '总有效金额',credits '信用额度'," \
+                  f"credits-available_quota '已用额度' FROM `m_account` a JOIN m_account_credits b ON a.id = b.account_id LEFT JOIN o_account_order c ON a.id = c.proxy0_id WHERE " \
+                  f"a.role_id= 0 {account_str} {accountName} GROUP BY CONCAT(a.account,'/',IFNULL(a.login_account,'')),a.`id`,a.`name`,account_status,role_id,credits,available_quota," \
+                  f"a.create_time ORDER BY a.create_time DESC) a JOIN ( SELECT a.proxy0_id,`余额`,`昨日余额` FROM (SELECT proxy0_id,-sum(company_win_or_lose) '余额' FROM " \
+                  f"o_account_order a JOIN m_account_unsettlement_amount_record b ON a.order_no = b.order_no WHERE b.payment_status = 0 AND a.status=2 AND a.award_time is not null " \
+                  f"AND a.proxy0_id=b.account_id GROUP BY proxy0_id) a JOIN (SELECT proxy0_id,sum(case when DATE_FORMAT( a.award_time, '%Y-%m-%d' ) < DATE_FORMAT( DATE_ADD( " \
+                  f"NOW(), INTERVAL '-4' HOUR ), '%Y-%m-%d' )  then -company_win_or_lose end) '昨日余额' FROM o_account_order a JOIN m_account_unsettlement_amount_record b ON " \
+                  f"a.order_no = b.order_no WHERE b.payment_status = 0 AND a.status=2 AND a.award_time is not null AND a.proxy0_id=b.account_id GROUP BY proxy0_id) b ON " \
+                  f"a.proxy0_id=b.proxy0_id ) b ON a.id=b.proxy0_id LEFT JOIN (SELECT a.proxy0_id,`现金余额`,`昨日现金余额` FROM (SELECT proxy0_id," \
+                  f"sum(company_win_or_lose+level0_win_or_lose) '现金余额' FROM o_account_order a JOIN m_account_unsettlement_amount_record b ON a.order_no = b.order_no WHERE " \
+                  f"b.payment_status_for_sub=0 AND a.status=2 AND a.award_time is not null AND a.proxy0_id=b.account_id GROUP BY proxy0_id) a JOIN (SELECT proxy0_id," \
+                  f"sum(case when DATE_FORMAT( a.award_time, '%Y-%m-%d' ) < DATE_FORMAT( DATE_ADD( NOW(), INTERVAL '-4' HOUR ), '%Y-%m-%d' ) then " \
+                  f"company_win_or_lose+level0_win_or_lose end) '昨日现金余额' FROM o_account_order a JOIN m_account_unsettlement_amount_record b ON a.order_no = b.order_no " \
+                  f"WHERE b.payment_status_for_sub = 0 AND a.`status`=2 AND a.award_time is not null AND a.proxy0_id=b.account_id GROUP BY proxy0_id) b ON a.proxy0_id=b.proxy0_id) c " \
+                  f"ON a.id=c.proxy0_id"
+        rtn = list(self.query_data(sql_str, database_name))
+
+        uncheckList = []
+        for item in rtn:
+            uncheckList.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7],
+                                item[9], item[10]])
+
+        return uncheckList,sql_str
 
 
     def query_account_role_sql(self, account):
@@ -6975,7 +7025,71 @@ class MysqlQuery(MysqlFunc):
                 match_info.append(item[2])
                 data_new_match.append(item)
 
-        return data_new_match
+        return data_new_match,sql_str
+
+    def get_mainBetReport_query(self, expData={}):
+        '''
+        总台-总投注-让球/大小/独赢/滚球-列表
+        :return:
+        '''
+        sport_name = expData['sportName']
+        database_name = "bfty_credit"
+        sql_str = f"SELECT sport_category_id'球类',match_time '比赛时间',match_soccer '赛事',IFNULL(if(outcome_id = 1714 and market_id IN(16,223,188,237,256,16) ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'全场让球盘主队',IFNULL(if(outcome_id = 1715 and market_id IN(16,223,188,237,256,16) ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'全场让球盘客队',IFNULL(if(outcome_id = 12 and market_id IN(18,225,314,238,258,18) ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'全场大小盘大盘',IFNULL(if(outcome_id = 13 and market_id IN(18,225,314,238,258,18) ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'全场大小盘小盘',IFNULL(if(outcome_id IN (1,4) and market_id IN(1,219,186,251) ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'全场独赢盘1',IFNULL(if(outcome_id =2 and market_id IN(1,219,186,251) ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'全场独赢盘x',IFNULL(if(outcome_id IN (3,5) and market_id IN(1,219,186,251) ,sum(bet_amount*company_percentage),' '),0)'全场独赢盘2'," \
+                  f"IFNULL(if(outcome_id  =1714 and market_id =66 ,sum(bet_amount*company_percentage),' '),0)'上半场让球盘主队',IFNULL(if(outcome_id =1715 and market_id =66 ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'上半场让球盘客队',IFNULL(if(outcome_id = 12 and market_id =68 ,sum(bet_amount*company_percentage),' '),0)'上半场大小盘大盘'," \
+                  f"IFNULL(if(outcome_id = 13 and market_id =68 ,sum(bet_amount*company_percentage),' '),0)'上半场大小盘小盘',IFNULL(if(outcome_id IN (1,4) and market_id =60 ," \
+                  f"sum(bet_amount*company_percentage),' '),0)'上半场独赢盘1',IFNULL(if(outcome_id =2  and market_id =60 ,sum(bet_amount*company_percentage),' '),0) '上半场独赢盘x'," \
+                  f"IFNULL(if(outcome_id IN(3,5)  and market_id =60 ,sum(bet_amount*company_percentage),' '),0) '上半场独赢盘2' FROM order_win_handicap_overunder WHERE sport_category_id='{sport_name}' " \
+                  f"GROUP BY sport_category_id ,match_time, match_soccer,match_id,market_id,outcome_id ORDER BY sport_category_id desc"
+        rtn = list(self.query_data(sql_str, database_name))
+        new_list = [list(item) for item in rtn]
+
+        # new_list = [['乒乓球', datetime.datetime(2022, 6, 8, 5, 45), '滚球国际TT Cup Hiiemae, Andrus vs Perv, Indrek', ' ', ' ', ' ', '10.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['乒乓球', datetime.datetime(2022, 6, 8, 6, 0), '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', ' ', ' ', ' ', '24.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['乒乓球', datetime.datetime(2022, 6, 8, 6, 0), '滚球国际TT Cup 马克西姆丘克, 伊戈尔 vs 阿赫拉莫夫, 塞尔吉', ' ', ' ', '14.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['乒乓球', datetime.datetime(2022, 6, 8, 6, 0), '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', ' ', ' ', '13.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], ['乒乓球', datetime.datetime(2022, 6, 8, 6, 0), '滚球捷克Czech Liga Pro Kubat, Vladimir vs Reczai, Jiri', ' ', ' ', ' ', ' ', ' ', ' ', '13.0000', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]
+
+        # 处理时间类型和" "字符串
+        for item in new_list:
+            matchTime = item[1]
+            match_time = matchTime.strftime("%Y-%m-%d %H:%M:%S")
+            for n in range(len(item)):
+                item[1] = match_time
+                if item[n] == " " or item[n] == "":
+                    item[n] = 0
+
+        # 将字符串转成数字
+        match_info_list = []
+        for index1, item in enumerate(new_list):
+            new_data_list = []
+            for j in item[3:]:
+                if j == None:
+                    j = 0
+                else:
+                    j = float(j)
+                new_data_list.append(j)
+            new_data_list.insert(0, item[0])
+            new_data_list.insert(1, item[1])
+            new_data_list.insert(2, item[2])
+            match_info_list.append(new_data_list)
+
+        # 将相同联赛的数据进行求和
+        data_new_match = []
+        match_info = []
+        for item in match_info_list:
+            if item[2] in match_info:
+                index_num = match_info.index(item[2])
+                for k in range(3, len(item)):
+                    number = item[k] + data_new_match[index_num][k]
+                    data_new_match[index_num][k] = number
+            else:
+                match_info.append(item[2])
+                data_new_match.append(item)
+
+        return data_new_match,sql_str
 
 
     def get_sportName_mainBetReport(self):
@@ -9533,9 +9647,10 @@ if __name__ == "__main__":
     # data = mysql.credit_terminalReport_query_sql(create_time=(-6, 0), terminal="", queryType=3)
     # data = mysql.credit_sportsReport_query_sql(create_time=(-6, 0), sportName="足球", queryType=3)
     # data = mysql.credit_sportsReport_query(expData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200,"sportName": "足球" }, queryType=1)
-    data = mysql.credit_rebateReport_query(expData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200}, queryType=1)[1]
+    # data = mysql.credit_rebateReport_query(expData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200}, queryType=1)[1]
+    # data = mysql.credit_uncheckList_query(expData={"accountStatus": 0, "searchAccountName": ""})  # 总台-总代结账
     # account = mysql.query_account_role_sql(account='a0b1')
-    print(data)
+    # print(data)
     # num = mysql.credit_dataSourceRepot_number(betTime=(-29,0), settleTime=(-29,0))
 
     # data = mysql.get_orderNo_effectAmount_and_commission(user_name='', order_no='XFB6FPtyXDyB', createDate=(), awardDate=())[1]
@@ -9593,8 +9708,9 @@ if __name__ == "__main__":
     # data = mysql.get_matchId_by_sportName_mainBetReport(sport_name='足球')
     # data = mysql.get_outcomeId_by_marketId_mainBetReport(sport_name='足球', match_id='sr:match:32225939', market_id='16')
     # data = mysql.get_matchdata_mainBetReport(sportName='足球')
-    # data = mysql.get_sportName_mainBetReport()
-    # print(data)
+    # data = mysql.get_mainBetReport_query(expData={'sportName':'足球'})
+    data = mysql.get_sportName_mainBetReport()
+    print(data)
 
 
 

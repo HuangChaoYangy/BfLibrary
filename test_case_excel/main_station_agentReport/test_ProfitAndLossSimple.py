@@ -196,19 +196,19 @@ class Test_profitAndLossSimple:
                 APIResult_list = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()['data']
                 for item in APIResult_list:
                     if item['levelName'] == '登0':
-                        actualResult.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                        actualResult.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],
                                              item['totalCommission'],item['payout'],item['companyWinOrLose'],item['companyCommission'],item['companyTotal']])
                     elif item['levelName'] == '登1':
-                        actualResult.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                        actualResult.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],
                                              item['totalCommission'],item['payout'],item['level0WinOrLose'],item['level0Commission'],item['level0Total']])
                     elif item['levelName'] == '登2':
-                        actualResult.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                        actualResult.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],
                                              item['totalCommission'],item['payout'],item['level1WinOrLose'],item['level1Commission'],item['level1Total']])
                     elif item['levelName'] == '登3':
-                        actualResult.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                        actualResult.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],
                                              item['totalCommission'],item['payout'],item['level2WinOrLose'],item['level2Commission'],item['level2Total']])
                     else:
-                        actualResult.append([item['account'], item['name'], item['levelName'], item['currency'],item['numberOfBets'], item['totalBet'],item['totalEfficientAmount'],
+                        actualResult.append([item['account'], item['name'], item['levelName'], item['currency'],item['numberOfBets'], item['TotalBet'],item['totalEfficientAmount'],
                                              item['totalCommission'], item['payout'], item['level3WinOrLose'],item['level3Commission'], item['level3Total']])
 
             elif response_data['data']['data'] == []:

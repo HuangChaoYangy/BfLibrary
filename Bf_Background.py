@@ -2350,12 +2350,12 @@ class BackGround(object):
             detail_league_list = []     # 每个联赛数据详情的统计
             current_league_list = []    # 当前界面所有联赛数据的统计
             for leagueInfo in rsp.json()['data']['data'][:-1]:
-                detail_league_list.append([leagueInfo['merchantName'], leagueInfo['leagueName'], leagueInfo['sportName'], leagueInfo['totalBet'],leagueInfo['effectiveAmount'],
+                detail_league_list.append([leagueInfo['merchantName'], leagueInfo['leagueName'], leagueInfo['sportName'], leagueInfo['TotalBet'],leagueInfo['effectiveAmount'],
                                           leagueInfo['totalProfitBet'], leagueInfo['profitBetProportion'], leagueInfo['rebateBetAmount'],leagueInfo['rebateTotalBet'],
                                           leagueInfo['rebateAmount'],leagueInfo['refundAmount'], leagueInfo['profit'], leagueInfo['backwaterAmount'],leagueInfo['endWinLose']])
 
             list = rsp.json()['data']['data'][-1]
-            current_league_list.extend([list['merchantName'], list['leagueName'], list['sportName'], list['totalBet'],list['effectiveAmount'],
+            current_league_list.extend([list['merchantName'], list['leagueName'], list['sportName'], list['TotalBet'],list['effectiveAmount'],
                                         list['totalProfitBet'], list['profitBetProportion'], list['rebateBetAmount'],list['rebateTotalBet'],
                                         list['rebateAmount'],list['refundAmount'], list['profit'], list['backwaterAmount'],list['endWinLose']])
 
@@ -2366,7 +2366,7 @@ class BackGround(object):
                 print("查询报表数据失败,原因：" + rtn.json()["message"])
 
             for leagueInfo in rtn.json()['data']:
-                total_league_list.extend(['总计', leagueInfo['leagueName'], leagueInfo['sportName'],leagueInfo['totalBet'], leagueInfo['effectiveAmount'],
+                total_league_list.extend(['总计', leagueInfo['leagueName'], leagueInfo['sportName'],leagueInfo['TotalBet'], leagueInfo['effectiveAmount'],
                                           leagueInfo['totalProfitBet'], leagueInfo['profitBetProportion'], leagueInfo['rebateBetAmount'],leagueInfo['rebateTotalBet'],
                                           leagueInfo['rebateAmount'], leagueInfo['refundAmount'], leagueInfo['profit'],leagueInfo['backwaterAmount'], leagueInfo['endWinLose']])
 
@@ -2387,12 +2387,12 @@ class BackGround(object):
             detail_league_list = []  # 每个联赛数据详情的统计
             current_league_list = []  # 当前界面所有联赛数据的统计
             for leagueInfo in rsp.json()['data']['data'][:-1]:
-                detail_league_list.append([leagueInfo['merchantName'], leagueInfo['leagueName'], leagueInfo['sportName'], leagueInfo['totalBet'],leagueInfo['effectiveAmount'],
+                detail_league_list.append([leagueInfo['merchantName'], leagueInfo['leagueName'], leagueInfo['sportName'], leagueInfo['TotalBet'],leagueInfo['effectiveAmount'],
                                           leagueInfo['totalProfitBet'], leagueInfo['profitBetProportion'], leagueInfo['rebateBetAmount'],leagueInfo['rebateTotalBet'],
                                           leagueInfo['rebateAmount'],leagueInfo['refundAmount'], leagueInfo['profit'], leagueInfo['backwaterAmount'],leagueInfo['endWinLose']])
 
             list = rsp.json()['data']['data'][-1]
-            current_league_list.extend([list['merchantName'], list['leagueName'], list['sportName'], list['totalBet'],list['effectiveAmount'],
+            current_league_list.extend([list['merchantName'], list['leagueName'], list['sportName'], list['TotalBet'],list['effectiveAmount'],
                                         list['totalProfitBet'], list['profitBetProportion'], list['rebateBetAmount'],list['rebateTotalBet'],
                                         list['rebateAmount'],list['refundAmount'], list['profit'], list['backwaterAmount'],list['endWinLose']])
 
@@ -2404,7 +2404,7 @@ class BackGround(object):
                 print("查询报表数据失败,原因：" + rtn.json()["message"])
 
             for leagueInfo in rtn.json()['data']:
-                total_league_list.extend(['总计', leagueInfo['leagueName'], leagueInfo['sportName'],leagueInfo['totalBet'], leagueInfo['effectiveAmount'],
+                total_league_list.extend(['总计', leagueInfo['leagueName'], leagueInfo['sportName'],leagueInfo['TotalBet'], leagueInfo['effectiveAmount'],
                                           leagueInfo['totalProfitBet'], leagueInfo['profitBetProportion'], leagueInfo['rebateBetAmount'],leagueInfo['rebateTotalBet'],
                                           leagueInfo['rebateAmount'], leagueInfo['refundAmount'], leagueInfo['profit'],leagueInfo['backwaterAmount'], leagueInfo['endWinLose']])
 
@@ -2554,12 +2554,12 @@ class BackGround(object):
             detail_league_list = []
             current_league_list = []
             for hcpInfo in rsp.json()['data']['data'][:-1]:
-                detail_league_list.append([hcpInfo['merchantName'], hcpInfo['handicapName'], hcpInfo['totalBet'], hcpInfo['effectiveAmount'],hcpInfo['totalProfitBet'],
+                detail_league_list.append([hcpInfo['merchantName'], hcpInfo['handicapName'], hcpInfo['TotalBet'], hcpInfo['effectiveAmount'],hcpInfo['totalProfitBet'],
                                            hcpInfo['profitBetProportion'],hcpInfo['rebateBetAmount'], hcpInfo['rebateTotalBet'],hcpInfo['rebateAmount'], hcpInfo['refundAmount'],
                                            hcpInfo['profit'], hcpInfo['backwaterAmount'], hcpInfo['endWinLose'] ])
 
             list = rsp.json()['data']['data'][-1]
-            current_league_list.extend([list['merchantName'], list['handicapName'], list['totalBet'], list['effectiveAmount'],list['totalProfitBet'],
+            current_league_list.extend([list['merchantName'], list['handicapName'], list['TotalBet'], list['effectiveAmount'],list['totalProfitBet'],
                                            list['profitBetProportion'],list['rebateBetAmount'], list['rebateTotalBet'],list['rebateAmount'], list['refundAmount'],
                                            list['profit'], list['backwaterAmount'], list['endWinLose'] ])
 
@@ -2570,7 +2570,7 @@ class BackGround(object):
                 print("查询报表数据失败,原因：" + rtn.json()["message"])
 
             for hcpInfo in rtn.json()['data']:
-                total_league_list.extend([hcpInfo['merchantName'], hcpInfo['handicapName'], hcpInfo['totalBet'], hcpInfo['effectiveAmount'],hcpInfo['totalProfitBet'],
+                total_league_list.extend([hcpInfo['merchantName'], hcpInfo['handicapName'], hcpInfo['TotalBet'], hcpInfo['effectiveAmount'],hcpInfo['totalProfitBet'],
                                            hcpInfo['profitBetProportion'],hcpInfo['rebateBetAmount'], hcpInfo['rebateTotalBet'],hcpInfo['rebateAmount'], hcpInfo['refundAmount'],
                                            hcpInfo['profit'], hcpInfo['backwaterAmount'], hcpInfo['endWinLose'] ])
 
@@ -2591,12 +2591,12 @@ class BackGround(object):
             detail_league_list = []
             current_league_list = []
             for hcpInfo in rsp.json()['data']['data'][:-1]:
-                detail_league_list.append([hcpInfo['merchantName'], hcpInfo['handicapName'], hcpInfo['totalBet'], hcpInfo['effectiveAmount'],hcpInfo['totalProfitBet'],
+                detail_league_list.append([hcpInfo['merchantName'], hcpInfo['handicapName'], hcpInfo['TotalBet'], hcpInfo['effectiveAmount'],hcpInfo['totalProfitBet'],
                                            hcpInfo['profitBetProportion'],hcpInfo['rebateBetAmount'], hcpInfo['rebateTotalBet'],hcpInfo['rebateAmount'], hcpInfo['refundAmount'],
                                            hcpInfo['profit'], hcpInfo['backwaterAmount'], hcpInfo['endWinLose'] ])
 
             list = rsp.json()['data']['data'][-1]
-            current_league_list.extend([list['merchantName'], list['handicapName'], list['totalBet'], list['effectiveAmount'],list['totalProfitBet'],
+            current_league_list.extend([list['merchantName'], list['handicapName'], list['TotalBet'], list['effectiveAmount'],list['totalProfitBet'],
                                         list['profitBetProportion'],list['rebateBetAmount'], list['rebateTotalBet'],list['rebateAmount'], list['refundAmount'],
                                         list['profit'], list['backwaterAmount'], list['endWinLose'] ])
 
@@ -2608,7 +2608,7 @@ class BackGround(object):
                 print("查询报表数据失败,原因：" + rtn.json()["message"])
 
             for hcpInfo in rtn.json()['data']:
-                total_league_list.extend(['总计', hcpInfo['handicapName'], hcpInfo['totalBet'], hcpInfo['effectiveAmount'],hcpInfo['totalProfitBet'],
+                total_league_list.extend(['总计', hcpInfo['handicapName'], hcpInfo['TotalBet'], hcpInfo['effectiveAmount'],hcpInfo['totalProfitBet'],
                                            hcpInfo['profitBetProportion'],hcpInfo['rebateBetAmount'], hcpInfo['rebateTotalBet'],hcpInfo['rebateAmount'], hcpInfo['refundAmount'],
                                            hcpInfo['profit'], hcpInfo['backwaterAmount'], hcpInfo['endWinLose'] ])
 
@@ -2651,12 +2651,12 @@ class BackGround(object):
             detail_league_list = []
             current_league_list = []
             for parlayInfo in rsp.json()['data']['data'][:-1]:
-                detail_league_list.append([parlayInfo['merchantName'], parlayInfo['multipName'], parlayInfo['totalBet'], parlayInfo['effectiveAmount'],parlayInfo['totalProfitBet'],
+                detail_league_list.append([parlayInfo['merchantName'], parlayInfo['multipName'], parlayInfo['TotalBet'], parlayInfo['effectiveAmount'],parlayInfo['totalProfitBet'],
                                            parlayInfo['profitBetProportion'],parlayInfo['rebateBetAmount'], parlayInfo['rebateTotalBet'],parlayInfo['rebateAmount'],
                                            parlayInfo['refundAmount'], parlayInfo['profit'] ])
 
             list = rsp.json()['data']['data'][-1]
-            current_league_list.extend([list['merchantName'], list['multipName'], list['totalBet'], list['effectiveAmount'],list['totalProfitBet'],
+            current_league_list.extend([list['merchantName'], list['multipName'], list['TotalBet'], list['effectiveAmount'],list['totalProfitBet'],
                                         list['profitBetProportion'],list['rebateBetAmount'], list['rebateTotalBet'],list['rebateAmount'],list['refundAmount'], list['profit'] ])
 
             total_league_list = []
@@ -2666,7 +2666,7 @@ class BackGround(object):
                 print("查询报表数据失败,原因：" + rtn.json()["message"])
 
             for parlayInfo in rtn.json()['data']:
-                total_league_list.extend(['总计', parlayInfo['multipName'], parlayInfo['totalBet'], parlayInfo['effectiveAmount'],parlayInfo['totalProfitBet'],
+                total_league_list.extend(['总计', parlayInfo['multipName'], parlayInfo['TotalBet'], parlayInfo['effectiveAmount'],parlayInfo['totalProfitBet'],
                                            parlayInfo['profitBetProportion'],parlayInfo['rebateBetAmount'], parlayInfo['rebateTotalBet'],parlayInfo['rebateAmount'],
                                            parlayInfo['refundAmount'], parlayInfo['profit'] ])
 
@@ -2687,12 +2687,12 @@ class BackGround(object):
             detail_league_list = []
             current_league_list = []
             for parlayInfo in rsp.json()['data']['data'][:-1]:
-                detail_league_list.append([parlayInfo['merchantName'], parlayInfo['multipName'], parlayInfo['totalBet'], parlayInfo['effectiveAmount'],parlayInfo['totalProfitBet'],
+                detail_league_list.append([parlayInfo['merchantName'], parlayInfo['multipName'], parlayInfo['TotalBet'], parlayInfo['effectiveAmount'],parlayInfo['totalProfitBet'],
                                            parlayInfo['profitBetProportion'],parlayInfo['rebateBetAmount'], parlayInfo['rebateTotalBet'],parlayInfo['rebateAmount'],
                                            parlayInfo['refundAmount'], parlayInfo['profit'] ])
 
             list = rsp.json()['data']['data'][-1]
-            current_league_list.extend([list['merchantName'], list['multipName'], list['totalBet'], list['effectiveAmount'],list['totalProfitBet'], list['profitBetProportion'],
+            current_league_list.extend([list['merchantName'], list['multipName'], list['TotalBet'], list['effectiveAmount'],list['totalProfitBet'], list['profitBetProportion'],
                                         list['rebateBetAmount'], list['rebateTotalBet'], list['rebateAmount'],list['refundAmount'], list['profit']])
 
             total_league_list = []
@@ -2703,7 +2703,7 @@ class BackGround(object):
                 print("查询报表数据失败,原因：" + rtn.json()["message"])
 
             for parlayInfo in rtn.json()['data']:
-                total_league_list.extend(['总计', parlayInfo['multipName'], parlayInfo['totalBet'], parlayInfo['effectiveAmount'],parlayInfo['totalProfitBet'],
+                total_league_list.extend(['总计', parlayInfo['multipName'], parlayInfo['TotalBet'], parlayInfo['effectiveAmount'],parlayInfo['totalProfitBet'],
                                            parlayInfo['profitBetProportion'],parlayInfo['rebateBetAmount'], parlayInfo['rebateTotalBet'],parlayInfo['rebateAmount'],
                                            parlayInfo['refundAmount'], parlayInfo['profit'] ])
 

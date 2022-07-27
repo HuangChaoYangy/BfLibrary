@@ -82,7 +82,7 @@ class Test_profitAndLossDetail:
             if response_data['message'] == 'OK':
                 APIResult_list = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()['data']
                 for item in APIResult_list:
-                    actualResult.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                    actualResult.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],item['totalCommission'],
                                          item['memberWinOrLose'],item['memberCommission'],item['memberTotal'],item['level3WinOrLose'],item['level3Commission'],item['level3Total'],
                                          item['level2WinOrLose'],item['level2Commission'],item['level2Total'],item['level1WinOrLose'],item['level1Commission'],item['level1Total'],
                                          item['level0WinOrLose'],item['level0Commission'],item['level0Total'],item['companyWinOrLose'],item['companyCommission'],item['companyTotal']])

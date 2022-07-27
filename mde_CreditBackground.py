@@ -1491,7 +1491,7 @@ class CreditBackGround(object):
                 else:
                     for item in rsp.json()['data']:
                         unsettled_winLose.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],
-                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+                                               item['TotalBet'],item['level0Percentage'],item['companyPercentage']])
                     print(unsettled_winLose)
                     print(11111111111111111)
                     return unsettled_winLose
@@ -1505,7 +1505,7 @@ class CreditBackGround(object):
                     else:
                         for item in rsp.json()['data']:
                             unsettled_winLose.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],
-                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+                                               item['TotalBet'],item['level0Percentage'],item['companyPercentage']])
                         print(unsettled_winLose)
                         print(2222222222222)
                         return unsettled_winLose
@@ -1519,7 +1519,7 @@ class CreditBackGround(object):
                     else:
                         for item in rsp.json()['data']:
                             unsettled_winLose.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],
-                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+                                               item['TotalBet'],item['level0Percentage'],item['companyPercentage']])
                         print(unsettled_winLose)
                         return unsettled_winLose
 
@@ -1532,7 +1532,7 @@ class CreditBackGround(object):
                     else:
                         for item in rsp.json()['data']:
                             unsettled_winLose.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],
-                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+                                               item['TotalBet'],item['level0Percentage'],item['companyPercentage']])
                         print(unsettled_winLose)
                         print(44444444444444)
                         return unsettled_winLose
@@ -1546,7 +1546,7 @@ class CreditBackGround(object):
                     else:
                         for item in rsp.json()['data']:
                             unsettled_winLose.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],
-                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+                                               item['TotalBet'],item['level0Percentage'],item['companyPercentage']])
                         print(unsettled_winLose)
                         print(555555555555555555555555555)
                         return unsettled_winLose
@@ -1627,7 +1627,7 @@ class CreditBackGround(object):
                     for item in rsp.json()['data']:
                         account = item['account']
                         unsettled_winLose.append([account,item['name'],item['levelName'],item['currency'],item['numberOfBets'],
-                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+                                               item['TotalBet'],item['level0Percentage'],item['companyPercentage']])
 
                     return unsettled_winLose
             else:
@@ -1641,7 +1641,7 @@ class CreditBackGround(object):
                         for item in rsp.json()['data']:
                             account = item['account']
                             unsettled_winLose.append([account,item['name'],item['levelName'],item['currency'],item['numberOfBets'],
-                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+                                               item['TotalBet'],item['level0Percentage'],item['companyPercentage']])
 
                         return unsettled_winLose
 
@@ -1655,7 +1655,7 @@ class CreditBackGround(object):
                         for item in rsp.json()['data']:
                             account = item['account']
                             unsettled_winLose.append([account,item['name'],item['levelName'],item['currency'],item['numberOfBets'],
-                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+                                               item['TotalBet'],item['level0Percentage'],item['companyPercentage']])
 
                         return unsettled_winLose
 
@@ -1669,7 +1669,7 @@ class CreditBackGround(object):
                         for item in rsp.json()['data']:
                             account = item['account']
                             unsettled_winLose.append([account,item['name'],item['levelName'],item['currency'],item['numberOfBets'],
-                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+                                               item['TotalBet'],item['level0Percentage'],item['companyPercentage']])
 
                         return unsettled_winLose
 
@@ -1683,7 +1683,7 @@ class CreditBackGround(object):
                         for item in rsp.json()['data']:
                             account = item['account']
                             unsettled_winLose.append([account,item['name'],item['levelName'],item['currency'],item['numberOfBets'],
-                                               item['totalBet'],item['level0Percentage'],item['companyPercentage']])
+                                               item['TotalBet'],item['level0Percentage'],item['companyPercentage']])
 
                         return unsettled_winLose
 
@@ -1768,7 +1768,7 @@ class CreditBackGround(object):
                     print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
                 else:
                     for item in rsp.json()['data']:
-                        winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                        winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],
                                                  item['totalCommission'],item['payout'],item['companyWinOrLose'],item['companyCommission'],item['companyTotal']])
                     return winLose_simple
             else:
@@ -1780,7 +1780,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],
                                                      item['totalCommission'],item['payout'],item['level0WinOrLose'],item['level0Commission'],item['level0Total']])
                         print(winLose_simple)
                         print(2222222222222)
@@ -1794,7 +1794,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],
                                                      item['totalCommission'],item['payout'],item['level1WinOrLose'],item['level1Commission'],item['level1Total']])
                         print(winLose_simple)
                         return winLose_simple
@@ -1807,7 +1807,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],
                                                      item['totalCommission'],item['payout'],item['level2WinOrLose'],item['level2Commission'],item['level2Total']])
                         print(winLose_simple)
                         print(44444444444444)
@@ -1821,7 +1821,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],
                                                      item['totalCommission'],item['payout'],item['level3WinOrLose'],item['level3Commission'],item['level3Total']])
                         print(winLose_simple)
                         print(555555555555555555555555555)
@@ -1905,7 +1905,7 @@ class CreditBackGround(object):
                     print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
                 else:
                     for item in rsp.json()['data']:
-                        winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                        winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],
                                                  item['totalCommission'],item['payout'],item['companyWinOrLose'],item['companyCommission'],item['companyTotal']])
                     return winLose_simple
             else:
@@ -1917,7 +1917,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],
                                                      item['totalCommission'],item['payout'],item['level0WinOrLose'],item['level0Commission'],item['level0Total']])
                         return winLose_simple
 
@@ -1929,7 +1929,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],
                                                      item['totalCommission'],item['payout'],item['level1WinOrLose'],item['level1Commission'],item['level1Total']])
                         return winLose_simple
 
@@ -1941,7 +1941,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],
                                                      item['totalCommission'],item['payout'],item['level2WinOrLose'],item['level2Commission'],item['level2Total']])
                         return winLose_simple
 
@@ -1953,7 +1953,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(简易)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],
+                            winLose_simple.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],
                                                      item['totalCommission'],item['payout'],item['level3WinOrLose'],item['level3Commission'],item['level3Total']])
                         return winLose_simple
 
@@ -2038,7 +2038,7 @@ class CreditBackGround(object):
                     print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                 else:
                     for item in rsp.json()['data']:
-                        winLose_detail.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                        winLose_detail.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],item['totalCommission'],
                                                item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
                                                item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
                                                item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
@@ -2054,7 +2054,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],item['totalCommission'],
                                                item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
                                                item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
                                                item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
@@ -2070,7 +2070,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],item['totalCommission'],
                                                item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
                                                item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
                                                item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
@@ -2085,7 +2085,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],item['totalCommission'],
                                                item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
                                                item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
                                                item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
@@ -2101,7 +2101,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],item['totalCommission'],
                                                item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
                                                item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
                                                item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
@@ -2191,7 +2191,7 @@ class CreditBackGround(object):
                     print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                 else:
                     for item in rsp.json()['data']:
-                        winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                        winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],item['totalCommission'],
                                                item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
                                                item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
                                                item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
@@ -2206,7 +2206,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],item['totalCommission'],
                                                item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
                                                item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
                                                item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
@@ -2221,7 +2221,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],item['totalCommission'],
                                                item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
                                                item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
                                                item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
@@ -2236,7 +2236,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],item['totalCommission'],
                                                item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
                                                item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
                                                item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
@@ -2251,7 +2251,7 @@ class CreditBackGround(object):
                         print("查询总代盈亏(详情)失败,原因：" + rsp.json()["message"])
                     else:
                         for item in rsp.json()['data']:
-                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],item['totalEfficientAmount'],item['totalCommission'],
+                            winLose_detail.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],item['totalEfficientAmount'],item['totalCommission'],
                                                item['memberWinOrLose'], item['memberCommission'], item['memberTotal'],item['level3WinOrLose'], item['level3Commission'],item['level3Total'],
                                                item['level2WinOrLose'], item['level2Commission'], item['level2Total'],item['level1WinOrLose'], item['level1Commission'],item['level1Total'],
                                                item['level0WinOrLose'], item['level0Commission'], item['level0Total'],item['companyWinOrLose'], item['companyCommission'],item['companyTotal']])
@@ -3772,6 +3772,107 @@ class CreditBackGround(object):
         except Exception as e:
             print(e)
 
+
+    def credit_uncheckList(self, inData):
+        '''
+        总台-代理管理-总代结账      用户自动化测试                             /// 修改于2022.07.26
+        :param inData:
+        :return:
+        '''
+        login_loken = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="", loginDiv=222333)
+
+        data = inData
+        page = data['page']
+        limit = data['limit']
+        accountStatus = data['accountStatus']
+        searchAccountName = data['searchAccountName']
+
+        url = self.mde_url + '/mainstation/generalAgentManagement/unCheck/list'
+        head = {"LoginDiv": '222333',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": login_loken,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+        try:
+            params = {"page":page, "limit":limit, "accountStatus":accountStatus, "searchAccountName":searchAccountName}
+            rsp = self.session.get(url, headers=head, params=params)
+            if rsp.json()['message'] != 'OK':
+                print("查询总代结账失败,原因：" + rsp.json()["message"])
+            else:
+                uncheckList = []
+                for item in rsp.json()['data']['data']:
+                    uncheckList.append([item['accountJointLoginAccount'],item['levelDesc'],item['accountStatusDesc'],item['checkAmountAsOfYesterdaySup'],
+                                        item['checkAmountAsOfTodaySup'],item['checkAmountAsOfYesterdaySub'],item['checkAmountAsOfTodaySub'],
+                                        item['unSettlementAmount'],item['creditsAmount'],item['usedCreditsAmount']])
+
+                return uncheckList
+
+        except Exception as e:
+            print(e)
+
+
+    def credit_mainBet(self, inData, quert_type=1):
+        '''
+        总台-总投注-让球/大小/独赢/滚球      用户自动化测试                             /// 修改于2022.07.26
+        :param inData:
+        :return:
+        '''
+        login_loken = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="", loginDiv=222333)
+
+        data = inData
+        matchId = data['matchId']
+        sportId = data['sportId']
+        producer_dic = {"1": "滚球", "3": ""}
+        url = self.mde_url + '/betManagement/agent/mainBet'
+        detail_url = self.mde_url + '/betManagement/agent/mainBetOrderInfo'
+        head = {"LoginDiv": '222333',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": login_loken,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+        try:
+            if quert_type == 1:
+                data = {"sportId":sportId,"flag":0,"matchId":matchId}
+                rsp = self.session.post(url, headers=head, json=data)
+                if rsp.json()['message'] != 'OK':
+                    print("查询总投注-让球/大小/独赢/滚球失败,原因：" + rsp.json()["message"])
+                else:
+                    mainBet = []
+                    for sport in rsp.json()['data']:
+                        for matchInfo in sport['agentBetTournamentVOS']:
+                            for market in matchInfo['agentBetStatisticsVO']:
+                                full_market = market['fullMarketBet']
+                                half_market = market['halfMarketBet']
+                                mainBet.append([sport['sportName'], market['matchStartTime'],producer_dic[market['producer']] + '' + matchInfo['tournamentName'] + ' ' +
+                                                market['homeTeamName'] + ' vs ' + market['awayTeamName'],full_market['ahHome'], full_market['ahAway'],
+                                                full_market['ouOver'], full_market['ouUnder'],full_market['home1x2'],full_market['draw1x2'], full_market['away1x2'],
+                                                half_market['ahHome'], half_market['ahAway'],half_market['ouOver'],half_market['ouUnder'], half_market['home1x2'],
+                                                half_market['draw1x2'], half_market['away1x2']])
+
+                    return mainBet
+
+            elif quert_type == 2:
+                data = {"matchId":matchId,"sportId":sportId,"marketId":"237","outcomeId":"1714"}
+                rsp = self.session.post(detail_url, headers=head, json=data)
+                if rsp.json()['message'] != 'OK':
+                    print("查询总投注-让球/大小/独赢/滚球失败,原因：" + rsp.json()["message"])
+                else:
+                    mainBetOrder = []
+                    for item in rsp.json()['data']:
+                        mainBetOrder.append([item['userId'] + '/' + item['loginAccount'],item['orderNo'],item['betTime'],item['sportName'],item['betType'],
+                                             item['tournamentName'],item['homeTeamName'] + ' Vs ' + item['awayTeamName'],producer_dic[item['producer']],
+                                             item['marketName'],item['specifier'], item['outComeName'], item['odds'],item['matchStartTime'],
+                                             item['orderResultName'],item['betIp'] + ' / ' + item['ipAddress'], item['betAmount'], item['companyActualPercentage'],
+                                             item['level0ActualPercentage'],item['level0RetreatProportion'],item['level1ActualPercentage'],item['level1RetreatProportion'],
+                                             item['level2ActualPercentage'],item['level2RetreatProportion'],item['level3ActualPercentage'],item['level3RetreatProportion'],
+                                             item['userRetreatProportion']])
+
+                    return mainBetOrder
+
+            else:
+                raise AssertionError('ERROR')
+
+        except Exception as e:
+            print(e)
+
     # def bf_request(self,method,url,head=None ,data = None,*args,**kwargs):
     #     '''
     #     获取请求方式
@@ -3967,7 +4068,9 @@ if __name__ == "__main__":
     # daily_report = bg.credit_dailyReport(Authorization=login_loken, create_time=(-6,0), queryType=2)           # 总台-报表管理-每日盈亏
     # data = bg.credit_terminalReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "terminal":"","sortIndex":"","sortParameter":"","page":1,"limit":200 },queryType=2)       # 总台-报表管理-客户端盈亏
     # data = bg.credit_sportsReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200 }, queryType=1)    # 总台-报表管理-体育项盈亏
-    data = bg.credit_rebateReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200 }, queryType=2)   # 总台-报表管理-返水报表
+    # data = bg.credit_rebateReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200 }, queryType=2)   # 总台-报表管理-返水报表
+    # data = bg.credit_uncheckList(inData={"accountStatus": 0, "searchAccountName": "",  "page": 1,"limit": 200})  # 总台-总代结账
+    data = bg.credit_mainBet(inData={"matchId": "", "sportId": ""}, quert_type=1)  # 总投注-让球/大小/独赢/滚球
     print(data)
 
 

@@ -80,7 +80,7 @@ class Test_unsettledOrder:
             if response_data['message'] == 'OK':
                 APIResult_list = CreditBackGround(mysql_info, mongo_info).bf_request(method=request_method, url=request_url, head=head,data=request_body).json()['data']
                 for item in APIResult_list:
-                    actualResult.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['totalBet'],
+                    actualResult.append([item['account'],item['name'],item['levelName'],item['currency'],item['numberOfBets'],item['TotalBet'],
                                              item['level0Percentage'],item['companyPercentage']])
             elif response_data['data']['data'] == []:
                 actualResult = []
