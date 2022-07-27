@@ -9576,31 +9576,37 @@ class MysqlQuery(MysqlFunc):
 
 
 
-    def queryUnusualOrderList(self, order_num="",date=(-30,0)):
+    def queryUnusualOrderList(self, order_num="", date=(-30,0)):
         '''
         查询异常注单列表
         :param order_num:
         :param date:
-        :return:
+        :param status:  1:     0: 待确认的异常注单,只能进行退款操作
+        :return:  confirmed_order 待确认的异常注单,只能进行退款操作       unsettled_order 未结算的异常注单,可以进行结算操作
         '''
         database_name = "bfty_credit"
         ctime = self.get_current_time_for_client(time_type='ctime',day_diff=date[0])
         etime = self.get_current_time_for_client(time_type='ctime', day_diff=date[1])
         if order_num:
-            order_str = f"and a.order_no={order_num}"
+            order_str = f"and a.order_no='{order_num}'"
         else:
             order_str = ""
-        sql_str = f"SELECT a.order_no '注单号' FROM o_account_order a JOIN o_account_order_match b ON a.order_no=b.order_no WHERE a.`status` in (0,1) AND date_add( b.match_time, " \
-                  f"INTERVAL 150 MINUTE ) < CONVERT_TZ(CURRENT_TIMESTAMP(), '+00:00', '-04:00' ) AND DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {order_str}" \
-                  f"ORDER BY a.create_time DESC"
+        sql_str = f"SELECT a.order_no '注单号',any_value(b.id) '子注单主键ID',b.market_id,a.`status` '注单状态' FROM o_account_order a JOIN o_account_order_match b ON a.order_no=b.order_no " \
+                  f"WHERE a.`status` in (0,1) AND date_add( b.match_time,INTERVAL 150 MINUTE ) < CONVERT_TZ(CURRENT_TIMESTAMP(), '+00:00', '-04:00' ) AND " \
+                  f"DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {order_str} ORDER BY a.create_time DESC"
         result = list(self.query_data(sql_str, database_name))
         result_data = [list(item) for item in result]
-        result_list = []
-        for item in result_data:
-            for detail in item:
-                result_list.append(detail)
 
-        return result_list
+        confirmed_order = []
+        unsettled_order = []
+        for item_list in result_data:
+            if item_list[3] == 0:
+                confirmed_order.append(item_list[0:3])
+            else:
+                unsettled_order.append(item_list[0:3])
+
+        return confirmed_order,unsettled_order
+
 
     def remove_special_symbols(self, data_str):
         '''
@@ -9731,7 +9737,7 @@ if __name__ == "__main__":
     # print(id)
 
 
-    # data = mysql.credit_unsettledOrder_query(expData={"account": "", "parentId":"0", "userName":"a0b1b2b3a3"})[0]
+    # data = mysql.credit_unsettledOrder_query(expData={"account": "", "parentId":"", "userName":"a0b1b2b301"})[0]
     # data = mysql.credit_winLoseSimple_query(expData={"account": "", "parentId":"a0b1b2b3", "userName":"","ctime": "-7", "etime":"-1"})[0]
     # data = mysql.credit_winLoseDetail_query(expData={"account": "", "parentId": "", "userName": "a0b1b2b300", "ctime": "-7", "etime": "-1"})[0]
     # data = mysql.credit_sportReport_query(expData={"ctime":'-6', "ctime":'-0', "sportName":'网球',"queryDateType":3 },queryType='market')[0]
@@ -9770,8 +9776,8 @@ if __name__ == "__main__":
     # data = mysql.get_mainBetReport_query(expData={'sportName':'足球'})
     # data = mysql.get_sportName_mainBetReport()
 
-    # data = mysql.queryUnusualOrderList(order_num="",date=(-4,0))
-    data = mysql.remove_special_symbols(data_str="ci/222222222")
+    data = mysql.queryUnusualOrderList(order_num="",date=(-20,0))[0]
+    # data = mysql.remove_special_symbols(data_str="ci/222222222")
     print(data)
 
 
