@@ -7283,7 +7283,8 @@ class MysqlQuery(MysqlFunc):
             rtn = list(self.query_data(sql_str, database_name))
             unsettledOrder_list = []
             for item in rtn:
-                unsettledOrder_list.append([item[0], item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
+                account_str = self.remove_special_symbols(data_str=item[0])
+                unsettledOrder_list.append([account_str, item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
 
             return unsettledOrder_list,sql_str
 
@@ -7298,8 +7299,9 @@ class MysqlQuery(MysqlFunc):
                 rtn = list(self.query_data(sql_str, database_name))
                 unsettledOrder_list = []
                 for item in rtn:
+                    account_str = self.remove_special_symbols(data_str=item[0])
                     unsettledOrder_list.append(
-                        [item[0], item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
+                        [account_str, item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
 
                 return unsettledOrder_list, sql_str
 
@@ -7313,8 +7315,9 @@ class MysqlQuery(MysqlFunc):
                 rtn = list(self.query_data(sql_str, database_name))
                 unsettledOrder_list = []
                 for item in rtn:
+                    account_str = self.remove_special_symbols(data_str=item[0])
                     unsettledOrder_list.append(
-                        [item[0], item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
+                        [account_str, item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
 
                 return unsettledOrder_list, sql_str
 
@@ -7328,8 +7331,9 @@ class MysqlQuery(MysqlFunc):
                 rtn = list(self.query_data(sql_str, database_name))
                 unsettledOrder_list = []
                 for item in rtn:
+                    account_str = self.remove_special_symbols(data_str=item[0])
                     unsettledOrder_list.append(
-                        [item[0], item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
+                        [account_str, item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
 
                 return unsettledOrder_list, sql_str
 
@@ -7341,8 +7345,9 @@ class MysqlQuery(MysqlFunc):
                 rtn = list(self.query_data(sql_str, database_name))
                 unsettledOrder_list = []
                 for item in rtn:
+                    account_str = self.remove_special_symbols(data_str=item[0])
                     unsettledOrder_list.append(
-                        [item[0], item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
+                        [account_str, item[1], item[2], item[3], item[4], float(item[5]), float(item[6]), float(item[7])])
 
                 return unsettledOrder_list, sql_str
 
@@ -7421,7 +7426,8 @@ class MysqlQuery(MysqlFunc):
             rtn = list(self.query_data(sql_str, database_name))
             winLoseSimple_list = []
             for item in rtn:
-                winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]), float(item[7]),
+                account_str = self.remove_special_symbols(data_str=item[0])
+                winLoseSimple_list.append([account_str, item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]), float(item[7]),
                                             float(item[8]), float(item[9]), float(item[10]), float(item[11])])
 
             return winLoseSimple_list,sql_str
@@ -7441,7 +7447,8 @@ class MysqlQuery(MysqlFunc):
                 rtn = list(self.query_data(sql_str, database_name))
                 winLoseSimple_list = []
                 for item in rtn:
-                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                    account_str = self.remove_special_symbols(data_str=item[0])
+                    winLoseSimple_list.append([account_str, item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
                          float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11])])
 
                 return winLoseSimple_list, sql_str
@@ -7460,7 +7467,8 @@ class MysqlQuery(MysqlFunc):
                 rtn = list(self.query_data(sql_str, database_name))
                 winLoseSimple_list = []
                 for item in rtn:
-                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                    account_str = self.remove_special_symbols(data_str=item[0])
+                    winLoseSimple_list.append([account_str, item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
                          float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11])])
 
                 return winLoseSimple_list, sql_str
@@ -7479,7 +7487,8 @@ class MysqlQuery(MysqlFunc):
                 rtn = list(self.query_data(sql_str, database_name))
                 winLoseSimple_list = []
                 for item in rtn:
-                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                    account_str = self.remove_special_symbols(data_str=item[0])
+                    winLoseSimple_list.append([account_str, item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
                          float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11])])
 
                 return winLoseSimple_list, sql_str
@@ -7497,7 +7506,8 @@ class MysqlQuery(MysqlFunc):
                 rtn = list(self.query_data(sql_str, database_name))
                 winLoseSimple_list = []
                 for item in rtn:
-                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                    account_str = self.remove_special_symbols(data_str=item[0])
+                    winLoseSimple_list.append([account_str, item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
                          float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11])])
                 return winLoseSimple_list, sql_str
 
@@ -7585,7 +7595,8 @@ class MysqlQuery(MysqlFunc):
             rtn = list(self.query_data(sql_str, database_name))
             winLoseSimple_list = []
             for item in rtn:
-                winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),float(item[7]), float(item[8]),
+                account_str = self.remove_special_symbols(data_str=item[0])
+                winLoseSimple_list.append([account_str, item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),float(item[7]), float(item[8]),
                      float(item[9]), float(item[10]), float(item[11]), float(item[12]),float(item[13]), float(item[14]), float(item[15]), float(item[16]),
                      float(item[17]), float(item[18]),float(item[19]), float(item[20]),float(item[21]), float(item[22]), float(item[23]), float(item[24]), float(item[25])])
 
@@ -7608,7 +7619,8 @@ class MysqlQuery(MysqlFunc):
                 rtn = list(self.query_data(sql_str, database_name))
                 winLoseSimple_list = []
                 for item in rtn:
-                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                    account_str = self.remove_special_symbols(data_str=item[0])
+                    winLoseSimple_list.append([account_str, item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
                          float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11]),float(item[12]),float(item[13]),
                          float(item[14]),float(item[15]), float(item[16]),float(item[17]),float(item[18]), float(item[19]), float(item[20]),
                                                float(item[21]),float(item[22]),float(item[23]), float(item[24]), float(item[25])])
@@ -7631,7 +7643,8 @@ class MysqlQuery(MysqlFunc):
                 rtn = list(self.query_data(sql_str, database_name))
                 winLoseSimple_list = []
                 for item in rtn:
-                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                    account_str = self.remove_special_symbols(data_str=item[0])
+                    winLoseSimple_list.append([account_str, item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
                          float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11]),float(item[12]),float(item[13]),
                          float(item[14]),float(item[15]), float(item[16]),float(item[17]),float(item[18]), float(item[19]), float(item[20]),
                                                float(item[21]),float(item[22]),float(item[23]), float(item[24]), float(item[25])])
@@ -7654,7 +7667,8 @@ class MysqlQuery(MysqlFunc):
                 rtn = list(self.query_data(sql_str, database_name))
                 winLoseSimple_list = []
                 for item in rtn:
-                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                    account_str = self.remove_special_symbols(data_str=item[0])
+                    winLoseSimple_list.append([account_str, item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
                          float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11]),float(item[12]),float(item[13]),
                          float(item[14]),float(item[15]), float(item[16]),float(item[17]),float(item[18]), float(item[19]), float(item[20]),
                                                float(item[21]),float(item[22]),float(item[23]), float(item[24]), float(item[25])])
@@ -7675,7 +7689,8 @@ class MysqlQuery(MysqlFunc):
                 rtn = list(self.query_data(sql_str, database_name))
                 winLoseSimple_list = []
                 for item in rtn:
-                    winLoseSimple_list.append([item[0], item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
+                    account_str = self.remove_special_symbols(data_str=item[0])
+                    winLoseSimple_list.append([account_str, item[1], item[2], item[3], float(item[4]), float(item[5]), float(item[6]),
                          float(item[7]),float(item[8]), float(item[9]), float(item[10]), float(item[11]),float(item[12]),float(item[13]),
                          float(item[14]),float(item[15]), float(item[16]),float(item[17]),float(item[18]), float(item[19]), float(item[20]),
                                                float(item[21]),float(item[22]),float(item[23]), float(item[24]), float(item[25])])
@@ -9559,6 +9574,48 @@ class MysqlQuery(MysqlFunc):
 
 
 
+    def queryUnusualOrderList(self, order_num="",date=(-30,0)):
+        '''
+        查询异常注单列表
+        :param order_num:
+        :param date:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        ctime = self.get_current_time_for_client(time_type='ctime',day_diff=date[0])
+        etime = self.get_current_time_for_client(time_type='ctime', day_diff=date[1])
+        if order_num:
+            order_str = f"and a.order_no={order_num}"
+        else:
+            order_str = ""
+        sql_str = f"SELECT a.order_no '注单号' FROM o_account_order a JOIN o_account_order_match b ON a.order_no=b.order_no WHERE a.`status` in (0,1) AND date_add( b.match_time, " \
+                  f"INTERVAL 150 MINUTE ) < CONVERT_TZ(CURRENT_TIMESTAMP(), '+00:00', '-04:00' ) AND DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {order_str}" \
+                  f"ORDER BY a.create_time DESC"
+        result = list(self.query_data(sql_str, database_name))
+        result_data = [list(item) for item in result]
+        result_list = []
+        for item in result_data:
+            for detail in item:
+                result_list.append(detail)
+
+        return result_list
+
+    def remove_special_symbols(self, data_str):
+        '''
+        将 'ci/'和 'ci/c1' 这两种字符串进行转换
+        :param data_str:
+        :return:
+        '''
+        result = data_str.split('/')
+        if result[1] == "":
+            result.remove(result[1])
+            result_str = ''.join(result)
+        else:
+            result_str = data_str
+
+        return result_str
+
+
 
 if __name__ == "__main__":
 
@@ -9709,7 +9766,10 @@ if __name__ == "__main__":
     # data = mysql.get_outcomeId_by_marketId_mainBetReport(sport_name='足球', match_id='sr:match:32225939', market_id='16')
     # data = mysql.get_matchdata_mainBetReport(sportName='足球')
     # data = mysql.get_mainBetReport_query(expData={'sportName':'足球'})
-    data = mysql.get_sportName_mainBetReport()
+    # data = mysql.get_sportName_mainBetReport()
+
+    # data = mysql.queryUnusualOrderList(order_num="",date=(-4,0))
+    data = mysql.remove_special_symbols(data_str="ci/222222222")
     print(data)
 
 
