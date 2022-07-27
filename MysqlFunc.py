@@ -5491,7 +5491,8 @@ class MysqlQuery(MysqlFunc):
 
         uncheckList = []
         for item in rtn:
-            uncheckList.append([item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7],
+            account_str = self.remove_special_symbols(data_str=item[0])
+            uncheckList.append([account_str, item[1], item[2], item[3], item[4], item[5], item[6], item[7],
                                 item[9], item[10]])
 
         return uncheckList,sql_str
@@ -8156,13 +8157,14 @@ class MysqlQuery(MysqlFunc):
         rtn = list(self.query_data(sql_str, database_name))
         cancelledOrder = []
         for item in rtn:
+            account_str = self.remove_special_symbols(data_str=item[0])
             order_num = item[1]
             odds = self.get_odds_by_orderNum(orderNo=order_num)
             bet_time = item[2]
             betTime = bet_time.strftime("%Y-%m-%d %H:%M:%S")
             match_time = item[10]
             matchTime = match_time.strftime("%Y-%m-%d %H:%M:%S")
-            cancelledOrder.append([item[0], item[1], betTime, [item[3], item[4], item[5], item[6], item[7], item[8],
+            cancelledOrder.append([account_str, item[1], betTime, [item[3], item[4], item[5], item[6], item[7], item[8],
                                   float(item[9]), matchTime, item[11]], float(odds), float(item[12]), item[13]])
 
         expectResult = self.cf.merge_compelx_01(new_lList=cancelledOrder)
