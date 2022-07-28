@@ -4140,7 +4140,7 @@ if __name__ == "__main__":
 
     # login_loken = bg.login_background(uname='a0child01', password='Bfty123456', securityCode="Agent0", loginDiv='555666')          # 登录信用网代理后台
     login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
-    data = bg.settleUnusualOrder(Authorization=login_loken, order_num="", date=(-39, -0), settleType='待确认', remark="脚本结算", result=None)
+    data = bg.settleUnusualOrder(Authorization=login_loken, order_num="", date=(-60, -0), settleType='未结算', remark="脚本结算", result=None)
     # data = bg.unsettlement(Authorization=login_loken)
     # user = bg.user_management(Authorization=login_loken, userStatus='0', userName='', userAccount='', sortIndex='', sortParameter='')   # 会员管理
     # match = bg.credit_match_result_query(Authorization=login_loken, sportName='足球', tournamentName='', teamName='',offset='0')    # 新赛果查询

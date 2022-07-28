@@ -9591,8 +9591,9 @@ class MysqlQuery(MysqlFunc):
             order_str = f"and a.order_no='{order_num}'"
         else:
             order_str = ""
-        sql_str = f"SELECT a.order_no '注单号',any_value(b.id) '子注单主键ID',b.market_id,a.`status` '注单状态' FROM o_account_order a JOIN o_account_order_match b ON a.order_no=b.order_no " \
-                  f"WHERE a.`status` in (0,1) AND date_add( b.match_time,INTERVAL 150 MINUTE ) < CONVERT_TZ(CURRENT_TIMESTAMP(), '+00:00', '-04:00' ) AND " \
+        sql_str = f"SELECT a.order_no '注单号',any_value(b.id) '子注单主键ID',b.market_id '盘口ID',a.`status` '注单状态',c.`sub_order_status` '子注单状态' FROM o_account_order a " \
+                  f"JOIN o_account_order_match b ON a.order_no=b.order_no JOIN o_account_order_match_update c ON (a.order_no=c.order_no AND b.match_id=c.match_id) WHERE a.`status` " \
+                  f"in (0,1) AND c.`sub_order_status` in (0,1) AND date_add( b.match_time,INTERVAL 150 MINUTE ) < CONVERT_TZ(CURRENT_TIMESTAMP(), '+00:00', '-04:00' ) AND " \
                   f"DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {order_str} ORDER BY a.create_time DESC"
         result = list(self.query_data(sql_str, database_name))
         result_data = [list(item) for item in result]
@@ -9776,7 +9777,7 @@ if __name__ == "__main__":
     # data = mysql.get_mainBetReport_query(expData={'sportName':'足球'})
     # data = mysql.get_sportName_mainBetReport()
 
-    data = mysql.queryUnusualOrderList(order_num="",date=(-20,0))[0]
+    data = mysql.queryUnusualOrderList(order_num="",date=(-39,0))[1]
     # data = mysql.remove_special_symbols(data_str="ci/222222222")
     print(data)
 
