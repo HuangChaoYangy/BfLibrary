@@ -1,0 +1,10 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /betManagement/agent/mixBetOrderInfo
+    method: POST
+  data:
+    orderNo: ''
+    title: 管理后台-总投注-混合串关-注单详情,默认查询所有数据
+  resp:
+    orderNo: ''
+

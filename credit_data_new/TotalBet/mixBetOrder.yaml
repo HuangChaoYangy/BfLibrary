@@ -1,0 +1,9 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /betManagement/agent/mixBetOrderInfo
+    method: POST
+  data:
+    orderNo: $ddt{orderNo}
+    title: $ddt{title}
+  resp:
+    orderNo: $ddt{orderNo}

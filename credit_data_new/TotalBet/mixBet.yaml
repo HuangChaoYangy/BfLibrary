@@ -1,0 +1,9 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /betManagement/agent/mixBetOrder
+    method: POST
+  data:
+    account: $ddt{account}
+    title: $ddt{title}
+  resp:
+    account: $ddt{account}
