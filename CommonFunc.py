@@ -806,7 +806,17 @@ class CommonFunc(object):
         else:
             expect_list = expect_list
 
-        return expect_list
+        news_targets = []
+        news_targets.append(expect_list[0])
+        platenolist = []
+        for item in expect_list:
+            plateno = item[2]
+            for new_item in news_targets:
+                platenolist.append(new_item[2])
+                if plateno not in platenolist:
+                    news_targets.append(item)
+
+        return news_targets
 
     def merge_compelx_02(self, new_lList):
         '''
@@ -868,7 +878,17 @@ class CommonFunc(object):
         else:
             expect_list = expect_list
 
-        return expect_list
+        news_targets = []
+        news_targets.append(expect_list[0])
+        platenolist = []
+        for item in expect_list:
+            plateno = item[2]
+            for new_item in news_targets:
+                platenolist.append(new_item[2])
+                if plateno not in platenolist:
+                    news_targets.append(item)
+
+        return news_targets
 
     def merge_compelx_03(self, new_lList):
         '''
