@@ -41,7 +41,7 @@ class Test_matchReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_match, yaml_file=match_url, new_yaml_file=match_url_new)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=match_url_new, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=match_url_new, isAll=True)[0]['request']
-    @pytest.mark.skip(reason="调试代码,暂不执行")
+    # @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-比赛报表')
     def test_matchReport(self, inBody, expData, url=url_data):
@@ -110,7 +110,7 @@ class Test_matchReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_match_m, yaml_file=match_url_m, new_yaml_file=match_url_new_m)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=match_url_new_m, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=match_url_new_m, isAll=True)[0]['request']
-    @pytest.mark.skip(reason="调试代码,暂不执行")
+    # @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-比赛报表-盘口详情')
     def test_matchReportMarket(self, inBody, expData, request=url_data):
