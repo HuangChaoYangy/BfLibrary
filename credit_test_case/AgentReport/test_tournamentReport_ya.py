@@ -43,10 +43,10 @@ class Test_tournamentReport_ya:
     url_data = Yaml_data().read_yaml_file(yaml_file=tournament_url_new, isAll=True)[0]['request']
     # @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
-    @allure.story('总台-代理报表-联赛报表-盘口详情')
+    @allure.story('总台-代理报表-联赛报表-联赛详情')
     def test_tournamentReport(self, inBody, expData, url=url_data):
         '''
-        管理后台-代理报表-联赛报表-盘口详情,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
+        管理后台-代理报表-联赛报表-联赛详情,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
         :param excel_data:  excel中的测试用例
         :param sport_params: excel中的参数化数据
         :return:
@@ -60,10 +60,10 @@ class Test_tournamentReport_ya:
         with allure.step(f"请求地址 {url}"):
             Bf_log('tournamentReport').info(f'请求地址为:{url}')
 
-        sql = MysqlQuery(mysql_info, mongo_info).credit_tournamentReport_query(expData=expData,queryType='detail')[1]
+        sql = MysqlQuery(mysql_info, mongo_info).credit_tournamentReport_query(expData=expData,queryType='tournament')[1]
         with allure.step(f'查询SQL:{sql}'):
             Bf_log('tournamentReport').info(f'执行sql:{sql}')
-        expectResult = MysqlQuery(mysql_info, mongo_info).credit_tournamentReport_query(expData=expData,queryType='detail')[0]
+        expectResult = MysqlQuery(mysql_info, mongo_info).credit_tournamentReport_query(expData=expData,queryType='tournament')[0]
 
         # 校验接口数据和SQL数据的长度
         if len(actualResult) == len(expectResult):
@@ -146,8 +146,9 @@ class Test_tournamentReport_ya:
                 request_body = {"begin": begin, "end": end, "dateType": inBody['dateType'], "page": 1, "limit": 200,
                                "sportId": inBody['sportId'], "marketId": None, "account": "", "tournamentId": tournamentId,"matchId": None}
 
+                total_title = f"根据球类：'{sport_name[inBody['sportId']]}', 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
+                allure.dynamic.title(total_title)
                 title = f"根据球类：'{sport_name[inBody['sportId']]}', 联赛ID：{tournamentId} 查看注单详情, 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
-                allure.dynamic.title(title)
                 with allure.step(f"执行测试用例:{title}"):
                     Bf_log('tournamentReport').info(f"----------------开始执行:{title}------------------------")
                 with allure.step(f"请求地址： {request_url}"):
@@ -284,8 +285,9 @@ class Test_tournamentReport_ya:
                 request_body = {"begin": begin, "end": end, "dateType": inBody['dateType'], "page": 1, "limit": 200,
                                 "sportId": inBody['sportId'], "marketId": None, "account": "", "tournamentId": tournamentId,"matchId": None}
 
+                total_title = f"根据球类：'{sport_name[inBody['sportId']]}', 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
+                allure.dynamic.title(total_title)
                 title = f"根据球类：'{sport_name[inBody['sportId']]}', 联赛名称：{tournamentId} 查看注单详情, 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
-                allure.dynamic.title(title)
                 with allure.step(f"执行测试用例:{title}"):
                     Bf_log('tournamentReport').info(f"----------------开始执行:{title}------------------------")
                 request_url = ip + url

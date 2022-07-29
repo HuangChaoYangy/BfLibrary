@@ -565,5 +565,5 @@ class Test_matchReport_ya:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_matchReport_ya.py", '-vs', '-q', '--alluredir', '../report/tmp','-n=auto','--clean-alluredir'])  # '--clean-alluredir', '-n=4'
+    pytest.main(["test_matchReport_ya.py", '-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  # '--clean-alluredir', '-n=4'
     os.system("allure serve ../report/tmp")

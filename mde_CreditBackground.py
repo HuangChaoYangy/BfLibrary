@@ -2428,7 +2428,7 @@ class CreditBackGround(object):
             sport_id = ""
         url = self.mde_url + '/winOrLost/sport'
         market_url = self.mde_url + '/winOrLost/market'
-        # order_url = self.mde_url + '/winOrLost/order/details'
+        order_url = self.mde_url + '/winOrLost/order/details'
         odds_dic = {"1": '欧洲盘', "2": '香港盘'}
         head = {"LoginDiv": '222333',
                 "Accept-Language": "zh-CN,zh;q=0.9",
@@ -2484,35 +2484,35 @@ class CreditBackGround(object):
 
                     return market_list
 
-            # elif queryType == 'order':
-            #     print(market_id_list)
-            #     order_list = []
-            #     for market in market_id_list:
-            #         data = {"begin":ctime,"end":etime,"dateType":date_type,"page":1,"limit":200,"sportId":sport_id,"marketId":market,"account":None,
-            #                 "tournamentId":None,"matchId":None}
-            #         print(data)
-            #         rsp = self.session.post(order_url, headers=head, json=data)
-            #
-            #         if rsp.json()['message'] != 'OK':
-            #             print("查询球类报表-注单详情失败,原因：" + rsp.json()["message"])
-            #         else:
-            #             for item in rsp.json()['data']['data']['data']:
-            #                 for detail in item['options']:
-            #                     odds_type = odds_dic[detail['oddsType']]
-            #                     order_list.append([item['account'], item['name'], item['orderNo'], item['betTime'], item['sportType'],item['betType'],
-            #                                  [detail['tournamentName'], detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'], detail['marketName'],
-            #                                   detail['specifier'], detail['outcomeName'], detail['odds'], odds_type,detail['matchTime']],
-            #                                  item['settlementTime'], item['betResult'],item['betIp'] + ' / ' + item['betIpAddress'], item['betAmount'], item['winOrLose'],
-            #                                  item['validAmount'], item['companyPercentage'], item['companyWinOrLose'],item['companyCommissionRatio'], item['companyCommission'],
-            #                                  item['companyTotal'], item['level0Percentage'], item['level0WinOrLose'],item['level0CommissionRatio'], item['level0Commission'],
-            #                                  item['level0Total'], item['level1Percentage'], item['level1WinOrLose'],item['level1CommissionRatio'], item['level1Commission'],
-            #                                  item['level1Total'], item['level2Percentage'], item['level2WinOrLose'],item['level2CommissionRatio'], item['level2Commission'],
-            #                                  item['level2Total'], item['level3Percentage'], item['level3WinOrLose'],item['level3CommissionRatio'], item['level3Commission'],
-            #                                  item['level3Total'], item['memberWinOrLose'], item['memberCommissionRatio'], item['memberCommission'], item['memberTotal']])
-            #
-            #             order_result = CommonFunc().merge_compelx_02(new_lList=order_list)
-            #
-            #     return order_result
+            elif queryType == 'order':
+                market_id_list = ["串关"]
+                order_list = []
+                for market in market_id_list:
+                    data = {"begin":ctime,"end":etime,"dateType":date_type,"page":1,"limit":200,"sportId":sport_id,"marketId":market,"account":None,
+                            "tournamentId":None,"matchId":None}
+                    print(data)
+                    rsp = self.session.post(order_url, headers=head, json=data)
+
+                    if rsp.json()['message'] != 'OK':
+                        print("查询球类报表-注单详情失败,原因：" + rsp.json()["message"])
+                    else:
+                        for item in rsp.json()['data']['data']['data']:
+                            for detail in item['options']:
+                                odds_type = odds_dic[detail['oddsType']]
+                                order_list.append([item['account'], item['name'], item['orderNo'], item['betTime'], item['sportType'],item['betType'],
+                                             [detail['tournamentName'], detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'], detail['marketName'],
+                                              detail['specifier'], detail['outcomeName'], detail['odds'], odds_type,detail['matchTime']],
+                                             item['settlementTime'], item['betResult'],item['betIp'] + ' / ' + item['betIpAddress'], item['betAmount'], item['winOrLose'],
+                                             item['validAmount'], item['companyPercentage'], item['companyWinOrLose'],item['companyCommissionRatio'], item['companyCommission'],
+                                             item['companyTotal'], item['level0Percentage'], item['level0WinOrLose'],item['level0CommissionRatio'], item['level0Commission'],
+                                             item['level0Total'], item['level1Percentage'], item['level1WinOrLose'],item['level1CommissionRatio'], item['level1Commission'],
+                                             item['level1Total'], item['level2Percentage'], item['level2WinOrLose'],item['level2CommissionRatio'], item['level2Commission'],
+                                             item['level2Total'], item['level3Percentage'], item['level3WinOrLose'],item['level3CommissionRatio'], item['level3Commission'],
+                                             item['level3Total'], item['memberWinOrLose'], item['memberCommissionRatio'], item['memberCommission'], item['memberTotal']])
+
+                        order_result = CommonFunc().merge_compelx_02(new_lList=order_list)
+
+                    return order_result
 
             else:
                 raise AssertionError('抱歉,暂不支持该种类型')
@@ -3886,6 +3886,63 @@ class CreditBackGround(object):
         except Exception as e:
             print(e)
 
+
+    def credit_mixBet(self, inData, query_type=1):
+        '''
+        总台-总投注-混合串关      用户自动化测试                             /// 修改于2022.07.28
+        :param inData:
+        :return:
+        '''
+        login_loken = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="", loginDiv=222333)
+
+        data = inData
+        if data['account']:
+            account = data['account']
+        else:
+            account = ""
+        producer_dic = {"1": "滚球盘", "3": "早盘"}
+        url = self.mde_url + '/betManagement/agent/mixBetOrder'
+        detail_url = self.mde_url + '/betManagement/agent/mixBetOrderInfo'
+        head = {"LoginDiv": '222333',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": login_loken,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+        try:
+            if query_type == 1:
+                data = {"account":account}
+                rsp = self.session.post(url, headers=head, json=data)
+                if rsp.json()['message'] != 'OK':
+                    print("查询总投注-混合串关失败,原因：" + rsp.json()["message"])
+                else:
+                    mainBet = []
+                    for item in rsp.json()['data']:
+                        mainBet.append([item['account'], item['loginAccount'], item['orderNo'], item['sportName'],item['mixType'] + ' ' + item['mix'], item['betTime'],
+                                      item['currency'], item['orderStatus'],item['betIp'] + ' / ' + item['ipAddress'], item['betAmount'], item['odds'],item['companyActualPercentage'],
+                                      item['level0ActualPercentage'], item['level1ActualPercentage'],item['level2ActualPercentage'], item['level3ActualPercentage']])
+
+                    return mainBet
+
+            elif query_type == 2:
+                data = {"orderNo":""}
+                rsp = self.session.post(detail_url, headers=head, json=data)
+                if rsp.json()['message'] != 'OK':
+                    print("查询总投注-混合串关-注单详情失败,原因：" + rsp.json()["message"])
+                else:
+                    mainBetOrder = []
+                    for item in rsp.json()['data']:
+                        mainBetOrder.append([item['sportName'], item['matchStartTime'],item['tournamentName'],item['homeTeamName'] + ' Vs ' + item['awayTeamName'],
+                                             producer_dic[item['producer']], item['marketName'],item['outComeName'], item['betScore'], item['odds'],item['oddType']])
+
+                    actualResult = self.cm.merge_compelx_02(new_lList=mainBetOrder)
+
+                    return actualResult
+
+            else:
+                raise AssertionError('ERROR')
+
+        except Exception as e:
+            print(e)
+
     # def bf_request(self,method,url,head=None ,data = None,*args,**kwargs):
     #     '''
     #     获取请求方式
@@ -4140,7 +4197,7 @@ if __name__ == "__main__":
 
     # login_loken = bg.login_background(uname='a0child01', password='Bfty123456', securityCode="Agent0", loginDiv='555666')          # 登录信用网代理后台
     login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
-    data = bg.settleUnusualOrder(Authorization=login_loken, order_num="", date=(-60, -0), settleType='未结算', remark="脚本结算", result=None)
+    # data = bg.settleUnusualOrder(Authorization=login_loken, order_num="", date=(-60, -0), settleType='未结算', remark="脚本结算", result=None)       # 异常订单结算脚本
     # data = bg.unsettlement(Authorization=login_loken)
     # user = bg.user_management(Authorization=login_loken, userStatus='0', userName='', userAccount='', sortIndex='', sortParameter='')   # 会员管理
     # match = bg.credit_match_result_query(Authorization=login_loken, sportName='足球', tournamentName='', teamName='',offset='0')    # 新赛果查询
@@ -4170,7 +4227,7 @@ if __name__ == "__main__":
     # data = bg.credit_unsettledOrder(inData={"account": "", "parentId":"", "userName":"a0b1b2b301"})
     # data = bg.credit_winLose_simple(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
     # data = bg.credit_winLose_detail(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
-    # data = bg.credit_sportReport(inData={"begin":"-7", "end":"-1", "sportName":"乒乓球","queryDateType":3 },queryType='order')
+    data = bg.credit_sportReport(inData={"begin":"-7", "end":"-1", "sportName":"网球","queryDateType":3 },queryType='order')
     # data = bg.credit_multitermReport(inData={"begin":"-7", "end":"-1", "sportName":'',"searchAccount":'', "queryDateType":3 })[0]
     # data = bg.credit_cancelledOrder(inData={"begin": "-7", "end": "-1", "account": ''})
     # data = bg.credit_bill(inData={"begin": "-0", "end": "-0"},query_type=2)
@@ -4181,7 +4238,9 @@ if __name__ == "__main__":
     # data = bg.credit_rebateReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200 }, queryType=2)   # 总台-报表管理-返水报表
     # data = bg.credit_uncheckList(inData={"accountStatus": 0, "searchAccountName": "",  "page": 1,"limit": 200})  # 总台-总代结账
     # data = bg.credit_mainBet(inData={"matchId": "", "sportId": ""}, quert_type=1)  # 总投注-让球/大小/独赢/滚球
-    # print(data)
+    # data = bg.credit_mixBet(inData={"account":""}, quert_type=2)     # 总投注-混合串关
+    print(data)
+    print(len(data))
 
 
     # 后台注册会员

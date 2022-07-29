@@ -7679,7 +7679,7 @@ class MysqlQuery(MysqlFunc):
             elif parent_level == '登3':  # 登3查询会员
                 sql_str = f"SELECT CONCAT(a.account,'/',a.login_account) '账号/登入账号',`name` '名称','会员' as '级别',a.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额'," \
                           f"sum(efficient_amount) '总有效金额',TRUNCATE(sum(efficient_amount*level3_retreat_proportion),2) '总佣金',sum(handicap_win_or_lose) '会员输赢'," \
-                          f"sum(IFNULL(level3_backwater_amount+backwater_amount,0)) '会员佣金',sum(level3_backwater_amount+handicap_final_win_or_lose) '会员总计'," \
+                          f"sum(IFNULL(backwater_amount,0)) '会员佣金',sum(handicap_final_win_or_lose) '会员总计'," \
                           f"sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计'," \
                           f"sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢',sum(IFNULL(level2_backwater_amount,0)) '二级代理佣金',sum(level2_win_or_lose) '二级代理总计'," \
                           f"sum(level1_win_or_lose-level1_backwater_amount) '一级代理输赢',sum(IFNULL(level1_backwater_amount,0)) '一级代理佣金',sum(level1_win_or_lose) '一级代理总计'," \
@@ -7834,14 +7834,50 @@ class MysqlQuery(MysqlFunc):
 
             return sportReport,sql_str
 
+        elif queryType == 'order':
+            sql_str = f"SELECT CONCAT(d.account,'/',d.login_account) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id= 1 " \
+                      f"then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 " \
+                      f"THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰上曲棍球' END)as '球类'," \
+                      f"(case when a.bet_type=1 then '单注' when a.bet_type=2 then '串关' when a.bet_type=3 then '复式串关' end ) as '注单类型',tournament_name '联赛名称'," \
+                      f"CONCAT( home_team_name, ' Vs ', away_team_name ) '赛事名称',IF(is_live=3,'早盘','滚球盘') '赛事类型',market_name  '盘口名称',hcp_for_the_rest '亚盘口',outcome_name '投注项名称'," \
+                      f"cast(credit_odds as char) '赔率',if(odds_type=1,'欧洲盘','香港盘') '盘口类型',match_time '赛事时间',ifnull(award_time,'--') as '结算时间',(CASE WHEN a.settlement_result=1" \
+                      f" then '赢' WHEN a.settlement_result=2 then '输' WHEN a.settlement_result=5 then '平局走水' WHEN a.settlement_result=1 then '注单取消' END) as '注单结果'," \
+                      f"CONCAT(bet_ip, +' / ',+ ip_address) '下注IP地址',bet_amount as '投注金额',handicap_win_or_lose '注单输赢',efficient_amount '有效金额',company_actual_percentage," \
+                      f"company_win_or_lose-company_backwater_amount 'company_winlose',0  as 'company_retreat',company_backwater_amount,company_win_or_lose,level0_actual_percentage," \
+                      f"level0_win_or_lose-level0_backwater_amount 'level0_winlose',company_retreat_proportion 'level0_retreat',level0_backwater_amount,level0_win_or_lose," \
+                      f"level1_actual_percentage,level1_win_or_lose-level1_backwater_amount 'level1_winlose',level0_retreat_proportion 'level1_retreat',level1_backwater_amount," \
+                      f"level1_win_or_lose,level2_actual_percentage,level2_win_or_lose-level2_backwater_amount 'level2_winlose',level1_retreat_proportion 'level2_retreat'," \
+                      f"level2_backwater_amount,level2_win_or_lose,level3_actual_percentage,level3_win_or_lose-level3_backwater_amount 'level3_winlose',level2_retreat_proportion " \
+                      f"'level3_retreat',level3_backwater_amount,level3_win_or_lose,handicap_final_win_or_lose-backwater_amount 'user_winlose',level3_retreat_proportion 'user_retreat'," \
+                      f"backwater_amount,handicap_final_win_or_lose FROM o_account_order a JOIN o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON " \
+                      f"(a.order_no=c.order_no AND b.match_id=c.match_id)JOIN u_user d ON a.user_id=d.id WHERE a.`status`=2 AND a.award_time is not NULL AND " \
+                      f"{date_type} BETWEEN '{ctime}' and  '{etime}' AND a.bet_type>1 {sport_id} ORDER BY a.create_time DESC"
+            rtn = list(MysqlFunc(mysql_info, mongo_info).query_data(sql_str, db_name='bfty_credit'))
+            sportReport = []
+            for item in rtn:
+                order_num = item[2]
+                odds = MysqlQuery(mysql_info, mongo_info).get_odds_by_orderNum(orderNo=order_num)
+                bet_time = item[3]
+                create_time = bet_time.strftime("%Y-%m-%d %H:%M:%S")
+                matchTime = item[14]
+                match_time = matchTime.strftime("%Y-%m-%d %H:%M:%S")
+                sportReport.append([item[0], item[1], item[2], create_time, item[4], item[5],[item[6], item[7], item[8], item[9], item[10], item[11], float(item[12]), item[13],
+                                      match_time],item[15], item[16], item[17], float(odds), item[18], item[19], item[20], item[21],item[22], item[23], item[24], item[25], item[26],
+                                     item[27], item[28], item[29], item[30], item[31], item[32], item[33], item[34],item[35], item[36], item[37], item[38], item[39], item[40],
+                                     item[41], item[42], item[43], item[44], item[45], item[46], item[47], item[48],item[49]])
+
+            expect_result = CommonFunc().merge_compelx_02(new_lList=sportReport)
+
+            return expect_result,sql_str
+
         else:
             raise AssertionError('暂不支持该类型')
 
-    def credit_tournamentReport_query(self, expData={}, queryType='match'):
+    def credit_tournamentReport_query(self, expData={}, queryType='tournament'):
         '''
         总台-代理报表-联赛报表                                   /// 修改于2022.07.22
         :param expData:
-        :param queryType:   detail/total
+        :param queryType:   tournament/total
         :return:
         '''
         resp = expData
@@ -7867,7 +7903,7 @@ class MysqlQuery(MysqlFunc):
                 date_type =""
 
         database_name = "bfty_credit"
-        if queryType == 'match':
+        if queryType == 'tournament':
             sql_str = f"SELECT tournament_name '联赛名称',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额',TRUNCATE(sum(efficient_amount*company_retreat_proportion),2) '总佣金'," \
                       f"sum(handicap_final_win_or_lose-backwater_amount) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金',sum(handicap_final_win_or_lose) '会员总计',sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢'," \
                       f"sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计',sum(level2_win_or_lose-level2_backwater_amount) '二级代理输赢'," \
@@ -8238,6 +8274,64 @@ class MysqlQuery(MysqlFunc):
             expectResult = self.cf.merge_compelx_02(new_lList=cancelledOrder)
 
             return expectResult, sql_str
+
+        else:
+            raise AssertionError('ERROE,暂不支持该类型')
+
+    def credit_mixBetOrder_query(self, expData={}, query_type=1):
+        '''
+        总台-代理报表-混合串关                              /// 修改于2022.07.28
+        :param expData:
+        :param queryType:   1/2
+        :return:
+        '''
+        resp = expData
+        if resp['account']:
+            account = f"and d.account = '{resp['account']}'"
+        else:
+            account = ""
+        database_name = "bfty_credit"
+        if query_type == 1:
+            sql_str = f"SELECT d.account '账号',d.login_account '登入账号',a.order_no as '注单号',(CASE WHEN a.sport_category_id= 1 then '足球' WHEN a.sport_category_id = 2 THEN '篮球' " \
+                      f"WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 THEN '羽毛球' WHEN a.sport_category_id = 6 THEN " \
+                      f"'乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰球' END)as '球类',(case when a.bet_type=1 then '单关' when a.bet_type=2 " \
+                      f"then '串关' when a.bet_type=3 then '复式串关' end ) as '注单类型',a.create_time as '投注时间',bet_amount as '投注金额',d.currency '币种',(CASE WHEN a.`status`=2 " \
+                      f"then '已结算' WHEN a.`status`=3 then '已取消' ELSE '未结算' END) as '注单状态',company_actual_percentage*100 '公司占成',level0_actual_percentage*100 '总代占成'," \
+                      f"level1_actual_percentage*100 '一级代理占成',level2_actual_percentage*100 '二级代理占成',level3_actual_percentage*100 '三级代理占成',CONCAT(bet_ip,' / ',ip_address)" \
+                      f" 'IP地址' FROM o_account_order a JOIN u_user d ON a.user_id=d.id WHERE a.`status` in (1,2) AND a.award_time is NULL AND bet_type>1 {account} ORDER BY a.create_time DESC"
+            rtn = list(self.query_data(sql_str, database_name))
+            new_list = [list(item) for item in rtn]
+            mixOrder = []
+            for item in new_list:
+                order_num = item[2]
+                odds = self.get_odds_by_orderNum(orderNo=order_num)
+                bet_time = item[5]
+                create_time = bet_time.strftime("%Y-%m-%d %H:%M:%S")
+                bet_type = self.get_bet_type_by_ordernum(order_no=order_num)
+                mixOrder.append([item[0],item[1], item[2], item[3], bet_type, create_time,item[7], item[8], item[14],
+                                 float(item[6]),float(odds),float(item[9]), float(item[10]), float(item[11]), float(item[12]),float(item[13])])
+
+            return mixOrder,sql_str
+
+        elif query_type == 2:
+            sql_str = f"SELECT a.order_no '注单号',(CASE WHEN a.sport_category_id= 1 then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN '网球' " \
+                      f"WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 " \
+                      f"THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰球' END)as '球类',b.match_time '开赛时间',tournament_name '联赛名称',CONCAT( home_team_name, ' Vs ', " \
+                      f"away_team_name ) '赛事名称',IF(is_live=3,'早盘','滚球盘') '赛事类型',market_name  '盘口名称',specifier '亚盘口',outcome_name  '投注项名称',bet_score," \
+                      f"cast(credit_odds as char) '赔率',if(odds_type=1,'欧赔','港赔') '盘口类型' FROM o_account_order a JOIN o_account_order_match b ON a.order_no = b.order_no JOIN " \
+                      f"o_account_order_match_update c ON (a.order_no=c.order_no AND b.match_id=c.match_id)JOIN u_user d ON a.user_id=d.id WHERE a.`status` in (1,2) AND a.award_time " \
+                      f"is NULL AND bet_type>1 AND a.order_no='XNjuYNCBuCJG'"
+            rtn = list(self.query_data(sql_str, database_name))
+            mixOrder = []
+            for item in rtn:
+                match_time = item[2]
+                matchTime = match_time.strftime("%Y-%m-%d %H:%M:%S")
+                mixOrder.append([item[1], matchTime, item[3], item[4], item[5], item[6],
+                                     item[8], item[9], float(item[10]), item[11]])
+
+            mixOrderDetail = self.cf.merge_compelx_02(new_lList=mixOrder)
+
+            return mixOrderDetail, sql_str
 
         else:
             raise AssertionError('ERROE,暂不支持该类型')
@@ -9741,13 +9835,15 @@ if __name__ == "__main__":
     # data = mysql.credit_unsettledOrder_query(expData={"account": "", "parentId":"", "userName":"a0b1b2b301"})[0]
     # data = mysql.credit_winLoseSimple_query(expData={"account": "", "parentId":"a0b1b2b3", "userName":"","ctime": "-7", "etime":"-1"})[0]
     # data = mysql.credit_winLoseDetail_query(expData={"account": "", "parentId": "", "userName": "a0b1b2b300", "ctime": "-7", "etime": "-1"})[0]
-    # data = mysql.credit_sportReport_query(expData={"ctime":'-6', "ctime":'-0', "sportName":'网球',"queryDateType":3 },queryType='market')[0]
+    data = mysql.credit_sportReport_query(expData={"ctime":'-7', "etime":'-1', "sportName":'网球',"queryDateType":3 },queryType='order')[0]
     # data = mysql.credit_tournamentReport_query(expData={"ctime":-9, "etime":-3, "sportName":'羽毛球',"queryDateType":3 },queryType='detail')[0]
     # data = mysql.credit_matchReport_query(expData={"ctime": -7, "etime": -1, "sportName": '冰上曲棍球',"matchId":'', "queryDateType": 3}, queryType='match')[0]
     # data = mysql.credit_multitermReport_query(expData={"ctime":-6, "etime":-0, "sportName":'',"searchAccount":"", "queryDateType":3 },queryType='detail')[0]
     # data = mysql.credit_cancelledOrder_query(expData={"ctime": "-7", "etime": "-1", "account": ''})[0]
     # data = mysql.credit_bill_query(expData={"ctime": '-0', "etime": '-0'},query_type=2)[0]
-    # print(data)
+    # data = mysql.credit_mixBetOrder_query(expData={"account": 'jcj1j2j3jc2'}, query_type=2)[0]
+    print(data)
+    print(len(data))
 
 
 
@@ -9777,9 +9873,9 @@ if __name__ == "__main__":
     # data = mysql.get_mainBetReport_query(expData={'sportName':'足球'})
     # data = mysql.get_sportName_mainBetReport()
 
-    data = mysql.queryUnusualOrderList(order_num="",date=(-39,0))[1]
+    # data = mysql.queryUnusualOrderList(order_num="",date=(-39,0))[1]
     # data = mysql.remove_special_symbols(data_str="ci/222222222")
-    print(data)
+    # print(data)
 
 
 

@@ -41,7 +41,7 @@ class Test_sportReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_sport, yaml_file=sport_url, new_yaml_file=sport_url_new)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new, isAll=True)[0]['request']
-    # @pytest.mark.skip(reason="调试代码,暂不执行")
+    @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-球类报表')
     def test_sportReport(self, inBody, expData, url=url_data):
@@ -109,7 +109,7 @@ class Test_sportReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_sport_m, yaml_file=sport_url_m, new_yaml_file=sport_url_new_m)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new_m, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new_m, isAll=True)[0]['request']
-    # @pytest.mark.skip(reason="调试代码,暂不执行")
+    @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-球类报表-盘口详情')
     def test_sportReportMarket(self, inBody, expData, url=url_data):
@@ -205,7 +205,7 @@ class Test_sportReport_ya:
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": token,
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
-
+        # market_id_list = ['串关']
         for marketId in market_id_list:  # 遍历盘口列表
             if marketId != "串关":
                 begin = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=int(inBody['begin']))
@@ -213,8 +213,9 @@ class Test_sportReport_ya:
                 request_body = {"begin": begin, "end": end, "dateType": inBody['dateType'], "page": 1, "limit": 200,
                                "sportId": inBody['sportId'], "marketId": marketId, "account": "", "tournamentId": None,"matchId": None}
 
+                total_title = f"根据球类：'{sport_name[inBody['sportId']]}', 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
+                allure.dynamic.title(total_title)
                 title = f"根据球类：'{sport_name[inBody['sportId']]}', 盘口ID： 【'{marketId}'】 查看注单详情, 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
-                allure.dynamic.title(title)
                 with allure.step(f"执行测试用例:{title}"):
                     Bf_log('sportReport').info(f"----------------开始执行:{title}------------------------")
                 with allure.step(f"请求地址： {request_url}"):
@@ -351,8 +352,9 @@ class Test_sportReport_ya:
                 request_body = {"begin": begin, "end": end, "dateType": inBody['dateType'], "page": 1, "limit": 200,
                                 "sportId": inBody['sportId'], "marketId": "串关", "account": "", "tournamentId": None,"matchId": None}
 
+                total_title = f"根据球类：'{sport_name[inBody['sportId']]}', 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
+                allure.dynamic.title(total_title)
                 title = f"根据球类：'{sport_name[inBody['sportId']]}', 盘口ID：'串关' 查看注单详情, 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
-                allure.dynamic.title(title)
                 with allure.step(f"执行测试用例:{title}"):
                     Bf_log('sportReport').info(f"----------------开始执行:{title}------------------------")
                 request_url = ip + url
