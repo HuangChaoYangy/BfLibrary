@@ -2,6 +2,7 @@ import  arrow
 import pymysql
 import datetime
 import calendar
+from decimal import *
 import requests
 import time
 from itertools import chain
@@ -10,6 +11,8 @@ import re
 from decimal import Decimal
 from itertools import combinations
 from functools import reduce
+from operator import itemgetter
+from itertools import groupby
 try:
     from CommonFunc import CommonFunc
     from MongoFunc import MongoFunc,DbQuery
@@ -5885,6 +5888,7 @@ class MysqlQuery(MysqlFunc):
                           f"a.order_no = b.order_no JOIN o_account_order_match c ON (a.order_no = c.order_no AND b.match_id=c.match_id) WHERE bet_type={bet_type} " \
                           f"AND a.`status` in (2,3) {orderNum} {create_time}" \
                           f"{userName} {award_time}"
+                print(sql_str)
                 data = list(self.query_data(sql_str, db_name=database_name))
                 actual_data_list = []
                 expect_data_list = []
@@ -6045,7 +6049,7 @@ class MysqlQuery(MysqlFunc):
 
     def get_all_odds(self, odds_list, bet_type):
         '''
-        串关赔率计算
+        串关总赔率计算
         :param odds_list: 赔率已列表形式传入, 暂时只写到10串1
         :param bet_type: 2，3，4，5，6，7 (当传入的type值=赔率个数时候为单串1，当大于个数时候 为最大串关（3串4，4串11...）)
         :return:
@@ -6169,115 +6173,437 @@ class MysqlQuery(MysqlFunc):
 
         return self.get_two_float(odds, 2)
 
-
-    def get_odds_by_orderNum(self,orderNo):
+    def get_all_odds_no_cut(self, odds_list, bet_type):
         '''
-        通过注单号计算总赔率
-        :param orderNo:
+        串关总赔率计算,未截取
+        :param odds_list: 赔率已列表形式传入, 暂时只写到10串1
+        :param bet_type: 2，3，4，5，6，7 (当传入的type值=赔率个数时候为单串1，当大于个数时候 为最大串关（3串4，4串11...）)
         :return:
         '''
-        database_name = "bfty_credit"
-        sql_str = f"SELECT a.order_no,bet_type,mix_num,odds_type,credit_odds 'odds' FROM o_account_order a JOIN o_account_order_match b ON a.order_no=b.order_no " \
-                  f"WHERE a.order_no = '{orderNo}'"
-        data = list(self.query_data(sql_str, db_name=database_name))
-        odds_list = [list(item) for item in data]
-        for item in odds_list:
-            if item[1] > 1:      # bet_type大于1为串关或复式串关
-                if item[3] == 1:
-                    pass
-                else:
-                    item[4] += 1
-        for item in odds_list:
-            item[4] = float(item[4])
+        odds = 0
+        my_len = len(odds_list)
+        combination_list = []
+        for num in range(my_len):
+            i_mum = num + 2
+            if i_mum <= my_len:
+                combination_list.append(list(combinations(odds_list, i_mum)))
+        # print(combination_list)
+        if bet_type == 2:
+            if bet_type <= len(combination_list):
+                odds_l = []
+                for i in combination_list[0]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+            elif bet_type == my_len:
+                odds_l = []
+                for i in combination_list[0]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+        elif bet_type == 3:
+            if bet_type - 1 <= len(combination_list):  # 3串1
+                odds_l = []
+                for i in combination_list[1]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+            elif bet_type == my_len:
+                odds_l = []
+                for i in combination_list:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+            else:
+                print('不存在这种串关形式，请求确认')
 
-        new_odds_list = []           #  odds_list=[['XHD4b5fwK42g', 2, '3_1_0', 2, [1.87, 1.78, 1.82]]]
-        count_i = 0
-        count_j = 1
-        count = 0
-        for i in range(0, len(odds_list)):
-            if i == count_i:
-                orderNo_list = []
-                new_odds_list.append(odds_list[i])
-                for j in range(count_j, len(odds_list)):
-                    if j == count_j:
-                        if odds_list[i][0] == odds_list[j][0]:
-                            orderNo_list.append(odds_list[i][4])
-                            orderNo_list.append(odds_list[j][4])
-                            count_j = count_j + 1
-                            count_i = count_i + 1
-                            if j == len(odds_list) - 1:
-                                new_odds_list[-1][4] = orderNo_list
-                            else:
-                                for k in range(count_j, len(odds_list)):
-                                    if odds_list[i][0] == odds_list[k][0]:
-                                        orderNo_list.append(odds_list[k][4])
-                                        if k == len(odds_list) - 1:
-                                            count = count + 1
-                                            count_j = count_j + 1
-                                            count_i = count_i + 2
-                                            new_odds_list[-1][4] = orderNo_list
+        elif bet_type == 4:
+            if bet_type - 1 <= len(combination_list):  # 4串1
+                odds_l = []
+                for i in combination_list[2]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+            elif bet_type - 1 > len(combination_list):  # 计算 3串 4
+                odds_l = []
+                for odd_tuper in combination_list:
+                    for i in odd_tuper:
+                        odds = reduce(lambda x, y: x * y, i)
+                        odds_l.append(odds)
+                odds = sum(odds_l)
+        elif bet_type == 5:
+            if bet_type - 1 <= len(combination_list):  # 5串1
+                odds_l = []
+                for i in combination_list[3]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+            elif bet_type - 1 > len(combination_list):  # 4串11
+                odds_l = []
+                for odd_tuper in combination_list:
+                    for i in odd_tuper:
+                        odds = reduce(lambda x, y: x * y, i)
+                        odds_l.append(odds)
+                odds = sum(odds_l)
+        elif bet_type == 6:
+            if bet_type - 1 <= len(combination_list):  # 6串1
+                odds_l = []
+                for i in combination_list[4]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+            elif bet_type - 1 > len(combination_list):  # 5串 26
+                odds_l = []
+                for odd_tuper in combination_list:
+                    for i in odd_tuper:
+                        odds = reduce(lambda x, y: x * y, i)
+                        odds_l.append(odds)
+                odds = sum(odds_l)
+        elif bet_type == 7:                         # 7串1
+            if bet_type - 1 <= len(combination_list):
+                odds_l = []
+                for i in combination_list[5]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+            elif bet_type - 1 > len(combination_list):  # 6串 57
+                odds_l = []
+                for odd_tuper in combination_list:
+                    for i in odd_tuper:
+                        odds = reduce(lambda x, y: x * y, i)
+                        odds_l.append(odds)
+                odds = sum(odds_l)
+        elif bet_type == 8:                             # 8串1
+            if bet_type - 1 <= len(combination_list):
+                odds_l = []
+                for i in combination_list[6]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+        elif bet_type == 9:                             # 9串1
+            if bet_type - 1 <= len(combination_list):
+                odds_l = []
+                for i in combination_list[7]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+        elif bet_type == 10:                             # 10串1
+            if bet_type - 1 <= len(combination_list):
+                odds_l = []
+                for i in combination_list[8]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
+        else:
+            raise AssertionError('暂不支持此种赔率计算或者赔率计算要求错误')
+
+        return odds
+
+
+    def get_odds_by_orderNum(self,orderNo, query_type='total'):
+        '''
+        通过注单号计算最大总赔率和注单结算后的实际总赔率以及注单的返回金额(不含佣金)和最终返回金额(包含佣金)        // 修改于2022.07.30
+        :param orderNo:
+        :param query_type: total 预估的最大总赔率       actual   计算注单实际的总赔率
+        :return:
+        '''
+        complex_dic = {"3_4_1": 4, "4_11_1": 5, "5_26_1": 6, "6_57_1": 7}  # 复式n串m
+        complex_one_dic = {"2_3_0": 2, "2_6_0": 2, "3_4_0": 3, "2_10_0": 2, "3_10_0": 3, "4_5_0": 4, "2_15_0": 2,
+                           "3_20_0": 3, "4_15_0": 4, "5_6_0": 5}  # 复式n串1
+        bet_dic = {"单注":1 , "串关": 2 ,"复式串关":3}
+        database_name = "bfty_credit"
+        if query_type == 'total':     # 最大总赔率
+            sql_str = f"SELECT a.order_no,bet_type,mix_num,odds_type,credit_odds 'odds' FROM o_account_order a JOIN o_account_order_match b ON a.order_no=b.order_no " \
+                      f"WHERE a.order_no = '{orderNo}'"
+            data = list(self.query_data(sql_str, db_name=database_name))
+            odds_list = [list(item) for item in data]
+            for item in odds_list:
+                if item[1] > 1:      # bet_type大于1为串关或复式串关
+                    if item[3] == 1:
+                        pass
+                    else:
+                        item[4] += 1   # 将盘口类型为港赔的赔率+1
+            for item in odds_list:
+                item[4] = float(item[4])
+
+            new_odds_list = []           # 计算得出new_odds_list=[['XHD4b5fwK42g', 2, '3_1_0', 2, [1.87, 1.78, 1.82]]]
+            count_i = 0
+            count_j = 1
+            count = 0
+            for i in range(0, len(odds_list)):
+                if i == count_i:
+                    orderNo_list = []
+                    new_odds_list.append(odds_list[i])
+                    for j in range(count_j, len(odds_list)):
+                        if j == count_j:
+                            if odds_list[i][0] == odds_list[j][0]:
+                                orderNo_list.append(odds_list[i][4])
+                                orderNo_list.append(odds_list[j][4])
+                                count_j = count_j + 1
+                                count_i = count_i + 1
+                                if j == len(odds_list) - 1:
+                                    new_odds_list[-1][4] = orderNo_list
+                                else:
+                                    for k in range(count_j, len(odds_list)):
+                                        if odds_list[i][0] == odds_list[k][0]:
+                                            orderNo_list.append(odds_list[k][4])
+                                            if k == len(odds_list) - 1:
+                                                count = count + 1
+                                                count_j = count_j + 1
+                                                count_i = count_i + 2
+                                                new_odds_list[-1][4] = orderNo_list
+                                            else:
+                                                count_j = count_j + 1
+                                                count_i = count_i + 1
                                         else:
+                                            new_odds_list[-1][4] = orderNo_list
                                             count_j = count_j + 1
                                             count_i = count_i + 1
-                                    else:
-                                        new_odds_list[-1][4] = orderNo_list
-                                        count_j = count_j + 1
-                                        count_i = count_i + 1
-                                        count = count + 1
-                                        break
+                                            count = count + 1
+                                            break
+                            else:
+                                count_i = count_i + 1
+                                count_j = count_j + 1
+                                count = count + 1
+                                break
                         else:
-                            count_i = count_i + 1
-                            count_j = count_j + 1
-                            count = count + 1
                             break
+                else:
+                    continue
+            # 对上面处理后2串1的数据进行去重
+            if len(new_odds_list) == 2:
+                if new_odds_list[0][2] == new_odds_list[1][2]:
+                    new_odds_list.remove(new_odds_list[-1])
+                else:
+                    new_odds_list = new_odds_list
+            else:
+                new_odds_list = new_odds_list
+
+            if new_odds_list[0][1] == bet_dic['单注']:
+                odds = new_odds_list[0][4]
+
+                return odds
+
+            elif new_odds_list[0][1] == bet_dic['串关']:
+                odd_list = new_odds_list[0][-1]
+                mix_num = new_odds_list[0][2]
+                odd = re.search("^(\d+)",mix_num)
+                bet_type = odd.group()
+                odds = self.get_all_odds(odds_list=odd_list, bet_type=int(bet_type))
+
+                return odds
+
+            elif new_odds_list[0][1] == bet_dic['复式串关']:
+                if new_odds_list[0][2] in complex_dic:
+                    odd_list = new_odds_list[0][-1]
+                    bet_type = complex_dic[new_odds_list[0][2]]
+                    odds = self.get_all_odds(odds_list=odd_list, bet_type=int(bet_type))
+
+                    return odds
+
+                elif new_odds_list[0][2] in complex_one_dic:
+                    odd_list = new_odds_list[0][-1]
+                    bet_type = complex_one_dic[new_odds_list[0][2]]
+                    odds = self.get_all_odds(odds_list=odd_list, bet_type=int(bet_type))
+
+                    return odds
+
+                else:
+                    pass
+            else:
+                raise AssertionError('ERROR')
+
+        elif query_type == 'actual':  # 注单结算后的实际总赔率
+            sql_str = f"SELECT a.order_no,bet_type,mix_num,c.odds_type,cast(c.credit_odds as char),b.settlement_result,cast(a.bet_amount as char) FROM o_account_order a JOIN " \
+                      f"o_account_order_match_update b ON a.order_no = b.order_no JOIN o_account_order_match c ON (a.order_no = c.order_no AND b.match_id=c.match_id) WHERE " \
+                      f"a.`status` in (2,3) AND a.order_no='{orderNo}'"
+            data = list(self.query_data(sql_str, db_name=database_name))
+            odds_list = [list(item) for item in data]         #  [['XHX6MBGWj936', 3, '6_57_1', 1, 1.02, 1, 5700.0], ['XHX6MBGWj936', 3, '6_57_1', 1, 1.7, 1, 5700.0], ['XHX6MBGWj936', 3, '6_57_1', 2, 1.05, 1, 5700.0], ['XHX6MBGWj936', 3, '6_57_1', 1, 4.75, 2, 5700.0], ['XHX6MBGWj936', 3, '6_57_1', 1, 1.8, 1, 5700.0], ['XHX6MBGWj936', 3, '6_57_1', 2, 0.9, 2, 5700.0]]
+            result_dic = {'赢': 1, '输': 2, '赢一半': 3, '输一半': 4, '走水': 5, '注单取消': 6}
+            odds_type_dic = {'欧洲盘': 1, '香港盘': 2}
+            if odds_list == []:
+                raise AssertionError('ERR:该笔订单为非已结算状态')
+            else:
+                for item in odds_list:
+                    item[4] = float(item[4])
+                    item[6] = float(item[6])
+
+                order_info_list = []
+                for item in odds_list:
+                    bet_type = item[1]
+                    odds_type = item[3]
+                    odds = Decimal(str(item[4]))
+                    sub_result = item[5]
+                    if bet_type > 1:  # bet_type大于1为串关或复式串关
+                        if odds_type == odds_type_dic['欧洲盘']:
+                            pass
+                        else:
+                            odds = odds + 1  # 将盘口类型为港赔的赔率+1
+                    odds_result = 0
+                    if sub_result == result_dic['赢']:
+                        odds_result = odds
+                    elif sub_result == result_dic['输']:
+                        odds_result = 0
+                    elif sub_result == result_dic['赢一半']:
+                        odds_result = odds*0.5+0.5
+                    elif sub_result == result_dic['输一半']:
+                        odds_result = 0.5
+                    elif sub_result == result_dic['走水']:
+                        odds_result = 1
+                    elif sub_result == result_dic['注单取消']:
+                        odds_result = 1
                     else:
-                        break
-            else:
-                continue
+                        print(f"ERRER： 这是个什么结果{sub_result}")
 
-        complex_dic = {"3_4_1": 4, "4_11_1": 5, "5_26_1": 6, "6_57_1": 7 }        # 复式n串m
-        complex_one_dic = {"2_3_0": 2, "2_6_0": 2, "3_4_0": 3, "2_10_0": 2, "3_10_0": 3, "4_5_0": 4, "2_15_0": 2,
-                           "3_20_0": 3, "4_15_0": 4, "5_6_0": 5}         # 复式n串1
+                    order_info_list.append([item[0],bet_type,item[2],odds_type,odds_result,item[6]])
 
-        if new_odds_list[0][1] == 1:
-            odds = new_odds_list[0][4]
+                new_odds_list = []  # 计算得出new_odds_list=[['XFB6FPtyXDyB', 2, '2_1_0', 1, [1.11, 0], 10.0]]
+                count_i = 0
+                count_j = 1
+                count = 0
+                for i in range(0, len(order_info_list)):
+                    if i == count_i:
+                        orderNo_list = []
+                        new_odds_list.append(order_info_list[i])
+                        for j in range(count_j, len(order_info_list)):
+                            if j == count_j:
+                                if order_info_list[i][0] == order_info_list[j][0]:
+                                    orderNo_list.append(order_info_list[i][4])
+                                    orderNo_list.append(order_info_list[j][4])
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                                    if j == len(order_info_list) - 1:
+                                        new_odds_list[-1][4] = orderNo_list
+                                    else:
+                                        for k in range(count_j, len(order_info_list)):
+                                            if order_info_list[i][0] == order_info_list[k][0]:
+                                                orderNo_list.append(order_info_list[k][4])
+                                                if k == len(order_info_list) - 1:
+                                                    count = count + 1
+                                                    count_j = count_j + 1
+                                                    count_i = count_i + 2
+                                                    new_odds_list[-1][4] = orderNo_list
+                                                else:
+                                                    count_j = count_j + 1
+                                                    count_i = count_i + 1
+                                            else:
+                                                new_odds_list[-1][4] = orderNo_list
+                                                count_j = count_j + 1
+                                                count_i = count_i + 1
+                                                count = count + 1
+                                                break
+                                else:
+                                    count_i = count_i + 1
+                                    count_j = count_j + 1
+                                    count = count + 1
+                                    break
+                            else:
+                                break
+                    else:
+                        continue
+                # 对上面处理后2串1的数据进行去重
+                if len(new_odds_list) == 2:
+                    if new_odds_list[0][2] == new_odds_list[1][2]:
+                        new_odds_list.remove(new_odds_list[-1])
+                    else:
+                        new_odds_list = new_odds_list
+                else:
+                    new_odds_list = new_odds_list
 
-            return odds
+                if new_odds_list[0][1] == bet_dic['单注']:
+                    order_no = new_odds_list[0][0]
+                    odds = new_odds_list[0][4]
+                    betAmount = new_odds_list[0][5]
+                    rebate_amount = odds * betAmount       # 不包含佣金的返回金额(包含投注额)
+                    commission = float(self.get_order_no_commission(order_no=order_no)[0][-1])   # 获取注单会员的实际佣金
+                    final_rebate_amount = rebate_amount + commission   # 包含佣金的返回金额(包含投注额)
 
-        elif new_odds_list[0][1] == 2:
-            odd_list = new_odds_list[0][-1]
-            mix_num = new_odds_list[0][2]
-            odd = re.search("^(\d+)",mix_num)
-            bet_type = odd.group()
-            odds = self.get_all_odds(odds_list=odd_list, bet_type=int(bet_type))
+                    return odds,rebate_amount,commission,final_rebate_amount
 
-            return odds
+                elif new_odds_list[0][1] == bet_dic['串关']:
+                    order_no = new_odds_list[0][0]
+                    odd_list = new_odds_list[0][4]
+                    betAmount = new_odds_list[0][5]
+                    mix_num = new_odds_list[0][2]
+                    odd = re.search("^(\d+)", mix_num)
+                    bet_type = odd.group()
+                    odds = float(self.get_all_odds(odds_list=odd_list, bet_type=int(bet_type)))
+                    rebate_amount = odds * betAmount
+                    commission = float(self.get_order_no_commission(order_no=order_no)[0][-1])
+                    final_rebate_amount = rebate_amount + commission
 
-        elif new_odds_list[0][1] == 3:
-            if new_odds_list[0][2] in complex_dic:
-                odd_list = new_odds_list[0][-1]
-                bet_type = complex_dic[new_odds_list[0][2]]
-                odds = self.get_all_odds(odds_list=odd_list, bet_type=int(bet_type))
+                    return odds,rebate_amount,commission,final_rebate_amount
 
-                return odds
+                elif new_odds_list[0][1] == bet_dic['复式串关']:
+                    if new_odds_list[0][2] in complex_dic:
+                        order_no = new_odds_list[0][0]
+                        odd_list = new_odds_list[0][4]
+                        betAmount = new_odds_list[0][5]
+                        bet_type = complex_dic[new_odds_list[0][2]]
+                        mix_num = new_odds_list[0][2]
+                        value = re.search("_(\d+)", mix_num)
+                        divide_value = float(value.group(1))        # 通过mix_num获取复式串关中的子注单数量
+                        odds = float(self.get_all_odds_no_cut(odds_list=odd_list, bet_type=int(bet_type)))
+                        # data = self.get_two_float(str((odds * betAmount)/divide_value), 2)         # 总赔率*总投注额/子注单数量得到最终返回金额
+                        float_length = self.get_float_length(num=(odds * betAmount) / divide_value)    # 获取浮点数小数位的长度,若大于2用正则进行截取,否则直接取值
+                        if float_length > 2:
+                            data = str(((odds * betAmount) / divide_value))
+                            rebate_amount = float(re.findall(r"\d{1,}?\.\d{2}", data)[0])    # 正则表达式直接截取保留两位小数
+                            commission = float(self.get_order_no_commission(order_no=order_no)[0][-1])
+                            final_rebate_amount = rebate_amount + commission
+                        else:
+                            rebate_amount = ((odds * betAmount) / divide_value)
+                            commission = float(self.get_order_no_commission(order_no=order_no)[0][-1])
+                            final_rebate_amount = rebate_amount + commission
 
-            elif new_odds_list[0][2] in complex_one_dic:
-                odd_list = new_odds_list[0][-1]
-                bet_type = complex_one_dic[new_odds_list[0][2]]
-                odds = self.get_all_odds(odds_list=odd_list, bet_type=int(bet_type))
+                        return odds, rebate_amount, commission, final_rebate_amount
 
-                return odds
+                    elif new_odds_list[0][2] in complex_one_dic:
+                        order_no = new_odds_list[0][0]
+                        odd_list = new_odds_list[0][4]
+                        betAmount = new_odds_list[0][5]
+                        bet_type = complex_one_dic[new_odds_list[0][2]]
+                        mix_num = new_odds_list[0][2]
+                        value = re.search("_(\d+)", mix_num)
+                        divide_value = float(value.group(1))
+                        odds = float(self.get_all_odds_no_cut(odds_list=odd_list, bet_type=int(bet_type)))
+                        float_length = self.get_float_length(num=(odds * betAmount) / divide_value)
+                        if float_length > 2:
+                            data = str(((odds * betAmount) / divide_value))
+                            rebate_amount = float(re.findall(r"\d{1,}?\.\d{2}", data)[0])
+                            commission = float(self.get_order_no_commission(order_no=order_no)[0][-1])
+                            final_rebate_amount = rebate_amount + commission
+                        else:
+                            rebate_amount = ((odds * betAmount) / divide_value)
+                            commission = float(self.get_order_no_commission(order_no=order_no)[0][-1])
+                            final_rebate_amount = rebate_amount + commission
 
-            else:
-                pass
+                        return odds, rebate_amount, commission, final_rebate_amount
+
+                    else:
+                        pass
+                else:
+                    raise AssertionError('ERROR,暂不支持此参数类型')
+
+
+    def get_float_length(self, num, query_type='float'):
+        '''
+        获取浮点数小数位后长度, 先将浮点数转化为字符串，然后截取小数点右边的字符，在使用len函数。
+        :param num:
+        :param query_type:  float/int/total 获取小数位/整数位/总长度
+        :return:
+        '''
+        if query_type == 'float':
+            length = len(str(num).split(".")[1])
+            # length = len(str(num)) - str(num).find(".")
+        elif query_type == 'int':
+            length = str(num).find(".")
+        elif query_type == 'total':
+            length = len(str(num))
         else:
-            raise AssertionError('ERROR')
+            raise AssertionError('ERROR,暂不支持此参数类型')
 
-        type_dic = {1: "欧洲盘", 2: "香港盘"}
-        bet_dic = {1: "单注", 2: "串关", 3: "复式串关"}
-
-        # if new_odds_list[0][1] == 1:                #  单注
-        #     print(f"投注类型为：{bet_dic[new_odds_list[0][1]]}, 盘口类型为：{type_dic[new_odds_list[0][3]]}, 赔率为：{new_odds_list[0][4]} ")
+        return length
 
 
     def get_order_no_commission_result(self, order_no):
@@ -9816,15 +10142,15 @@ if __name__ == "__main__":
     # data = mysql.get_orderNo_effectAmount_and_commission(user_name='', order_no='XFB6FPtyXDyB', createDate=(), awardDate=())[1]
     # print(data)
 
-    # commission = mysql.get_order_no_commission(order_no='XFB74wbGYMe5')            # 总佣金
+    # commission = mysql.get_order_no_commission(order_no='XFB74wbGYMe5')            # 佣金
     # order = mysql.get_order_by_account(account='a2')
     # total = mysql.get_account_totalCommission(account="a0")
 
     # data = mysql.check_orderNo_effectAmount_and_commission(user_name='', order_no='', createDate=(-1,0), awardDate=())    # 校验信用网注单有效金额和佣金
 
-    # check_result = mysql.check_order_no_settlement_result(bet_type=2,user_name='a2j1j2j3j2',order_no='XB4mLjJJHmf2')
+    # data = mysql.check_order_no_settlement_result(bet_type=2,user_name='',order_no='XFB6FPtyXDyB')
     # betType = mysql.get_bet_type_by_ordernum(order_no='XHXrWXc2SsDc')          # 获取串关的类型
-    # print(betType)
+    # print(data)
     # order = mysql.get_unsettled_order(user_name='a01')
     # user_name,bet_amount,sport_name,team_name,market_name = mysql.get_order_detail(order_no='XLjatmChCUUy')
     # print(user_name,bet_amount,sport_name,team_name,market_name)
@@ -9835,22 +10161,23 @@ if __name__ == "__main__":
     # data = mysql.credit_unsettledOrder_query(expData={"account": "", "parentId":"", "userName":"a0b1b2b301"})[0]
     # data = mysql.credit_winLoseSimple_query(expData={"account": "", "parentId":"a0b1b2b3", "userName":"","ctime": "-7", "etime":"-1"})[0]
     # data = mysql.credit_winLoseDetail_query(expData={"account": "", "parentId": "", "userName": "a0b1b2b300", "ctime": "-7", "etime": "-1"})[0]
-    data = mysql.credit_sportReport_query(expData={"ctime":'-7', "etime":'-1', "sportName":'网球',"queryDateType":3 },queryType='order')[0]
+    # data = mysql.credit_sportReport_query(expData={"ctime":'-7', "etime":'-1', "sportName":'网球',"queryDateType":3 },queryType='order')[0]
     # data = mysql.credit_tournamentReport_query(expData={"ctime":-9, "etime":-3, "sportName":'羽毛球',"queryDateType":3 },queryType='detail')[0]
     # data = mysql.credit_matchReport_query(expData={"ctime": -7, "etime": -1, "sportName": '冰上曲棍球',"matchId":'', "queryDateType": 3}, queryType='match')[0]
     # data = mysql.credit_multitermReport_query(expData={"ctime":-6, "etime":-0, "sportName":'',"searchAccount":"", "queryDateType":3 },queryType='detail')[0]
     # data = mysql.credit_cancelledOrder_query(expData={"ctime": "-7", "etime": "-1", "account": ''})[0]
     # data = mysql.credit_bill_query(expData={"ctime": '-0', "etime": '-0'},query_type=2)[0]
     # data = mysql.credit_mixBetOrder_query(expData={"account": 'jcj1j2j3jc2'}, query_type=2)[0]
-    print(data)
-    print(len(data))
+    # print(data)
+    # print(len(data))
 
 
 
     # odds_list = [1.88, 1.81, 1.74, 1.81]
     # data = mysql.get_all_odds(odds_list=odds_list, bet_type=4)
     # print(data)
-    # odds = mysql.get_odds_by_orderNum(orderNo='XLjkGuy8u2Ut')          #   通过注单号查询注单的总赔率
+    odds = mysql.get_odds_by_orderNum(orderNo='XFB77XY4Ja4T', query_type='actual')          #   通过注单号查询注单的最大总赔率和注单结算后的实际总赔率
+    # odds = mysql.get_float_lenth(num=0.22222222222)
     # print(odds)
     # N1 = list(combinations(a, 2))
     # N2 = list(permutations(a, 2))
