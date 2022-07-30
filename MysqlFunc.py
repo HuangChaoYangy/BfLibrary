@@ -4670,7 +4670,7 @@ class MysqlQuery(MysqlFunc):
 
     def credit_dataSourceReport(self, expData={}, queryType=1):
         '''
-        总台-报表管理-数据源对账报表，默认以"投注时间"查询近一个月数据                    /// 修改于2022.05.02
+        总台-报表管理-数据源对账报表，默认以"投注时间"查询近一个月数据                    /// 修改于2022.07.30
         :param userAccount:
         :param orderNo:
         :param sportName:
@@ -4709,8 +4709,13 @@ class MysqlQuery(MysqlFunc):
             order_no = ''
         if resp['sportId']:
             sport_list = resp['sportId']
-            sport_tuple = tuple(sport_list)
-            sport_name = f"and a.sport_id in {sport_tuple}"
+            if len(sport_list) == 1:
+                sport = sport_list[0]
+                sport_name = f"and a.sport_id in ('{sport}')"
+            else:
+                # sport = tuple(sport_list)
+                # sport_tuple = tuple(sport_list)
+                sport_name = f"and a.sport_id in {tuple(sport_list)}"
         else:
             sport_name = ''
         if resp['settlementResult']:
@@ -10126,7 +10131,9 @@ if __name__ == "__main__":
     # print(settled)
 
     # agentLine = mysql.credit_agentLineManagement_sql(agentName="aw", agentAccount="")
-    # data = mysql.credit_dataSourceReport_sql(queryType=2)
+    data = mysql.credit_dataSourceReport(expData={"betStartTime":"-30", "betEndTime":"-0", "settlementStartTime":"-30", "settlementEndTime":"-0", "userName":"","orderNo":"",
+                        "sportId":['sr:sport:3','sr:sport:4'], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=1)
+    print(data)
     # for item in data:
     #     print(type(item))
     # data = mysql.credit_dailyReport_query_sql(create_time=(-6,0), queryType=2)
@@ -10176,7 +10183,7 @@ if __name__ == "__main__":
     # odds_list = [1.88, 1.81, 1.74, 1.81]
     # data = mysql.get_all_odds(odds_list=odds_list, bet_type=4)
     # print(data)
-    odds = mysql.get_odds_by_orderNum(orderNo='XFB77XY4Ja4T', query_type='actual')          #   通过注单号查询注单的最大总赔率和注单结算后的实际总赔率
+    # odds = mysql.get_odds_by_orderNum(orderNo='XFB77XY4Ja4T', query_type='actual')          #   通过注单号查询注单的最大总赔率和注单结算后的实际总赔率
     # odds = mysql.get_float_lenth(num=0.22222222222)
     # print(odds)
     # N1 = list(combinations(a, 2))

@@ -3126,7 +3126,7 @@ class CreditBackGround(object):
 
     def credit_dataSourceReport(self, inData, queryType=1):
         '''
-        总台-报表管理-数据源对账报表，默认以"投注时间"查询近一个月数据                              /// 修改于2022.06.02
+        总台-报表管理-数据源对账报表，默认以"投注时间"查询近一个月数据                              /// 修改于2022.07.30
         :param Authorization:
         :param userAccount:
         :param orderNo:
@@ -3166,7 +3166,7 @@ class CreditBackGround(object):
         result = inData['settlementResult']
         status = inData['status']
         betType = inData['betType']
-        sortIndex = inData['sortIndex']
+        sortIndex = inData['sortBy']
         sortParameter = inData['sortParameter']
 
         orderNum = self.mysql.credit_dataSourceRepot_number(betTime=(int(resp['betStartTime']),int(resp['betEndTime'])),
@@ -3203,7 +3203,7 @@ class CreditBackGround(object):
                         "betStartTime":ctime, "betEndTime":etime, "settlementStartTime":set_ctime, "settlementEndTime":set_etime }
                 rsp = self.session.post(total_url, headers=head, json=data)
                 if rsp.json()['message'] != 'OK':
-                    print("查询数据源对账报表失败,原因：" + rsp.json()["message"])
+                    print("查询数据源对账报表-底部总计失败,原因：" + rsp.json()["message"])
                 else:
                     orderTotal_list = []
                     data = rsp.json()['data']
@@ -3216,7 +3216,7 @@ class CreditBackGround(object):
                         "betStartTime":ctime, "betEndTime":etime, "settlementStartTime":set_ctime, "settlementEndTime":set_etime }
                 rsp = self.session.post(totalbanner_url, headers=head, json=data)
                 if rsp.json()['message'] != 'OK':
-                    print("查询数据源对账报表失败,原因：" + rsp.json()["message"])
+                    print("查询数据源对账报表-顶部总计失败,原因：" + rsp.json()["message"])
                 else:
                     orderBanner_list = []
                     data = rsp.json()['data']
@@ -4227,11 +4227,13 @@ if __name__ == "__main__":
     # data = bg.credit_unsettledOrder(inData={"account": "", "parentId":"", "userName":"a0b1b2b301"})
     # data = bg.credit_winLose_simple(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
     # data = bg.credit_winLose_detail(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
-    data = bg.credit_sportReport(inData={"begin":"-7", "end":"-1", "sportName":"网球","queryDateType":3 },queryType='order')
+    # data = bg.credit_sportReport(inData={"begin":"-7", "end":"-1", "sportName":"网球","queryDateType":3 },queryType='order')
     # data = bg.credit_multitermReport(inData={"begin":"-7", "end":"-1", "sportName":'',"searchAccount":'', "queryDateType":3 })[0]
     # data = bg.credit_cancelledOrder(inData={"begin": "-7", "end": "-1", "account": ''})
     # data = bg.credit_bill(inData={"begin": "-0", "end": "-0"},query_type=2)
-    # rdata_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=1)   # 总台-报表管理-数据源对账报表
+    # data_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=1)   # 总台-报表管理-数据源对账报表
+    data = bg.credit_dataSourceReport(inData={"betStartTime":"-30", "betEndTime":"-0", "settlementStartTime":"-30", "settlementEndTime":"-0", "userName":"","orderNo":"",
+                        "sportId":[], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=1)  # 总台-报表管理-数据源对账报表
     # daily_report = bg.credit_dailyReport(Authorization=login_loken, create_time=(-6,0), queryType=2)           # 总台-报表管理-每日盈亏
     # data = bg.credit_terminalReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "terminal":"","sortIndex":"","sortParameter":"","page":1,"limit":200 },queryType=2)       # 总台-报表管理-客户端盈亏
     # data = bg.credit_sportsReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200 }, queryType=1)    # 总台-报表管理-体育项盈亏
@@ -4240,7 +4242,7 @@ if __name__ == "__main__":
     # data = bg.credit_mainBet(inData={"matchId": "", "sportId": ""}, quert_type=1)  # 总投注-让球/大小/独赢/滚球
     # data = bg.credit_mixBet(inData={"account":""}, quert_type=2)     # 总投注-混合串关
     print(data)
-    print(len(data))
+
 
 
     # 后台注册会员
