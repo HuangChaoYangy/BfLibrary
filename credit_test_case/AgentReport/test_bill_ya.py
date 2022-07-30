@@ -40,7 +40,7 @@ class Test_bill_yaml(object):
     YamlFileData().get_testcase_params(csv_path=csv_url_bill, yaml_file=bill_url, new_yaml_file=bill_url_new)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=bill_url_new, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=bill_url_new, isAll=True)[0]['request']
-    @pytest.mark.skip(reason="调试代码,暂不执行")
+    # @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('代理报表-账目')
     def test_bill(self, inBody, expData, url=url_data):
@@ -106,7 +106,7 @@ class Test_bill_yaml(object):
     YamlFileData().get_testcase_params(csv_path=csv_url_billOrder, yaml_file=billOrder_url, new_yaml_file=billOrder_url_new)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=billOrder_url_new, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=billOrder_url_new, isAll=True)[0]['request']
-    # @pytest.mark.skip(reason="调试代码,暂不执行")
+    @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('代理报表-账目-注单详情')
     def test_billOrder(self, inBody, expData, url=url_data):
