@@ -3141,7 +3141,8 @@ class CreditBackGround(object):
         :param queryType: 1 列表 / 2 底部总计 /3 顶部总计
         :return:
         '''
-        login_loken = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="", loginDiv=222333)
+        login_loken = self.get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
+        # login_loken = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="", loginDiv=222333)
 
         resp = inData
         if resp['betStartTime']:
@@ -3177,6 +3178,7 @@ class CreditBackGround(object):
         url = self.mde_url + '/dataSourceCheckReport/getPage'
         total_url = self.mde_url + '/dataSourceCheckReport/getTotal'
         totalbanner_url = self.mde_url + '/dataSourceCheckReport/getBannerData'
+        order_url = self.mde_url + '/dataSourceCheckReport/getOrderDetailsByOrderNo'
         head = {"LoginDiv": '222333',
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": login_loken,
@@ -3205,9 +3207,12 @@ class CreditBackGround(object):
                 if rsp.json()['message'] != 'OK':
                     print("查询数据源对账报表-底部总计失败,原因：" + rsp.json()["message"])
                 else:
-                    orderTotal_list = []
-                    data = rsp.json()['data']
-                    orderTotal_list.append([data['betAmount'],data['accountFinalWinOrLose'],data['handicapFinalWinOrLose']])
+                    if not rsp.json()['data']:
+                        orderTotal_list = []
+                    else:
+                        orderTotal_list = []
+                        data = rsp.json()['data']
+                        orderTotal_list.append([data['betAmount'],data['accountFinalWinOrLose'],data['handicapFinalWinOrLose']])
 
                     return orderTotal_list
 
@@ -3218,11 +3223,42 @@ class CreditBackGround(object):
                 if rsp.json()['message'] != 'OK':
                     print("查询数据源对账报表-顶部总计失败,原因：" + rsp.json()["message"])
                 else:
-                    orderBanner_list = []
-                    data = rsp.json()['data']
-                    orderBanner_list.append([data['settledNumber'],data['unsettlementNumber'],data['orderTotal']])
+                    if not rsp.json()['data']:
+                        orderBanner_list = []
+                    else:
+                        orderBanner_list = []
+                        data = rsp.json()['data']
+                        orderBanner_list.append([data['settledNumber'], data['unsettlementNumber'], data['orderTotal']])
 
                     return orderBanner_list
+
+            elif queryType == 4:
+                params = {"orderNo":'XNZTeEdUi4W2' }
+                rsp = self.session.get(order_url, headers=head, params=params)
+                odds_dic = {"1":"欧洲盘", "2":"香港盘"}
+                if rsp.json()['message'] != 'OK':
+                    print("查询数据源对账报表-注单详情失败,原因：" + rsp.json()["message"])
+                else:
+                    if not rsp.json()['data']:
+                        orderDetail_list = []
+                    else:
+                        orderDetail_list = []
+                        order_dic = rsp.json()['data']
+                        for item in order_dic['orderDetails']:
+                            if not item['outcomeName']:      # 如果item['outcomeName']为空,  item['outcomeName']=首尔衣恋足球俱乐部 (-0/0.5)
+                                outcome_name = ""
+                            else:
+                                outcomeName = item['outcomeName'].replace('(', '')
+                                outcome_name = outcomeName.replace(')', '')
+                            orderDetail_list.append([order_dic['userName'], order_dic['createTime'], order_dic['orderNo'], order_dic['settlementTime'], order_dic['statusName'],
+                                                     order_dic['betType'], [item['tournamentName'], item['homeTeamName'] + ' Vs ' +item['awayTeamName'],item['producer'],
+                                                     item['marketName'],outcome_name,odds_dic[item['oddsType']],item['odds'],item['creditOdds'], item['matchResult'],
+                                                     item['settlementResult'], item['matchTime']],
+                                                     order_dic['sportName'], order_dic['settlementResult'],order_dic['betAmount'],order_dic['accountFinalWinOrLose'],
+                                                     order_dic['handicapFinalWinOrLose'],order_dic['accountFinalWinOrLose']])
+                    orderDetail = self.cm.merge_compelx_02(new_lList=orderDetail_list)
+
+                    return orderDetail
 
             else:
                 raise AssertionError('抱歉,暂不支持该种类型')
@@ -4233,7 +4269,7 @@ if __name__ == "__main__":
     # data = bg.credit_bill(inData={"begin": "-0", "end": "-0"},query_type=2)
     # data_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=1)   # 总台-报表管理-数据源对账报表
     data = bg.credit_dataSourceReport(inData={"betStartTime":"-30", "betEndTime":"-0", "settlementStartTime":"-30", "settlementEndTime":"-0", "userName":"","orderNo":"",
-                        "sportId":[], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=1)  # 总台-报表管理-数据源对账报表
+                        "sportId":[], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=4)  # 总台-报表管理-数据源对账报表
     # daily_report = bg.credit_dailyReport(Authorization=login_loken, create_time=(-6,0), queryType=2)           # 总台-报表管理-每日盈亏
     # data = bg.credit_terminalReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "terminal":"","sortIndex":"","sortParameter":"","page":1,"limit":200 },queryType=2)       # 总台-报表管理-客户端盈亏
     # data = bg.credit_sportsReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200 }, queryType=1)    # 总台-报表管理-体育项盈亏

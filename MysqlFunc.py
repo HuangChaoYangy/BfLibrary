@@ -4710,20 +4710,28 @@ class MysqlQuery(MysqlFunc):
         if resp['sportId']:
             sport_list = resp['sportId']
             if len(sport_list) == 1:
-                sport = sport_list[0]
-                sport_name = f"and a.sport_id in ('{sport}')"
+                sport_str = sport_list[0]
+                sport_name = f"and a.sport_id in ('{sport_str}')"
             else:
-                # sport = tuple(sport_list)
-                # sport_tuple = tuple(sport_list)
                 sport_name = f"and a.sport_id in {tuple(sport_list)}"
         else:
             sport_name = ''
         if resp['settlementResult']:
-            result = f"and settlement_result in {resp['settlementResult']}"
+            result_list = resp['settlementResult']
+            if len(result_list) == 1:
+                result_str = result_list[0]
+                result = f"and settlement_result in ('{result_str}')"
+            else:
+                result = f"and settlement_result in {tuple(result_list)}"
         else:
             result = ''
         if resp['status']:
-            status = f"and a.`status` in {resp['status']}"
+            status_list = resp['status']
+            if len(status_list) == 1:
+                status_str = status_list[0]
+                status = f"and a.`status` in ('{status_str}')"
+            else:
+                status = f"and a.`status` in {tuple(status_list)}"
         else:
             status = ''
         if resp['betType']:
@@ -4746,17 +4754,20 @@ class MysqlQuery(MysqlFunc):
                       f"account_win_or_lose,NULL) as '原始输/赢',if(a.`status`=2,handicap_win_or_lose,NULL) as '盘口输/赢' FROM o_account_order a JOIN u_user b ON a.user_id = b.id " \
                       f"WHERE DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' AND DATE_FORMAT(a.award_time,'%Y-%m-%d') BETWEEN '{set_ctime}' AND '{set_etime}' " \
                       f"{account} {order_no} {sport_name} {result} {status} {bet_type} AND a.`status`>=0 {sort}"
-            print(sql_str)
+            # print(sql_str)
             rtn = list(self.query_data(sql_str, database_name))
 
-            dataSourceReport_list = []
-            for item in rtn:
-                ctime = item[4]
-                create_time = ctime.strftime("%Y-%m-%d %H:%M:%S")
-                settime = item[6]
-                set_time = settime.strftime("%Y-%m-%d %H:%M:%S")
-                dataSourceReport_list.append([item[0], item[1], item[2], item[3], create_time, item[5], set_time,
-                                       item[7], item[8], item[9], item[10]])
+            if rtn == []:
+                dataSourceReport_list=[]
+            else:
+                dataSourceReport_list = []
+                for item in rtn:
+                    ctime = item[4]
+                    create_time = ctime.strftime("%Y-%m-%d %H:%M:%S")
+                    settime = item[6]
+                    set_time = settime.strftime("%Y-%m-%d %H:%M:%S")
+                    dataSourceReport_list.append([item[0], item[1], item[2], item[3], create_time, item[5], set_time,
+                                           item[7], item[8], item[9], item[10]])
 
             return dataSourceReport_list,sql_str
 
@@ -4765,28 +4776,85 @@ class MysqlQuery(MysqlFunc):
                       f"if(a.`status`>=0,bet_amount,0) as bet_amount,(case when a.`status`=2 then account_win_or_lose end) as '原始输/赢',(case when a.`status`=2 then handicap_win_or_lose end) as '盘口输/赢' " \
                       f"FROM o_account_order a JOIN u_user b ON a.user_id = b.id WHERE DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' AND DATE_FORMAT(a.award_time,'%Y-%m-%d') BETWEEN '{set_ctime}' AND '{set_etime}' " \
                       f"{account} {order_no} {sport_name} {result} {status} {bet_type} ORDER BY a.create_time DESC ) a"
-            # print(sql_str)
+
             rtn = list(self.query_data(sql_str, database_name))
-
             dataSourceReport_list = []
-            for item in rtn:
-                dataSourceReport_list.append([float(item[0]), item[1], item[2]])
+            if rtn == [(None, None, None)]:
+                dataSourceReport_list=[]
 
-            return dataSourceReport_list,sql_str
+                return dataSourceReport_list, sql_str
+            else:
+                for item in rtn:
+                    dataSourceReport_list.append([float(item[0]), item[1], item[2]])
+
+                return dataSourceReport_list,sql_str
 
         elif queryType == 3:
             sql_str = f"SELECT count(if(`注单状态`='已结算',1,null)) as '已结算单数',count(if(`注单状态`='未结算',1,null)) as '未结算单数',count(1) as '单数总计' FROM (SELECT " \
                   f"(CASE WHEN a.`status`=2 then '已结算' WHEN a.`status` in (0,1) then '未结算' ELSE '已取消' END) as '注单状态' FROM o_account_order a JOIN u_user b ON " \
                   f"a.user_id = b.id WHERE DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' AND DATE_FORMAT(a.award_time,'%Y-%m-%d') BETWEEN '{set_ctime}'" \
                   f" AND '{set_etime}' {account} {order_no} {sport_name} {result} {status} {bet_type} AND a.`status`>=0) a"
-            # print(sql_str)
+
             rtn = list(self.query_data(sql_str, database_name))
 
-            dataSourceReport_list = []
-            for item in rtn:
-                dataSourceReport_list.append([item[0], item[1], item[2]])
+            if rtn == [(None, None, None)]:
+                dataSourceReport_list=[]
 
-            return dataSourceReport_list,sql_str
+                return dataSourceReport_list, sql_str
+            else:
+                dataSourceReport_list = []
+                for item in rtn:
+                    dataSourceReport_list.append([item[0], item[1], item[2]])
+
+                return dataSourceReport_list,sql_str
+
+        elif queryType == 4:
+            sql_str = f"SELECT a.order_no as '注单号' FROM o_account_order a JOIN u_user b ON a.user_id = b.id WHERE DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND " \
+                      f"'{etime}' AND DATE_FORMAT(a.award_time,'%Y-%m-%d') BETWEEN '{set_ctime}' AND '{set_etime}' {account} {order_no} {sport_name} {result} {status} {bet_type} " \
+                      f"AND a.`status`>=0 {sort}"
+            rtn = list(self.query_data(sql_str, database_name))
+
+            if rtn == []:
+                order_list=[]
+            else:
+                order_list = []
+                for item in rtn:
+                    order_list.append(item[0])
+
+            return order_list
+
+        elif queryType == 5:
+            sql_str = f"SELECT a.user_name,a.create_time,a.order_no,a.award_time,(CASE WHEN a.`status` in (2) then '已结算' WHEN a.`status` in (0,1) then '未结算' ELSE '已取消' END) " \
+                      f"'orderStatus',(case when a.bet_type=1 then '单关' when a.bet_type=2 then '串关' when a.bet_type=3 then '复式串关' end) as 'betType',tournament_name," \
+                      f"CONCAT( home_team_name, ' Vs ', away_team_name ) 'teamName',if(is_live=3,'早盘','滚球') 'matchType',market_name,CONCAT(outcome_name,IFNULL(hcp_for_the_rest," \
+                      f"'')) outcome_name,bet_score,if(odds_type=1,'欧洲盘','香港盘') 'oddsType',odds,credit_odds,b.match_result,(CASE WHEN c.settlement_result=1 THEN '赢' WHEN " \
+                      f"c.settlement_result=2 THEN '输' WHEN c.settlement_result = 3 THEN '赢一半' WHEN c.settlement_result = 4 THEN '输一半' WHEN c.settlement_result = 5 THEN " \
+                      f"'注单平局' WHEN c.settlement_result = 6 THEN '注单取消' END ) 'subOrderResult',match_time,(CASE WHEN a.sport_category_id= 1 then '足球' WHEN a.sport_category_id = 2 " \
+                      f"THEN '篮球' WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 THEN '羽毛球' WHEN " \
+                      f"a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰上曲棍球' END) 'sportName',(CASE " \
+                      f"WHEN a.settlement_result in (1,3) THEN '赢' WHEN a.settlement_result in (2,4) THEN '输' WHEN a.settlement_result = 5 THEN '注单平局' WHEN a.settlement_result" \
+                      f" = 6 THEN '注单取消' END ) 'orderResult',bet_amount,account_win_or_lose,handicap_win_or_lose FROM o_account_order a JOIN " \
+                      f"o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON ( a.order_no = c.order_no AND b.match_id = c.match_id ) WHERE " \
+                      f"a.order_no='XNZTeEdUi4W2'"
+            rtn = list(self.query_data(sql_str, database_name))
+
+            if rtn == []:
+                dataSourceReport_list=[]
+            else:
+                dataSourceReport_list = []
+                for item in rtn:
+                    ctime = item[1]
+                    create_time = ctime.strftime("%Y-%m-%d %H:%M:%S")
+                    settime = item[3]
+                    set_time = settime.strftime("%Y-%m-%d %H:%M:%S")
+                    matchtime = item[17]
+                    match_time = matchtime.strftime("%Y-%m-%d %H:%M:%S")
+                    dataSourceReport_list.append([item[0], create_time, item[2], set_time, item[4], item[5], [item[6] ,item[7], item[8], item[9], item[10],
+                                                  item[11], item[12], float(item[13]), float(item[14]), item[15], item[16], match_time], item[18], item[19],
+                                                  float(item[20]), float(item[21]), float(item[22])])
+                    dataSourceReport = self.cf.merge_compelx_02(new_lList=dataSourceReport_list)
+
+            return dataSourceReport,sql_str
 
         else:
             raise AssertionError('暂不支持该类型')
@@ -10132,7 +10200,7 @@ if __name__ == "__main__":
 
     # agentLine = mysql.credit_agentLineManagement_sql(agentName="aw", agentAccount="")
     data = mysql.credit_dataSourceReport(expData={"betStartTime":"-30", "betEndTime":"-0", "settlementStartTime":"-30", "settlementEndTime":"-0", "userName":"","orderNo":"",
-                        "sportId":['sr:sport:3','sr:sport:4'], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=1)
+                        "sportId":['sr:sport:3','sr:sport:4'], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=5)[0]
     print(data)
     # for item in data:
     #     print(type(item))
@@ -10149,7 +10217,7 @@ if __name__ == "__main__":
     # data = mysql.get_orderNo_effectAmount_and_commission(user_name='', order_no='XFB6FPtyXDyB', createDate=(), awardDate=())[1]
     # print(data)
 
-    # commission = mysql.get_order_no_commission(order_no='XFB74wbGYMe5')            # 佣金
+    # commission = mysql.get_order_no_commission(order_no='XFB74wbGYMe5')            # 会员及代理佣金
     # order = mysql.get_order_by_account(account='a2')
     # total = mysql.get_account_totalCommission(account="a0")
 
@@ -10184,7 +10252,7 @@ if __name__ == "__main__":
     # data = mysql.get_all_odds(odds_list=odds_list, bet_type=4)
     # print(data)
     # odds = mysql.get_odds_by_orderNum(orderNo='XFB77XY4Ja4T', query_type='actual')          #   通过注单号查询注单的最大总赔率和注单结算后的实际总赔率
-    # odds = mysql.get_float_lenth(num=0.22222222222)
+    # odds = mysql.get_float_length(num=0.22222222222)
     # print(odds)
     # N1 = list(combinations(a, 2))
     # N2 = list(permutations(a, 2))
