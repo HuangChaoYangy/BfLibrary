@@ -62,6 +62,14 @@ mixBetOrder_url_new = os.path.join(excel_dir,'credit_data_new\TotalBet','mixBetO
 csv_url_data = os.path.join(excel_dir,'credit_data_new\ReportManagement','dataSource.csv')
 data_source_url = os.path.join(excel_dir,'credit_data_new\ReportManagement','dataSource.yaml')
 data_source_url_new = os.path.join(excel_dir,'credit_data_new\ReportManagement','dataSource_case.yaml')
+# 数据源对账报表-底部总计
+csv_url_data_t = os.path.join(excel_dir,'credit_data_new\ReportManagement','dataSource_t.csv')
+data_source_url_t = os.path.join(excel_dir,'credit_data_new\ReportManagement','dataSource_t.yaml')
+data_source_url_new_t = os.path.join(excel_dir,'credit_data_new\ReportManagement','dataSource_case_t.yaml')
+# 数据源对账报表-顶部banner合计
+csv_url_data_b = os.path.join(excel_dir,'credit_data_new\ReportManagement','dataSource_b.csv')
+data_source_url_b = os.path.join(excel_dir,'credit_data_new\ReportManagement','dataSource_b.yaml')
+data_source_url_new_b = os.path.join(excel_dir,'credit_data_new\ReportManagement','dataSource_case_b.yaml')
 
 # 每日盈亏报表 - 列表详情
 csv_url_daily = os.path.join(excel_dir,'credit_data_new\ReportManagement','dailyReport.csv')
