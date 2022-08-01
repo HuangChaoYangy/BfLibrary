@@ -1,6 +1,6 @@
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -16,7 +16,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,默认按投注时间和结算时间查询近30天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,默认按投注时间和结算时间查询近30天数据
   resp:
     userName: ''
     orderNo: ''
@@ -34,7 +34,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -50,7 +50,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,默认按投注时间和结算时间查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,默认按投注时间和结算时间查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -68,7 +68,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: 'a0b1b2b301'
@@ -84,7 +84,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据会员账号'a0b1b2b301'查询近30天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据会员账号'a0b1b2b301'查询近30天数据
   resp:
     userName: 'a0b1b2b301'
     orderNo: ''
@@ -102,7 +102,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -118,7 +118,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据注单号'XLjgkxqnpaAT'查询近30天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据注单号'XLjgkxqnpaAT'查询近30天数据
   resp:
     userName: ''
     orderNo: 'XLjgkxqnpaAT'
@@ -136,7 +136,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -152,7 +152,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据球类'足球'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据球类'足球'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -170,7 +170,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -186,7 +186,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据球类'篮球'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据球类'篮球'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -204,7 +204,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -220,7 +220,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据球类'网球'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据球类'网球'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -238,7 +238,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -254,7 +254,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据球类'排球'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据球类'排球'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -272,7 +272,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -288,7 +288,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据球类'羽毛球'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据球类'羽毛球'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -306,7 +306,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -322,7 +322,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据球类'乒乓球'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据球类'乒乓球'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -340,7 +340,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -356,7 +356,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据球类'棒球'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据球类'棒球'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -374,7 +374,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -390,7 +390,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据球类'冰上曲棍球'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据球类'冰上曲棍球'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -408,7 +408,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -424,7 +424,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据球类'足球'和'网球'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据球类'足球'和'网球'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -442,7 +442,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -458,7 +458,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据注单结果'赢'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据注单结果'赢'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -476,7 +476,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -492,7 +492,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据注单结果'输'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据注单结果'输'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -510,7 +510,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -526,7 +526,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据注单结果'走水'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据注单结果'走水'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -544,7 +544,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -560,7 +560,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据注单结果'取消'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据注单结果'取消'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -578,7 +578,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -594,7 +594,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据注单状态'未结算'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据注单状态'未结算'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -612,7 +612,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -628,7 +628,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据注单状态'已结算'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据注单状态'已结算'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -646,7 +646,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -662,7 +662,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据注单状态'已取消'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据注单状态'已取消'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -680,7 +680,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -696,7 +696,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据注单类型'单注'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据注单类型'单注'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -714,7 +714,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -730,7 +730,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据注单类型'串关'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据注单类型'串关'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -748,7 +748,7 @@
 
 - request:
     mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
+    url: /dataSourceCheckReport/getTotal
     method: POST
   data:
     userName: ''
@@ -764,7 +764,7 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-    title: 管理后台-总台-数据源对账报表,按投注时间和结算时间根据注单类型'复式串关'查询近7天数据
+    title: 管理后台-总台-数据源对账报表-底部总计,按投注时间和结算时间根据注单类型'复式串关'查询近7天数据
   resp:
     userName: ''
     orderNo: ''
@@ -779,344 +779,4 @@
     sortBy: ''
     sortIndex: ''
     sortParameter: ''
-
-- request:
-    mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
-    method: POST
-  data:
-    userName: ''
-    orderNo: ''
-    sportId: []
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'ascending'
-    sortIndex: ''
-    sortParameter: '投注金额'
-    title: 管理后台-总台-数据源对账报表,默认按投注时间和结算时间查询近7天数据,根据'投注金额'进行升序排序
-  resp:
-    userName: ''
-    orderNo: ''
-    sportId: ''
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'ASC'
-    sortIndex: ''
-    sortParameter: 'bet_amount'
-
-- request:
-    mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
-    method: POST
-  data:
-    userName: ''
-    orderNo: ''
-    sportId: []
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'descending'
-    sortIndex: ''
-    sortParameter: '投注金额'
-    title: 管理后台-总台-数据源对账报表,默认按投注时间和结算时间查询近7天数据,根据'投注金额'进行降序排序
-  resp:
-    userName: ''
-    orderNo: ''
-    sportId: ''
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'DESC'
-    sortIndex: ''
-    sortParameter: 'bet_amount'
-
-- request:
-    mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
-    method: POST
-  data:
-    userName: ''
-    orderNo: ''
-    sportId: []
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'ascending'
-    sortIndex: ''
-    sortParameter: '投注时间'
-    title: 管理后台-总台-数据源对账报表,默认按投注时间和结算时间查询近7天数据,根据'投注时间'进行升序排序
-  resp:
-    userName: ''
-    orderNo: ''
-    sportId: ''
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'ASC'
-    sortIndex: ''
-    sortParameter: 'a.create_time'
-
-- request:
-    mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
-    method: POST
-  data:
-    userName: ''
-    orderNo: ''
-    sportId: []
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'descending'
-    sortIndex: ''
-    sortParameter: '投注时间'
-    title: 管理后台-总台-数据源对账报表,默认按投注时间和结算时间查询近7天数据,根据'投注时间'进行降序排序
-  resp:
-    userName: ''
-    orderNo: ''
-    sportId: ''
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'DESC'
-    sortIndex: ''
-    sortParameter: 'a.create_time'
-
-- request:
-    mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
-    method: POST
-  data:
-    userName: ''
-    orderNo: ''
-    sportId: []
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'ascending'
-    sortIndex: ''
-    sortParameter: '结算时间'
-    title: 管理后台-总台-数据源对账报表,默认按投注时间和结算时间查询近7天数据,根据'结算时间'进行升序排序
-  resp:
-    userName: ''
-    orderNo: ''
-    sportId: ''
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'ASC'
-    sortIndex: ''
-    sortParameter: 'a.award_time'
-
-- request:
-    mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
-    method: POST
-  data:
-    userName: ''
-    orderNo: ''
-    sportId: []
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'descending'
-    sortIndex: ''
-    sortParameter: '结算时间'
-    title: 管理后台-总台-数据源对账报表,默认按投注时间和结算时间查询近7天数据,根据'结算时间'进行降序排序
-  resp:
-    userName: ''
-    orderNo: ''
-    sportId: ''
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'DESC'
-    sortIndex: ''
-    sortParameter: 'a.award_time'
-
-- request:
-    mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
-    method: POST
-  data:
-    userName: ''
-    orderNo: ''
-    sportId: []
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'ascending'
-    sortIndex: ''
-    sortParameter: '输/赢(原始)'
-    title: 管理后台-总台-数据源对账报表,默认按投注时间和结算时间查询近7天数据,根据'输/赢(原始)'进行升序排序
-  resp:
-    userName: ''
-    orderNo: ''
-    sportId: ''
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'ASC'
-    sortIndex: ''
-    sortParameter: if(a.`status`=2,account_win_or_lose,NULL)
-
-- request:
-    mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
-    method: POST
-  data:
-    userName: ''
-    orderNo: ''
-    sportId: []
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'descending'
-    sortIndex: ''
-    sortParameter: '输/赢(原始)'
-    title: 管理后台-总台-数据源对账报表,默认按投注时间和结算时间查询近7天数据,根据'输/赢(原始)'进行降序排序
-  resp:
-    userName: ''
-    orderNo: ''
-    sportId: ''
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'DESC'
-    sortIndex: ''
-    sortParameter: if(a.`status`=2,account_win_or_lose,NULL)
-
-- request:
-    mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
-    method: POST
-  data:
-    userName: ''
-    orderNo: ''
-    sportId: []
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'ascending'
-    sortIndex: ''
-    sortParameter: '输/赢(盘口)'
-    title: 管理后台-总台-数据源对账报表,默认按投注时间和结算时间查询近7天数据,根据'输/赢(盘口)'进行升序排序
-  resp:
-    userName: ''
-    orderNo: ''
-    sportId: ''
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'ASC'
-    sortIndex: ''
-    sortParameter: if(a.`status`=2,handicap_win_or_lose,NULL)
-
-- request:
-    mde_ip: https://mdesearch.betf.best
-    url: /dataSourceCheckReport/getPage
-    method: POST
-  data:
-    userName: ''
-    orderNo: ''
-    sportId: []
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'descending'
-    sortIndex: ''
-    sortParameter: '输/赢(盘口)'
-    title: 管理后台-总台-数据源对账报表,默认按投注时间和结算时间查询近7天数据,根据'输/赢(盘口)'进行降序排序
-  resp:
-    userName: ''
-    orderNo: ''
-    sportId: ''
-    settlementResult: []
-    status: []
-    betType: ''
-    betStartTime: '-6'
-    betEndTime: '0'
-    settlementStartTime: '-6'
-    settlementEndTime: '0'
-    sortBy: 'DESC'
-    sortIndex: ''
-    sortParameter: if(a.`status`=2,handicap_win_or_lose,NULL)
 
