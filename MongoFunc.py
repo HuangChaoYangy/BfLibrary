@@ -4884,346 +4884,336 @@ class DbQuery(object):
 
             return closed_matchResult_list, cancelled_matchResult_list, abandoned_matchResult_list
 
-    def new_matchResult_sql(self, sportName='足球', offset='0'):
+    def query_matchResult_sql(self, sportName, match_id=""):
         '''
-        管理后台-新赛果查询,修改             /// 修改于2021.09.24
-        :param sportName:
-        :param offset:
+        查询赛果比分            /// 修改于2022.08.02
+        :param sportName: 必填
+        :param match_id:  非必填
+        :param offset:                       "matchStatus": {"$in": ["abandoned", "cancelled", "ended", "closed"]},
         :return:
         '''
-
         sport_id = self.get_sportId_sql(sportName)
-
         select_dic = {"_id": 1, "matchScheduled": 1, "tournamentSportId": 1, "tournamentName": 1, "homeTeamName": 1,
                       "homeScore": 1,
                       "awayTeamName": 1, "awayScore": 1, "matchStatus": 1, "periodStatisticsMap": 1, "periodScores": 1}
+        matchStatus_dic = {'closed': '已完成', 'ended': '已完成', 'cancelled': '比赛取消', 'abandoned': '比赛中止', 'postponed': '推迟', 'not_started': '未开始'}
 
-        matchStatus_dic = {'closed': '已完成', 'ended': '已完成', 'cancelled': '比赛取消', 'abandoned': '比赛中止'}
+        mg_se = {"tournamentSportId": sport_id, "_id": match_id}
+        match_data_list = list(self.mg.mg_select("soccer_match", condition_sql=mg_se, choose_sql=select_dic))
+        match_result_list = []
+        matchResult_list = []
 
-        if not offset:
-            raise AssertionError('offset 不能为空')
+        for matchInfo in match_data_list[0:1]:
+            date = matchInfo['matchScheduled']
+            # matchTime = date.strftime("%Y-%m-%d %H:%M:%S")  # 将datetime格式转成字符串
+            match_time = (date + datetime.timedelta(hours=-4)).strftime("%Y-%m-%d %H:%M:%S")  # 获取到的时间减去xx个小时
 
-        else:
-            create_time = self.get_current_time_for_client(time_type="begin", day_diff=int(offset))
-            createTime = datetime.datetime.strptime(create_time, "%Y-%m-%d %H:%M:%S")  # 将字符串转换成datetime时间格式
-            end_time = self.get_current_time_for_client(time_type="end", day_diff=int(offset) + 1)
-            endTime = datetime.datetime.strptime(end_time, "%Y-%m-%d %H:%M:%S")  # 将字符串转换成datetime时间格式
-            mg_se = {"tournamentSportId": sport_id,
-                     "matchStatus": {"$in": ["abandoned", "cancelled", "ended", "closed"]},
-                     "matchScheduled": {"$gte": createTime, "$lte": endTime}}
-            match_data_list = list(self.mg.mg_select("soccer_match", mg_se, select_dic))
+            if sportName == '足球':
+                # match_result_list.append([matchInfo['_id'], match_time, matchInfo['tournamentName'],matchInfo['homeTeamName'], matchInfo['awayTeamName'],
+                #                      matchStatus_dic[matchInfo['matchStatus']]])
+                match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],matchInfo['homeTeamName'], matchInfo['awayTeamName'],
+                                     matchStatus_dic[matchInfo['matchStatus']]]
+                if 'periodScores' in matchInfo:
+                    period_score = []
+                    all_homeScore = 0
+                    all_awayScore = 0
+                    for periodIndex in ['上半场', '下半场', '加时', '点球']:
+                        for period in matchInfo['periodScores']:
+                            if period['periodDescription'] == periodIndex:
+                                home_score = int(period['homeScore'])
+                                away_score = int(period['awayScore'])
+                                if periodIndex == '上半场' or periodIndex == '下半场':  # 通过上半场和下半场,计算全场比分
+                                    all_homeScore += home_score
+                                    all_awayScore += away_score
+                                # if periodIndex == '加时':
+                                #     overtime_homeScore = int(period['homeScore'])
+                                #     overtime_awayScore = int(period['awayScore'])
+                                period_score.append([periodIndex, home_score, away_score])
+                    period_score.insert(2, ['全场比分', all_homeScore, all_awayScore])
 
-            match_result_list = []
-            matchResult_list = []
+                    match_result_list.append(period_score)
 
-            for matchInfo in match_data_list[37:38]:
-                print(matchInfo)
-                date = matchInfo['matchScheduled']
-                matchTime = date.strftime("%Y-%m-%d %H:%M:%S")  # 将datetime格式转成字符串
-                match_time = (date + datetime.timedelta(hours=-4)).strftime("%Y-%m-%d %H:%M:%S")  # 获取到的时间减去xx个小时
+                if 'periodStatisticsMap' in matchInfo:
+                    result_data = []
+                    first_card_num_list = [0, 0]
+                    first_corner_list = [0, 0]
+                    second_card_num_list = [0, 0]
+                    second_corner_list = [0, 0]
+                    if '1st half' in matchInfo['periodStatisticsMap']:
+                        # first_card_num_list = [0, 0]
+                        # first_corner_list = [0, 0]
+                        for score_detail in matchInfo['periodStatisticsMap']['1st half']:
+                            for index, score_type in enumerate(["Home", "Away"]):
+                                if score_detail['homeAway'] == score_type:
+                                    if 'yellow' in score_detail:
+                                        first_card_num_list[index] += score_detail['yellow']
+                                    if 'red' in score_detail:
+                                        first_card_num_list[index] += score_detail['red'] * 2
+                                    if 'yellowRed' in score_detail:
+                                        first_card_num_list[index] += score_detail['yellowRed'] * 2
+                                    if 'corner' in score_detail:
+                                        first_corner_list[index] += score_detail['corner']
 
-                if sportName == '足球':
-                    match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
-                                         matchInfo['homeTeamName'], matchInfo['awayTeamName'],
-                                         matchStatus_dic[matchInfo['matchStatus']]]
-                    if 'periodScores' in matchInfo:
-                        period_score = []
-                        all_homeScore = 0
-                        all_awayScore = 0
-                        for periodIndex in ['上半场', '下半场', '加时', '点球']:
-                            for period in matchInfo['periodScores']:
-                                if period['periodDescription'] == periodIndex:
-                                    home_score = int(period['homeScore'])
-                                    away_score = int(period['awayScore'])
-                                    if periodIndex == '上半场' or periodIndex == '下半场':  # 通过上半场和下半场,计算全场比分
-                                        all_homeScore += home_score
-                                        all_awayScore += away_score
-                                    # if periodIndex == '加时':
-                                    #     overtime_homeScore = int(period['homeScore'])
-                                    #     overtime_awayScore = int(period['awayScore'])
-                                    period_score.append([periodIndex, home_score, away_score])
-                        period_score.insert(2, ['全场比分', all_homeScore, all_awayScore])
+                        # fullTime_corner_list = first_card_num_list
+                        # fullTime_card_num_list = first_corner_list
+                        # result_data.extend([first_corner_list, fullTime_corner_list, first_card_num_list, fullTime_card_num_list])
+                        # periodDescription = ['上半场角球数', '全场角球数', '上半场罚牌数', '全场罚牌数']
+                        # for index in range(4):
+                        #     result_data[index].insert(0, periodDescription[index])
+                        #
+                        # print(result_data)
+                        # match_result_list[-1].extend(result_data)
+                        # print(match_result_list)
 
-                        match_result_list.append(period_score)
+                    if '2nd half' in matchInfo['periodStatisticsMap']:
+                        # first_card_num_list = [0, 0]
+                        # first_corner_list = [0, 0]
+                        # second_card_num_list = [0, 0]
+                        # second_corner_list = [0, 0]
+                        for score_detail in matchInfo['periodStatisticsMap']['2nd half']:
+                            for index, score_type in enumerate(["Home", "Away"]):
+                                if score_detail['homeAway'] == score_type:
+                                    if 'yellow' in score_detail:
+                                        second_card_num_list[index] += score_detail['yellow']
+                                    if 'red' in score_detail:
+                                        second_card_num_list[index] += score_detail['red'] * 2
+                                    if 'yellowRed' in score_detail:
+                                        second_card_num_list[index] += score_detail['yellowRed'] * 2
+                                    if 'corner' in score_detail:
+                                        second_corner_list[index] += score_detail['corner']
 
-                    if 'periodStatisticsMap' in matchInfo:
-                        result_data = []
-                        first_card_num_list = [0, 0]
-                        first_corner_list = [0, 0]
-                        second_card_num_list = [0, 0]
-                        second_corner_list = [0, 0]
-                        if '1st half' in matchInfo['periodStatisticsMap']:
-                            # first_card_num_list = [0, 0]
-                            # first_corner_list = [0, 0]
-                            for score_detail in matchInfo['periodStatisticsMap']['1st half']:
-                                for index, score_type in enumerate(["Home", "Away"]):
-                                    if score_detail['homeAway'] == score_type:
-                                        if 'yellow' in score_detail:
-                                            first_card_num_list[index] += score_detail['yellow']
-                                        if 'red' in score_detail:
-                                            first_card_num_list[index] += score_detail['red'] * 2
-                                        if 'yellowRed' in score_detail:
-                                            first_card_num_list[index] += score_detail['yellowRed'] * 2
-                                        if 'corner' in score_detail:
-                                            first_corner_list[index] += score_detail['corner']
+                    fullTime_card_num_list = []  # 将两个长度相同的列表所有元素相加
+                    for item in range(len(first_card_num_list)):
+                        fullTime_card_num_list.append(first_card_num_list[item] + second_card_num_list[item])
 
-                            # fullTime_corner_list = first_card_num_list
-                            # fullTime_card_num_list = first_corner_list
-                            # result_data.extend([first_corner_list, fullTime_corner_list, first_card_num_list, fullTime_card_num_list])
-                            # periodDescription = ['上半场角球数', '全场角球数', '上半场罚牌数', '全场罚牌数']
-                            # for index in range(4):
-                            #     result_data[index].insert(0, periodDescription[index])
-                            #
-                            # print(result_data)
-                            # match_result_list[-1].extend(result_data)
-                            # print(match_result_list)
+                    fullTime_corner_list = []
+                    for item in range(len(first_card_num_list)):
+                        fullTime_corner_list.append(first_corner_list[item] + second_corner_list[item])
 
-                        if '2nd half' in matchInfo['periodStatisticsMap']:
-                            # first_card_num_list = [0, 0]
-                            # first_corner_list = [0, 0]
-                            # second_card_num_list = [0, 0]
-                            # second_corner_list = [0, 0]
-                            for score_detail in matchInfo['periodStatisticsMap']['2nd half']:
-                                for index, score_type in enumerate(["Home", "Away"]):
-                                    if score_detail['homeAway'] == score_type:
-                                        if 'yellow' in score_detail:
-                                            second_card_num_list[index] += score_detail['yellow']
-                                        if 'red' in score_detail:
-                                            second_card_num_list[index] += score_detail['red'] * 2
-                                        if 'yellowRed' in score_detail:
-                                            second_card_num_list[index] += score_detail['yellowRed'] * 2
-                                        if 'corner' in score_detail:
-                                            second_corner_list[index] += score_detail['corner']
+                    result_data.extend(
+                        [first_corner_list, second_corner_list, fullTime_corner_list, first_card_num_list,
+                         second_card_num_list, fullTime_card_num_list])
+                    periodDescription = ['上半场角球数', '下半场角球数', '全场角球数', '上半场罚牌数', '下半场罚牌数', '全场罚牌数']
 
-                        fullTime_card_num_list = []  # 将两个长度相同的列表所有元素相加
-                        for item in range(len(first_card_num_list)):
-                            fullTime_card_num_list.append(first_card_num_list[item] + second_card_num_list[item])
+                    for index in range(6):
+                        result_data[index].insert(0, periodDescription[index])
+                    # print(result_data)
+                    # print(match_result_list)
+                    # print(type(result_data))
+                    # print(type(match_result_list))
 
-                        fullTime_corner_list = []
-                        for item in range(len(first_card_num_list)):
-                            fullTime_corner_list.append(first_corner_list[item] + second_corner_list[item])
+                    match_result_list[-1].extend(result_data)
 
-                        result_data.extend(
-                            [first_corner_list, second_corner_list, fullTime_corner_list, first_card_num_list,
-                             second_card_num_list, fullTime_card_num_list])
-                        periodDescription = ['上半场角球数', '下半场角球数', '全场角球数', '上半场罚牌数', '下半场罚牌数', '全场罚牌数']
+            elif sportName == '篮球':
+                # match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
+                #                      matchInfo['homeTeamName'], matchInfo['awayTeamName'],
+                #                      matchStatus_dic[matchInfo['matchStatus']]]
+                match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],matchInfo['homeTeamName'], matchInfo['awayTeamName'],
+                                     matchStatus_dic[matchInfo['matchStatus']]]
+                if 'periodScores' in matchInfo:
+                    period_score = []
 
-                        for index in range(6):
-                            result_data[index].insert(0, periodDescription[index])
+                    first_homeScore = 0
+                    first_awayScore = 0
+                    second_homeScore = 0
+                    second_awayScore = 0
+                    overtime_homeScore = 0
+                    overtime_awayScore = 0
+                    for periodIndex in ['第一节', '第二节', '第三节', '第四节', '加时']:
+                        for period in matchInfo['periodScores']:
+                            if period['periodDescription'] == periodIndex:
+                                home_score = int(period['homeScore'])
+                                away_score = int(period['awayScore'])
+                                period_score.append([periodIndex, home_score, away_score])
+                                if periodIndex == '第一节' or periodIndex == '第二节':
+                                    first_homeScore += home_score
+                                    first_awayScore += away_score
+                                elif periodIndex == '第三节' or periodIndex == '第四节':
+                                    second_homeScore += home_score
+                                    second_awayScore += away_score
+                                elif periodIndex == '加时':
+                                    overtime_homeScore += home_score
+                                    overtime_awayScore += away_score
 
-                        match_result_list[-1].extend(result_data)
+                    total_homeScore = first_homeScore + second_homeScore + overtime_homeScore
+                    total_awayScore = first_awayScore + second_awayScore + overtime_awayScore
 
+                    period_score.insert(4, ['上半场', first_homeScore, first_awayScore])
+                    period_score.insert(5, ['下半场', second_homeScore, second_awayScore])
+                    period_score.append(['全场', total_homeScore, total_awayScore])
 
-                elif sportName == '篮球':
-                    match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
-                                         matchInfo['homeTeamName'], matchInfo['awayTeamName'],
-                                         matchStatus_dic[matchInfo['matchStatus']]]
+                    match_result_list.append(period_score)
 
-                    if 'periodScores' in matchInfo:
-                        period_score = []
+            elif sportName == '网球':
+                match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
+                                     matchInfo['homeTeamName'], matchInfo['awayTeamName'],
+                                     matchStatus_dic[matchInfo['matchStatus']]]
+                if 'periodScores' in matchInfo:
+                    period_score = []
+                    total_homescore = 0
+                    total_awayscore = 0
+                    set_homescore = 0
+                    set_awayscore = 0
+                    for periodIndex in ['第一盘', '第二盘', '第三盘']:
+                        for period in matchInfo['periodScores']:
+                            if period['periodDescription'] == periodIndex:
+                                home_score = int(period['homeScore'])
+                                away_score = int(period['awayScore'])
+                                period_score.append([periodIndex, home_score, away_score])
+                                if periodIndex == '第一盘' or periodIndex == '第二盘' or periodIndex == '第三盘':
+                                    total_homescore += home_score
+                                    total_awayscore += away_score
+                                if home_score > away_score:
+                                    set_homescore += 1
+                                elif home_score < away_score:
+                                    set_awayscore += 1
+                                else:
+                                    pass
+                    period_score.append(['总局数', total_homescore, total_awayscore])
+                    period_score.append(['盘数', set_homescore, set_awayscore])
+                    match_result_list.append(period_score)
 
-                        first_homeScore = 0
-                        first_awayScore = 0
-                        second_homeScore = 0
-                        second_awayScore = 0
-                        overtime_homeScore = 0
-                        overtime_awayScore = 0
-                        for periodIndex in ['第一节', '第二节', '第三节', '第四节', '加时']:
-                            for period in matchInfo['periodScores']:
-                                if period['periodDescription'] == periodIndex:
-                                    home_score = int(period['homeScore'])
-                                    away_score = int(period['awayScore'])
-                                    period_score.append([periodIndex, home_score, away_score])
-                                    if periodIndex == '第一节' or periodIndex == '第二节':
-                                        first_homeScore += home_score
-                                        first_awayScore += away_score
-                                    elif periodIndex == '第三节' or periodIndex == '第四节':
-                                        second_homeScore += home_score
-                                        second_awayScore += away_score
-                                    elif periodIndex == '加时':
-                                        overtime_homeScore += home_score
-                                        overtime_awayScore += away_score
+            elif sportName == '排球':
+                match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
+                                     matchInfo['homeTeamName'], matchInfo['awayTeamName'],
+                                     matchStatus_dic[matchInfo['matchStatus']]]
+                if 'periodScores' in matchInfo:
+                    period_score = []
 
-                        total_homeScore = first_homeScore + second_homeScore + overtime_homeScore
-                        total_awayScore = first_awayScore + second_awayScore + overtime_awayScore
+                    total_homescore = 0
+                    total_awayscore = 0
+                    set_homescore = 0
+                    set_awayscore = 0
+                    for periodIndex in ['第一盘', '第二盘', '第三盘', '第四盘', '第五盘']:
+                        for period in matchInfo['periodScores']:
+                            if period['periodDescription'] == periodIndex:
+                                home_score = int(period['homeScore'])
+                                away_score = int(period['awayScore'])
+                                period_score.append([periodIndex, home_score, away_score])
+                                if periodIndex == '第一盘' or periodIndex == '第二盘' or periodIndex == '第三盘' or periodIndex == '第四盘' or periodIndex == '第五盘':
+                                    total_homescore += home_score
+                                    total_awayscore += away_score
+                                if home_score > away_score:
+                                    set_homescore += 1
+                                elif home_score < away_score:
+                                    set_awayscore += 1
+                                else:
+                                    pass
+                    period_score.append(['总分', total_homescore, total_awayscore])
+                    period_score.append(['局比分', set_homescore, set_awayscore])
+                    match_result_list.append(period_score)
 
-                        period_score.insert(4, ['上半场', first_homeScore, first_awayScore])
-                        period_score.insert(5, ['下半场', second_homeScore, second_awayScore])
-                        period_score.append(['全场', total_homeScore, total_awayScore])
+            elif sportName == '羽毛球':
+                match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
+                                     matchInfo['homeTeamName'], matchInfo['awayTeamName'],
+                                     matchStatus_dic[matchInfo['matchStatus']]]
+                if 'periodScores' in matchInfo:
+                    period_score = []
 
-                        match_result_list.append(period_score)
+                    total_homescore = 0
+                    total_awayscore = 0
+                    set_homescore = 0
+                    set_awayscore = 0
+                    for periodIndex in ['第一盘', '第二盘', '第三盘']:
+                        for period in matchInfo['periodScores']:
+                            if period['periodDescription'] == periodIndex:
+                                home_score = int(period['homeScore'])
+                                away_score = int(period['awayScore'])
+                                period_score.append([periodIndex, home_score, away_score])
+                                if periodIndex == '第一盘' or periodIndex == '第二盘' or periodIndex == '第三盘':
+                                    total_homescore += home_score
+                                    total_awayscore += away_score
+                                if home_score > away_score:
+                                    set_homescore += 1
+                                elif home_score < away_score:
+                                    set_awayscore += 1
+                                else:
+                                    pass
+                    period_score.append(['总分', total_homescore, total_awayscore])
+                    period_score.append(['局比分', set_homescore, set_awayscore])
+                    match_result_list.append(period_score)
 
-                elif sportName == '网球':
-                    match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
-                                         matchInfo['homeTeamName'], matchInfo['awayTeamName'],
-                                         matchStatus_dic[matchInfo['matchStatus']]]
-                    if 'periodScores' in matchInfo:
-                        period_score = []
+            elif sportName == '乒乓球':
+                match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
+                                     matchInfo['homeTeamName'], matchInfo['awayTeamName'],
+                                     matchStatus_dic[matchInfo['matchStatus']]]
+                if 'periodScores' in matchInfo:
+                    period_score = []
 
-                        total_homescore = 0
-                        total_awayscore = 0
-                        set_homescore = 0
-                        set_awayscore = 0
-                        for periodIndex in ['第一盘', '第二盘', '第三盘']:
-                            for period in matchInfo['periodScores']:
-                                if period['periodDescription'] == periodIndex:
-                                    home_score = int(period['homeScore'])
-                                    away_score = int(period['awayScore'])
-                                    period_score.append([periodIndex, home_score, away_score])
-                                    if periodIndex == '第一盘' or periodIndex == '第二盘' or periodIndex == '第三盘':
-                                        total_homescore += home_score
-                                        total_awayscore += away_score
-                                    if home_score > away_score:
-                                        set_homescore += 1
-                                    elif home_score < away_score:
-                                        set_awayscore += 1
-                                    else:
-                                        pass
-                        period_score.append(['总局数', total_homescore, total_awayscore])
-                        period_score.append(['盘数', set_homescore, set_awayscore])
-                        match_result_list.append(period_score)
+                    total_homescore = 0
+                    total_awayscore = 0
+                    set_homescore = 0
+                    set_awayscore = 0
+                    for periodIndex in ['第一盘', '第二盘', '第三盘', '第四盘', '第五盘', '第六盘', '第七盘']:
+                        for period in matchInfo['periodScores']:
+                            if period['periodDescription'] == periodIndex:
+                                home_score = int(period['homeScore'])
+                                away_score = int(period['awayScore'])
+                                period_score.append([periodIndex, home_score, away_score])
+                                if periodIndex == '第一盘' or periodIndex == '第二盘' or periodIndex == '第三盘' or periodIndex == '第四盘' \
+                                        or periodIndex == '第五盘' or periodIndex == '第六盘' or periodIndex == '第七盘':
+                                    total_homescore += home_score
+                                    total_awayscore += away_score
+                                if home_score > away_score:
+                                    set_homescore += 1
+                                elif home_score < away_score:
+                                    set_awayscore += 1
+                                else:
+                                    pass
+                    period_score.append(['总分', total_homescore, total_awayscore])
+                    period_score.append(['局比分', set_homescore, set_awayscore])
+                    match_result_list.append(period_score)
 
-                elif sportName == '排球':
-                    match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
-                                         matchInfo['homeTeamName'], matchInfo['awayTeamName'],
-                                         matchStatus_dic[matchInfo['matchStatus']]]
-                    if 'periodScores' in matchInfo:
-                        period_score = []
+            elif sportName == '棒球':
+                match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
+                                     matchInfo['homeTeamName'], matchInfo['awayTeamName'],
+                                     matchStatus_dic[matchInfo['matchStatus']]]
+                if 'periodScores' in matchInfo:
+                    period_score = []
 
-                        total_homescore = 0
-                        total_awayscore = 0
-                        set_homescore = 0
-                        set_awayscore = 0
-                        for periodIndex in ['第一盘', '第二盘', '第三盘', '第四盘', '第五盘']:
-                            for period in matchInfo['periodScores']:
-                                if period['periodDescription'] == periodIndex:
-                                    home_score = int(period['homeScore'])
-                                    away_score = int(period['awayScore'])
-                                    period_score.append([periodIndex, home_score, away_score])
-                                    if periodIndex == '第一盘' or periodIndex == '第二盘' or periodIndex == '第三盘' or periodIndex == '第四盘' or periodIndex == '第五盘':
-                                        total_homescore += home_score
-                                        total_awayscore += away_score
-                                    if home_score > away_score:
-                                        set_homescore += 1
-                                    elif home_score < away_score:
-                                        set_awayscore += 1
-                                    else:
-                                        pass
-                        period_score.append(['总分', total_homescore, total_awayscore])
-                        period_score.append(['局比分', set_homescore, set_awayscore])
-                        match_result_list.append(period_score)
+                    first_five_homescore = 0
+                    first_five_awayscore = 0
+                    total_homescore = 0
+                    total_awayscore = 0
+                    for periodIndex in ['第1局', '第2局', '第3局', '第4局', '第5局', '第6局', '第7局', '第8局', '第9局', '加时']:
+                        for period in matchInfo['periodScores']:
+                            if period['periodDescription'] == periodIndex:
+                                home_score = int(period['homeScore'])
+                                away_score = int(period['awayScore'])
+                                period_score.append([periodIndex, home_score, away_score])
+                                if periodIndex == '第1局' or periodIndex == '第2局' or periodIndex == '第3局' or periodIndex == '第4局' or periodIndex == '第5局':
+                                    first_five_homescore += home_score
+                                    first_five_awayscore += away_score
+                                if periodIndex == '第1局' or periodIndex == '第2局' or periodIndex == '第3局' or periodIndex == '第4局' or periodIndex == '第5局' \
+                                        or periodIndex == '第6局' or periodIndex == '第7局' or periodIndex == '第8局' or periodIndex == '第9局':
+                                    total_homescore += home_score
+                                    total_awayscore += away_score
+                    period_score.insert(9, ['前五局', first_five_homescore, first_five_awayscore])
+                    period_score.append(['总分', total_homescore, total_awayscore])
+                    match_result_list.append(period_score)
 
-                elif sportName == '羽毛球':
-                    match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
-                                         matchInfo['homeTeamName'], matchInfo['awayTeamName'],
-                                         matchStatus_dic[matchInfo['matchStatus']]]
-                    if 'periodScores' in matchInfo:
-                        period_score = []
+            elif sportName == '冰上曲棍球':
+                match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
+                                     matchInfo['homeTeamName'], matchInfo['awayTeamName'],
+                                     matchStatus_dic[matchInfo['matchStatus']]]
+                if 'periodScores' in matchInfo:
+                    period_score = []
 
-                        total_homescore = 0
-                        total_awayscore = 0
-                        set_homescore = 0
-                        set_awayscore = 0
-                        for periodIndex in ['第一盘', '第二盘', '第三盘']:
-                            for period in matchInfo['periodScores']:
-                                if period['periodDescription'] == periodIndex:
-                                    home_score = int(period['homeScore'])
-                                    away_score = int(period['awayScore'])
-                                    period_score.append([periodIndex, home_score, away_score])
-                                    if periodIndex == '第一盘' or periodIndex == '第二盘' or periodIndex == '第三盘':
-                                        total_homescore += home_score
-                                        total_awayscore += away_score
-                                    if home_score > away_score:
-                                        set_homescore += 1
-                                    elif home_score < away_score:
-                                        set_awayscore += 1
-                                    else:
-                                        pass
-                        period_score.append(['总分', total_homescore, total_awayscore])
-                        period_score.append(['局比分', set_homescore, set_awayscore])
-                        match_result_list.append(period_score)
+                    total_homescore = 0
+                    total_awayscore = 0
+                    for periodIndex in ['第一节', '第二节', '第三节', '加时']:
+                        for period in matchInfo['periodScores']:
+                            if period['periodDescription'] == periodIndex:
+                                home_score = int(period['homeScore'])
+                                away_score = int(period['awayScore'])
+                                period_score.append([periodIndex, home_score, away_score])
+                                if periodIndex == '第一节' or periodIndex == '第二节' or periodIndex == '第三节':
+                                    total_homescore += home_score
+                                    total_awayscore += away_score
+                    period_score.append(['总分', total_homescore, total_awayscore])
+                    match_result_list.append(period_score)
 
-                elif sportName == '乒乓球':
-                    match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
-                                         matchInfo['homeTeamName'], matchInfo['awayTeamName'],
-                                         matchStatus_dic[matchInfo['matchStatus']]]
-                    if 'periodScores' in matchInfo:
-                        period_score = []
-
-                        total_homescore = 0
-                        total_awayscore = 0
-                        set_homescore = 0
-                        set_awayscore = 0
-                        for periodIndex in ['第一盘', '第二盘', '第三盘', '第四盘', '第五盘', '第六盘', '第七盘']:
-                            for period in matchInfo['periodScores']:
-                                if period['periodDescription'] == periodIndex:
-                                    home_score = int(period['homeScore'])
-                                    away_score = int(period['awayScore'])
-                                    period_score.append([periodIndex, home_score, away_score])
-                                    if periodIndex == '第一盘' or periodIndex == '第二盘' or periodIndex == '第三盘' or periodIndex == '第四盘' \
-                                            or periodIndex == '第五盘' or periodIndex == '第六盘' or periodIndex == '第七盘':
-                                        total_homescore += home_score
-                                        total_awayscore += away_score
-                                    if home_score > away_score:
-                                        set_homescore += 1
-                                    elif home_score < away_score:
-                                        set_awayscore += 1
-                                    else:
-                                        pass
-                        period_score.append(['总分', total_homescore, total_awayscore])
-                        period_score.append(['局比分', set_homescore, set_awayscore])
-                        match_result_list.append(period_score)
-
-                elif sportName == '棒球':
-                    match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
-                                         matchInfo['homeTeamName'], matchInfo['awayTeamName'],
-                                         matchStatus_dic[matchInfo['matchStatus']]]
-                    if 'periodScores' in matchInfo:
-                        period_score = []
-
-                        first_five_homescore = 0
-                        first_five_awayscore = 0
-                        total_homescore = 0
-                        total_awayscore = 0
-                        for periodIndex in ['第1局', '第2局', '第3局', '第4局', '第5局', '第6局', '第7局', '第8局', '第9局', '加时']:
-                            for period in matchInfo['periodScores']:
-                                if period['periodDescription'] == periodIndex:
-                                    home_score = int(period['homeScore'])
-                                    away_score = int(period['awayScore'])
-                                    period_score.append([periodIndex, home_score, away_score])
-                                    if periodIndex == '第1局' or periodIndex == '第2局' or periodIndex == '第3局' or periodIndex == '第4局' or periodIndex == '第5局':
-                                        first_five_homescore += home_score
-                                        first_five_awayscore += away_score
-                                    if periodIndex == '第1局' or periodIndex == '第2局' or periodIndex == '第3局' or periodIndex == '第4局' or periodIndex == '第5局' \
-                                            or periodIndex == '第6局' or periodIndex == '第7局' or periodIndex == '第8局' or periodIndex == '第9局':
-                                        total_homescore += home_score
-                                        total_awayscore += away_score
-                        period_score.insert(9, ['前五局', first_five_homescore, first_five_awayscore])
-                        period_score.append(['总分', total_homescore, total_awayscore])
-                        match_result_list.append(period_score)
-
-                elif sportName == '冰上曲棍球':
-                    match_result_list = [matchInfo['_id'], match_time, matchInfo['tournamentName'],
-                                         matchInfo['homeTeamName'], matchInfo['awayTeamName'],
-                                         matchStatus_dic[matchInfo['matchStatus']]]
-                    if 'periodScores' in matchInfo:
-                        period_score = []
-
-                        total_homescore = 0
-                        total_awayscore = 0
-                        for periodIndex in ['第一节', '第二节', '第三节', '加时']:
-                            for period in matchInfo['periodScores']:
-                                if period['periodDescription'] == periodIndex:
-                                    home_score = int(period['homeScore'])
-                                    away_score = int(period['awayScore'])
-                                    period_score.append([periodIndex, home_score, away_score])
-                                    if periodIndex == '第一节' or periodIndex == '第二节' or periodIndex == '第三节':
-                                        total_homescore += home_score
-                                        total_awayscore += away_score
-                        period_score.append(['总分', total_homescore, total_awayscore])
-                        match_result_list.append(period_score)
-
-                matchResult_list.append(match_result_list)
+            matchResult_list.append(match_result_list)
         print(matchResult_list)
         return matchResult_list
 
@@ -5294,7 +5284,8 @@ class DbQuery(object):
 
 if __name__ == "__main__":
 
-    mongo_info = ['app', '123456', '192.168.10.120', '27017']
+    # mongo_info = ['app', '123456', '192.168.10.120', '27017']   # 120内网 MongoDB
+    mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']    # mde环境 MongoDB
     db = DbQuery(mongo_info)  # 内网
     # db = DbQuery(['admin', 'LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A', '35.229.139.160', '37017'])  # 外网
     # print(db.get_league_name_list_sql("足球"))
@@ -5306,8 +5297,8 @@ if __name__ == "__main__":
 
     # featuredevents_detail = db.get_featured_events_detail_sql()
     # live_data = db.get_live_list_sql()
-    sportId = db.get_sportId_sql(sportName='冰上曲棍球')
-    print(sportId)
+    # sportId = db.get_sportId_sql(sportName='冰上曲棍球')
+    # print(sportId)
     # sportCategoryId = db.get_sportCategoryId_sql(sportName='足球')
     # tournamentId = db.get_tournamentId_sql(tournamentName='德国超级杯')
 
@@ -5333,7 +5324,7 @@ if __name__ == "__main__":
 
     # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
     # bg = db.Bfbackground_new_matchResult_sql(sportName="足球", offset='-1')          # 信用网管理后台/总台/现金网管理后台-新赛果查询
-    # bg = db.new_matchResult_sql(sportName="足球", offset='-13')  # 信用网管理后台/总台/现金网管理后台-新赛果查询        最新
+    result = db.query_matchResult_sql(sportName="网球", match_id='sr:match:34312197')  # 赛果查询
 
     # match_result = db.match_result_sql(sportId='1')
     # teamID = db.get_teamId_sql(teamName='FK Blansko')
