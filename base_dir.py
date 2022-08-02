@@ -70,6 +70,8 @@ data_source_url_new_t = os.path.join(excel_dir,'credit_data_new\ReportManagement
 csv_url_data_b = os.path.join(excel_dir,'credit_data_new\ReportManagement','dataSource_b.csv')
 data_source_url_b = os.path.join(excel_dir,'credit_data_new\ReportManagement','dataSource_b.yaml')
 data_source_url_new_b = os.path.join(excel_dir,'credit_data_new\ReportManagement','dataSource_case_b.yaml')
+# 数据源对账报表-注单详情
+data_source_url_d = os.path.join(excel_dir,'credit_data_new\ReportManagement','dataSource_d.yaml')
 
 # 每日盈亏报表 - 列表详情
 csv_url_daily = os.path.join(excel_dir,'credit_data_new\ReportManagement','dailyReport.csv')
