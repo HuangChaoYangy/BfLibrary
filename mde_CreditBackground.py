@@ -3233,14 +3233,14 @@ class CreditBackGround(object):
                     return orderBanner_list
 
             elif queryType == 4:
-                params = {"orderNo":'XNZTeEdUi4W2' }
+                params = {"orderNo":'XNWZQBgLcwLs' }
                 rsp = self.session.get(order_url, headers=head, params=params)
                 odds_dic = {"1":"欧洲盘", "2":"香港盘"}
                 if rsp.json()['message'] != 'OK':
                     print("查询数据源对账报表-注单详情失败,原因：" + rsp.json()["message"])
                 else:
                     if not rsp.json()['data']:
-                        orderDetail_list = []
+                        orderDetail = []
                     else:
                         orderDetail_list = []
                         order_dic = rsp.json()['data']
@@ -3252,13 +3252,13 @@ class CreditBackGround(object):
                                 outcome_name = outcomeName.replace(')', '')
                             orderDetail_list.append([order_dic['userName'], order_dic['createTime'], order_dic['orderNo'], order_dic['settlementTime'], order_dic['statusName'],
                                                      order_dic['betType'], [item['tournamentName'], item['homeTeamName'] + ' Vs ' +item['awayTeamName'],item['producer'],
-                                                     item['marketName'],outcome_name,odds_dic[item['oddsType']],item['odds'],item['creditOdds'], item['matchResult'],
-                                                     item['settlementResult'], item['matchTime']],
+                                                     item['marketName'],outcome_name, item['betScore'], odds_dic[item['oddsType']],float(item['odds']),float(item['creditOdds']),
+                                                     item['matchResult'],item['settlementResult'], item['matchTime']],
                                                      order_dic['sportName'], order_dic['settlementResult'],order_dic['betAmount'],order_dic['accountFinalWinOrLose'],
-                                                     order_dic['handicapFinalWinOrLose'],order_dic['accountFinalWinOrLose']])
-                    orderDetail = self.cm.merge_compelx_02(new_lList=orderDetail_list)
+                                                     order_dic['handicapFinalWinOrLose']])
+                        orderDetail = self.cm.merge_compelx_02(new_lList=orderDetail_list)
 
-                    return orderDetail
+                        return orderDetail
 
             else:
                 raise AssertionError('抱歉,暂不支持该种类型')

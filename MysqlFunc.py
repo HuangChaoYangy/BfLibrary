@@ -4075,12 +4075,12 @@ class MysqlQuery(MysqlFunc):
         return order_data
 
 
-    def get_client_orderNo_matchId_sql(self, user_name='', order_no='', offset=(-4,0)):
+    def query_orderInfo_by_match_result(self, user_name='', order_no='', offset=()):
         '''
-        查询已结算注单info,用于查询赛果比分          /// 修改于2022.05.21
-        :param user_name: 用户账号,必填
-        :param order_no: 注单号,必填
-        :param offset: 日期参数,必填
+        查询已结算注单info,用于查询赛果比分          /// 修改于2022.08.02
+        :param user_name: 用户账号,非必填
+        :param order_no: 注单号,非必填
+        :param offset: 日期参数,非必填
         :return:
         '''
         if not offset:
@@ -4095,9 +4095,14 @@ class MysqlQuery(MysqlFunc):
             orderNo = f"and a.order_no='{order_no}'"
         else:
             orderNo = ""
+        if user_name:
+            userName = f"and a.user_name='{order_no}'"
+        else:
+            userName = ""
 
-        sql_str = f"SELECT a.order_no as '注单号',a.sport_category_id as '体育类型',b.match_id as '比赛ID',b.market_id as '盘口ID',specifier as '亚盘口' FROM o_account_order a " \
-                          f"JOIN o_account_order_match b ON a.order_no=b.order_no WHERE `status`=2 AND a.user_name='{user_name}' {orderNo} {selectTime}"
+        sql_str = f"SELECT a.order_no as '注单号',a.sport_id as '体育类型',b.match_id as '比赛ID',b.market_id as '盘口ID',specifier as '亚盘口' FROM o_account_order a " \
+                          f"JOIN o_account_order_match b ON a.order_no=b.order_no WHERE `status`=2 {userName} {orderNo} {selectTime}"
+        print(sql_str)
         order_data = list(self.query_data(sql_str, db_name="bfty_credit"))
 
         for index in range(len(order_data)):
@@ -4839,9 +4844,10 @@ class MysqlQuery(MysqlFunc):
             rtn = list(self.query_data(sql_str, database_name))
 
             if rtn == []:
-                dataSourceReport_list=[]
+                dataSourceReport=[]
             else:
                 dataSourceReport_list = []
+                dataSourceReport = []
                 for item in rtn:
                     ctime = item[1]
                     create_time = ctime.strftime("%Y-%m-%d %H:%M:%S")
@@ -4854,7 +4860,7 @@ class MysqlQuery(MysqlFunc):
                                                   float(item[20]), float(item[21]), float(item[22])])
                     dataSourceReport = self.cf.merge_compelx_02(new_lList=dataSourceReport_list)
 
-            return dataSourceReport,sql_str
+                return dataSourceReport,sql_str
 
         else:
             raise AssertionError('暂不支持该类型')
@@ -10143,8 +10149,8 @@ if __name__ == "__main__":
 
     # data = mysql.get_order_marketid_and_specifier_sql(offset=-1)
     # data = mysql.get_client_orderNo_marketid_and_specifier_sql(user_name="USD_TEST02",offset=-3)
-    # data = mysql.get_client_orderNo_matchId_sql(user_name="a0b1c2b301", order_no='XB4aCmTZhhvt', offset=(-4,0))
-    # print(data)
+    data = mysql.query_orderInfo_by_match_result(user_name="", order_no='XNwvKuW9gsFn', offset=())
+    print(data)
     # data = mysql.get_settled_order_matchid_sql()
 
 
@@ -10199,9 +10205,9 @@ if __name__ == "__main__":
     # print(settled)
 
     # agentLine = mysql.credit_agentLineManagement_sql(agentName="aw", agentAccount="")
-    data = mysql.credit_dataSourceReport(expData={"betStartTime":"-30", "betEndTime":"-0", "settlementStartTime":"-30", "settlementEndTime":"-0", "userName":"","orderNo":"",
-                        "sportId":['sr:sport:3','sr:sport:4'], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=5)[0]
-    print(data)
+    # data = mysql.credit_dataSourceReport(expData={"betStartTime":"-30", "betEndTime":"-0", "settlementStartTime":"-30", "settlementEndTime":"-0", "userName":"","orderNo":"",
+    #                     "sportId":['sr:sport:3','sr:sport:4'], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=5)[0]
+    # print(data)
     # for item in data:
     #     print(type(item))
     # data = mysql.credit_dailyReport_query_sql(create_time=(-6,0), queryType=2)
