@@ -1,0 +1,33 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /dataSourceCheckReport/getOrderDetailsByOrderNo
+    method: get
+  data:
+    userName: ''
+    orderNo: ''
+    sportId: []
+    settlementResult: []
+    status: []
+    betType: ''
+    betStartTime: '-6'
+    betEndTime: '0'
+    settlementStartTime: '-6'
+    settlementEndTime: '0'
+    sortBy: ''
+    sortIndex: ''
+    sortParameter: ''
+    title: 管理后台-总台-数据源对账报表-注单详情,按投注时间和结算时间查询近30天数据
+  resp:
+    userName: ''
+    orderNo: ''
+    sportId: ''
+    settlementResult: []
+    status: []
+    betType: ''
+    betStartTime: '-6'
+    betEndTime: '0'
+    settlementStartTime: '-6'
+    settlementEndTime: '0'
+    sortBy: ''
+    sortIndex: ''
+    sortParameter: ''
