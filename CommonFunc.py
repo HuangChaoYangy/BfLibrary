@@ -168,10 +168,27 @@ class CommonFunc(object):
             return now.strftime("%Y-%m-%d")
         elif time_type == "currenttime":
             return now.strftime("%Y-%m-%d %H:%M:%S")
+        elif time_type == "now_month_start":      # 当月第一天
+            year = now.year
+            month = now.month
+            now_month_start = datetime.date(year, month, 1).strftime("%Y-%m-%d")
+            return now_month_start
+        elif time_type == "now_month_end":        # 当月最后一天
+            year = now.year
+            month = now.month
+            last_day = calendar.monthrange(year, month)[1]
+            now_month_end = datetime.date(year, month, last_day).strftime("%Y-%m-%d")
+            return now_month_end
         else:
             raise AssertionError("【ERR】传参错误")
 
-    def get_day_range(self, date_type="月", diff=0, timezone="shanghai"):
+    def getMonthFirstDayAndLastDay(self, year=None, month=None):
+        if year:
+            year = int(year)
+        else:
+            year = datetime.date.today().year
+
+    def get_day_range(self, date_type="月", diff=0, timezone="UTC"):
         """
         获取年、月的起始和结束日期，不含小时分钟秒
         :param date_type: 年|月|周，默认为月
@@ -200,12 +217,12 @@ class CommonFunc(object):
             raise AssertionError("类型只能为年月，实际传参为： %s" % date_type)
         return start, end
 
-    def get_md_day_range(self, date_type="月", diff=-1, timezone="shanghai"):
+    def get_md_day_range(self, date_type="月", diff=-1, timezone="US/Eastern"):
         """
         获取美东时区的年、月的起始和结束日期，不含小时分钟秒
         :param date_type: 年|月|周，默认为月
         :param diff:之后传正值，之前传负值
-        :param timezone: (default)shanghai|UTC
+        :param timezone: (default)US/Eastern|UTC
         :return: 该月起始及最后一天
         """
         diff = self.get_md_diff_unit(diff)
@@ -1022,7 +1039,8 @@ if __name__ == "__main__":
     cf = CommonFunc()
     # print(cf.get_relative_date('1', '2', '3'))
     # print(cf.get_specify_date())
-    # print(cf.get_day_range("年", 1))
+    # print(cf.get_day_range("月", 1))
+    print(cf.get_md_day_range("月", 1))
     # cf.get_relative_time()
     # now_time = arrow.now()
     # l1 = [806000000.00, 828000000.00, 367837.82, 359595.68, 259836.94, 7113.14, -99758.74, 52.62, -99706.12]
@@ -1053,5 +1071,5 @@ if __name__ == "__main__":
     # data = cf.tuple_to_list(tuple_in=[('XHBWcd8LzVE7', 3, '3_4_1', 1, '1.220'), ('XHBWcd8LzVE7', 3, '3_4_1', 2, '1.220'), ('XHBWcd8LzVE7', 3, '3_4_1', 1, '1.100')])
     # print(data)
 
-    list_data = [['t0t1t2t3y4/y4', 'y4', 'XMqWr374u44B', '2022-07-22 04:35:41', '冰球', '串关', ['澳大利亚冰球联盟', '堪培拉勇士 Vs 纽卡斯尔北极星', '早盘', '让球', '-2.5', '堪培拉勇士 ', 1.99, '欧洲盘', '2022-07-24 03:00:00'], '2022-07-22 04:36:39', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 3.28, 80.0, -80.0, 80.0, 0.29, 23.2, 0, 0.0, 23.2, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.11, 8.8, 0.0, 0.0, 8.8, -80.0, 0.0, 0.0, -80.0], ['t0t1t2t3y4/y4', 'y4', 'XMqWr374u44B', '2022-07-22 04:35:41', '冰球', '串关', ['澳大利亚冰球联盟', '墨尔本野马 Vs 墨尔本冰', '早盘', '让球', '+3.5', '墨尔本冰 ', 1.65, '欧洲盘', '2022-07-23 03:00:00'], '2022-07-22 04:36:39', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 3.28, 80.0, -80.0, 80.0, 0.29, 23.2, 0, 0.0, 23.2, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.11, 8.8, 0.0, 0.0, 8.8, -80.0, 0.0, 0.0, -80.0]]
-    print(cf.merge_compelx_02(new_lList=list_data))
+    # list_data = [['t0t1t2t3y4/y4', 'y4', 'XMqWr374u44B', '2022-07-22 04:35:41', '冰球', '串关', ['澳大利亚冰球联盟', '堪培拉勇士 Vs 纽卡斯尔北极星', '早盘', '让球', '-2.5', '堪培拉勇士 ', 1.99, '欧洲盘', '2022-07-24 03:00:00'], '2022-07-22 04:36:39', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 3.28, 80.0, -80.0, 80.0, 0.29, 23.2, 0, 0.0, 23.2, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.11, 8.8, 0.0, 0.0, 8.8, -80.0, 0.0, 0.0, -80.0], ['t0t1t2t3y4/y4', 'y4', 'XMqWr374u44B', '2022-07-22 04:35:41', '冰球', '串关', ['澳大利亚冰球联盟', '墨尔本野马 Vs 墨尔本冰', '早盘', '让球', '+3.5', '墨尔本冰 ', 1.65, '欧洲盘', '2022-07-23 03:00:00'], '2022-07-22 04:36:39', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 3.28, 80.0, -80.0, 80.0, 0.29, 23.2, 0, 0.0, 23.2, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.11, 8.8, 0.0, 0.0, 8.8, -80.0, 0.0, 0.0, -80.0]]
+    # print(cf.merge_compelx_02(new_lList=list_data))
