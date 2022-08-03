@@ -178,6 +178,22 @@ class MysqlQuery(MysqlFunc):
             return now_month.strftime("%Y-%m")
         elif time_type == "year":
             return now_year.strftime("%Y")
+        elif time_type == "now_month_start":      # 当月第一天
+            year = now.year
+            month = now.month
+            now_month_start = datetime.date(year, month, 1).strftime("%Y-%m-%d")
+            return now_month_start
+        elif time_type == "now_month_end":        # 当月最后一天
+            year = now.year
+            month = now.month
+            last_day = calendar.monthrange(year, month)[1]
+            now_month_end = datetime.date(year, month, last_day).strftime("%Y-%m-%d")
+            return now_month_end
+        elif time_type == "now_month_day":        # 根据day_diff指定查询当月某一天
+            year = now.year
+            month = now.month
+            nnow_month_day = datetime.date(year, month, day=day_diff).strftime("%Y-%m-%d")
+            return nnow_month_day
         else:
             raise AssertionError("【ERR】传参错误")
 
