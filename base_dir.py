@@ -30,6 +30,16 @@ test_data_path = os.path.join(excel_dir,'test_data','test_oddsData.yaml')
 client_token_url = os.path.join(excel_dir,'client_data','client_token.yaml')
 client_user_url = os.path.join(excel_dir,'client_data','client_user.yaml')
 
+                                        # [ 总台-首页 ]
+f_winlose_url = os.path.join(excel_dir,'credit_data_new\FrontPage','f_win_or_lose.yaml')
+f_credit_url = os.path.join(excel_dir,'credit_data_new\FrontPage','f_credit.yaml')
+f_betInfo_url = os.path.join(excel_dir,'credit_data_new\FrontPage','f_betInfo.yaml')
+f_agent_url = os.path.join(excel_dir,'credit_data_new\FrontPage','f_agent.yaml')
+f_betAmount_url = os.path.join(excel_dir,'credit_data_new\FrontPage','f_betAmount.yaml')
+f_final_win_lose_url = os.path.join(excel_dir,'credit_data_new\FrontPage','f_final_win_lose.yaml')
+f_order_win_lose_url = os.path.join(excel_dir,'credit_data_new\FrontPage','f_order_win_lose.yaml')
+f_commission_url = os.path.join(excel_dir,'credit_data_new\FrontPage','f_commission.yaml')
+
                                         # [ 总台-代理管理 ]
 # 总代结账
 csv_url_uncheck = os.path.join(excel_dir,'credit_data_new\AgentManagement','uncheck.csv')
