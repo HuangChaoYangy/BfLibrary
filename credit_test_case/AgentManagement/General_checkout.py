@@ -64,52 +64,48 @@ class Test_uncheckList:
             Bf_log('uncheckList').info(f'执行sql:{sql}')
         expectResult = MysqlQuery(mysql_info, mongo_info).credit_uncheckList_query(expData=expData)[0]
 
-        # 校验接口数据和SQL数据的长度
-        if len(actualResult) == len(expectResult):
-            if actualResult != [] or expectResult != []:
-                for index1, item1 in enumerate(actualResult):
-                    for index2, item2 in enumerate(expectResult):
-                        if item1[0] == item2[0]:     # 判断账号/登入账号是否相等,若相等,则校验该条数据
-                            new_item1 = []
-                            new_item2 = []
-                            for aip_data in item1[3:]:
-                                if aip_data == None or aip_data == 0:
-                                    api_result = 0
-                                else:
-                                    api_result = float(aip_data)
-                                new_item1.append(api_result)
-                            index = 0
-                            for item in item1[:3]:
-                                new_item1.insert(index, item)
-                                index += 1
-                            for sql_data in item2[3:]:
-                                if sql_data == None or sql_data == 0:
-                                    sql_result = 0
-                                else:
-                                    sql_result = float(sql_data)
-                                new_item2.append(sql_result)
-                            index = 0
-                            for item in item2[:3]:
-                                new_item2.insert(index, item)
-                                index += 1
-
-                            # 判断两个list的值是否一致,并且回写入excel
-                            if new_item1 == new_item2:
-                                with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
-                                    Bf_log('uncheckList').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
-
+        # 因为结账后查询为空,所有不去校验长度
+        if actualResult != [] or expectResult != []:
+            for index1, item1 in enumerate(actualResult):
+                for index2, item2 in enumerate(expectResult):
+                    if item1[0] == item2[0]:     # 判断账号/登入账号是否相等,若相等,则校验该条数据
+                        new_item1 = []
+                        new_item2 = []
+                        for aip_data in item1[3:]:
+                            if aip_data == None or aip_data == 0:
+                                api_result = 0
                             else:
-                                with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
-                                    Bf_log('uncheckList').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
+                                api_result = float(aip_data)
+                            new_item1.append(api_result)
+                        index = 0
+                        for item in item1[:3]:
+                            new_item1.insert(index, item)
+                            index += 1
+                        for sql_data in item2[3:]:
+                            if sql_data == None or sql_data == 0:
+                                sql_result = 0
+                            else:
+                                sql_result = float(sql_data)
+                            new_item2.append(sql_result)
+                        index = 0
+                        for item in item2[:3]:
+                            new_item2.insert(index, item)
+                            index += 1
 
-                            assert new_item1 == new_item2
+                        # 判断两个list的值是否一致,并且回写入excel
+                        if new_item1 == new_item2:
+                            with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
+                                Bf_log('uncheckList').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
 
-            else:
-                with allure.step(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过'):
-                    Bf_log('uncheckList').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
+                        else:
+                            with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
+                                Bf_log('uncheckList').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
+
+                        assert new_item1 == new_item2
 
         else:
-            raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actualResult)},sql为{len(expectResult)}")
+            with allure.step(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过'):
+                Bf_log('uncheckList').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
 
 
 
