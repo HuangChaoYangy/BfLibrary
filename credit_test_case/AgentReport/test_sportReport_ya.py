@@ -41,7 +41,7 @@ class Test_sportReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_sport, yaml_file=sport_url, new_yaml_file=sport_url_new)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new, isAll=True)[0]['request']
-    @pytest.mark.skip(reason="调试代码,暂不执行")
+    # @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-球类报表')
     def test_sportReport(self, inBody, expData, url=url_data):
@@ -109,7 +109,7 @@ class Test_sportReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_sport_m, yaml_file=sport_url_m, new_yaml_file=sport_url_new_m)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new_m, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new_m, isAll=True)[0]['request']
-    @pytest.mark.skip(reason="调试代码,暂不执行")
+    # @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-球类报表-盘口详情')
     def test_sportReportMarket(self, inBody, expData, url=url_data):
@@ -210,7 +210,7 @@ class Test_sportReport_ya:
             if marketId != "串关":
                 begin = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=int(inBody['begin']))
                 end = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=int(inBody['end']))
-                request_body = {"begin": begin, "end": end, "dateType": inBody['dateType'], "page": 1, "limit": 200,
+                request_body = {"begin": begin, "end": end, "dateType": inBody['dateType'], "page": 1, "limit": 200, "singleBet":True,
                                "sportId": inBody['sportId'], "marketId": marketId, "account": "", "tournamentId": None,"matchId": None}
 
                 total_title = f"根据球类：'{sport_name[inBody['sportId']]}', 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"

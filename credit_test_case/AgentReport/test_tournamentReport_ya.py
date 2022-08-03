@@ -143,7 +143,7 @@ class Test_tournamentReport_ya:
             if tournamentId != "串关":
                 begin = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=int(inBody['begin']))
                 end = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=int(inBody['end']))
-                request_body = {"begin": begin, "end": end, "dateType": inBody['dateType'], "page": 1, "limit": 200,
+                request_body = {"begin": begin, "end": end, "dateType": inBody['dateType'], "page": 1, "limit": 200, "singleBet":True,
                                "sportId": inBody['sportId'], "marketId": None, "account": "", "tournamentId": tournamentId,"matchId": None}
 
                 total_title = f"根据球类：'{sport_name[inBody['sportId']]}', 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
@@ -282,7 +282,7 @@ class Test_tournamentReport_ya:
             if tournamentId == "串关":
                 begin = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=int(inBody['begin']))
                 end = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=int(inBody['end']))
-                request_body = {"begin": begin, "end": end, "dateType": inBody['dateType'], "page": 1, "limit": 200,
+                request_body = {"begin": begin, "end": end, "dateType": inBody['dateType'], "page": 1, "limit": 200, "singleBet":True,
                                 "sportId": inBody['sportId'], "marketId": None, "account": "", "tournamentId": tournamentId,"matchId": None}
 
                 total_title = f"根据球类：'{sport_name[inBody['sportId']]}', 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"

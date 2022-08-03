@@ -278,7 +278,7 @@ class Test_matchReport_ya:
             for marketId in market_id_list:
                 begin = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=int(inBody['begin']))
                 end = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=int(inBody['end']))
-                request_body = {"begin":begin,"end":end,"dateType":inBody['dateType'],"page":1,"limit":200,"sportId":inBody['sportId'],
+                request_body = {"begin":begin,"end":end,"dateType":inBody['dateType'],"page":1,"limit":200,"sportId":inBody['sportId'],"singleBet":True,
                                 "marketId":marketId,"account":None,"tournamentId":None,"matchId":match_id}
 
                 total_title = f"根据球类：'{sport_name[inBody['sportId']]}',查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
@@ -418,7 +418,7 @@ class Test_matchReport_ya:
         # 遍历串关的注单详情
         begin = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=int(inBody['begin']))
         end = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=int(inBody['end']))
-        request_body = {"begin":begin,"end":end,"dateType":inBody['dateType'],"page":1,"limit":200,"sportId":inBody['sportId'],
+        request_body = {"begin":begin,"end":end,"dateType":inBody['dateType'],"page":1,"limit":200,"sportId":inBody['sportId'],"singleBet":True,
                         "marketId":None,"account":None,"tournamentId":"串关","matchId":"串关"}
 
         total_title = f"根据球类：'{sport_name[inBody['sportId']]}',查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"

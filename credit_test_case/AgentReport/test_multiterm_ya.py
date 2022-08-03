@@ -136,7 +136,7 @@ class Test_multitermReport:
         for account in account_id_list:  # 遍历会员账号列表
             begin = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=inBody['begin'])
             end = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=inBody['end'])
-            request_body = {"begin": begin, "end": end, "dateType": inBody['dateType'], "page": 1, "limit": 200,
+            request_body = {"begin": begin, "end": end, "dateType": inBody['dateType'], "page": 1, "limit": 200, "singleBet":True,
                            "sportId": "", "marketId": "串关", "account": account, "tournamentId": None,"matchId": None}
 
             title = f"根据会员账号：'{account}' 查看注单详情, 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
