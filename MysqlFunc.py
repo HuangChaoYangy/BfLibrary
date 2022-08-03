@@ -154,7 +154,10 @@ class MysqlQuery(MysqlFunc):
 
     @staticmethod
     def get_current_time_for_client(time_type="now", day_diff=0):
-        now = arrow.now().shift(days=+day_diff)
+        now = arrow.now().shift(days=+day_diff)               # 当日 + -
+        now_week = arrow.now().shift(weeks=+day_diff)         # 当周 + -
+        now_month = arrow.now().shift(months=+day_diff)       # 当月 + -
+        now_year = arrow.now().shift(years=+day_diff)         # 当年 + -
         if time_type == "now":
             return now.strftime("%Y-%m-%dT%H:%M:%S+07:00")
         elif time_type == "begin":
@@ -169,6 +172,12 @@ class MysqlQuery(MysqlFunc):
             return now.strftime("%Y-%m-%d")
         elif time_type == "etime":
             return now.strftime("%Y-%m-%d")
+        elif time_type == "week":
+            return now_week.strftime("%Y-%m-%d")
+        elif time_type == "month":
+            return now_month.strftime("%Y-%m")
+        elif time_type == "year":
+            return now_year.strftime("%Y")
         else:
             raise AssertionError("【ERR】传参错误")
 
@@ -224,12 +233,12 @@ class MysqlQuery(MysqlFunc):
             diff_unit -= 1
         return diff_unit
 
-    def get_md_day_range(self, date_type="月", diff=-1, timezone="shanghai"):
+    def get_md_day_range(self, date_type="月", diff=-1, timezone="US/Eastern"):
         """
         获取美东时区的年、月的起始和结束日期，不含小时分钟秒      ///    修改于2021.07.30
         :param date_type: 年|月|周，默认为月
         :param diff:之后传正值，之前传负值           -1 代表以美东时间查询前一天, 0 代表以美东时间查询当天; 例：在8月1号柬时间早上9点查询当月的数据,实际美东时间是7月30号,所以查询的是7月的数据
-        :param timezone: (default)shanghai|UTC
+        :param timezone: (default)US/Eastern|UTC
         :return: 该月起始及最后一天
         """
         diff = self.get_md_diff_unit(diff)
@@ -10149,7 +10158,8 @@ if __name__ == "__main__":
 
     # data = mysql.get_order_marketid_and_specifier_sql(offset=-1)
     # data = mysql.get_client_orderNo_marketid_and_specifier_sql(user_name="USD_TEST02",offset=-3)
-    data = mysql.query_orderInfo_by_match_result(user_name="", order_no='XNwvKuW9gsFn', offset=())
+    # data = mysql.query_orderInfo_by_match_result(user_name="", order_no='XNwvKuW9gsFn', offset=())
+    data = mysql.get_current_time_for_client(time_type="month", day_diff=-1)
     print(data)
     # data = mysql.get_settled_order_matchid_sql()
 

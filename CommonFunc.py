@@ -153,7 +153,10 @@ class CommonFunc(object):
 
     @staticmethod
     def get_current_time_for_client(time_type="now", day_diff=0):
-        now = arrow.now().shift(days=+day_diff)
+        now = arrow.now().shift(days=+day_diff)               # 当日 + -
+        now_week = arrow.now().shift(weeks=+day_diff)         # 当周 + -
+        now_month = arrow.now().shift(months=+day_diff)       # 当月 + -
+        now_year = arrow.now().shift(years=+day_diff)         # 当年 + -
         if time_type == "now":
             return now.strftime("%Y-%m-%dT%H:%M:%S+07:00")
         elif time_type == "begin":
@@ -179,6 +182,12 @@ class CommonFunc(object):
             last_day = calendar.monthrange(year, month)[1]
             now_month_end = datetime.date(year, month, last_day).strftime("%Y-%m-%d")
             return now_month_end
+        elif time_type == "week":
+            return now_week.strftime("%Y-%m-%d")
+        elif time_type == "month":
+            return now_month.strftime("%Y-%m")
+        elif time_type == "year":
+            return now_year.strftime("%Y")
         else:
             raise AssertionError("【ERR】传参错误")
 
