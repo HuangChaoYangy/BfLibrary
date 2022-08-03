@@ -292,8 +292,8 @@ class CreditBackGround(object):
         :param Authorization:
         :return:
         '''
-        win_lose_url = self.auth_url + '/frontPage/queryCumulativeIncome'
-        credit_amount = self.auth_url + '/frontPage/allCreditQuota'
+        win_lose_url = self.auth_url + '/FrontPage/queryCumulativeIncome'
+        credit_amount = self.auth_url + '/FrontPage/allCreditQuota'
         head = {"LoginDiv": '222333',
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": Authorization,
@@ -986,14 +986,14 @@ class CreditBackGround(object):
         :return:
         '''
         login_loken = self.login_background(uname='Liyang124', password='Bfty123456', securityCode="",loginDiv='222333')
-        income_url = self.auth_url + '/frontPage/queryCumulativeIncome'
-        CreditQuota_url = self.auth_url + '/frontPage/allCreditQuota'
-        bet_url = self.auth_url + '/frontPage/getBetOverview'
-        agent_url = self.auth_url + '/frontPage/getProxySituation'
-        betAmount_url = self.auth_url + '/frontPage/getBetAmountHistogram'
-        totalwinlose_url = self.auth_url + '/frontPage/queryPercentageWinOrLose'
-        winlose_url = self.auth_url + '/frontPage/queryTotalWinOrLose'
-        backwater_url = self.auth_url + '/frontPage/getBackwaterHistogram'
+        income_url = self.auth_url + '/FrontPage/queryCumulativeIncome'
+        CreditQuota_url = self.auth_url + '/FrontPage/allCreditQuota'
+        bet_url = self.auth_url + '/FrontPage/getBetOverview'
+        agent_url = self.auth_url + '/FrontPage/getProxySituation'
+        betAmount_url = self.auth_url + '/FrontPage/getBetAmountHistogram'
+        totalwinlose_url = self.auth_url + '/FrontPage/queryPercentageWinOrLose'
+        winlose_url = self.auth_url + '/FrontPage/queryTotalWinOrLose'
+        backwater_url = self.auth_url + '/FrontPage/getBackwaterHistogram'
         ctime = self.get_current_time_for_client(time_type='month', day_diff=quertTime)
         head = {"LoginDiv": '222333',
                 "Accept-Language": "zh-CN,zh;q=0.9",
@@ -1965,7 +1965,7 @@ class CreditBackGround(object):
                 elif data['userName'] != "":
                     winLose_simple = []
                     for page in range(1, pageNum + 1):
-                        data = {"page":page,"limit":200,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime}
+                        data = {"page":page,"limit":200,"account":account,"parentId":parent_id,"startTime":ctime,"endTime":etime, "easy": True}
                         rsp = self.session.post(user_url, headers=head, json=data)
                         if rsp.json()['message'] != 'OK':
                             print("查询总代盈亏(简易)-注单详情失败,原因：" + rsp.json()["message"])
@@ -4220,6 +4220,34 @@ class CreditBackGround(object):
         else:
             print("ERR: 暂不支持该类型")
 
+
+    def addAgentLine(self, Authorization, account, name, password, securityCode,accountStatus,credits,maxProfitLossPercentage,minProfitLossPercentage):
+        '''
+        新增代理线账号(登0)                     // 修改于 2022.07.27
+        :param Authorization:
+        :param order_num:
+        :param date:
+        :param settleType:  1: 未计算的异常注单,可以进行结算操作    0: 待确认的异常注单,只能进行退款操作
+        :param remark:  备注
+        :param result:  ["赢", "输", "半赢", "半输", "注单平局", "注单取消"]
+        :return:
+        '''
+        url = self.mde_url + '/mainstation/generalAgentManagement/addGeneralAgent'
+        head = {"LoginDiv": '222333',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": Authorization,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+
+        data = {"name":name,"account":account,"password":password,"securityCode":securityCode,"credits":credits,"accountStatus":accountStatus,
+                "maxProfitLossPercentage":maxProfitLossPercentage,"minProfitLossPercentage":minProfitLossPercentage,
+                "commissionAndBettingLimitCollection":[{"accountId":"1531516962489016321","hcpOu":{"retreatValueA":10,"retreatValueB":10,"retreatValueC":10,"retreatValueD":10,
+                "retreatValuePercentageA":0.21,"retreatValuePercentageB":0.21,"retreatValuePercentageC":0.21,"retreatValuePercentageD":0.21,"singleBetMax":10000,"singleHighest":
+                100000},"inplay":{"retreatValueA":10,"retreatValueB":10,"retreatValueC":10,"retreatValueD":10,"retreatValuePercentageA":0.21,"retreatValuePercentageB":0.21,
+                "retreatValuePercentageC":0.21,"retreatValuePercentageD":0.21,"singleBetMax":10000,"singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},
+                "sportId":"1","winner":{"singleBetMax":10000,"singleHighest":100000}},{"accountId":"1531516962489016321","hcpOu":{"retreatValueA":10,"retreatValueB":10,
+                "retreatValueC":10,"retreatValueD":10,"retreatValuePercentageA":0.21,"retreatValuePercentageB":0.21,"retreatValuePercentageC":0.21,"retreatValuePercentageD":0.21,
+                                                                                                                                  "singleBetMax":10000,"singleHighest":100000},"inplay":{"retreatValueA":10,"retreatValueB":10,"retreatValueC":10,"retreatValueD":10,"retreatValuePercentageA":0.21,"retreatValuePercentageB":0.21,"retreatValuePercentageC":0.21,"retreatValuePercentageD":0.21,"singleBetMax":10000,"singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},"sportId":"2","winner":{"singleBetMax":10000,"singleHighest":100000}},{"accountId":"1531516962489016321","hcpOu":{"retreatValueA":10,"retreatValueB":10,"retreatValueC":10,"retreatValueD":10,"retreatValuePercentageA":0.21,"retreatValuePercentageB":0.21,"retreatValuePercentageC":0.21,"retreatValuePercentageD":0.21,"singleBetMax":10000,"singleHighest":100000},"inplay":{"retreatValueA":10,"retreatValueB":10,"retreatValueC":10,"retreatValueD":10,"retreatValuePercentageA":0.21,"retreatValuePercentageB":0.21,"retreatValuePercentageC":0.21,"retreatValuePercentageD":0.21,"singleBetMax":10000,"singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},"sportId":"100","winner":{"singleBetMax":10000,"singleHighest":100000}}]}
+        order_info_list = self.mysql.queryUnusualOrderList(order_num=order_num,date=date)
 
 
 
