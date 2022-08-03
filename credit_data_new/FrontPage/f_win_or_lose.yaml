@@ -1,0 +1,9 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /frontPage/queryCumulativeIncome
+    method: get
+  data:
+    mark: 1
+    title: 管理后台-总台-首页,查询昨日/已累计收益
+  resp:
+    mark: 1

@@ -1,0 +1,18 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /frontPage/getBetAmountHistogram
+    method: POST
+  data:
+    chooseTime: -1
+    title: 管理后台-总台-首页,按月查询投注金额和有效金额,默认查询本月
+  resp:
+    chooseTime: -1
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /frontPage/getBetAmountHistogram
+    method: POST
+  data:
+    chooseTime: -0
+    title: 管理后台-总台-首页,按月查询投注金额和有效金额,默认查询本月
+  resp:
+    chooseTime: -0

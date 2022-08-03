@@ -1,0 +1,9 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /frontPage/getBetOverview
+    method: get
+  data:
+    mark: 1
+    title: 管理后台-总台-首页,查询投注概况
+  resp:
+    mark: 1

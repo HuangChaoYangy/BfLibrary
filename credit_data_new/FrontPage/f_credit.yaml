@@ -1,0 +1,8 @@
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /frontPage/allCreditQuota
+    method: get
+  data:
+    title: 管理后台-总台-首页,查询总授信额度
+  resp:
+    mark: 1
