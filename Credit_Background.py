@@ -269,8 +269,8 @@ class CreditBackGround(object):
         :param Authorization:
         :return:
         '''
-        win_lose_url = self.auth_url + '/frontPage/queryCumulativeIncome'
-        credit_amount = self.auth_url + '/frontPage/allCreditQuota'
+        win_lose_url = self.auth_url + '/FrontPage/queryCumulativeIncome'
+        credit_amount = self.auth_url + '/FrontPage/allCreditQuota'
         head = {"LoginDiv": '222333',
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": Authorization,
@@ -963,14 +963,14 @@ class CreditBackGround(object):
         :return:
         '''
         login_loken = self.login_background(uname='Liyang124', password='Bfty123456', securityCode="",loginDiv='222333')
-        income_url = self.auth_url + '/frontPage/queryCumulativeIncome'
-        CreditQuota_url = self.auth_url + '/frontPage/allCreditQuota'
-        bet_url = self.auth_url + '/frontPage/getBetOverview'
-        agent_url = self.auth_url + '/frontPage/getProxySituation'
-        betAmount_url = self.auth_url + '/frontPage/getBetAmountHistogram'
-        totalwinlose_url = self.auth_url + '/frontPage/queryPercentageWinOrLose'
-        winlose_url = self.auth_url + '/frontPage/queryTotalWinOrLose'
-        backwater_url = self.auth_url + '/frontPage/getBackwaterHistogram'
+        income_url = self.auth_url + '/FrontPage/queryCumulativeIncome'
+        CreditQuota_url = self.auth_url + '/FrontPage/allCreditQuota'
+        bet_url = self.auth_url + '/FrontPage/getBetOverview'
+        agent_url = self.auth_url + '/FrontPage/getProxySituation'
+        betAmount_url = self.auth_url + '/FrontPage/getBetAmountHistogram'
+        totalwinlose_url = self.auth_url + '/FrontPage/queryPercentageWinOrLose'
+        winlose_url = self.auth_url + '/FrontPage/queryTotalWinOrLose'
+        backwater_url = self.auth_url + '/FrontPage/getBackwaterHistogram'
         ctime = self.get_current_time_for_client(time_type='month', day_diff=quertTime)
         head = {"LoginDiv": '222333',
                 "Accept-Language": "zh-CN,zh;q=0.9",
