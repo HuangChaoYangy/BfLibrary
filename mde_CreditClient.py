@@ -1486,11 +1486,11 @@ class Credit_Client(object):
                 rsp = self.session.get(url, headers=head, params=param)
                 outcome_id_list = []
                 # market
-                is_live = rsp.json()["data"]["isLive"]
-                sport_id = rsp.json()["data"]["tournamentSportId"]
+                sport_id = sport_id_dic[sport_name]
 
                 for market in rsp.json()["data"]["marketList"]:
                     market_id = market["marketId"]
+                    is_live = market["isLive"]
                     for outcome in market["outcomeList"]:
                         for outcome_detail in outcome:
                             outcome_dic = {"market_id": market_id,
@@ -1512,13 +1512,13 @@ class Credit_Client(object):
                 rsp = self.session.get(url, headers=head, params=param)
                 outcome_id_list = []
                 # market
-                is_live = rsp.json()["data"]["isLive"]
-                sport_id = rsp.json()["data"]["tournamentSportId"]
-
+                # sport_id = rsp.json()["data"]["tournamentSportId"]
+                sport_id = sport_id_dic[sport_name]
                 for market in rsp.json()["data"]["marketList"]:
                     market_str = market["marketId"]              # market_str="sr:match:31801861_24"
                     market_obeject = re.search("_(\d+)", market_str)
                     market_simple_id = market_obeject.group(1)
+                    is_live = market["isLive"]
                     if market_simple_id in handicap_list:
                         for outcome in market["outcomeList"]:
                             for outcome_detail in outcome:
@@ -1559,7 +1559,7 @@ class Credit_Client(object):
                               "Chrome/85.0.4183.102 Safari/537.36"}
 
         outcome_info_list = self.get_all_match_outcome(token, event_type=event_type, odds_Type=odds_type, handicap=handicap)  # 指定盘口类型，1是欧洲盘，2是香港盘，3是马来盘，4是印尼盘
-        # print(outcome_info_list)
+        print(outcome_info_list)
         if not IsRandom:
             selection_list = []
             for outcome_info in outcome_info_list:
@@ -2151,9 +2151,19 @@ class Credit_Client(object):
         return None
 
     def bf_request(self, method, url, head=None, data=None, *args, **kwargs):
+        '''
+        请求方法
+        :param method:
+        :param url:
+        :param head:
+        :param data:
+        :param args:
+        :param kwargs:
+        :return:
+        '''
         method = method.lower()
         if method == 'get':
-            for loop in range(3):
+            for loop in range(1,4):
                 try:
                     b_request = requests.get(url=url, headers=head, params=data, timeout=600)
                     if b_request.status_code != 200:
@@ -2167,7 +2177,7 @@ class Credit_Client(object):
                     raise AssertionError(f'当前接口接口调用失败，请求检查接口,失败信息：{e}')
 
         elif method == 'post':
-            for loop in range(3):
+            for loop in range(1,4):
                 try:
                     b_request = requests.post(url=url, headers=head, json=data, timeout=600)
                     if b_request.status_code != 200:
@@ -2312,7 +2322,7 @@ class Credit_Client(object):
                         else:
                             pass
 
-    def get_client_user_token(self, request_method='get', request_url='https://mdesearch.betf.io/creditUser/getUserAmount', request_body={}):
+    def get_client_user_token(self, request_method='post', request_url='https://mdesearch.betf.io/creditUser/getUserAmount', request_body={}):
         '''
         使用token通过调接口判断token是否过期，若过期则获取新的token
         :param request_method:
@@ -2321,14 +2331,23 @@ class Credit_Client(object):
         :return:
         '''
         try:
-            token = self.ya.read_yaml_file(yaml_file=client_token_url)
-            head = {"LoginDiv": "222333",
-                    "Accept-Language": "zh-CN,zh;q=0.9",
-                    "Account_Login_Identify": token,
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
-            self.bf_request(method=request_method, url=request_url,head=head, data=request_body).json()
+            tokenList = self.ya.read_yaml_file(yaml_file=client_token_url)
+            token_list = []
+            for item in tokenList:
+                token_list.append(item['token'])
 
-            return token
+            for token in token_list:
+                head = {"Accept-Encoding": "gzip, deflate",
+                    "Accept-Language": "zh-CN,zh;q=0.9",
+                    "Connection": "keep-alive",
+                    "accessCode": token,
+                    "lang": "ZH",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"}
+                # self.bf_request(method=request_method, url=request_url,head=head, data=request_body).json()
+                self.session.post(url=request_url, headers=head, data=request_body).json()
+
+            return token_list
+
 
         except:
             # token过期,清除文件后重新获取token并写入yaml文件
@@ -2370,6 +2389,7 @@ class MyThread(threading.Thread):
         :return:
         '''
         token_list = self.bfc.get_client_user_token()
+        print(token_list)
         type_list = ['INPLAY', 'EARLY', 'TODAY']
         sport_name_list = ['足球', '篮球', '网球', '排球', '羽毛球',  '兵乓球', '棒球', '冰球']
         bet_type_dic = {1:"单注", 2:"串关", 3:"复式串关"}
@@ -2454,13 +2474,14 @@ if __name__ == "__main__":
     mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    # MyThread().thread_submit(bet_type=2, sport_name=None, event_type=None, odds_type=1, IsRandom='5',handicap=False, complex='multi', complex_number=2)
-    MyThread().thread_pool_submit(bet_type=1,  sport_name=None, event_type=None, odds_type=1, IsRandom='30', handicap=False, complex='multi', complex_number=2)
+    # MyThread().thread_submit(bet_type=1, sport_name=None, event_type="TODAY", odds_type=2, IsRandom='20',handicap=False, complex='multi', complex_number=2)
+    # MyThread().thread_pool_submit(bet_type=1,  sport_name=None, event_type=None, odds_type=1, IsRandom='30', handicap=False, complex='multi', complex_number=2)
 
-    token_list = ['6fa2475d165d41dab8633bbbc45f21b6','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
+    # token_list = ['ebeea5ec69b54c039225a39aea437759','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
 
     # for item in ['Testuser001','Testuser002','Testuser003','Testuser004']:
-    #     token = bf.login_client(username=item, password='Bfty123456')
+    # token = bf.login_client(username='a16000000101', password='Bfty123456')
+    # print(token)
     #     data = bf.cm.write_to_local_file(content=token+'\n', file_name='C:/Users/USER/Desktop/testToken.txt',mode='a')
 
     # odds_outcomeId = bf.get_match_odds_and_outcomeId(match_id='sr:match:32846261', token=token_list[0], sport_name='排球', terminal='h5', odds_Type=1)
@@ -2470,7 +2491,6 @@ if __name__ == "__main__":
 
     # 新增多线程-模拟多用户进行投注
     # start_time = time.perf_counter()
-    # token_list = bf.get_client_user_token()
     # for token in token_list:
     #     type_list = ['INPLAY', 'EARLY', 'TODAY']
     #     type = random.choice(type_list)
@@ -2488,9 +2508,11 @@ if __name__ == "__main__":
     #                                    etime='2022-06-10 18:13:00',args=[f'{token_list[0]}', f'{type}', '2', '30', True])
 
     # 所有比赛随机投注
-    # for token in token_list:
-    #     for type in ['INPLAY', 'TODAY', 'EARLY']:
-    # bf.submit_all_match(token=f'{token_list[0]}', event_type='INPLAY', odds_type=2, IsRandom='20', handicap=False)
+    token_list = bf.get_client_user_token()
+    print(token_list)
+    for token in token_list:
+        # for type in ['INPLAY', 'TODAY', 'EARLY']:
+        bf.submit_all_match(token=f'{token}', event_type='TODAY', odds_type=2, IsRandom='10', handicap=False)
 
         # 单注投注
     # match_info_list = []
