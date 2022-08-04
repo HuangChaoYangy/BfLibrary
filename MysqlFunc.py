@@ -7769,7 +7769,7 @@ class MysqlQuery(MysqlFunc):
                 return unsettledOrder_list, sql_str
 
             elif parent_level == '登3':  # 登3查询会员
-                sql_str = f"SELECT CONCAT(a.user_name,'/',a.login_account) '账号/登入账号',b.`name` '名称','会员' as '级别',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '投注金额'," \
+                sql_str = f"SELECT CONCAT(a.user_name,'/',IFNULL(a.login_account,'')) '账号/登入账号',b.`name` '名称','会员' as '级别',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '投注金额'," \
                           f"sum(ROUND(bet_amount*level0_actual_percentage,2)) '总代理占成',sum(ROUND(bet_amount*company_actual_percentage,2)) '公司占成' FROM o_account_order a JOIN " \
                           f"u_user b ON a.user_id=b.id WHERE a.`status` in (1,2) AND a.award_time is NULL {account} AND a.proxy3_id=(SELECT id FROM m_account WHERE account='{resp['parentId']}') GROUP BY " \
                           f"CONCAT(a.user_name,'/',a.login_account),b.`name`,b.currency"
@@ -7783,7 +7783,7 @@ class MysqlQuery(MysqlFunc):
                 return unsettledOrder_list, sql_str
 
             elif resp['userName'] != "":  # 会员查询注单
-                sql_str = f"SELECT CONCAT(d.account,'/',d.login_account) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id= 1 " \
+                sql_str = f"SELECT CONCAT(d.account,'/',IFNULL(d.login_account,'')) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id= 1 " \
                           f"then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 " \
                           f"THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰球' END)as '球类'," \
                           f"(case when a.bet_type=1 then '单注' when a.bet_type=2 then '串关' when a.bet_type=3 then '复式串关' end ) as '注单类型',tournament_name '联赛名称'," \
@@ -7926,7 +7926,7 @@ class MysqlQuery(MysqlFunc):
 
             elif parent_level == '登3':  # 登3查询会员
                 sql_str = f"SELECT `账号/登入账号`,`名称`,`级别`,`货币`,`注单数量`,`总投注额`,`总有效金额`,`总佣金`,`派彩`,`三级代理输赢`,`三级代理佣金`,`三级代理总计` FROM (SELECT " \
-                          f"CONCAT(a.account,'/',a.login_account) '账号/登入账号',b.user_id,`name` '名称','会员' as '级别',a.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额'," \
+                          f"CONCAT(a.account,'/',IFNULL(a.login_account,'')) '账号/登入账号',b.user_id,`name` '名称','会员' as '级别',a.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额'," \
                           f"sum(efficient_amount) '总有效金额',TRUNCATE(sum(efficient_amount*level3_retreat_proportion),2) '总佣金',sum(level3_win_or_lose-level3_backwater_amount) " \
                           f"'三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计' FROM u_user a LEFT JOIN o_account_order b ON " \
                           f"a.`id`=b.`user_id` WHERE b.`status`=2 AND b.award_time is not null AND DATE_FORMAT(b.award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {account}" \
@@ -7943,7 +7943,7 @@ class MysqlQuery(MysqlFunc):
                 return winLoseSimple_list, sql_str
 
             elif resp['userName'] != "":  # 会员查询注单
-                sql_str = f"SELECT CONCAT(d.account,'/',d.login_account) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id= 1 " \
+                sql_str = f"SELECT CONCAT(d.account,'/',IFNULL(d.login_account,'')) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id= 1 " \
                           f"then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 " \
                           f"THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰球' END)as '球类'," \
                           f"(case when a.bet_type=1 then '单注' when a.bet_type=2 then '串关' when a.bet_type=3 then '复式串关' end ) as '注单类型',tournament_name '联赛名称'," \
@@ -8107,7 +8107,7 @@ class MysqlQuery(MysqlFunc):
                 return winLoseSimple_list, sql_str
 
             elif parent_level == '登3':  # 登3查询会员
-                sql_str = f"SELECT CONCAT(a.account,'/',a.login_account) '账号/登入账号',`name` '名称','会员' as '级别',a.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额'," \
+                sql_str = f"SELECT CONCAT(a.account,'/',IFNULL(a.login_account,'')) '账号/登入账号',`name` '名称','会员' as '级别',a.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额'," \
                           f"sum(efficient_amount) '总有效金额',TRUNCATE(sum(efficient_amount*level3_retreat_proportion),2) '总佣金',sum(handicap_win_or_lose) '会员输赢'," \
                           f"sum(IFNULL(backwater_amount,0)) '会员佣金',sum(handicap_final_win_or_lose) '会员总计'," \
                           f"sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计'," \
@@ -8129,7 +8129,7 @@ class MysqlQuery(MysqlFunc):
                 return winLoseSimple_list, sql_str
 
             elif resp['userName'] != "":  # 会员查询注单
-                sql_str = f"SELECT CONCAT(d.account,'/',d.login_account) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id= 1 " \
+                sql_str = f"SELECT CONCAT(d.account,'/',IFNULL(d.login_account,'')) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id= 1 " \
                           f"then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 " \
                           f"THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰球' END)as '球类'," \
                           f"(case when a.bet_type=1 then '单注' when a.bet_type=2 then '串关' when a.bet_type=3 then '复式串关' end ) as '注单类型',tournament_name '联赛名称'," \
@@ -8265,7 +8265,7 @@ class MysqlQuery(MysqlFunc):
             return sportReport,sql_str
 
         elif queryType == 'order':
-            sql_str = f"SELECT CONCAT(d.account,'/',d.login_account) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id= 1 " \
+            sql_str = f"SELECT CONCAT(d.account,'/',IFNULL(d.login_account,'')) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id= 1 " \
                       f"then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 " \
                       f"THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰上曲棍球' END)as '球类'," \
                       f"(case when a.bet_type=1 then '单注' when a.bet_type=2 then '串关' when a.bet_type=3 then '复式串关' end ) as '注单类型',tournament_name '联赛名称'," \
@@ -8553,7 +8553,7 @@ class MysqlQuery(MysqlFunc):
 
         database_name = "bfty_credit"
         if queryType == 'detail':
-            sql_str = f"SELECT CONCAT(a.user_name,'/',login_account) '账号/登入账号',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额'," \
+            sql_str = f"SELECT CONCAT(a.user_name,'/',IFNULL(login_account,'')) '账号/登入账号',sum(bet_amount) '总投注金额',sum(IFNULL(efficient_amount,0)) '总有效金额'," \
                       f"TRUNCATE(sum(efficient_amount*company_retreat_proportion),2) '总佣金'," \
                       f"sum(handicap_final_win_or_lose-backwater_amount) '会员输赢',sum(IFNULL(backwater_amount,0)) '会员佣金',sum(handicap_final_win_or_lose) '会员总计'," \
                       f"sum(level3_win_or_lose-level3_backwater_amount) '三级代理输赢',sum(IFNULL(level3_backwater_amount,0)) '三级代理佣金',sum(level3_win_or_lose) '三级代理总计'," \
@@ -8615,7 +8615,7 @@ class MysqlQuery(MysqlFunc):
             account = ""
 
         database_name = "bfty_credit"
-        sql_str = f"SELECT CONCAT(d.account,'/',d.login_account) '账号/登入账号',a.order_no '注单号',a.create_time '投注时间',tournament_name '联赛名称',CONCAT( home_team_name, ' Vs '," \
+        sql_str = f"SELECT CONCAT(d.account,'/',IFNULL(d.login_account,'')) '账号/登入账号',a.order_no '注单号',a.create_time '投注时间',tournament_name '联赛名称',CONCAT( home_team_name, ' Vs '," \
                   f" away_team_name ) '赛事名称',IF(is_live=3,'早盘','滚球盘') '赛事类型',market_name  '盘口名称',specifier '亚盘口',outcome_name  '投注项名称',cast(credit_odds as char) " \
                   f"'赔率',match_time '赛事时间',if(odds_type=1,'欧洲盘','香港盘') '盘口类型',bet_amount '投注金额',CONCAT(bet_ip,' / ',ip_address) 'IP地址' FROM o_account_order a JOIN " \
                   f"o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON (a.order_no=c.order_no AND b.match_id=c.match_id) JOIN u_user d ON " \
@@ -8668,7 +8668,7 @@ class MysqlQuery(MysqlFunc):
             return billOrder,sql_str
 
         elif query_type == 2:
-            sql_str = f" SELECT CONCAT(d.account,'/',d.login_account) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id=" \
+            sql_str = f" SELECT CONCAT(d.account,'/',IFNULL(d.login_account,'')) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id=" \
                       f" 1 then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id" \
                       f" = 5 THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰上曲棍球' END)as " \
                       f"'球类',(case when a.bet_type=1 then '单注' when a.bet_type=2 then '串关' when a.bet_type=3 then '复式串关' end ) as '注单类型',tournament_name '联赛名称'," \
@@ -10308,8 +10308,8 @@ if __name__ == "__main__":
     # data = mysql.get_sportName_mainBetReport()
 
     # data = mysql.queryUnusualOrderList(order_num="",date=(-39,0))[1]
-    # data = mysql.remove_special_symbols(data_str="ci/222222222")
-    # print(data)
+    data = mysql.remove_special_symbols(data_str="jcj1j2j3jc2/")
+    print(data)
 
 
 
