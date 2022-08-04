@@ -4485,5 +4485,5 @@ if __name__ == "__main__":
     # print(AgentLine)
 
 
-    token = bg.get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
+    # token = bg.get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
     # print(token)
