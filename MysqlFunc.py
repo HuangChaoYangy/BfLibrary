@@ -5593,7 +5593,7 @@ class MysqlQuery(MysqlFunc):
                   f"sum(case when DATE_FORMAT( a.award_time, '%Y-%m-%d' ) < DATE_FORMAT( DATE_ADD( NOW(), INTERVAL '-4' HOUR ), '%Y-%m-%d' ) then " \
                   f"company_win_or_lose+level0_win_or_lose end) '昨日现金余额' FROM o_account_order a JOIN m_account_unsettlement_amount_record b ON a.order_no = b.order_no " \
                   f"WHERE b.payment_status_for_sub = 0 AND a.`status`=2 AND a.award_time is not null AND a.proxy0_id=b.account_id GROUP BY proxy0_id) b ON a.proxy0_id=b.proxy0_id) c " \
-                  f"ON a.id=c.proxy0_id"
+                  f"ON a.id=c.proxy0_id HAVING `昨日余额`!=0"
         rtn = list(self.query_data(sql_str, database_name))
 
         uncheckList = []
