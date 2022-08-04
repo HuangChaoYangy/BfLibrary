@@ -7011,6 +7011,7 @@ class MysqlQuery(MysqlFunc):
                 f"a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 THEN " \
                 f"'棒球' WHEN a.sport_category_id = 100 THEN '冰上曲棍球' END)as '球类',CONCAT(home_team_name,' Vs ',away_team_name) 'team',market_name FROM o_account_order a " \
                 f"JOIN o_account_order_match b ON a.order_no=b.order_no WHERE a.order_no='{order_no}' and bet_type=1"
+        print(sql_str)
         rtn = list(self.query_data(sql_str, database_name))
         user_name = rtn[0][0]
         bet_amount = rtn[0][1]
