@@ -151,7 +151,7 @@ class Credit_Client(object):
     def login_client(self, username, password):
         '''
         信用网-客户端登录
-        :param username:
+        :param username:  账号/登入账号
         :param password:
         :return:
         '''
@@ -165,10 +165,12 @@ class Credit_Client(object):
         data = {"userName":username, "password":self.get_md5(password),"loginUrl":loginUrl}
         rsp = self.session.post(url, json=data, headers=head)
 
-        if rsp.json()['message'] != "OK":
-            raise AssertionError("查询赛事列表失败,原因：" + rsp.json()["message"])
+        if rsp.json()['data']['message'] != "OK":
+            raise AssertionError("登录失败,原因：" + rsp.json()['data']["message"])
         elif rsp.json()['data']['code'] == -3006:
-            raise AssertionError("查询赛事列表失败,原因：" + rsp.json()['data']['message'])
+            raise AssertionError("登录失败,原因：" + rsp.json()['data']['message'])
+        elif rsp.json()['data']['code'] == -3007:
+            raise AssertionError("登录失败,原因：" + rsp.json()['data']['message'])
         else:
             self.Authorization = rsp.json()['data']['data']['accessCode']
 
@@ -2322,9 +2324,53 @@ class Credit_Client(object):
                         else:
                             pass
 
-    def get_client_user_token(self, request_method='post', request_url='https://mdesearch.betf.io/creditUser/getUserAmount', request_body={}):
+    def get_user_token_list(self, request_method='get', request_url='https://mdesearch.betf.io/creditUser/getUserAmount', request_body={}):
         '''
-        使用token通过调接口判断token是否过期，若过期则获取新的token
+        使用token通过调接口判断token是否过期，若过期则获取新的token   方法一
+        :param request_method:
+        :param request_url:
+        :param request_body:
+        :return:
+        '''
+        tokenList = self.ya.read_yaml_file(yaml_file=client_token_url)
+        token_list = []
+        for item in tokenList:
+            token_list.append(item['token'])
+
+        for token in token_list:
+            head = {"Accept-Encoding": "gzip, deflate",
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Connection": "keep-alive",
+                "accessCode": token,
+                "lang": "ZH",
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"}
+            response = self.session.get(url=request_url, headers=head, data=request_body).json()
+            if response['message'] == "OK":
+                print(f"token未过期,直接取yaml文件的token：{token_list}")
+
+                return token_list
+            else:
+                # token过期,清除文件后重新获取token并写入yaml文件
+                Yaml_data().clear_yaml_file(yaml_file=client_token_url)
+                user_list = self.ya.read_yaml_file(yaml_file=client_user_url)
+                for username in user_list:
+                    token_str = self.login_client(username=username, password='Bfty123456')
+                    Yaml_data().write_yaml_file(yaml_file=client_token_url, data=[{'token': f'{token_str}'}])
+
+                # 再读取yaml文件中的token
+                new_list = Yaml_data().read_yaml_file(yaml_file=client_token_url)
+                token_list = []
+                for item in new_list:
+                    token_list.append(item['token'])
+
+                print(f'赔率已过期,获取新token列表:{token_list}')
+
+                return token_list
+
+
+    def get_client_user_token(self, request_method='get', request_url='https://mdesearch.betf.io/creditUser/getUserAmount', request_body={}):
+        '''
+        使用token通过调接口判断token是否过期，若过期则获取新的token   方法二
         :param request_method:
         :param request_url:
         :param request_body:
@@ -2343,12 +2389,10 @@ class Credit_Client(object):
                     "accessCode": token,
                     "lang": "ZH",
                     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"}
-                # self.bf_request(method=request_method, url=request_url,head=head, data=request_body).json()
-                self.session.post(url=request_url, headers=head, data=request_body).json()
+                self.bf_request(method=request_method, url=request_url,head=head, data=request_body).json()
+            print(f"token未过期,直接取yaml文件的token：{token_list}")
 
             return token_list
-
-
         except:
             # token过期,清除文件后重新获取token并写入yaml文件
             Yaml_data().clear_yaml_file(yaml_file=client_token_url)
@@ -2364,7 +2408,7 @@ class Credit_Client(object):
             for item in new_list:
                 token_list.append(item['token'])
 
-            print(f'赔率已过期,获取新token:{token_list}')
+            print(f'赔率已过期,获取新token列表:{token_list}')
 
             return token_list
 
@@ -2480,7 +2524,7 @@ if __name__ == "__main__":
     # token_list = ['ebeea5ec69b54c039225a39aea437759','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
 
     # for item in ['Testuser001','Testuser002','Testuser003','Testuser004']:
-    # token = bf.login_client(username='a16000000101', password='Bfty123456')
+    # token = bf.login_client(username='a16000000109', password='Bfty123456')
     # print(token)
     #     data = bf.cm.write_to_local_file(content=token+'\n', file_name='C:/Users/USER/Desktop/testToken.txt',mode='a')
 
@@ -2509,10 +2553,10 @@ if __name__ == "__main__":
 
     # 所有比赛随机投注
     token_list = bf.get_client_user_token()
-    print(token_list)
-    for token in token_list:
-        # for type in ['INPLAY', 'TODAY', 'EARLY']:
-        bf.submit_all_match(token=f'{token}', event_type='TODAY', odds_type=2, IsRandom='10', handicap=False)
+    # print(token_list)
+    # for token in token_list:
+    #     # for type in ['INPLAY', 'TODAY', 'EARLY']:
+    #     bf.submit_all_match(token=f'{token}', event_type='TODAY', odds_type=2, IsRandom='10', handicap=False)
 
         # 单注投注
     # match_info_list = []
