@@ -138,10 +138,9 @@ class Test_multitermReport:
             end = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=inBody['end'])
             request_body = {"begin": begin, "end": end, "dateType": inBody['dateType'], "page": 1, "limit": 200, "singleBet":True,
                            "sportId": "", "marketId": "串关", "account": account, "tournamentId": None,"matchId": None}
-            total_title = f"查看注单详情, 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
-            allure.dynamic.title(total_title)
+            # total_title = f"查看注单详情, 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
+            allure.dynamic.title(inBody['title'])
             title = f"根据会员账号：'{account}' 查看注单详情, 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
-
             with allure.step(f"执行测试用例:{title}"):
                 Bf_log('multitermOrder_d').info(f"----------------开始执行:{title}------------------------")
             request_url = ip + url
