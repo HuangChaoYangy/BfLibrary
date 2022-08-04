@@ -1599,6 +1599,7 @@ class Credit_Client(object):
                 else:
                     run_loop = len(outcome_info_list)
                     sub_order_no = rsp.json()['data']['orderNo']
+                    # matchInfo = rsp.json()['data']['selections']
                     content = self.cm.write_to_local_file(content=f"{sub_order_no}\n",
                                                           file_name='C:/Users/USER/Desktop/test.txt', mode='a',
                                                           )
