@@ -4221,16 +4221,17 @@ class CreditBackGround(object):
             print("ERR: 暂不支持该类型")
 
 
-    def addAgentLine(self, Authorization, account, name, password, securityCode,accountStatus,credits,maxProfitLossPercentage,minProfitLossPercentage):
+    def addAgentLine(self, Authorization, account, name, password, securityCode='Agent0',credits=100000000,accountStatus="0"):
         '''
-        新增代理线账号(登0)                     // 修改于 2022.07.27
+        总台--新增代理线账号(登0)                     // 修改于 2022.08.04
         :param Authorization:
-        :param order_num:
-        :param date:
-        :param settleType:  1: 未计算的异常注单,可以进行结算操作    0: 待确认的异常注单,只能进行退款操作
-        :param remark:  备注
-        :param result:  ["赢", "输", "半赢", "半输", "注单平局", "注单取消"]
-        :return:
+        :param account:   3位有效英文或数字
+        :param name:
+        :param password:   密码长度8-16位，须含字母(区分大小写)和数字,可以特殊字符,不可空格
+        :param securityCode:  安全码
+        :param accountStatus: 账户状态  0:"启用",1:"只能看账",2:"禁止登入",3:"停用"
+        :param credits:  信用额度
+        :return:   本级占成+下级最高占成 不得高于 本级最高占成 / 本级占成+下级最低占成 不得低于 本级最低占成
         '''
         url = self.mde_url + '/mainstation/generalAgentManagement/addGeneralAgent'
         head = {"LoginDiv": '222333',
@@ -4239,15 +4240,165 @@ class CreditBackGround(object):
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
 
         data = {"name":name,"account":account,"password":password,"securityCode":securityCode,"credits":credits,"accountStatus":accountStatus,
-                "maxProfitLossPercentage":maxProfitLossPercentage,"minProfitLossPercentage":minProfitLossPercentage,
+                "maxProfitLossPercentage":90,"minProfitLossPercentage":80,
                 "commissionAndBettingLimitCollection":[{"accountId":"1531516962489016321","hcpOu":{"retreatValueA":10,"retreatValueB":10,"retreatValueC":10,"retreatValueD":10,
                 "retreatValuePercentageA":0.21,"retreatValuePercentageB":0.21,"retreatValuePercentageC":0.21,"retreatValuePercentageD":0.21,"singleBetMax":10000,"singleHighest":
                 100000},"inplay":{"retreatValueA":10,"retreatValueB":10,"retreatValueC":10,"retreatValueD":10,"retreatValuePercentageA":0.21,"retreatValuePercentageB":0.21,
                 "retreatValuePercentageC":0.21,"retreatValuePercentageD":0.21,"singleBetMax":10000,"singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},
                 "sportId":"1","winner":{"singleBetMax":10000,"singleHighest":100000}},{"accountId":"1531516962489016321","hcpOu":{"retreatValueA":10,"retreatValueB":10,
                 "retreatValueC":10,"retreatValueD":10,"retreatValuePercentageA":0.21,"retreatValuePercentageB":0.21,"retreatValuePercentageC":0.21,"retreatValuePercentageD":0.21,
-                                                                                                                                  "singleBetMax":10000,"singleHighest":100000},"inplay":{"retreatValueA":10,"retreatValueB":10,"retreatValueC":10,"retreatValueD":10,"retreatValuePercentageA":0.21,"retreatValuePercentageB":0.21,"retreatValuePercentageC":0.21,"retreatValuePercentageD":0.21,"singleBetMax":10000,"singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},"sportId":"2","winner":{"singleBetMax":10000,"singleHighest":100000}},{"accountId":"1531516962489016321","hcpOu":{"retreatValueA":10,"retreatValueB":10,"retreatValueC":10,"retreatValueD":10,"retreatValuePercentageA":0.21,"retreatValuePercentageB":0.21,"retreatValuePercentageC":0.21,"retreatValuePercentageD":0.21,"singleBetMax":10000,"singleHighest":100000},"inplay":{"retreatValueA":10,"retreatValueB":10,"retreatValueC":10,"retreatValueD":10,"retreatValuePercentageA":0.21,"retreatValuePercentageB":0.21,"retreatValuePercentageC":0.21,"retreatValuePercentageD":0.21,"singleBetMax":10000,"singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},"sportId":"100","winner":{"singleBetMax":10000,"singleHighest":100000}}]}
-        order_info_list = self.mysql.queryUnusualOrderList(order_num=order_num,date=date)
+                "singleBetMax":10000,"singleHighest":100000},"inplay":{"retreatValueA":10,"retreatValueB":10,"retreatValueC":10,"retreatValueD":10,"retreatValuePercentageA":0.21,
+                "retreatValuePercentageB":0.21,"retreatValuePercentageC":0.21,"retreatValuePercentageD":0.21,"singleBetMax":10000,"singleHighest":100000},"other":{"singleBetMax":
+                10000,"singleHighest":100000},"sportId":"2","winner":{"singleBetMax":10000,"singleHighest":100000}},{"accountId":"1531516962489016321","hcpOu":{"retreatValueA":10,
+                "retreatValueB":10,"retreatValueC":10,"retreatValueD":10,"retreatValuePercentageA":0.21,"retreatValuePercentageB":0.21,"retreatValuePercentageC":0.21,
+                "retreatValuePercentageD":0.21,"singleBetMax":10000,"singleHighest":100000},"inplay":{"retreatValueA":10,"retreatValueB":10,"retreatValueC":10,"retreatValueD":10,
+                "retreatValuePercentageA":0.21,"retreatValuePercentageB":0.21,"retreatValuePercentageC":0.21,"retreatValuePercentageD":0.21,"singleBetMax":10000,"singleHighest":
+                100000},"other":{"singleBetMax":10000,"singleHighest":100000},"sportId":"100","winner":{"singleBetMax":10000,"singleHighest":100000}}]}
+        rsp = self.session.post(url=url, headers=head, json=data)
+
+        if rsp.json()['message'] == 'OK':
+            print(f"操作成功： 代理线新增登0账号：{account}成功")
+        else:
+            print("ERR: 操作失败：" + rsp.json()["message"])
+
+    def addAgent1(self, agent_token, account, name, password, securityCode='Agent0',credits=10000000,accountStatus=0):
+        '''
+        代理后台--登0账号新增登1                    // 修改于 2022.08.04
+        :param Authorization:
+        :param account:   2位有效英文或数字
+        :param name:
+        :param password:   密码长度8-16位，须含字母(区分大小写)和数字,可以特殊字符,不可空格
+        :param securityCode:  安全码
+        :param accountStatus: 账户状态  0:"启用",1:"只能看账",2:"禁止登入",3:"停用"
+        :param credits:  信用额度
+        :return:
+        '''
+        url = self.mde_url + '/account/insertRetreatAndBetting'
+        head = {"LoginDiv": '555666',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": agent_token,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+
+        data = {"accountInsertParam":{"accountStatus":accountStatus,"credits":credits,"account":account,"securityCode":securityCode,"name":name,"password":password,
+                "parentProfitLossPercentage":25,"maxProfitLossPercentage":60,"minProfitLossPercentage":55,"currency":"CNY"},"retreat":[{"hcpOu":{"retreatValueA":9,"retreatValueB":9,
+                "retreatValueC":9,"retreatValueD":9,"singleBetMax":10000,"singleHighest":100000},"inplay":{"retreatValueA":9,"retreatValueB":9,"retreatValueC":9,"retreatValueD":9,
+                "singleBetMax":10000,"singleHighest":100000},"winner":{"singleBetMax":10000,"singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},
+                "sportId":"1"},{"hcpOu":{"retreatValueA":9,"retreatValueB":9,"retreatValueC":9,"retreatValueD":9,"singleBetMax":10000,"singleHighest":100000},"inplay":
+                {"retreatValueA":9,"retreatValueB":9,"retreatValueC":9,"retreatValueD":9,"singleBetMax":10000,"singleHighest":100000},"winner":{"singleBetMax":10000,
+                 "singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},"sportId":"2"},{"hcpOu":{"retreatValueA":9,"retreatValueB":9,"retreatValueC":9,
+                 "retreatValueD":9,"singleBetMax":10000,"singleHighest":100000},"inplay":{"retreatValueA":9,"retreatValueB":9,"retreatValueC":9,"retreatValueD":9,"singleBetMax":
+                10000,"singleHighest":100000},"winner":{"singleBetMax":10000,"singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},"sportId":"100"}]}
+        rsp = self.session.post(url=url, headers=head, json=data)
+
+        if rsp.json()['message'] == 'OK':
+            print(f"操作成功： 代理线新增登1账号：{account}成功")
+        else:
+            print("ERR: 操作失败：" + rsp.json()["message"])
+
+    def addAgent2(self, agent_token, account, name, password, securityCode='Agent0',credits=2000000,accountStatus=0):
+        '''
+        代理后台--登1账号新增登2                    // 修改于 2022.08.04
+        :param Authorization:
+        :param account:   2位有效英文或数字
+        :param name:
+        :param password:   密码长度8-16位，须含字母(区分大小写)和数字,可以特殊字符,不可空格
+        :param securityCode:  安全码
+        :param accountStatus: 账户状态  0:"启用",1:"只能看账",2:"禁止登入",3:"停用"
+        :param credits:  信用额度
+        :return:     本级占成+下级最高占成 不得高于 本级最高占成 / 本级占成+下级最低占成 不得低于 本级最低占成
+        '''
+        url = self.mde_url + '/account/insertRetreatAndBetting'
+        head = {"LoginDiv": '555666',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": agent_token,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+
+        data = {"accountInsertParam":{"accountStatus":accountStatus,"credits":credits,"account":account,"securityCode":securityCode,"name":name,"password":password,
+                "parentProfitLossPercentage":22,"maxProfitLossPercentage":38,"minProfitLossPercentage":33,"currency":"CNY"},"retreat":[{"hcpOu":{"retreatValueA":8,"retreatValueB":8,
+                "retreatValueC":8,"retreatValueD":8,"singleBetMax":10000,"singleHighest":100000},"inplay":{"retreatValueA":8,"retreatValueB":8,"retreatValueC":8,"retreatValueD":8,
+                "singleBetMax":10000,"singleHighest":100000},"winner":{"singleBetMax":10000,"singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},
+                "sportId":"1"},{"hcpOu":{"retreatValueA":8,"retreatValueB":8,"retreatValueC":8,"retreatValueD":8,"singleBetMax":10000,"singleHighest":100000},"inplay":
+                {"retreatValueA":8,"retreatValueB":8,"retreatValueC":8,"retreatValueD":8,"singleBetMax":10000,"singleHighest":100000},"winner":{"singleBetMax":10000,
+                "singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},"sportId":"2"},{"hcpOu":{"retreatValueA":8,"retreatValueB":8,"retreatValueC":8,
+                "retreatValueD":8,"singleBetMax":10000,"singleHighest":100000},"inplay":{"retreatValueA":8,"retreatValueB":8,"retreatValueC":8,"retreatValueD":8,"singleBetMax":10000,
+                "singleHighest":100000},"winner":{"singleBetMax":10000,"singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},"sportId":"100"}]}
+        rsp = self.session.post(url=url, headers=head, json=data)
+
+        if rsp.json()['message'] == 'OK':
+            print(f"操作成功： 代理线新增登2账号：{account}成功")
+        else:
+            print("ERR: 操作失败：" + rsp.json()["message"])
+
+    def addAgent3(self, agent_token, account, name, password, securityCode='Agent0',credits=1000000,accountStatus=0):
+        '''
+        代理后台--登2账号新增登3                    // 修改于 2022.08.04
+        :param Authorization:
+        :param account:   2位有效英文或数字
+        :param name:
+        :param password:   密码长度8-16位，须含字母(区分大小写)和数字,可以特殊字符,不可空格
+        :param securityCode:  安全码
+        :param accountStatus: 账户状态  0:"启用",1:"只能看账",2:"禁止登入",3:"停用"
+        :param credits:  信用额度
+        :return:     本级占成+下级最高占成 不得高于 本级最高占成 / 本级占成+下级最低占成 不得低于 本级最低占成
+        '''
+        url = self.mde_url + '/account/insertRetreatAndBetting'
+        head = {"LoginDiv": '555666',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": agent_token,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+
+        data = {"accountInsertParam":{"accountStatus":accountStatus,"credits":credits,"account":account,"securityCode":securityCode,"name":name,"password":password,
+                "parentProfitLossPercentage":15,"maxProfitLossPercentage":23,"minProfitLossPercentage":20,"currency":"CNY"},"retreat":[{"hcpOu":{"retreatValueA":7,"retreatValueB":7,
+                "retreatValueC":7,"retreatValueD":7,"singleBetMax":10000,"singleHighest":100000},"inplay":{"retreatValueA":7,"retreatValueB":7,"retreatValueC":7,"retreatValueD":7,
+                "singleBetMax":10000,"singleHighest":100000},"winner":{"singleBetMax":10000,"singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},
+                "sportId":"1"},{"hcpOu":{"retreatValueA":7,"retreatValueB":7,"retreatValueC":7,"retreatValueD":7,"singleBetMax":10000,"singleHighest":100000},"inplay":
+                {"retreatValueA":7,"retreatValueB":7,"retreatValueC":7,"retreatValueD":7,"singleBetMax":10000,"singleHighest":100000},"winner":{"singleBetMax":10000,
+                "singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},"sportId":"2"},{"hcpOu":{"retreatValueA":7,"retreatValueB":7,"retreatValueC":7,
+                "retreatValueD":7,"singleBetMax":10000,"singleHighest":100000},"inplay":{"retreatValueA":7,"retreatValueB":7,"retreatValueC":7,"retreatValueD":7,"singleBetMax":10000,
+                "singleHighest":100000},"winner":{"singleBetMax":10000,"singleHighest":100000},"other":{"singleBetMax":10000,"singleHighest":100000},"sportId":"100"}]}
+        rsp = self.session.post(url=url, headers=head, json=data)
+
+        if rsp.json()['message'] == 'OK':
+            print(f"操作成功： 代理线新增登3账号：{account}成功")
+        else:
+            print("ERR: 操作失败：" + rsp.json()["message"])
+
+
+    def add_user(self, agent_token, account, name, password,credits=50000,accountStatus='0'):
+        '''
+        代理后台--登3账号新增会员                    // 修改于 2022.08.04
+        :param Authorization:
+        :param account:   3位有效英文或数字
+        :param name:
+        :param password:   密码长度8-16位，须含字母(区分大小写)和数字,可以特殊字符,不可空格
+        :param securityCode:  安全码
+        :param accountStatus: 账户状态  0:"启用",1:"只能看账",2:"禁止登入",3:"停用"
+        :param credits:  信用额度
+        :return:     本级占成+下级最高占成 不得高于 本级最高占成 / 本级占成+下级最低占成 不得低于 本级最低占成
+        '''
+        url = self.mde_url + '/uuser/addUser'
+        head = {"LoginDiv": '555666',
+                "Accept-Language": "zh-CN,zh;q=0.9",
+                "Account_Login_Identify": agent_token,
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
+
+        data = {"account":account,"creditsAmount":credits,"status":accountStatus,"exchangeRate":None,"handicapType":"A","name":name,"password":password,
+                "parentProfitLossPercentage":22,"userConfigurationParams":[{"handicapCategoryId":"1","retreatProportion":6,"singleBetLimit":10000,"singleGameBetLimit":100000,
+                "sportCategoryId":"1"},{"handicapCategoryId":"2","retreatProportion":6,"singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"1"},
+                {"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"1"},{"handicapCategoryId":"100",
+                "retreatProportion":"","singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"1"},{"handicapCategoryId":"1","retreatProportion":6,"singleBetLimit":
+                10000,"singleGameBetLimit":100000,"sportCategoryId":"2"},{"handicapCategoryId":"2","retreatProportion":6,"singleBetLimit":10000,"singleGameBetLimit":100000,
+                "sportCategoryId":"2"},{"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"2"},
+                {"handicapCategoryId":"100","retreatProportion":"","singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"2"},{"handicapCategoryId":"1",
+                "retreatProportion":6,"singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"100"},{"handicapCategoryId":"2","retreatProportion":6,
+                "singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"100"},{"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":10000,
+                "singleGameBetLimit":100000,"sportCategoryId":"100"},{"handicapCategoryId":"100","retreatProportion":"","singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"100"}]}
+        rsp = self.session.post(url=url, headers=head, json=data)
+
+        if rsp.json()['message'] == 'OK':
+            print(f"操作成功： 代理线新增会员账号：{account} 成功")
+        else:
+            print("ERR: 操作失败：" + rsp.json()["message"])
 
 
 
@@ -4259,8 +4410,8 @@ if __name__ == "__main__":
     mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
     bg = CreditBackGround(mysql_info,mongo_info)            # 创建对象
 
-    # login_loken = bg.login_background(uname='a0child01', password='Bfty123456', securityCode="Agent0", loginDiv='555666')          # 登录信用网代理后台
-    login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
+    # login_loken = bg.login_background(uname='a16', password='Bfty123456', securityCode="Agent0", loginDiv=555666)          # 登录信用网代理后台
+    # login_loken = bg.login_background(uname='Liyang03', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
     # data = bg.settleUnusualOrder(Authorization=login_loken, order_num="", date=(-60, -0), settleType='未结算', remark="脚本结算", result=None)       # 异常订单结算脚本
     # data = bg.unsettlement(Authorization=login_loken)
     # user = bg.user_management(Authorization=login_loken, userStatus='0', userName='', userAccount='', sortIndex='', sortParameter='')   # 会员管理
@@ -4296,8 +4447,8 @@ if __name__ == "__main__":
     # data = bg.credit_cancelledOrder(inData={"begin": "-7", "end": "-1", "account": ''})
     # data = bg.credit_bill(inData={"begin": "-0", "end": "-0"},query_type=2)
     # data_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=1)   # 总台-报表管理-数据源对账报表
-    data = bg.credit_dataSourceReport(inData={"betStartTime":"-30", "betEndTime":"-0", "settlementStartTime":"-30", "settlementEndTime":"-0", "userName":"","orderNo":"",
-                        "sportId":[], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=4)  # 总台-报表管理-数据源对账报表
+    # data = bg.credit_dataSourceReport(inData={"betStartTime":"-30", "betEndTime":"-0", "settlementStartTime":"-30", "settlementEndTime":"-0", "userName":"","orderNo":"",
+    #                     "sportId":[], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=4)  # 总台-报表管理-数据源对账报表
     # daily_report = bg.credit_dailyReport(Authorization=login_loken, create_time=(-6,0), queryType=2)           # 总台-报表管理-每日盈亏
     # data = bg.credit_terminalReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "terminal":"","sortIndex":"","sortParameter":"","page":1,"limit":200 },queryType=2)       # 总台-报表管理-客户端盈亏
     # data = bg.credit_sportsReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200 }, queryType=1)    # 总台-报表管理-体育项盈亏
@@ -4305,7 +4456,16 @@ if __name__ == "__main__":
     # data = bg.credit_uncheckList(inData={"accountStatus": 0, "searchAccountName": "",  "page": 1,"limit": 200})  # 总台-总代结账
     # data = bg.credit_mainBet(inData={"matchId": "", "sportId": ""}, quert_type=1)  # 总投注-让球/大小/独赢/滚球
     # data = bg.credit_mixBet(inData={"account":""}, quert_type=2)     # 总投注-混合串关
-    print(data)
+
+    login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE1NTUwNjk5MjgyNDcxMDc1ODUiLCJleHAiOjE2NTk1OTk4OTEsInVzZXJuYW1lIjoiYTE2MDAwMDAwIn0.swtiEzP3CE3IoMy46WLXsd3qwvNdBVU-ZWiNxpcvveM"
+    # data = bg.addAgentLine(Authorization=login_loken, account='a16', name='test', password='Bfty123456', securityCode='Agent0', credits=100000000,accountStatus="0")  # 新增登0
+    # data = bg.addAgent1(agent_token=login_loken, account='a1600', name='test', password='Bfty123456',securityCode='Agent0', credits=10000000, accountStatus=0)  # 新增登1
+    # data = bg.addAgent2(agent_token=login_loken, account='a160000', name='test', password='Bfty123456',securityCode='Agent0', credits=2000000, accountStatus=0)  # 新增登2
+    # data = bg.addAgent3(agent_token=login_loken, account='a16000000', name='test', password='Bfty123456',securityCode='Agent0', credits=1000000, accountStatus=0)  # 新增登3
+    for number in range(100,110):
+        account = "a16000000" + str(number)           # "a16000000":  登3账号
+        data = bg.add_user(agent_token=login_loken, account=account, name='test', password='Bfty123456', credits=50000, accountStatus='0')  # 新增登0
+        # print(data)
 
 
 
@@ -4325,5 +4485,5 @@ if __name__ == "__main__":
     # print(AgentLine)
 
 
-    # token = bg.get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
+    token = bg.get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
     # print(token)
