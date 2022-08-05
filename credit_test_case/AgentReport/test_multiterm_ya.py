@@ -123,6 +123,15 @@ class Test_multitermReport:
         url = request['url']
         method = request['method']
         dateType_dic = {1: '投注时间', 2: '赛事时间', 3: '结算时间'}
+        sport_name_dic = {"": "全部",
+                        "sr:sport:1": "足球",
+                        "sr:sport:2": "篮球",
+                        "sr:sport:5": "网球",
+                        "sr:sport:23": "排球",
+                        "sr:sport:31": "羽毛球",
+                        "sr:sport:20": "乒乓球",
+                        "sr:sport:3": "棒球",
+                        "sr:sport:4": "冰上曲棍球" }
         account_id_list = MysqlQuery(mysql_info, mongo_info).get_account_id_by_matchId_multitermReport(account_id=inBody['account'], sport_id=inBody['sportId'],
             time=(inBody['begin'], inBody['end']), queryDateType=inBody['dateType'])
 
@@ -137,10 +146,10 @@ class Test_multitermReport:
             begin = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=inBody['begin'])
             end = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=inBody['end'])
             request_body = {"begin": begin, "end": end, "dateType": inBody['dateType'], "page": 1, "limit": 200, "singleBet":True,
-                           "sportId": "", "marketId": "串关", "account": account, "tournamentId": None,"matchId": None}
+                           "sportId": inBody['sportId'], "marketId": "串关", "account": account, "tournamentId": None,"matchId": None}
             # total_title = f"查看注单详情, 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
             allure.dynamic.title(inBody['title'])
-            title = f"根据会员账号：'{account}' 查看注单详情, 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
+            title = f"根据会员账号：'{account}', 体育类型'{sport_name_dic[inBody['sportId']]}', 查看注单详情, 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
             with allure.step(f"执行测试用例:{title}"):
                 Bf_log('multitermOrder_d').info(f"----------------开始执行:{title}------------------------")
             request_url = ip + url
@@ -279,5 +288,5 @@ class Test_multitermReport:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_multiterm_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  #  '--clean-alluredir', '-n=4'
+    pytest.main(["test_multiterm_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','-n=auto','--clean-alluredir'])  #  '--clean-alluredir', '-n=4'
     os.system("allure serve ../report/tmp")
