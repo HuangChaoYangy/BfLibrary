@@ -8652,10 +8652,9 @@ class MysqlQuery(MysqlFunc):
         etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['end']))
         time = resp['ctime']
         database_name = "bfty_credit"
-        if query_type == 1:
+        if query_type == 1:     # 通过查询结账记录表判断周期内是否有结账记录
             sql_str1 = f"SELECT create_time,operation_desc,check_amount,remark FROM `m_account_checked_history` WHERE `account_id`='0' AND DATE_FORMAT(create_time,'%Y-%m-%d') " \
                        f"BETWEEN '{ctime}' and '{etime}' ORDER BY `create_time` ASC"
-            # print(sql_str1)
             rtn = list(self.query_data(sql_str1, database_name))
             if rtn == []:
                 print("SQL：当前查询日期范围内暂无结账")
@@ -8671,7 +8670,6 @@ class MysqlQuery(MysqlFunc):
                           f"a.company_win_or_lose,0)) '当日结账佣金现金余额',sum(IF (b.payment_status=0,a.company_win_or_lose,0)) '截至当日未账佣金现金余额' FROM o_account_order a LEFT JOIN " \
                           f"m_account_unsettlement_amount_record b ON a.order_no=b.order_no AND a.proxy0_id=b.account_id AND b.role_id=0 WHERE a.`status`=2 AND " \
                           f"DATE_FORMAT(a.award_time,'%Y-%m-%d')<=DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d')) a ) b ON a.date=b.`日期`"
-                # print(sql_str)
                 rtn = list(self.query_data(sql_str, database_name))
                 billOrder = [list(item) for item in rtn][0]
                 expect_result = []
@@ -8700,7 +8698,6 @@ class MysqlQuery(MysqlFunc):
                           f"'当日结账佣金现金余额',sum(IF (b.payment_status=0,a.company_win_or_lose,0)) '截至当日未账佣金现金余额' FROM o_account_order a LEFT JOIN m_account_unsettlement_amount_record b " \
                           f"ON a.order_no=b.order_no AND a.proxy0_id=b.account_id AND b.role_id=0 WHERE a.`status`=2 AND DATE_FORMAT(a.award_time,'%Y-%m-%d')<=DATE_FORMAT(date_sub(CONVERT_TZ(" \
                           f"NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d')) a ) b ON a.date=b.`日期`"
-                # print(sql_str)
                 result = list(self.query_data(sql_str, database_name))
                 billOrder = [list(item) for item in result][0]
                 settled_list.insert(0, billOrder)
