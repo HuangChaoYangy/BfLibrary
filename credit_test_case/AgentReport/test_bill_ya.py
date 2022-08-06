@@ -65,10 +65,7 @@ class Test_bill_yaml(object):
         with allure.step(f'查询SQL:{sql}'):
             Bf_log('bill').info(f'执行sql:{sql}')
         expectResult = MysqlQuery(mysql_info, mongo_info).credit_bill_query(expData=expData, query_type=1)[0]
-        print(actualResult)
-        print(1111111111111111111111111111111111)
-        print(expectResult)
-        print(22222222222222222222222222222222222)
+
         # 校验接口数据和SQL数据的长度
         if len(actualResult) == len(expectResult):
             if actualResult != [] or expectResult != []:
@@ -102,16 +99,18 @@ class Test_bill_yaml(object):
     @allure.story('代理报表-账目-注单详情')
     def test_billOrder(self, inBody, expData, url=url_data):
         '''
-        管理后台-代理报表-账目-注单详情
+        管理后台-代理报表-账目-注单详情,由于返回的数据量太大,暂时只验证前200条
         :param inBody:
         :param expData:
         :return:
         '''
-        allure.dynamic.title(inBody['title'])
+        date = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=int(inBody['begin']))
+        title = f"总台-代理报表-账目-注单详情,查询日期：{date}"
+        allure.dynamic.title(title)
         actualResult = CreditBackGround(mysql_info,mongo_info).credit_bill(inData=inBody, query_type=2)
 
-        with allure.step(f"执行测试用例:{inBody['title']}"):
-            Bf_log('bill').info(f"----------------开始执行:{inBody['title']}------------------------")
+        with allure.step(f"执行测试用例:{title}"):
+            Bf_log('bill').info(f"----------------开始执行:{title}------------------------")
         url = url['mde_ip'] + url['url']
         with allure.step(f"请求地址 {url}"):
             Bf_log('bill').info(f'请求地址为:{url}')
@@ -171,5 +170,5 @@ class Test_bill_yaml(object):
 
 if __name__ == "__main__":
 
-    pytest.main(["test_bill_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  # '--clean-alluredir'
+    pytest.main(["test_bill_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','-n=auto','--clean-alluredir'])  # '--clean-alluredir'
     os.system("allure serve ../report/tmp")
