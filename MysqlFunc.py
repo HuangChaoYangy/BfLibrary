@@ -6272,6 +6272,13 @@ class MysqlQuery(MysqlFunc):
                     odds = reduce(lambda x, y: x * y, i)
                     odds_l.append(odds)
                 odds = sum(odds_l)
+        elif bet_type > 10:
+            if bet_type - 1 <= len(combination_list):
+                odds_l = []
+                for i in combination_list[bet_type-2]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
         else:
             raise AssertionError('暂不支持此种赔率计算或者赔率计算要求错误')
 
@@ -6491,6 +6498,7 @@ class MysqlQuery(MysqlFunc):
             elif new_odds_list[0][1] == bet_dic['串关']:
                 odd_list = new_odds_list[0][-1]
                 mix_num = new_odds_list[0][2]
+                # print(mix_num)
                 odd = re.search("^(\d+)",mix_num)
                 bet_type = odd.group()
                 odds = self.get_all_odds(odds_list=odd_list, bet_type=int(bet_type))
@@ -7775,7 +7783,7 @@ class MysqlQuery(MysqlFunc):
                 sql_str = f"SELECT CONCAT(a.user_name,'/',IFNULL(a.login_account,'')) '账号/登入账号',b.`name` '名称','会员' as '级别',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '投注金额'," \
                           f"sum(ROUND(bet_amount*level0_actual_percentage,2)) '总代理占成',sum(ROUND(bet_amount*company_actual_percentage,2)) '公司占成' FROM o_account_order a JOIN " \
                           f"u_user b ON a.user_id=b.id WHERE a.`status` in (1,2) AND a.award_time is NULL {account} AND a.proxy3_id=(SELECT id FROM m_account WHERE account='{resp['parentId']}') GROUP BY " \
-                          f"CONCAT(a.user_name,'/',a.login_account),b.`name`,b.currency"
+                          f"CONCAT(a.user_name,'/',IFNULL(a.login_account,'')),b.`name`,b.currency"
                 rtn = list(self.query_data(sql_str, database_name))
                 unsettledOrder_list = []
                 for item in rtn:
@@ -7792,7 +7800,7 @@ class MysqlQuery(MysqlFunc):
                           f"(case when a.bet_type=1 then '单注' when a.bet_type=2 then '串关' when a.bet_type=3 then '复式串关' end ) as '注单类型',tournament_name '联赛名称'," \
                           f"CONCAT( home_team_name, ' Vs ', away_team_name ) '赛事名称',IF(is_live=3,'早盘','滚球盘') '赛事类型',market_name '盘口名称',hcp_for_the_rest '亚盘口'," \
                           f"outcome_name '投注项名称',cast(credit_odds as char) '赔率',if(odds_type=1,'欧洲盘','香港盘') '盘口类型',match_time '赛事时间',bet_amount as '投注金额'," \
-                          f"(CASE WHEN a.`status`=2 then '已结算' WHEN a.`status`=3 then '已取消' ELSE '未结算' END) as '注单状态',CONCAT(bet_ip,' / ',ip_address) '下注IP地址'," \
+                          f"(CASE WHEN a.`status`=2 then '已结算' WHEN a.`status`=3 then '已取消' ELSE '未结算' END) as '注单状态',CONCAT(bet_ip,' / ',IFNULL(ip_address,'')) '下注IP地址'," \
                           f"company_actual_percentage,level0_actual_percentage,company_retreat_proportion,level1_actual_percentage,level0_retreat_proportion,level2_actual_percentage," \
                           f"level1_retreat_proportion,level3_actual_percentage,level2_retreat_proportion,level3_retreat_proportion 'user_retreat_proportion' FROM o_account_order a " \
                           f"JOIN o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON (a.order_no=c.order_no AND b.match_id=c.match_id)JOIN " \
@@ -7953,7 +7961,7 @@ class MysqlQuery(MysqlFunc):
                           f"CONCAT( home_team_name, ' Vs ', away_team_name ) '赛事名称',IF(is_live=3,'早盘','滚球盘') '赛事类型',market_name '盘口名称',hcp_for_the_rest '亚盘口',outcome_name '投注项名称'," \
                           f"cast(credit_odds as char) '赔率',if(odds_type=1,'欧洲盘','香港盘') '盘口类型',match_time '赛事时间',ifnull(award_time,'--') as '结算时间',(CASE WHEN a.settlement_result=1 " \
                           f"then '赢' WHEN a.settlement_result=2 then '输' WHEN a.settlement_result=5 then '平局走水' WHEN a.settlement_result=1 then '注单取消' END) as '注单结果'," \
-                          f"CONCAT(bet_ip, +' / ',+ ip_address) '下注IP地址',bet_amount as '投注金额',handicap_win_or_lose '注单输赢',efficient_amount '有效金额',company_actual_percentage," \
+                          f"CONCAT(bet_ip, +' / ',+ IFNULL(ip_address,'')) '下注IP地址',bet_amount as '投注金额',handicap_win_or_lose '注单输赢',efficient_amount '有效金额',company_actual_percentage," \
                           f"company_win_or_lose-company_backwater_amount 'company_winlose',0 as 'company_retreat',company_backwater_amount,company_win_or_lose,level0_actual_percentage," \
                           f"level0_win_or_lose-level0_backwater_amount 'level0_winlose',company_retreat_proportion 'level0_retreat',level0_backwater_amount,level0_win_or_lose," \
                           f"level1_actual_percentage,level1_win_or_lose-level1_backwater_amount 'level1_winlose',level0_retreat_proportion 'level1_retreat',level1_backwater_amount," \
@@ -8139,7 +8147,7 @@ class MysqlQuery(MysqlFunc):
                           f"CONCAT( home_team_name, ' Vs ', away_team_name ) '赛事名称',IF(is_live=3,'早盘','滚球盘') '赛事类型',market_name '盘口名称',hcp_for_the_rest '亚盘口',outcome_name '投注项名称'," \
                           f"cast(credit_odds as char) '赔率',if(odds_type=1,'欧洲盘','香港盘') '盘口类型',match_time '赛事时间',ifnull(award_time,'--') as '结算时间',(CASE WHEN a.settlement_result=1 " \
                           f"then '赢' WHEN a.settlement_result=2 then '输' WHEN a.settlement_result=5 then '平局走水' WHEN a.settlement_result=1 then '注单取消' END) as '注单结果'," \
-                          f"CONCAT(bet_ip, +' / ',+ ip_address) '下注IP地址',bet_amount as '投注金额',handicap_win_or_lose '注单输赢',efficient_amount '有效金额',company_actual_percentage," \
+                          f"CONCAT(bet_ip, +' / ',+ IFNULL(ip_address,'')) '下注IP地址',bet_amount as '投注金额',handicap_win_or_lose '注单输赢',efficient_amount '有效金额',company_actual_percentage," \
                           f"company_win_or_lose-company_backwater_amount 'company_winlose',0 as 'company_retreat',company_backwater_amount,company_win_or_lose,level0_actual_percentage," \
                           f"level0_win_or_lose-level0_backwater_amount 'level0_winlose',company_retreat_proportion 'level0_retreat',level0_backwater_amount,level0_win_or_lose," \
                           f"level1_actual_percentage,level1_win_or_lose-level1_backwater_amount 'level1_winlose',level0_retreat_proportion 'level1_retreat',level1_backwater_amount," \
@@ -10323,9 +10331,9 @@ if __name__ == "__main__":
     # data = mysql.credit_matchReport_query(expData={"ctime": -7, "etime": -1, "sportName": '冰上曲棍球',"matchId":'', "queryDateType": 3}, queryType='match')[0]
     # data = mysql.credit_multitermReport_query(expData={"ctime":-6, "etime":-0, "sportName":'',"searchAccount":"", "queryDateType":3 },queryType='detail')[0]
     # data = mysql.credit_cancelledOrder_query(expData={"ctime": "-7", "etime": "-1", "account": ''})[0]
-    data = mysql.credit_bill_query(expData={"begin": '-4', "end": '-4', "ctime":4 },query_type=1)[0]
+    # data = mysql.credit_bill_query(expData={"begin": '-4', "end": '-4', "ctime":4 },query_type=1)[0]
     # data = mysql.credit_mixBetOrder_query(expData={"account": 'jcj1j2j3jc2'}, query_type=2)[0]
-    print(data)
+    # print(data)
     # print(len(data))
 
 
@@ -10333,9 +10341,9 @@ if __name__ == "__main__":
     # odds_list = [1.88, 1.81, 1.74, 1.81]
     # data = mysql.get_all_odds(odds_list=odds_list, bet_type=4)
     # print(data)
-    # odds = mysql.get_odds_by_orderNum(orderNo='XPjwN6siUUiG', query_type='actual')          #   通过注单号查询注单的最大总赔率和注单结算后的实际总赔率
+    odds = mysql.get_odds_by_orderNum(orderNo='XPLid9GiTwFV', query_type='total')          #   通过注单号查询注单的最大总赔率和注单结算后的实际总赔率
     # odds = mysql.get_float_length(num=0.22222222222)
-    # print(odds)
+    print(odds)
     # N1 = list(combinations(a, 2))
     # N2 = list(permutations(a, 2))
 
