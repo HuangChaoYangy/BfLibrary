@@ -70,3 +70,201 @@
     ctime: '-7'
     etime: '-1'
 
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList
+    method: POST
+  data:
+    account: ''
+    parentId: ''
+    userName: 'a16000000100'
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000100'查询近7天数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000100'
+    ctime: '-7'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList
+    method: POST
+  data:
+    account: ''
+    parentId: ''
+    userName: 'a16000000101'
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000101'查询近7天数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000101'
+    ctime: '-7'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList
+    method: POST
+  data:
+    account: ''
+    parentId: ''
+    userName: 'a16000000102'
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a0b1b2b3a4'查询近7天数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000102'
+    ctime: '-7'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList
+    method: POST
+  data:
+    account: ''
+    parentId: ''
+    userName: 'a16000000103'
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000103'查询近7天数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000103'
+    ctime: '-7'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList
+    method: POST
+  data:
+    account: ''
+    parentId: ''
+    userName: 'a16000000104'
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000104'查询近7天数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000104'
+    ctime: '-7'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList
+    method: POST
+  data:
+    account: ''
+    parentId: ''
+    userName: 'a16000000105'
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000105'查询近7天数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000105'
+    ctime: '-7'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList
+    method: POST
+  data:
+    account: ''
+    parentId: ''
+    userName: 'a16000000106'
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000106'查询近7天数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000106'
+    ctime: '-7'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList
+    method: POST
+  data:
+    account: ''
+    parentId: ''
+    userName: 'a16000000107'
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000107'查询近7天数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000107'
+    ctime: '-7'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList
+    method: POST
+  data:
+    account: ''
+    parentId: ''
+    userName: 'a16000000108'
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000108'查询近7天数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000108'
+    ctime: '-7'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList
+    method: POST
+  data:
+    account: ''
+    parentId: ''
+    userName: 'a16000000109'
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000109'查询近7天数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000109'
+    ctime: '-7'
+    etime: '-1'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentProfitAndLoss/queryMemberProfitAndLossOrderList
+    method: POST
+  data:
+    account: ''
+    parentId: ''
+    userName: 'a16000000001'
+    begin: '-7'
+    end: '-1'
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000001'查询近7天数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000001'
+    ctime: '-7'
+    etime: '-1'
+

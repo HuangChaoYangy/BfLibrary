@@ -40,7 +40,7 @@ class Test_unsettledOrder_yaml(object):
     YamlFileData().get_testcase_params(csv_path=csv_url_unsettle, yaml_file=unsettle_url, new_yaml_file=unsettle_url_new)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=unsettle_url_new, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=unsettle_url_new, isAll=True)[0]['request']
-    # @pytest.mark.skip(reason="调试代码,暂不执行")
+    @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('报表管理-总代未完成交易')
     def test_unsettledOrder(self, inBody, expData, url=url_data):
@@ -119,7 +119,7 @@ class Test_unsettledOrder_yaml(object):
     @allure.story('报表管理-总代未完成交易-注单详情')
     def test_unsettledOrderDetail(self, inBody, expData, url=url_data):
         '''
-        管理后台-报表管理-总代未完成交易
+        管理后台-报表管理-总代未完成交易-注单详情
         :param inBody:
         :param expData:
         :return:

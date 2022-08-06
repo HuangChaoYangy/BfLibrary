@@ -40,7 +40,7 @@ class Test_winLoseSimple_yaml(object):
     YamlFileData().get_testcase_params(csv_path=csv_url_winlose_simple, yaml_file=winlose_simple_url, new_yaml_file=winlose_simple_url_new)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=winlose_simple_url_new, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=winlose_simple_url_new, isAll=True)[0]['request']
-    # @pytest.mark.skip(reason="调试代码,暂不执行")
+    @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('报表管理-总代盈亏(简易)')
     def test_winLoseSimple(self, inBody, expData, url=url_data):

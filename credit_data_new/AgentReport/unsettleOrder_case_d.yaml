@@ -62,3 +62,179 @@
     parentId: ''
     userName: 'a0b1b2b3a4'
 
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryMemberUndoneOrderList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: ''
+    userName: 'a16000000100'
+    title: 总台-代理报表-总代未完成交易-注单详情,根据会员账号'a16000000100'查询所有数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000100'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryMemberUndoneOrderList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: ''
+    userName: 'a16000000101'
+    title: 总台-代理报表-总代未完成交易-注单详情,根据会员账号'a16000000101'查询所有数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000101'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryMemberUndoneOrderList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: ''
+    userName: 'a16000000102'
+    title: 总台-代理报表-总代未完成交易-注单详情,根据会员账号'a16000000102'查询所有数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000102'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryMemberUndoneOrderList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: ''
+    userName: 'a16000000103'
+    title: 总台-代理报表-总代未完成交易-注单详情,根据会员账号'a16000000103'查询所有数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000103'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryMemberUndoneOrderList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: ''
+    userName: 'a16000000104'
+    title: 总台-代理报表-总代未完成交易-注单详情,根据会员账号'a16000000104'查询所有数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000104'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryMemberUndoneOrderList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: ''
+    userName: 'a16000000105'
+    title: 总台-代理报表-总代未完成交易-注单详情,根据会员账号'a16000000105'查询所有数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000105'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryMemberUndoneOrderList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: ''
+    userName: 'a16000000106'
+    title: 总台-代理报表-总代未完成交易-注单详情,根据会员账号'a16000000106'查询所有数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000106'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryMemberUndoneOrderList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: ''
+    userName: 'a16000000107'
+    title: 总台-代理报表-总代未完成交易-注单详情,根据会员账号'a16000000107'查询所有数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000107'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryMemberUndoneOrderList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: ''
+    userName: 'a16000000108'
+    title: 总台-代理报表-总代未完成交易-注单详情,根据会员账号'a16000000108'查询所有数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000108'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryMemberUndoneOrderList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: ''
+    userName: 'a16000000109'
+    title: 总台-代理报表-总代未完成交易-注单详情,根据会员账号'a16000000109'查询所有数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000109'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryMemberUndoneOrderList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: ''
+    parentId: ''
+    userName: 'a16000000001'
+    title: 总台-代理报表-总代未完成交易-注单详情,根据会员账号'a16000000001'查询所有数据
+  resp:
+    account: ''
+    parentId: ''
+    userName: 'a16000000001'
+

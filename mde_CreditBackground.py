@@ -1596,7 +1596,7 @@ class CreditBackGround(object):
             account = ""
         if data['parentId'] == "0":    # 总台
             parent_id = data['parentId']
-            print(parent_id)
+            # print(parent_id)
             parent_level = ''
         else:
             if data['userName']:       # 会员
@@ -4504,13 +4504,13 @@ if __name__ == "__main__":
     # matchReport = bg.credit_matchReport_query(Authorization=login_loken, sportName='', matchId='', queryType='match', dateType=3,create_time=(-7, -1))
     # multitermReport = bg.credit_multitermReport_query(Authorization=login_loken, sportName='', account='', dateType=3,create_time=(-7, -1))
     # match = bg.credit_last_two_days_match_query(Authorization=login_loken)
-    # data = bg.credit_unsettledOrder(inData={"account": "", "parentId":"", "userName":"a0b1b2b300"})
+    data = bg.credit_unsettledOrder(inData={"account": "", "parentId":"", "userName":"a0b1b2b300"})
     # data = bg.credit_winLose_simple(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
     # data = bg.credit_winLose_detail(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
     # data = bg.credit_sportReport(inData={"begin":"-7", "end":"-1", "sportName":"网球","queryDateType":3 },queryType='order')
     # data = bg.credit_multitermReport(inData={"begin":"-7", "end":"-1", "sportName":'',"searchAccount":'', "queryDateType":3 })[0]
     # data = bg.credit_cancelledOrder(inData={"begin": "-7", "end": "-1", "account": ''})
-    data = bg.credit_bill(inData={"begin": "-1", "end": "-1"},query_type=2)
+    # data = bg.credit_bill(inData={"begin": "-1", "end": "-1"},query_type=2)
     # data_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=1)   # 总台-报表管理-数据源对账报表
     # data = bg.credit_dataSourceReport(inData={"betStartTime":"-30", "betEndTime":"-0", "settlementStartTime":"-30", "settlementEndTime":"-0", "userName":"","orderNo":"",
     #                     "sportId":[], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=4)  # 总台-报表管理-数据源对账报表
@@ -4530,7 +4530,7 @@ if __name__ == "__main__":
     # for number in range(100,110):
     #     account = "a16000000" + str(number)           # "a16000000":  登3账号
     #     data = bg.add_user(agent_token=login_loken, account=account, name='test', password='Bfty123456', credits=50000, accountStatus='0')  # 新增登0
-    # print(data)
+    print(data)
 
 
 
