@@ -8,7 +8,7 @@ import pytest
 import allure,os
 import sys
 sys.path.append(os.getcwd())
-
+from CommonFunc import CommonFunc
 from mde_CreditBackground import CreditBackGround
 from MysqlFunc import MysqlQuery
 from log import Bf_log
@@ -50,50 +50,41 @@ class Test_bill_yaml(object):
         :param expData:
         :return:
         '''
-        allure.dynamic.title(inBody['title'])
+        date = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=int(inBody['begin']))
+        title = f"总台-代理报表-账目,查询日期：{date}"
+        allure.dynamic.title(title)
         actualResult = CreditBackGround(mysql_info,mongo_info).credit_bill(inData=inBody, query_type=1)
 
-        with allure.step(f"执行测试用例:{inBody['title']}"):
-            Bf_log('bill').info(f"----------------开始执行:{inBody['title']}------------------------")
+        with allure.step(f"执行测试用例:{title}"):
+            Bf_log('bill').info(f"----------------开始执行:{title}------------------------")
         url = url['mde_ip'] + url['url']
         with allure.step(f"请求地址 {url}"):
             Bf_log('bill').info(f'请求地址为:{url}')
 
         sql = MysqlQuery(mysql_info, mongo_info).credit_bill_query(expData=expData, query_type=1)[1]
         with allure.step(f'查询SQL:{sql}'):
-            Bf_log('cancelledOrder').info(f'执行sql:{sql}')
+            Bf_log('bill').info(f'执行sql:{sql}')
         expectResult = MysqlQuery(mysql_info, mongo_info).credit_bill_query(expData=expData, query_type=1)[0]
-
+        print(actualResult)
+        print(1111111111111111111111111111111111)
+        print(expectResult)
+        print(22222222222222222222222222222222222)
         # 校验接口数据和SQL数据的长度
         if len(actualResult) == len(expectResult):
             if actualResult != [] or expectResult != []:
-                if actualResult[0] == expectResult[0]:  # 判断时间是否相等,若相等,则校验该条数据
-                    new_item1 = []
-                    new_item2 = []
-                    for aip_data in actualResult[1:]:
-                        if aip_data == None or aip_data == 0:
-                            api_result = 0
-                        else:
-                            api_result = float(aip_data)
-                        new_item1.append(api_result)
-                    new_item1.insert(0, actualResult[0])
-                    for sql_data in expectResult[1:]:
-                        if sql_data == None or sql_data == 0:
-                            sql_result = 0
-                        else:
-                            sql_result = float(sql_data)
-                        new_item2.append(sql_result)
-                    new_item2.insert(0, expectResult[0])
+                for index1, item1 in enumerate(actualResult):
+                    for index2, item2 in enumerate(expectResult):
+                        if item1['date'] == item2['date']:  # 判断时间是否相等,若相等,则校验该条数据
 
-                    # 判断两个list的值是否一致,并且回写入excel
-                    if new_item1 == new_item2:
-                        with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
-                            Bf_log('bill').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
-                    else:
-                        with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
-                            Bf_log('bill').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
+                            # 判断两个list的值是否一致,并且回写入excel
+                            if item1 == item2:
+                                with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试通过'):
+                                    Bf_log('bill').info(f'实际结果:{item1}, 期望结果：{item2},==》测试通过')
+                            else:
+                                with allure.step(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过'):
+                                    Bf_log('bill').error(f'实际结果：{item1}, 期望结果：{item2},==》测试不通过')
 
-                    assert new_item1 == new_item2
+                            assert item1 == item2
 
             else:
                 with allure.step(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过'):

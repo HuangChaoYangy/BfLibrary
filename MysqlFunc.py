@@ -157,7 +157,7 @@ class MysqlQuery(MysqlFunc):
         now = arrow.now().shift(days=+day_diff)               # 当日 + -
         now_week = arrow.now().shift(weeks=+day_diff)         # 当周 + -
         now_month = arrow.now().shift(months=+day_diff)       # 当月 + -
-        now_year = arrow.now().shift(years=+day_diff)         # 当年 + -
+        # now_year = arrow.now().shift(years=+day_diff)         # 当年 + -
         if time_type == "now":
             return now.strftime("%Y-%m-%dT%H:%M:%S+07:00")
         elif time_type == "begin":
@@ -176,8 +176,8 @@ class MysqlQuery(MysqlFunc):
             return now_week.strftime("%Y-%m-%d")
         elif time_type == "month":
             return now_month.strftime("%Y-%m")
-        elif time_type == "year":
-            return now_year.strftime("%Y")
+        # elif time_type == "year":
+        #     return now_year.strftime("%Y")
         elif time_type == "now_month_start":      # 当月第一天
             year = now.year
             month = now.month
@@ -7013,6 +7013,8 @@ class MysqlQuery(MysqlFunc):
                 f"JOIN o_account_order_match b ON a.order_no=b.order_no WHERE a.order_no='{order_no}' and bet_type=1"
         print(sql_str)
         rtn = list(self.query_data(sql_str, database_name))
+        print(rtn)
+        print("----------------------------------------------------------------------------------------")
         user_name = rtn[0][0]
         bet_amount = rtn[0][1]
         sport_name = rtn[0][2]
@@ -8640,33 +8642,82 @@ class MysqlQuery(MysqlFunc):
 
     def credit_bill_query(self, expData={}, query_type=1):
         '''
-        总台-代理报表-账目                              /// 修改于2022.07.21
-        :param expData:
+        总台-代理报表-账目,日期参数目前只支持查询1天                            /// 修改于2022.08.05
+        :param expData:      有个缺陷/由于数据库是美东时区，若在北京时间12点前跑数据 resp['begin'] 不能和 resp['ctime'] 传一致，必须减1处理
         :param queryType:   detail/total
         :return:
         '''
         resp = expData
-        ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['ctime']))
-        etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['etime']))
+        ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['begin']))
+        etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(resp['end']))
         time = resp['ctime']
         database_name = "bfty_credit"
         if query_type == 1:
-            sql_str = f"SELECT b.`日期`,`赢亏金额`,`赢亏现金余额`,`佣金金额`,`佣金现金余额` FROM (SELECT IFNULL(DATE_FORMAT(any_value(a.award_time),'%Y-%m-%d')," \
-                      f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d') )'date' ,ifnull(SUM(company_win_or_lose-company_backwater_amount),0)'赢亏金额'," \
-                      f"ifnull(SUM(company_backwater_amount),0)'佣金金额' FROM o_account_order a  WHERE `status` = 2  and  DATE_FORMAT(a.award_time ,'%Y-%m-%d') = " \
-                      f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d') GROUP BY IFNULL(DATE_FORMAT(any_value(a.award_time),'%Y-%m-%d')," \
-                      f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d'))) a JOIN (SELECT DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00')," \
-                      f"INTERVAL {time} DAY),'%Y-%m-%d') '日期',(`当日结账赢亏现金余额`+`截至当日未结账赢亏现金余额`) '赢亏现金余额',(`当日结账佣金现金余额`+`截至当日未账佣金现金余额`) '佣金现金余额' FROM " \
-                      f"(SELECT sum(IF (DATE_FORMAT(b.checkout_time,'%Y-%m-%d')=DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d')," \
-                      f"(a.company_win_or_lose-a.company_backwater_amount),0)) '当日结账赢亏现金余额',sum(IF (b.payment_status=0,(a.company_win_or_lose-a.company_backwater_amount),0)) " \
-                      f"'截至当日未结账赢亏现金余额',sum(IF (DATE_FORMAT(b.checkout_time,'%Y-%m-%d')=DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d')," \
-                      f"a.company_win_or_lose,0)) '当日结账佣金现金余额',sum(IF (b.payment_status=0,a.company_win_or_lose,0)) '截至当日未账佣金现金余额' FROM o_account_order a LEFT JOIN " \
-                      f"m_account_unsettlement_amount_record b ON a.order_no=b.order_no AND a.proxy0_id=b.account_id AND b.role_id=0 WHERE a.`status`=2 AND " \
-                      f"DATE_FORMAT(a.award_time,'%Y-%m-%d')<=DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d')) a ) b ON a.date=b.`日期`"
-            rtn = list(self.query_data(sql_str, database_name))
-            billOrder = [list(item) for item in rtn][0]
+            sql_str1 = f"SELECT create_time,operation_desc,check_amount,remark FROM `m_account_checked_history` WHERE `account_id`='0' AND DATE_FORMAT(create_time,'%Y-%m-%d') " \
+                       f"BETWEEN '{ctime}' and '{etime}' ORDER BY `create_time` ASC"
+            # print(sql_str1)
+            rtn = list(self.query_data(sql_str1, database_name))
+            if rtn == []:
+                print("SQL：当前查询日期范围内暂无结账")
+                sql_str = f"SELECT b.`日期`,`赢亏金额`,`赢亏现金余额`,`佣金金额`,`佣金现金余额`,`结账金额`,`佣金现金余额` as '结账现金余额' FROM (SELECT IFNULL(DATE_FORMAT(any_value(a.award_time),'%Y-%m-%d')," \
+                          f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d') )'date' ,ifnull(SUM(company_win_or_lose-company_backwater_amount),0)'赢亏金额'," \
+                          f"ifnull(SUM(company_backwater_amount),0)'佣金金额',0 '结账金额' FROM o_account_order a  WHERE `status` = 2  and  DATE_FORMAT(a.award_time ,'%Y-%m-%d') = " \
+                          f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d') GROUP BY IFNULL(DATE_FORMAT(any_value(a.award_time),'%Y-%m-%d')," \
+                          f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d'))) a JOIN (SELECT DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00')," \
+                          f"INTERVAL {time} DAY),'%Y-%m-%d') '日期',(`当日结账赢亏现金余额`+`截至当日未结账赢亏现金余额`) '赢亏现金余额',(`当日结账佣金现金余额`+`截至当日未账佣金现金余额`) '佣金现金余额' FROM " \
+                          f"(SELECT sum(IF (DATE_FORMAT(b.checkout_time,'%Y-%m-%d')=DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d')," \
+                          f"(a.company_win_or_lose-a.company_backwater_amount),0)) '当日结账赢亏现金余额',sum(IF (b.payment_status=0,(a.company_win_or_lose-a.company_backwater_amount),0)) " \
+                          f"'截至当日未结账赢亏现金余额',sum(IF (DATE_FORMAT(b.checkout_time,'%Y-%m-%d')=DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d')," \
+                          f"a.company_win_or_lose,0)) '当日结账佣金现金余额',sum(IF (b.payment_status=0,a.company_win_or_lose,0)) '截至当日未账佣金现金余额' FROM o_account_order a LEFT JOIN " \
+                          f"m_account_unsettlement_amount_record b ON a.order_no=b.order_no AND a.proxy0_id=b.account_id AND b.role_id=0 WHERE a.`status`=2 AND " \
+                          f"DATE_FORMAT(a.award_time,'%Y-%m-%d')<=DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d')) a ) b ON a.date=b.`日期`"
+                # print(sql_str)
+                rtn = list(self.query_data(sql_str, database_name))
+                billOrder = [list(item) for item in rtn][0]
+                expect_result = []
+                expect_result.append({"date": billOrder[0], "winloseAmount": float(billOrder[1]), "winloseBalance": float(billOrder[2]),
+                                    "commissionAmount": float(billOrder[3]), "commissionBalance": float(billOrder[4]),
+                                      "settledAmount": float(billOrder[5]),"settledBalance": float(billOrder[6])})
 
-            return billOrder,sql_str
+                return expect_result,sql_str
+            else:
+                print("SQL：当前查询日期范围内有结账")
+                settled_list = []
+                for item in rtn:
+                    ctime = item[0]
+                    create_time = ctime.strftime("%Y-%m-%d %H:%M:%S")
+                    settled_list.append([create_time, item[1], float(item[2]), item[3]])
+                # print(settled_list)
+                sql_str = f"SELECT b.`日期`,`赢亏金额`,`赢亏现金余额`,`佣金金额`,`佣金现金余额` FROM (SELECT IFNULL(DATE_FORMAT(any_value(a.award_time),'%Y-%m-%d'),DATE_FORMAT(date_sub" \
+                          f"(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d') )'date' ,ifnull(SUM(company_win_or_lose-company_backwater_amount),0)'赢亏金额'," \
+                          f"ifnull(SUM(company_backwater_amount),0)'佣金金额' FROM o_account_order a  WHERE `status` = 2   and  DATE_FORMAT(a.award_time ,'%Y-%m-%d') = " \
+                          f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d') GROUP BY IFNULL(DATE_FORMAT(any_value(a.award_time),'%Y-%m-%d')," \
+                          f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d'))) a JOIN (SELECT DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00'," \
+                          f"'-04:00'),INTERVAL {time} DAY),'%Y-%m-%d') '日期',(`截至当日未结账赢亏现金余额`) '赢亏现金余额',(`截至当日未账佣金现金余额`) '佣金现金余额' FROM (SELECT sum(IF " \
+                          f"(DATE_FORMAT(b.checkout_time,'%Y-%m-%d')=DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d'),(a.company_win_or_lose-" \
+                          f"a.company_backwater_amount),0)) '当日结账赢亏现金余额',sum(IF (b.payment_status=0,(a.company_win_or_lose-a.company_backwater_amount),0)) '截至当日未结账赢亏现金余额'," \
+                          f"sum(IF (DATE_FORMAT(b.checkout_time,'%Y-%m-%d')=DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d'),a.company_win_or_lose,0)) " \
+                          f"'当日结账佣金现金余额',sum(IF (b.payment_status=0,a.company_win_or_lose,0)) '截至当日未账佣金现金余额' FROM o_account_order a LEFT JOIN m_account_unsettlement_amount_record b " \
+                          f"ON a.order_no=b.order_no AND a.proxy0_id=b.account_id AND b.role_id=0 WHERE a.`status`=2 AND DATE_FORMAT(a.award_time,'%Y-%m-%d')<=DATE_FORMAT(date_sub(CONVERT_TZ(" \
+                          f"NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d')) a ) b ON a.date=b.`日期`"
+                # print(sql_str)
+                result = list(self.query_data(sql_str, database_name))
+                billOrder = [list(item) for item in result][0]
+                settled_list.insert(0, billOrder)
+
+                balance = settled_list[0][4]       # 获取到佣金现金余额
+                for item in settled_list[1:]:
+                    check_amount = Decimal(str(-item[2]))                # 数据库存的和接口返的值是相反数,所以这里要取反
+                    balance = balance + check_amount                     # 通过佣金现金余额+与下级的结账金额计算得出与下级结账后的现金余额
+                    item.insert(3,balance)
+                # print(settled_list)
+                actual_result = []
+                actual_result.append({"date": settled_list[0][0], "winloseAmount": float(settled_list[0][1]),"winloseBalance": float(settled_list[0][2]),
+                                      "commissionAmount": float(settled_list[0][3]), "commissionBalance": float(settled_list[0][4])})
+                for item in settled_list[1:]:
+                    actual_result.append({"date": item[0], "operation_desc": item[1], "check_amount": -float(item[2]),     # 数据库存的和接口返的值是相反数,所以这里要取反
+                                          "settleBalance": float(item[3]), "remark": item[4]})
+                return actual_result, sql_str
 
         elif query_type == 2:
             sql_str = f" SELECT CONCAT(d.account,'/',IFNULL(d.login_account,'')) as '账号/登入账号',d.`name` '名称',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id=" \
@@ -10176,8 +10227,8 @@ if __name__ == "__main__":
     # data = mysql.get_order_marketid_and_specifier_sql(offset=-1)
     # data = mysql.get_client_orderNo_marketid_and_specifier_sql(user_name="USD_TEST02",offset=-3)
     # data = mysql.query_orderInfo_by_match_result(user_name="", order_no='XNwvKuW9gsFn', offset=())
-    data = mysql.get_current_time_for_client(time_type="month", day_diff=-1)
-    print(data)
+    # data = mysql.get_current_time_for_client(time_type="month", day_diff=-1)
+    # print(data)
     # data = mysql.get_settled_order_matchid_sql()
 
 
@@ -10260,8 +10311,9 @@ if __name__ == "__main__":
     # betType = mysql.get_bet_type_by_ordernum(order_no='XHXrWXc2SsDc')          # 获取串关的类型
     # print(data)
     # order = mysql.get_unsettled_order(user_name='a01')
-    # user_name,bet_amount,sport_name,team_name,market_name = mysql.get_order_detail(order_no='XLjatmChCUUy')
+    # user_name,bet_amount,sport_name,team_name,market_name = mysql.get_order_detail(order_no='XPuhA5jKDRGA')
     # print(user_name,bet_amount,sport_name,team_name,market_name)
+    # print(data)
     # id = mysql.get_account_id(account='a0b1b2b300')
     # print(id)
 
@@ -10274,9 +10326,9 @@ if __name__ == "__main__":
     # data = mysql.credit_matchReport_query(expData={"ctime": -7, "etime": -1, "sportName": '冰上曲棍球',"matchId":'', "queryDateType": 3}, queryType='match')[0]
     # data = mysql.credit_multitermReport_query(expData={"ctime":-6, "etime":-0, "sportName":'',"searchAccount":"", "queryDateType":3 },queryType='detail')[0]
     # data = mysql.credit_cancelledOrder_query(expData={"ctime": "-7", "etime": "-1", "account": ''})[0]
-    # data = mysql.credit_bill_query(expData={"ctime": '-0', "etime": '-0'},query_type=2)[0]
+    data = mysql.credit_bill_query(expData={"begin": '-4', "end": '-4', "ctime":4 },query_type=1)[0]
     # data = mysql.credit_mixBetOrder_query(expData={"account": 'jcj1j2j3jc2'}, query_type=2)[0]
-    # print(data)
+    print(data)
     # print(len(data))
 
 
@@ -10284,7 +10336,7 @@ if __name__ == "__main__":
     # odds_list = [1.88, 1.81, 1.74, 1.81]
     # data = mysql.get_all_odds(odds_list=odds_list, bet_type=4)
     # print(data)
-    # odds = mysql.get_odds_by_orderNum(orderNo='XFB77XY4Ja4T', query_type='actual')          #   通过注单号查询注单的最大总赔率和注单结算后的实际总赔率
+    # odds = mysql.get_odds_by_orderNum(orderNo='XPjwN6siUUiG', query_type='actual')          #   通过注单号查询注单的最大总赔率和注单结算后的实际总赔率
     # odds = mysql.get_float_length(num=0.22222222222)
     # print(odds)
     # N1 = list(combinations(a, 2))
@@ -10308,9 +10360,9 @@ if __name__ == "__main__":
     # data = mysql.get_mainBetReport_query(expData={'sportName':'足球'})
     # data = mysql.get_sportName_mainBetReport()
 
-    # data = mysql.queryUnusualOrderList(order_num="",date=(-39,0))[1]
-    data = mysql.remove_special_symbols(data_str="jcj1j2j3jc2/")
-    print(data)
+    # data = mysql.queryUnusualOrderList(order_num="XPuvXSpW5n3u",date=(-39,0))[0]
+    # data = mysql.remove_special_symbols(data_str="jcj1j2j3jc2/")
+    # print(data)
 
 
 

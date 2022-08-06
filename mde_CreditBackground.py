@@ -2957,7 +2957,7 @@ class CreditBackGround(object):
 
     def credit_bill(self, inData, query_type=1):
         '''
-        总台-代理报表-账目，默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的                /// 修改于2022.07.21
+        总台-代理报表-账目,日期参数目前只支持查询1天                /// 修改于2022.08.06
         :param inData:
         :param query_type: 1 列表详情  2 注单详情
         :return:
@@ -2982,21 +2982,81 @@ class CreditBackGround(object):
                 data = {"type":"","begin":ctime,"end":etime,"page":1,"limit":200}
                 rsp = self.session.post(url, headers=head, json=data)
                 if rsp.json()['message'] != 'OK':
-                    print("查询账目失败,原因：" + rsp.json()["message"])
+                    print("接口：查询账目失败,原因：" + rsp.json()["message"])
                 else:
-                    billOrder = []
-                    for item in rsp.json()['data']['data'][:2]:
-                        billOrder.append([item['totalDate'], item['totalAmount'], item['total']])
+                    data_num = len(rsp.json()['data']['data'])
+                    if data_num <= 3:
+                        billOrder = []
+                        for item in rsp.json()['data']['data']:
+                            billType = item['billType']
+                            if billType in (1,2,3):     #  1,2,3 分别是盈亏/佣金/结账, 4是已结账
+                                billOrder.append([item['totalDate'], item['totalAmount'], item['total']])
+                        # 将[['2022-08-01', -340.55, 1851.65], ['2022-08-01', -4.29, 1710.42], ['2022-08-01', 0.0, 1710.42]]  转成 ['2022-08-01', -340.55, 1851.65, -4.29, 1710.42, 0.0, 1710.42]
+                        if len(billOrder) == 3:        # 总共3条记录,billOrder的长度为3,则没有已结账记录,3条记录分别是 盈亏/佣金/结账
+                            print("接口：当前查询日期范围内暂无结账")
+                            num = 0
+                            actualResult = []
+                            for item in range(len(billOrder)):
+                                if item == num:
+                                    actualResult.append(billOrder[0][0])
+                            for detail in billOrder:
+                                actualResult.extend(detail[1:])
+                            # print(actualResult)
+                            actual_result = []
+                            actual_result.append({"date": actualResult[0], "winloseAmount": actualResult[1],"winloseBalance": actualResult[2],
+                                                "commissionAmount": actualResult[3],"commissionBalance": actualResult[4],
+                                                "settledAmount": actualResult[5],"settledBalance": actualResult[6]})
 
-                    num = 0
-                    actualResult = []
-                    for item in range(len(billOrder)):
-                        if item == num:
-                            actualResult.append(billOrder[0][0])
-                    for detail in billOrder:
-                        actualResult.extend(detail[1:])
+                            return actual_result
 
-                    return actualResult
+                        elif len(billOrder) == 2:      # 总共3条记录,billOrder的长度为2,则有一条已结账的记录,3条记录分别是 盈亏/佣金/  与下级结账记录
+                            print("接口：当前查询日期范围内仅有1条结账记录")
+                            num = 0
+                            billOrderDetail = []
+                            for item in range(len(billOrder)):
+                                if item == num:
+                                    billOrderDetail.append(billOrder[0][0])
+                            for detail in billOrder:
+                                billOrderDetail.extend(detail[1:])
+                            actualResult = []
+                            actualResult.append({"date": billOrderDetail[0], "winloseAmount": billOrderDetail[1],"winloseBalance": billOrderDetail[2],
+                                                  "commissionAmount": billOrderDetail[3],"commissionBalance": billOrderDetail[4]})
+                            # print(actualResult)
+                            actual_result = []
+                            for item in rsp.json()['data']['data'][2:]:
+                                actual_result.append({"date":item['checkoutDate'], "operation_desc":item['remark'], "check_amount":item['totalAmount'],
+                                                     "settleBalance":item['total'], "remark":item['checkBillRemark']})
+
+                            actual_result.insert(0, actualResult[0])
+                            # print(actual_result)
+                            return actual_result
+
+                    else:                            # 大于3条记录,则有多条已结账的记录,多条记录分别是 盈亏/佣金/  与下级结账记录
+                        print("接口：当前查询日期范围内有多条结账记录")
+                        billOrder = []
+                        for item in rsp.json()['data']['data'][:2]:
+                            billOrder.append([item['totalDate'], item['totalAmount'], item['total']])
+                        num = 0
+                        billOrderDetail = []
+                        for item in range(len(billOrder)):
+                            if item == num:
+                                billOrderDetail.append(billOrder[0][0])
+                        for detail in billOrder:
+                            billOrderDetail.extend(detail[1:])
+
+                        actualResult = []
+                        for item in rsp.json()['data']['data'][2:]:
+                            actualResult.append([item['checkoutDate'], item['remark'], item['totalAmount'],
+                                              item['total'],item['checkBillRemark']])
+                        actualResult.insert(0, billOrderDetail)
+                        # print(actualResult)
+                        actual_result = []
+                        actual_result.append({"date":actualResult[0][0], "winloseAmount":actualResult[0][1], "winloseBalance":actualResult[0][2],
+                                              "commissionAmount":actualResult[0][3], "commissionBalance":actualResult[0][4]})
+                        for item in actualResult[1:]:
+                            actual_result.append({"date":item[0], "operation_desc":item[1], "check_amount":item[2],
+                                                  "settleBalance":item[3], "remark":item[4]})
+                        return actual_result
 
             elif query_type == 2:
                 data = {"begin":ctime,"end":etime,"page":1,"limit":200}
@@ -4161,7 +4221,9 @@ class CreditBackGround(object):
                     loop += 1
 
         elif settleType == "未结算":
+            print(date)
             order_info_list = self.mysql.queryUnusualOrderList(order_num=order_num,date=date)[1]
+            print(order_info_list)
             if order_info_list == []:
                 raise AssertionError('ERROR,查询范围内暂无异常订单')
             else:
@@ -4411,8 +4473,8 @@ if __name__ == "__main__":
     bg = CreditBackGround(mysql_info,mongo_info)            # 创建对象
 
     # login_loken = bg.login_background(uname='a16', password='Bfty123456', securityCode="Agent0", loginDiv=555666)          # 登录信用网代理后台
-    # login_loken = bg.login_background(uname='Liyang03', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
-    # data = bg.settleUnusualOrder(Authorization=login_loken, order_num="", date=(-60, -0), settleType='未结算', remark="脚本结算", result=None)       # 异常订单结算脚本
+    login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
+    # data = bg.settleUnusualOrder(Authorization=login_loken, order_num="", date=(-60, -0), settleType='待确认', remark="脚本结算", result=None)       # 异常订单结算脚本
     # data = bg.unsettlement(Authorization=login_loken)
     # user = bg.user_management(Authorization=login_loken, userStatus='0', userName='', userAccount='', sortIndex='', sortParameter='')   # 会员管理
     # match = bg.credit_match_result_query(Authorization=login_loken, sportName='足球', tournamentName='', teamName='',offset='0')    # 新赛果查询
@@ -4438,14 +4500,13 @@ if __name__ == "__main__":
     # matchReport = bg.credit_matchReport_query(Authorization=login_loken, sportName='', matchId='', queryType='match', dateType=3,create_time=(-7, -1))
     # multitermReport = bg.credit_multitermReport_query(Authorization=login_loken, sportName='', account='', dateType=3,create_time=(-7, -1))
     # match = bg.credit_last_two_days_match_query(Authorization=login_loken)
-    # winlose_simple = bg.credit_unsettledOrder_query(Authorization=login_loken, account='',parentId='a0b1', userName='')
-    # data = bg.credit_unsettledOrder(inData={"account": "", "parentId":"", "userName":"a0b1b2b301"})
+    # data = bg.credit_unsettledOrder(inData={"account": "", "parentId":"", "userName":"a0b1b2b300"})
     # data = bg.credit_winLose_simple(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
     # data = bg.credit_winLose_detail(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
     # data = bg.credit_sportReport(inData={"begin":"-7", "end":"-1", "sportName":"网球","queryDateType":3 },queryType='order')
     # data = bg.credit_multitermReport(inData={"begin":"-7", "end":"-1", "sportName":'',"searchAccount":'', "queryDateType":3 })[0]
     # data = bg.credit_cancelledOrder(inData={"begin": "-7", "end": "-1", "account": ''})
-    # data = bg.credit_bill(inData={"begin": "-0", "end": "-0"},query_type=2)
+    data = bg.credit_bill(inData={"begin": "-3", "end": "-3"},query_type=1)
     # data_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=1)   # 总台-报表管理-数据源对账报表
     # data = bg.credit_dataSourceReport(inData={"betStartTime":"-30", "betEndTime":"-0", "settlementStartTime":"-30", "settlementEndTime":"-0", "userName":"","orderNo":"",
     #                     "sportId":[], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=4)  # 总台-报表管理-数据源对账报表
@@ -4457,15 +4518,15 @@ if __name__ == "__main__":
     # data = bg.credit_mainBet(inData={"matchId": "", "sportId": ""}, quert_type=1)  # 总投注-让球/大小/独赢/滚球
     # data = bg.credit_mixBet(inData={"account":""}, quert_type=2)     # 总投注-混合串关
 
-    login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE1NTUwNjk5MjgyNDcxMDc1ODUiLCJleHAiOjE2NTk1OTk4OTEsInVzZXJuYW1lIjoiYTE2MDAwMDAwIn0.swtiEzP3CE3IoMy46WLXsd3qwvNdBVU-ZWiNxpcvveM"
+    # login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE1NTUwNjk5MjgyNDcxMDc1ODUiLCJleHAiOjE2NTk1OTk4OTEsInVzZXJuYW1lIjoiYTE2MDAwMDAwIn0.swtiEzP3CE3IoMy46WLXsd3qwvNdBVU-ZWiNxpcvveM"
     # data = bg.addAgentLine(Authorization=login_loken, account='a16', name='test', password='Bfty123456', securityCode='Agent0', credits=100000000,accountStatus="0")  # 新增登0
     # data = bg.addAgent1(agent_token=login_loken, account='a1600', name='test', password='Bfty123456',securityCode='Agent0', credits=10000000, accountStatus=0)  # 新增登1
     # data = bg.addAgent2(agent_token=login_loken, account='a160000', name='test', password='Bfty123456',securityCode='Agent0', credits=2000000, accountStatus=0)  # 新增登2
     # data = bg.addAgent3(agent_token=login_loken, account='a16000000', name='test', password='Bfty123456',securityCode='Agent0', credits=1000000, accountStatus=0)  # 新增登3
-    for number in range(100,110):
-        account = "a16000000" + str(number)           # "a16000000":  登3账号
-        data = bg.add_user(agent_token=login_loken, account=account, name='test', password='Bfty123456', credits=50000, accountStatus='0')  # 新增登0
-        # print(data)
+    # for number in range(100,110):
+    #     account = "a16000000" + str(number)           # "a16000000":  登3账号
+    #     data = bg.add_user(agent_token=login_loken, account=account, name='test', password='Bfty123456', credits=50000, accountStatus='0')  # 新增登0
+    # print(data)
 
 
 
