@@ -986,7 +986,7 @@ class Credit_Client(object):
 
     def submit_all_outcome(self, match_id, sport_name, token, odds_type=1, IsRandom=''):
         '''
-        投注单注,比赛下所有盘口全投注                    /// 修改于2022.04.28
+        投注单注,比赛下所有盘口全投注                    /// 修改于2022.08.06
         :param match_id:
         :param sport_name:
         :param token:
@@ -994,7 +994,7 @@ class Credit_Client(object):
         :param IsRandom: False不随机投注   True随机投注           ['pc','H5-IOS','H5-android','APP-android','APP-IOS']
         :return:
         '''
-        url = self.auth_url + ":6210/creditBet/mobileSubmit"
+        url = self.auth_url + "/creditBet/submit"
         head = {"accessCode": token,
                 "Accept-Encoding": "gzip, deflate",
                 "Accept-Language": "zh-CN,zh;q=0.9",
@@ -1455,20 +1455,25 @@ class Credit_Client(object):
                     loop += 1
             print('注单号列表: %s' % (sub_order_no_list))
 
-    def get_all_match_outcome(self, token, event_type='INPLAY', odds_Type=1, handicap=False):
+    def get_all_match_outcome(self, token, sport_name="", event_type='INPLAY', odds_Type=1, handicap=False):
         '''
-        PC端,通过比赛ID获取该比赛所有盘口                /// 修改于2022.06.04
+        PC端,通过比赛ID获取该比赛所有盘口                /// 修改于2022.08.06
         :param token:
-        :param odds_Type:
-        :param odds_Type:
+        :param event_type:
+        :param odds_Type:     ['足球', '篮球', '网球', '排球', '羽毛球', '乒乓球', '棒球', '冰上曲棍球']
         :param handicap:  默认为false,为True时获取让球/大小/独赢盘口    用户后台查询
         :return:
         '''
         match_info_list = []
-        for sport_name in ['足球', '篮球', '网球', '排球', '羽毛球', '乒乓球', '棒球', '冰上曲棍球']:
-            match_id_list = self.get_match_list(sport_name=sport_name, token=token,event_type=event_type, odds_type=odds_Type)[0]
+        if sport_name == "":
+            for sport_name in ['足球', '篮球', '网球', '排球', '羽毛球', '乒乓球', '棒球', '冰上曲棍球']:
+                match_id_list = self.get_match_list(sport_name=sport_name, token=token,event_type=event_type, odds_type=odds_Type)[0]
+                match_info_list.extend(match_id_list)
+        else:
+            match_id_list =self.get_match_list(sport_name=sport_name, token=token, event_type=event_type, odds_type=odds_Type)[0]
             match_info_list.extend(match_id_list)
-
+        # print(match_info_list)
+        # print(1111111111111111111111111111111)
         url = self.mde_url + '/creditMatchPC/totalMarketList'
         handicap_list = ["1", "16", "18", "219", "223", "225", "60", "66", "68", "186", "188", "314", "237", "238", "251", "256", "258"]
         sport_id_dic = {"足球": "sr:sport:1", "篮球": "sr:sport:2", "网球": "sr:sport:5", "排球": "sr:sport:23",
@@ -1481,6 +1486,7 @@ class Credit_Client(object):
                 "Connection": "keep-alive",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                               "Chrome/85.0.4183.102 Safari/537.36"}
+        # match_info_list = ["sr:match:35176177"]
         outcome_info_list = []
         if handicap == False:
             for match_id in match_info_list:
@@ -1489,23 +1495,45 @@ class Credit_Client(object):
                 outcome_id_list = []
                 # market
                 sport_id = sport_id_dic[sport_name]
-
-                for market in rsp.json()["data"]["marketList"]:
-                    market_id = market["marketId"]
-                    is_live = market["isLive"]
-                    for outcome in market["outcomeList"]:
-                        for outcome_detail in outcome:
-                            outcome_dic = {"market_id": market_id,
-                                           "specifier": outcome_detail["specifier"],
-                                           "outcome_id": outcome_detail["outcomeId"],
-                                           "oddsType": outcome_detail["oddsType"],
-                                           "odds": outcome_detail["odds"],
-                                           "islive": is_live,
-                                           "sport_category_id": sport_id}
-                            outcome_info_list.append((market_id, outcome_dic))
-                            outcomeid = outcome_detail['outcomeId']
-                            outcome_id_list.append(outcomeid)
-
+                try:
+                    marketList = rsp.json()["data"]["marketList"]
+                    # print(marketList)
+                    for market in marketList:
+                        market_id = market["marketId"]
+                        is_live = market["isLive"]
+                        for outcome in market["outcomeList"]:
+                            for outcome_detail in outcome:
+                                outcome_dic = {"market_id": market_id,
+                                               "specifier": outcome_detail["specifier"],
+                                               "outcome_id": outcome_detail["outcomeId"],
+                                               "oddsType": outcome_detail["oddsType"],
+                                               "odds": outcome_detail["odds"],
+                                               "islive": is_live,
+                                               "sport_category_id": sport_id}
+                                outcome_info_list.append((market_id, outcome_dic))
+                                outcomeid = outcome_detail['outcomeId']
+                                outcome_id_list.append(outcomeid)
+                except:
+                    marketList = rsp.json()["data"]["marketList"]
+                    # print(111111111111111111111111111111111111111111111)
+                    # print(marketList)
+                    for market in marketList:
+                        market_id = market["marketId"]
+                        is_live = market["isLive"]
+                        for outcome in market["outcomeList"]:
+                            outCome = eval(outcome)
+                            for outcome_detail in outCome:
+                                outcome_dic = {"market_id": market_id,
+                                               "specifier": outcome_detail["specifier"],
+                                               "outcome_id": outcome_detail["outcomeId"],
+                                               "oddsType": outcome_detail["oddsType"],
+                                               "odds": outcome_detail["odds"],
+                                               "islive": is_live,
+                                               "sport_category_id": sport_id}
+                                outcome_info_list.append((market_id, outcome_dic))
+                                outcomeid = outcome_detail['outcomeId']
+                                outcome_id_list.append(outcomeid)
+            # print(outcome_info_list)
             return outcome_info_list
 
         else:
@@ -1538,9 +1566,9 @@ class Credit_Client(object):
             return outcome_info_list
 
 
-    def submit_all_match(self, token, event_type=None, odds_type=1, IsRandom='', handicap=False):
+    def submit_all_match(self, token, sport_name="", event_type=None, odds_type=1, IsRandom='', handicap=False):
         '''
-        投注单注,所有球类所有比赛下所有盘口随机投注                    /// 修改于2022.06.04
+        投注单注,所有球类所有比赛下所有盘口随机投注                    /// 修改于2022.08.06
         :param token:
         :param event_type:
         :param odds_type:
@@ -1560,8 +1588,8 @@ class Credit_Client(object):
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                               "Chrome/85.0.4183.102 Safari/537.36"}
 
-        outcome_info_list = self.get_all_match_outcome(token, event_type=event_type, odds_Type=odds_type, handicap=handicap)  # 指定盘口类型，1是欧洲盘，2是香港盘，3是马来盘，4是印尼盘
-        print(outcome_info_list)
+        outcome_info_list = self.get_all_match_outcome(token, sport_name=sport_name, event_type=event_type, odds_Type=odds_type, handicap=handicap)  # 指定盘口类型，1是欧洲盘，2是香港盘，3是马来盘，4是印尼盘
+        random.shuffle(outcome_info_list)
         if not IsRandom:
             selection_list = []
             for outcome_info in outcome_info_list:
@@ -1601,17 +1629,16 @@ class Credit_Client(object):
                     sub_order_no = rsp.json()['data']['orderNo']
                     # matchInfo = rsp.json()['data']['selections']
                     content = self.cm.write_to_local_file(content=f"{sub_order_no}\n",
-                                                          file_name='C:/Users/USER/Desktop/test.txt', mode='a',
-                                                          )
+                                                          file_name='C:/Users/USER/Desktop/test.txt', mode='a',)
                     time.sleep(3)  # 等待3秒
                     if sub_order_no:
                         sub_order_no_list.append(str(sub_order_no))
                         print("投注成功：" + str(sub_order_no))
-                        user_name, bet_amount, sport_name, team_name, market_name = self.my.get_order_detail(order_no=sub_order_no)
-                        print(f'当前用户：{user_name}, 投注金额：{bet_amount}, 队伍名称：{team_name}, 盘口名称：{market_name}, 体育类型：{sport_name}, 赛事类型：{type_dic[event_type]}')
-                        # 输出日志
-                        self.blog.info(msg=f'当前用户：{user_name}, 投注金额：{bet_amount}, 队伍名称：{team_name}, 盘口名称：{market_name}, 体育类型：{sport_name}, '
-                                f'赛事类型：{type_dic[event_type]}, 注单号：{sub_order_no}')
+                        # user_name, bet_amount, sport_name, team_name, market_name = self.my.get_order_detail(order_no=sub_order_no)
+                        # print(f'当前用户：{user_name}, 投注金额：{bet_amount}, 队伍名称：{team_name}, 盘口名称：{market_name}, 体育类型：{sport_name}, 赛事类型：{type_dic[event_type]}')
+                        # # 输出日志
+                        # self.blog.info(msg=f'当前用户：{user_name}, 投注金额：{bet_amount}, 队伍名称：{team_name}, 盘口名称：{market_name}, 体育类型：{sport_name}, '
+                        #         f'赛事类型：{type_dic[event_type]}, 注单号：{sub_order_no}')
                     else:
                         print("ERR: 投注失败：" + rsp.json()['data']["message"])
                     print("总共【%d】个投注项，已投注【%d】个投注项，还剩【%d】个投注项" % (run_loop, loop, run_loop - loop))
@@ -1668,11 +1695,11 @@ class Credit_Client(object):
                     if sub_order_no:
                         sub_order_no_list.append(str(sub_order_no))
                         print("投注成功：" + str(sub_order_no))
-                        user_name, bet_amount, sport_name, team_name, market_name = self.my.get_order_detail(order_no=sub_order_no)
-                        print(f'当前用户：{user_name}, 投注金额：{bet_amount}, 队伍名称：{team_name}, 盘口名称：{market_name}, 体育类型：{sport_name}, 赛事类型：{type_dic[event_type]}')
-                        # 输出日志
-                        self.blog.info(msg=f'当前用户：{user_name}, 投注金额：{bet_amount}, 队伍名称：{team_name}, 盘口名称：{market_name}, 体育类型：{sport_name}, '
-                                           f'赛事类型：{type_dic[event_type]}, 注单号：{sub_order_no}')
+                        # user_name, bet_amount, sport_name, team_name, market_name = self.my.get_order_detail(order_no=sub_order_no)
+                        # print(f'当前用户：{user_name}, 投注金额：{bet_amount}, 队伍名称：{team_name}, 盘口名称：{market_name}, 体育类型：{sport_name}, 赛事类型：{type_dic[event_type]}')
+                        # # 输出日志
+                        # self.blog.info(msg=f'当前用户：{user_name}, 投注金额：{bet_amount}, 队伍名称：{team_name}, 盘口名称：{market_name}, 体育类型：{sport_name}, '
+                        #                    f'赛事类型：{type_dic[event_type]}, 注单号：{sub_order_no}')
                     else:
                         print("ERR: 投注失败：" + rsp.json()['data']["message"])
                     print("总共【%d】个投注项，已投注【%d】个投注项，还剩【%d】个投注项" % (randomNum, loop, randomNum - loop))
@@ -2434,7 +2461,6 @@ class MyThread(threading.Thread):
         :return:
         '''
         token_list = self.bfc.get_client_user_token()
-        print(token_list)
         type_list = ['INPLAY', 'EARLY', 'TODAY']
         sport_name_list = ['足球', '篮球', '网球', '排球', '羽毛球',  '兵乓球', '棒球', '冰球']
         bet_type_dic = {1:"单注", 2:"串关", 3:"复式串关"}
@@ -2449,10 +2475,10 @@ class MyThread(threading.Thread):
 
         for token_str in token_list:
             if bet_type_dic[bet_type] == "单注":
-                sub_thread = threading.Thread(target=self.bfc.submit_all_match, args=(f'{token_str}', f'{eventType}', odds_type, IsRandom, handicap))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
+                sub_thread = threading.Thread(target=self.bfc.submit_all_match, args=(f'{token_str}', sportName, f'{eventType}', odds_type, IsRandom, handicap))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
                 sub_thread.start()          # 通过start()方法手动来启动线程
-                work_thread = threading.Thread(target=self.bfc.submit_all_match, daemon=True)
-                print(threading.current_thread())
+                # work_thread = threading.Thread(target=self.bfc.submit_all_match, daemon=True)
+                # print(threading.current_thread())
 
             elif bet_type_dic[bet_type] == "串关":
                 for betType in range(3, 15):
@@ -2519,7 +2545,7 @@ if __name__ == "__main__":
     mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    # MyThread().thread_submit(bet_type=1, sport_name=None, event_type="TODAY", odds_type=2, IsRandom='20',handicap=False, complex='multi', complex_number=2)
+    MyThread().thread_submit(bet_type=1, sport_name="", event_type="TODAY", odds_type=2, IsRandom='3',handicap=False, complex='multi', complex_number=2)
     # MyThread().thread_pool_submit(bet_type=1,  sport_name=None, event_type=None, odds_type=1, IsRandom='30', handicap=False, complex='multi', complex_number=2)
 
     # token_list = ['ebeea5ec69b54c039225a39aea437759','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
@@ -2553,11 +2579,11 @@ if __name__ == "__main__":
     #                                    etime='2022-06-10 18:13:00',args=[f'{token_list[0]}', f'{type}', '2', '30', True])
 
     # 所有比赛随机投注
-    token_list = bf.get_client_user_token()
-    # print(token_list)
+    # token_list = bf.get_client_user_token()
+    # bf.get_all_match_outcome(token=token_list[0], sport_name="足球", event_type='TODAY', odds_Type=1, handicap=False)
     # for token in token_list:
     #     # for type in ['INPLAY', 'TODAY', 'EARLY']:
-    #     bf.submit_all_match(token=f'{token}', event_type='TODAY', odds_type=2, IsRandom='10', handicap=False)
+    # bf.submit_all_match(token=f'{token}', event_type='TODAY', odds_type=2, IsRandom='10', handicap=False)
 
         # 单注投注
     # match_info_list = []
@@ -2565,7 +2591,7 @@ if __name__ == "__main__":
     #     match_id_list = bf.get_match_list(sport_name=sport_name, token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     #     match_info_list.extend(match_id_list)
     # for match_id in match_info_list:
-    #     bf.submit_all_outcome(match_id=match_id, sport_name=sport_name, token=token_list[0], odds_type=1, IsRandom='5')
+    # bf.submit_all_outcome(match_id=match_id, sport_name=sport_name, token=token_list[0], odds_type=1, IsRandom='5')
     # 非复式串关投注
     # for bet_type in range(3,15):
     #     bf.submit_all_outcomes(sport_name='足球', token=token_list[0], bet_type=bet_type, event_type='TODAY', IsRandom='10')
