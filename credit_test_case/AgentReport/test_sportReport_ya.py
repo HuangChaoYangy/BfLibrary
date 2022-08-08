@@ -299,10 +299,10 @@ class Test_sportReport_ya:
                     expect_result = CommonFunc().merge_compelx_02(new_lList=expectResult)
 
                 # 校验接口数据和SQL数据的长度
-                if len(actual_result) == len(expect_result):
-                    if actual_result != [] or expect_result != []:
+                if len(actual_result) == len(expect_result[:200]):
+                    if actual_result != [] or expect_result[:200] != []:
                         for index1, item1 in enumerate(actual_result):
-                            for index2, item2 in enumerate(expect_result):
+                            for index2, item2 in enumerate(expect_result[:200]):
                                 if item1[2] == item2[2]:  # 判断注单号是否相等,若相等,则校验该条数据
                                     new_item1 = []
                                     new_item2 = []
@@ -340,11 +340,11 @@ class Test_sportReport_ya:
                                     assert new_item1 == new_item2
 
                     else:
-                        with allure.step(f'实际结果：{actual_result}, 期望结果：{expect_result},==》测试通过'):
+                        with allure.step(f'实际结果：{actual_result}, 期望结果：{expect_result[:200]},==》测试通过'):
                             Bf_log('sportReport').info(f'实际结果:{actual_result}, 期望结果：{expectResult},==》测试通过')
 
                 else:
-                    raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actual_result)},sql为{len(expect_result)}")
+                    raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actual_result)},sql为{len(expect_result[:200])}")
 
             if marketId == "串关":
                 begin = CommonFunc().get_current_time_for_client(time_type="ctime", day_diff=int(inBody['begin']))
@@ -440,10 +440,10 @@ class Test_sportReport_ya:
                     expect_result = CommonFunc().merge_compelx_02(new_lList=expectResult)
 
                 # 校验接口数据和SQL数据的长度
-                if len(actual_result) == len(expect_result):
-                    if actual_result != [] or expect_result != []:
+                if len(actual_result) == len(expect_result[:200]):
+                    if actual_result != [] or expect_result[:200] != []:
                         for index1, item1 in enumerate(actual_result):
-                            for index2, item2 in enumerate(expect_result):
+                            for index2, item2 in enumerate(expect_result[:200]):
                                 if item1[2] == item2[2]:  # 判断注单号是否相等,若相等,则校验该条数据
                                     new_item1 = []
                                     new_item2 = []
@@ -481,11 +481,11 @@ class Test_sportReport_ya:
                                     assert new_item1 == new_item2
 
                     else:
-                        with allure.step(f'实际结果：{actual_result}, 期望结果：{expect_result},==》测试通过'):
+                        with allure.step(f'实际结果：{actual_result}, 期望结果：{expect_result[:200]},==》测试通过'):
                             Bf_log('sportReport').info(f'实际结果:{actual_result}, 期望结果：{expectResult},==》测试通过')
 
                 else:
-                    raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actual_result)},sql为{len(expect_result)}")
+                    raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actual_result)},sql为{len(expect_result[:200])}")
 
 
 

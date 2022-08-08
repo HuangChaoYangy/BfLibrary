@@ -63,10 +63,7 @@ class Test_cancelledOrder_yaml(object):
         with allure.step(f'查询SQL:{sql}'):
             Bf_log('cancelledOrder').info(f'执行sql:{sql}')
         expectResult = MysqlQuery(mysql_info, mongo_info).credit_cancelledOrder_query(expData=expData)[0]
-        print(actualResult)
-        print(1111111111111111111111111111)
-        print(expectResult)
-        print(22222222222222222222222222222)
+
         # 校验接口数据和SQL数据的长度
         if len(actualResult) == len(expectResult):
             if actualResult != [] or expectResult != []:
