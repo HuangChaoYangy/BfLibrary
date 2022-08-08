@@ -6154,7 +6154,7 @@ class MysqlQuery(MysqlFunc):
     def get_all_odds(self, odds_list, bet_type):
         '''
         串关总赔率计算
-        :param odds_list: 赔率已列表形式传入, 暂时只写到10串1
+        :param odds_list: 赔率已列表形式传入
         :param bet_type: 2，3，4，5，6，7 (当传入的type值=赔率个数时候为单串1，当大于个数时候 为最大串关（3串4，4串11...）)
         :return:
         '''
@@ -6287,7 +6287,7 @@ class MysqlQuery(MysqlFunc):
     def get_all_odds_no_cut(self, odds_list, bet_type):
         '''
         串关总赔率计算,未截取
-        :param odds_list: 赔率已列表形式传入, 暂时只写到10串1
+        :param odds_list: 赔率已列表形式传入
         :param bet_type: 2，3，4，5，6，7 (当传入的type值=赔率个数时候为单串1，当大于个数时候 为最大串关（3串4，4串11...）)
         :return:
         '''
@@ -6298,7 +6298,7 @@ class MysqlQuery(MysqlFunc):
             i_mum = num + 2
             if i_mum <= my_len:
                 combination_list.append(list(combinations(odds_list, i_mum)))
-        # print(combination_list)
+        print(combination_list)
         if bet_type == 2:
             if bet_type <= len(combination_list):
                 odds_l = []
@@ -6405,6 +6405,13 @@ class MysqlQuery(MysqlFunc):
                     odds = reduce(lambda x, y: x * y, i)
                     odds_l.append(odds)
                 odds = sum(odds_l)
+        elif bet_type > 10:
+            if bet_type - 1 <= len(combination_list):
+                odds_l = []
+                for i in combination_list[bet_type-2]:
+                    odds = reduce(lambda x, y: x * y, i)
+                    odds_l.append(odds)
+                odds = sum(odds_l)
         else:
             raise AssertionError('暂不支持此种赔率计算或者赔率计算要求错误')
 
@@ -6413,7 +6420,7 @@ class MysqlQuery(MysqlFunc):
 
     def get_odds_by_orderNum(self,orderNo, query_type='total'):
         '''
-        通过注单号计算最大总赔率和注单结算后的实际总赔率以及注单的返回金额(不含佣金)和最终返回金额(包含佣金)        // 修改于2022.07.30
+        通过注单号计算最大总赔率和注单结算后的实际总赔率以及注单的返回金额(不含佣金)和最终返回金额(包含佣金)        // 修改于2022.08.08
         :param orderNo:
         :param query_type: total 预估的最大总赔率       actual   计算注单实际的总赔率
         :return:
@@ -6429,7 +6436,7 @@ class MysqlQuery(MysqlFunc):
             data = list(self.query_data(sql_str, db_name=database_name))
             odds_list = [list(item) for item in data]
             for item in odds_list:
-                if item[1] > 1:      # bet_type大于1为串关或复式串关
+                if item[1] >= 1:      # bet_type大于1为串关或复式串关
                     if item[3] == 1:
                         pass
                     else:
@@ -6544,13 +6551,13 @@ class MysqlQuery(MysqlFunc):
                 for item in odds_list:
                     bet_type = item[1]
                     odds_type = item[3]
-                    odds = Decimal(str(item[4]))
+                    # odds = Decimal(str(item[4]))
+                    odds = item[4]
                     sub_result = item[5]
-                    if bet_type > 1:  # bet_type大于1为串关或复式串关
-                        if odds_type == odds_type_dic['欧洲盘']:
-                            pass
-                        else:
-                            odds = odds + 1  # 将盘口类型为港赔的赔率+1
+                    if odds_type == odds_type_dic['欧洲盘']:
+                        pass
+                    else:
+                        odds = odds + 1  # 将盘口类型为港赔的赔率+1
                     odds_result = 0
                     if sub_result == result_dic['赢']:
                         odds_result = odds
@@ -6622,34 +6629,48 @@ class MysqlQuery(MysqlFunc):
                 else:
                     new_odds_list = new_odds_list
 
+                odd_list = []
+                if len(new_odds_list[0][4]) > 1:
+                    for item in new_odds_list[0][4]:
+                        item = self.cf.get_cut_float_length(value=item, length=2)
+                        odd_list.append(float(item))
+                # 先计算总赔率,再进行计算输赢和返回金额
                 if new_odds_list[0][1] == bet_dic['单注']:
                     order_no = new_odds_list[0][0]
-                    odds = new_odds_list[0][4]
+                    odds = float(new_odds_list[0][4])
                     betAmount = new_odds_list[0][5]
-                    rebate_amount = odds * betAmount       # 不包含佣金的返回金额(包含投注额)
+                    float_length = self.get_float_length(odds * betAmount)
+                    if float_length > 2:  # 小数位数大于2截取保留2位
+                        rebate_amount = self.cf.get_cut_float_length(value=odds * betAmount,length=2)
+                    else:
+                        rebate_amount = odds * betAmount
                     commission = float(self.get_order_no_commission(order_no=order_no)[0][-1])   # 获取注单会员的实际佣金
-                    final_rebate_amount = rebate_amount + commission   # 包含佣金的返回金额(包含投注额)
+                    final_rebate_amount = Decimal(str(rebate_amount)) + Decimal(str(commission))   # 包含佣金的返回金额(包含投注额)
+                    win_lose = final_rebate_amount - Decimal(str(betAmount))
 
-                    return odds,rebate_amount,commission,final_rebate_amount
+                    return betAmount,float(win_lose),commission,float(final_rebate_amount)
 
                 elif new_odds_list[0][1] == bet_dic['串关']:
                     order_no = new_odds_list[0][0]
-                    odd_list = new_odds_list[0][4]
                     betAmount = new_odds_list[0][5]
                     mix_num = new_odds_list[0][2]
                     odd = re.search("^(\d+)", mix_num)
                     bet_type = odd.group()
-                    odds = float(self.get_all_odds(odds_list=odd_list, bet_type=int(bet_type)))
-                    rebate_amount = odds * betAmount
+                    odds = float(self.get_all_odds_no_cut(odds_list=odd_list, bet_type=int(bet_type)))
+                    float_length = self.get_float_length(odds * betAmount)
+                    if float_length > 2:
+                        rebate_amount = self.cf.get_cut_float_length(value=odds * betAmount,length=2)
+                    else:
+                        rebate_amount = odds * betAmount
                     commission = float(self.get_order_no_commission(order_no=order_no)[0][-1])
-                    final_rebate_amount = rebate_amount + commission
+                    final_rebate_amount = Decimal(str(rebate_amount)) + Decimal(str(commission))
+                    win_lose = final_rebate_amount - Decimal(str(betAmount))
 
-                    return odds,rebate_amount,commission,final_rebate_amount
+                    return betAmount,float(win_lose),commission,float(final_rebate_amount)
 
                 elif new_odds_list[0][1] == bet_dic['复式串关']:
                     if new_odds_list[0][2] in complex_dic:
                         order_no = new_odds_list[0][0]
-                        odd_list = new_odds_list[0][4]
                         betAmount = new_odds_list[0][5]
                         bet_type = complex_dic[new_odds_list[0][2]]
                         mix_num = new_odds_list[0][2]
@@ -6660,19 +6681,20 @@ class MysqlQuery(MysqlFunc):
                         float_length = self.get_float_length(num=(odds * betAmount) / divide_value)    # 获取浮点数小数位的长度,若大于2用正则进行截取,否则直接取值
                         if float_length > 2:
                             data = str(((odds * betAmount) / divide_value))
-                            rebate_amount = float(re.findall(r"\d{1,}?\.\d{2}", data)[0])    # 正则表达式直接截取保留两位小数
+                            rebate_amount = float(re.findall(r"\d{1,}?\.\d{2}", data)[0])    # 正则截取保留两位小数
                             commission = float(self.get_order_no_commission(order_no=order_no)[0][-1])
-                            final_rebate_amount = rebate_amount + commission
+                            final_rebate_amount = Decimal(str(rebate_amount)) + Decimal(str(commission))
+                            win_lose = final_rebate_amount - Decimal(str(betAmount))
                         else:
                             rebate_amount = ((odds * betAmount) / divide_value)
                             commission = float(self.get_order_no_commission(order_no=order_no)[0][-1])
-                            final_rebate_amount = rebate_amount + commission
+                            final_rebate_amount = Decimal(str(rebate_amount)) + Decimal(str(commission))
+                            win_lose = final_rebate_amount - Decimal(str(betAmount))
 
-                        return odds, rebate_amount, commission, final_rebate_amount
+                        return betAmount,float(win_lose),commission,float(final_rebate_amount)
 
                     elif new_odds_list[0][2] in complex_one_dic:
                         order_no = new_odds_list[0][0]
-                        odd_list = new_odds_list[0][4]
                         betAmount = new_odds_list[0][5]
                         bet_type = complex_one_dic[new_odds_list[0][2]]
                         mix_num = new_odds_list[0][2]
@@ -6684,13 +6706,15 @@ class MysqlQuery(MysqlFunc):
                             data = str(((odds * betAmount) / divide_value))
                             rebate_amount = float(re.findall(r"\d{1,}?\.\d{2}", data)[0])
                             commission = float(self.get_order_no_commission(order_no=order_no)[0][-1])
-                            final_rebate_amount = rebate_amount + commission
+                            final_rebate_amount = Decimal(str(rebate_amount)) + Decimal(str(commission))
+                            win_lose = final_rebate_amount - Decimal(str(betAmount))
                         else:
                             rebate_amount = ((odds * betAmount) / divide_value)
                             commission = float(self.get_order_no_commission(order_no=order_no)[0][-1])
-                            final_rebate_amount = rebate_amount + commission
+                            final_rebate_amount = Decimal(str(rebate_amount)) + Decimal(str(commission))
+                            win_lose = final_rebate_amount - Decimal(str(betAmount))
 
-                        return odds, rebate_amount, commission, final_rebate_amount
+                        return betAmount, float(win_lose), commission, float(final_rebate_amount)
 
                     else:
                         pass
@@ -10341,9 +10365,9 @@ if __name__ == "__main__":
     # odds_list = [1.88, 1.81, 1.74, 1.81]
     # data = mysql.get_all_odds(odds_list=odds_list, bet_type=4)
     # print(data)
-    odds = mysql.get_odds_by_orderNum(orderNo='XPLid9GiTwFV', query_type='total')          #   通过注单号查询注单的最大总赔率和注单结算后的实际总赔率
+    odds = mysql.get_odds_by_orderNum(orderNo='XPNdFzaxHqc9', query_type='actual')          #   通过注单号查询注单的最大总赔率和注单结算后的实际总赔率
     # odds = mysql.get_float_length(num=0.22222222222)
-    print(odds)
+    # print(odds)
     # N1 = list(combinations(a, 2))
     # N2 = list(permutations(a, 2))
 
