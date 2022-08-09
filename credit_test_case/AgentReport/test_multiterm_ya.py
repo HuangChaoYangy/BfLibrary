@@ -38,78 +38,78 @@ else:
 @allure.feature('总台-代理报表-混合过关')
 class Test_multitermReport:
 
-    # YamlFileData().get_testcase_params(csv_path=csv_url_multiterm, yaml_file=multiterm_url, new_yaml_file=multiterm_url_new)
-    # yaml_data = Yaml_data().read_yaml_file(yaml_file=multiterm_url_new, isAll=False)
-    # url_data = Yaml_data().read_yaml_file(yaml_file=multiterm_url_new, isAll=True)[0]['request']
-    # # @pytest.mark.skip(reason="调试代码,暂不执行")
-    # @pytest.mark.parametrize('inBody, expData', yaml_data)
-    # @allure.story('总台-代理报表-混合过关')
-    # def test_multitermReport(self, inBody, expData, url=url_data):
-    #     '''
-    #     管理后台-代理报表-混合过关-列表详情,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
-    #     :param excel_data:  excel中的测试用例
-    #     :param sport_params: excel中的参数化数据
-    #     :return:
-    #     '''
-    #     allure.dynamic.title(inBody['title'])
-    #     actualResult = CreditBackGround(mysql_info,mongo_info).credit_multitermReport(inData=inBody)[0]
-    #
-    #     with allure.step(f"执行测试用例:{inBody['title']}"):
-    #         Bf_log('multitermReport').info(f"----------------开始执行:{inBody['title']}------------------------")
-    #     url = url['mde_ip'] + url['url']
-    #     with allure.step(f"请求地址 {url}"):
-    #         Bf_log('multitermReport').info(f'请求地址为:{url}')
-    #
-    #     sql = MysqlQuery(mysql_info, mongo_info).credit_multitermReport_query(expData=expData)[1]
-    #     with allure.step(f'查询SQL:{sql}'):
-    #         Bf_log('multitermReport').info(f'执行sql:{sql}')
-    #     expectResult = MysqlQuery(mysql_info, mongo_info).credit_multitermReport_query(expData=expData)[0]
-    #
-    #     # 校验接口数据和SQL数据的长度
-    #     if len(actualResult) == len(expectResult):
-    #         if actualResult != [] or expectResult != []:
-    #             for index1, item1 in enumerate(actualResult):
-    #                 for index2, item2 in enumerate(expectResult):
-    #                     if item1[0] == item2[0]:  # 判断账号/登入账号是否相等,若相等,则校验该条数据
-    #                         new_item1 = []
-    #                         new_item2 = []
-    #                         for aip_data in item1[1:]:
-    #                             if aip_data == None or aip_data == 0:
-    #                                 api_result = 0
-    #                             else:
-    #                                 api_result = float(aip_data)
-    #                             new_item1.append(api_result)
-    #                         new_item1.insert(0, item1[0])
-    #                         for sql_data in item2[1:]:
-    #                             if sql_data == None or sql_data == 0:
-    #                                 sql_result = 0
-    #                             else:
-    #                                 sql_result = float(sql_data)
-    #                             new_item2.append(sql_result)
-    #                         new_item2.insert(0, item2[0])
-    #
-    #                         # 判断两个list的值是否一致,并且回写入excel
-    #                         if new_item1 == new_item2:
-    #                             with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
-    #                                 Bf_log('multitermReport').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
-    #                         else:
-    #                             with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
-    #                                 Bf_log('multitermReport').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
-    #
-    #                         assert new_item1 == new_item2
-    #
-    #         else:
-    #             with allure.step(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过'):
-    #                 Bf_log('multitermReport').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
-    #
-    #     else:
-    #         raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actualResult)},sql为{len(expectResult)}")
+    YamlFileData().get_testcase_params(csv_path=csv_url_multiterm, yaml_file=multiterm_url, new_yaml_file=multiterm_url_new)
+    yaml_data = Yaml_data().read_yaml_file(yaml_file=multiterm_url_new, isAll=False)
+    url_data = Yaml_data().read_yaml_file(yaml_file=multiterm_url_new, isAll=True)[0]['request']
+    # @pytest.mark.skip(reason="调试代码,暂不执行")
+    @pytest.mark.parametrize('inBody, expData', yaml_data)
+    @allure.story('总台-代理报表-混合过关')
+    def test_multitermReport(self, inBody, expData, url=url_data):
+        '''
+        管理后台-代理报表-混合过关-列表详情,默认以"结算时间"查询近7天数据,因定时任务每10分钟跑一次，为了数据准确就查询头一天的
+        :param excel_data:  excel中的测试用例
+        :param sport_params: excel中的参数化数据
+        :return:
+        '''
+        allure.dynamic.title(inBody['title'])
+        actualResult = CreditBackGround(mysql_info,mongo_info).credit_multitermReport(inData=inBody)[0]
+
+        with allure.step(f"执行测试用例:{inBody['title']}"):
+            Bf_log('multitermReport').info(f"----------------开始执行:{inBody['title']}------------------------")
+        url = url['mde_ip'] + url['url']
+        with allure.step(f"请求地址 {url}"):
+            Bf_log('multitermReport').info(f'请求地址为:{url}')
+
+        sql = MysqlQuery(mysql_info, mongo_info).credit_multitermReport_query(expData=expData)[1]
+        with allure.step(f'查询SQL:{sql}'):
+            Bf_log('multitermReport').info(f'执行sql:{sql}')
+        expectResult = MysqlQuery(mysql_info, mongo_info).credit_multitermReport_query(expData=expData)[0]
+
+        # 校验接口数据和SQL数据的长度
+        if len(actualResult) == len(expectResult):
+            if actualResult != [] or expectResult != []:
+                for index1, item1 in enumerate(actualResult):
+                    for index2, item2 in enumerate(expectResult):
+                        if item1[0] == item2[0]:  # 判断账号/登入账号是否相等,若相等,则校验该条数据
+                            new_item1 = []
+                            new_item2 = []
+                            for aip_data in item1[1:]:
+                                if aip_data == None or aip_data == 0:
+                                    api_result = 0
+                                else:
+                                    api_result = float(aip_data)
+                                new_item1.append(api_result)
+                            new_item1.insert(0, item1[0])
+                            for sql_data in item2[1:]:
+                                if sql_data == None or sql_data == 0:
+                                    sql_result = 0
+                                else:
+                                    sql_result = float(sql_data)
+                                new_item2.append(sql_result)
+                            new_item2.insert(0, item2[0])
+
+                            # 判断两个list的值是否一致,并且回写入excel
+                            if new_item1 == new_item2:
+                                with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试通过'):
+                                    Bf_log('multitermReport').info(f'实际结果:{new_item1}, 期望结果：{new_item2},==》测试通过')
+                            else:
+                                with allure.step(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过'):
+                                    Bf_log('multitermReport').error(f'实际结果：{new_item1}, 期望结果：{new_item2},==》测试不通过')
+
+                            assert new_item1 == new_item2
+
+            else:
+                with allure.step(f'实际结果：{actualResult}, 期望结果：{expectResult},==》测试通过'):
+                    Bf_log('multitermReport').info(f'实际结果:{actualResult}, 期望结果：{expectResult},==》测试通过')
+
+        else:
+            raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actualResult)},sql为{len(expectResult)}")
 
 
     YamlFileData().get_testcase_params(csv_path=csv_url_multiterm_d, yaml_file=multiterm_url_d, new_yaml_file=multiterm_url_new_d)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=multiterm_url_new_d, isAll=False)
     request_data = Yaml_data().read_yaml_file(yaml_file=multiterm_url_new_d, isAll=True)[0]['request']
-    # @pytest.mark.skip(reason="调试代码,暂不执行")
+    @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-混合过关-注单详情')
     def test_multitermReportDetail(self, inBody, expData, request=request_data):
@@ -167,8 +167,8 @@ class Test_multitermReport:
                         odds_type = odds_dic[detail['oddsType']]
                         actualResult.append([item['account'], item['name'], item['orderNo'], item['betTime'], item['sportType'],item['betType'],
                                          [detail['tournamentName'], detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'], detail['marketName'],
-                                          detail['specifier'], detail['outcomeName'], detail['odds'], odds_type,detail['matchTime']],
-                                         item['settlementTime'], item['betResult'], item['betIp'] + ' / ' + item['betIpAddress'],item['betAmount'], item['winOrLose'],
+                                          detail['specifier'], detail['outcomeName'], detail['odds'], odds_type,detail['matchTime']],item['settlementTime'],
+                                         item['betResult'], item['betIp'] + ' / ' + item['betIpAddress'],item['odds'], item['betAmount'], item['winOrLose'],
                                          item['validAmount'], item['companyPercentage'], item['companyWinOrLose'],item['companyCommissionRatio'], item['companyCommission'],
                                          item['companyTotal'], item['level0Percentage'], item['level0WinOrLose'],item['level0CommissionRatio'], item['level0Commission'],
                                          item['level0Total'], item['level1Percentage'], item['level1WinOrLose'],item['level1CommissionRatio'], item['level1Commission'],
@@ -216,7 +216,6 @@ class Test_multitermReport:
             SQLResult_list = list(MysqlFunc(mysql_info, mongo_info).query_data(sql_str, db_name='bfty_credit'))
             with allure.step(f'查询SQL:{sql_str}'):
                 Bf_log('multitermOrder_d').info(f'执行sql:{sql_str}')
-
             SQLResult = [list(item) for item in SQLResult_list]
 
             expectResult = []
@@ -239,10 +238,10 @@ class Test_multitermReport:
                 expect_result = CommonFunc().merge_compelx_02(new_lList=expectResult)
 
             # 校验接口数据和SQL数据的长度
-            if len(actual_result) == len(expect_result):
-                if actual_result != [] or expect_result != []:
-                    for index1, item1 in enumerate(expect_result):
-                        for index2, item2 in enumerate(expect_result):
+            if len(actual_result) == len(expect_result[:200]):
+                if actual_result != [] or expect_result[:200] != []:
+                    for index1, item1 in enumerate(actual_result):
+                        for index2, item2 in enumerate(expect_result[:200]):
                             if item1[2] == item2[2]:  # 判断注单号是否相等,若相等,则校验该条数据
                                 new_item1 = []
                                 new_item2 = []
@@ -278,15 +277,15 @@ class Test_multitermReport:
                                 assert new_item1 == new_item2
 
                 else:
-                    with allure.step(f'实际结果：{actual_result}, 期望结果：{expect_result},==》测试通过'):
-                        Bf_log('winLoseDetail').info(f'实际结果:{actual_result}, 期望结果：{expect_result},==》测试通过')
+                    with allure.step(f'实际结果：{actual_result}, 期望结果：{expect_result[:200]},==》测试通过'):
+                        Bf_log('winLoseDetail').info(f'实际结果:{actual_result}, 期望结果：{expect_result[:200]},==》测试通过')
 
             else:
-                raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actual_result)},sql为{len(expect_result)}")
+                raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actual_result)},sql为{len(expect_result[:200])}")
 
 
 
 if __name__ == "__main__":
 
-    pytest.main(["test_multiterm_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','-n=auto','--clean-alluredir'])  #  '--clean-alluredir', '-n=4'
+    pytest.main(["test_multiterm_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  #  '--clean-alluredir', '-n=4'
     os.system("allure serve ../report/tmp")
