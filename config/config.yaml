@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2022/05/23 19:14
 # @Author  : liyang
-# @FileName: 数据库配置文件
+# @FileName: 数据库配置文件        120  mde  extranet
 # @Software: PyCharm
 
 -
@@ -42,4 +42,23 @@
     user: 'sport_test'
     password: "BB#gCmqf3gTO5777"
     port: 27017
+    describe: 'mde环境mongodb配置'
+
+
+# 正式环境mysql配置
+  mysql_extranet:
+    host: '34.80.33.71'
+    user: 'creditnetrouser'
+    password: "BB#XqtZYGfHKBBftu9"
+    port: 3306
+    describe: 'mde测试环境mysql配置'
+# 正式环境消息推送接口配置
+#  mock_config_extranet:
+#    mock_url: 'http://35.185.159.184:31101/mock/message'
+# 正式环境mongodb配置
+  mongodb_extranet:
+    host: '35.229.139.160'
+    user: 'admin'
+    password: "LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A"
+    port: 37017
     describe: 'mde环境mongodb配置'
