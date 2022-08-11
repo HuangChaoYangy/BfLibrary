@@ -29,6 +29,11 @@ elif configure[0]['environment'] == "120":
     mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
     mongo_dic = configure[1]['mongodb_config']
     mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
+elif configure[0]['environment'] == "extranet":
+    mysql_dic = configure[1]['mysql_extranet']
+    mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
+    mongo_dic = configure[1]['mongodb_extranet']
+    mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
 else:
     raise AssertionError('ERROR,this environment is not available')
 
@@ -40,7 +45,7 @@ class Test_unsettledOrder_yaml(object):
     YamlFileData().get_testcase_params(csv_path=csv_url_unsettle, yaml_file=unsettle_url, new_yaml_file=unsettle_url_new)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=unsettle_url_new, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=unsettle_url_new, isAll=True)[0]['request']
-    @pytest.mark.skip(reason="调试代码,暂不执行")
+    # @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('报表管理-总代未完成交易')
     def test_unsettledOrder(self, inBody, expData, url=url_data):
