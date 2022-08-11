@@ -5,14 +5,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a0b1b2b300'
+    userName: 'a01000000100'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a0b1b2b300'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000100'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a0b1b2b300'
+    userName: 'a01000000100'
     ctime: '-7'
     etime: '-1'
 
@@ -23,14 +23,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a0b1b2b301'
+    userName: 'a01000000101'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a0b1b2b301'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000101'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a0b1b2b301'
+    userName: 'a01000000101'
     ctime: '-7'
     etime: '-1'
 
@@ -41,14 +41,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a0b1b2b3a3'
+    userName: 'a01000000103'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a0b1b2b3a3'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000103'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a0b1b2b3a3'
+    userName: 'a01000000103'
     ctime: '-7'
     etime: '-1'
 
@@ -59,14 +59,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a0b1b2b3a4'
+    userName: 'a01000000104'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a0b1b2b3a4'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000104'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a0b1b2b3a4'
+    userName: 'a01000000104'
     ctime: '-7'
     etime: '-1'
 
@@ -77,14 +77,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a16000000100'
+    userName: 'a01000000105'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000100'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000105'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a16000000100'
+    userName: 'a01000000105'
     ctime: '-7'
     etime: '-1'
 
@@ -95,14 +95,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a16000000101'
+    userName: 'a01000000106'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000101'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000106'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a16000000101'
+    userName: 'a01000000106'
     ctime: '-7'
     etime: '-1'
 
@@ -113,14 +113,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a16000000102'
+    userName: 'a01000000107'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a0b1b2b3a4'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000107'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a16000000102'
+    userName: 'a01000000107'
     ctime: '-7'
     etime: '-1'
 
@@ -131,14 +131,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a16000000103'
+    userName: 'a01000000108'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000103'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000108'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a16000000103'
+    userName: 'a01000000108'
     ctime: '-7'
     etime: '-1'
 
@@ -149,14 +149,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a16000000104'
+    userName: 'a01000000109'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000104'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000109'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a16000000104'
+    userName: 'a01000000109'
     ctime: '-7'
     etime: '-1'
 
@@ -167,14 +167,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a16000000105'
+    userName: 'a01000000110'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000105'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000110'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a16000000105'
+    userName: 'a01000000110'
     ctime: '-7'
     etime: '-1'
 
@@ -185,14 +185,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a16000000106'
+    userName: 'a01000000111'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000106'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000111'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a16000000106'
+    userName: 'a01000000111'
     ctime: '-7'
     etime: '-1'
 
@@ -203,14 +203,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a16000000107'
+    userName: 'a01000000112'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000107'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000112'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a16000000107'
+    userName: 'a01000000112'
     ctime: '-7'
     etime: '-1'
 
@@ -221,14 +221,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a16000000108'
+    userName: 'a01000000113'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000108'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000113'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a16000000108'
+    userName: 'a01000000113'
     ctime: '-7'
     etime: '-1'
 
@@ -239,14 +239,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a16000000109'
+    userName: 'a01000000114'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000109'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000114'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a16000000109'
+    userName: 'a01000000114'
     ctime: '-7'
     etime: '-1'
 
@@ -257,14 +257,14 @@
   data:
     account: ''
     parentId: ''
-    userName: 'a16000000001'
+    userName: 'a01000000115'
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a16000000001'查询近7天数据
+    title: 总台-代理报表-总代盈亏(简易),-注单详情,根据会员账号'a01000000115'查询近7天数据
   resp:
     account: ''
     parentId: ''
-    userName: 'a16000000001'
+    userName: 'a01000000115'
     ctime: '-7'
     etime: '-1'
 
