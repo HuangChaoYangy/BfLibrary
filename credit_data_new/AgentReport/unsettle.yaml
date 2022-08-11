@@ -1,0 +1,15 @@
+- request:
+    mde_ip: https://search.betf.best
+    url: /mainstation/generalAgentUndoneTransaction/queryMemberUndoneOrderList
+    method: POST
+  data:
+    page: 1
+    limit: 200
+    account: 'a01000000'
+    parentId: '0'
+    userName: ''
+    title: 总台-代理报表-总代未完成交易,根据登3账号查询会员
+  resp:
+    account: 'a01000000'
+    parentId: ''
+    userName: ''
