@@ -14,3 +14,227 @@
     queryDateType: 3
     sportName: '网球'
 
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/sport
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 2
+    sportName: '网球'
+    title: 总台-代理报表-球类报表-盘口详情,按照赛事时间根据球类'网球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 2
+    sportName: '网球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/sport
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 1
+    sportName: '网球'
+    title: 总台-代理报表-球类报表-盘口详情,按照投注时间根据球类'网球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 1
+    sportName: '网球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/sport
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 3
+    sportName: '篮球'
+    title: 总台-代理报表-球类报表-盘口详情,按照结算时间根据球类'篮球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 3
+    sportName: '篮球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/sport
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 2
+    sportName: '篮球'
+    title: 总台-代理报表-球类报表-盘口详情,按照赛事时间根据球类'篮球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 2
+    sportName: '篮球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/sport
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 1
+    sportName: '篮球'
+    title: 总台-代理报表-球类报表-盘口详情,按照投注时间根据球类'篮球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 1
+    sportName: '篮球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/sport
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 3
+    sportName: '冰上曲棍球'
+    title: 总台-代理报表-球类报表-盘口详情,按照结算时间根据球类'冰上曲棍球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 3
+    sportName: '冰上曲棍球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/sport
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 2
+    sportName: '冰上曲棍球'
+    title: 总台-代理报表-球类报表-盘口详情,按照赛事时间根据球类'冰上曲棍球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 2
+    sportName: '冰上曲棍球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/sport
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 1
+    sportName: '冰上曲棍球'
+    title: 总台-代理报表-球类报表-盘口详情,按照投注时间根据球类'冰上曲棍球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 1
+    sportName: '冰上曲棍球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/sport
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 3
+    sportName: '乒乓球'
+    title: 总台-代理报表-球类报表-盘口详情,按照结算时间根据球类'乒乓球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 3
+    sportName: '乒乓球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/sport
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 2
+    sportName: '乒乓球'
+    title: 总台-代理报表-球类报表-盘口详情,按照赛事时间根据球类'乒乓球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 2
+    sportName: '乒乓球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/sport
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 1
+    sportName: '乒乓球'
+    title: 总台-代理报表-球类报表-盘口详情,按照投注时间根据球类'乒乓球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 1
+    sportName: '乒乓球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/sport
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 3
+    sportName: '足球'
+    title: 总台-代理报表-球类报表-盘口详情,按照结算时间根据球类'足球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 3
+    sportName: '足球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/sport
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 2
+    sportName: '足球'
+    title: 总台-代理报表-球类报表-盘口详情,按照赛事时间根据球类'足球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 2
+    sportName: '足球'
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/sport
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 1
+    sportName: '足球'
+    title: 总台-代理报表-球类报表-盘口详情,按照投注时间根据球类'足球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 1
+    sportName: '足球'
+

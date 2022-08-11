@@ -30,6 +30,11 @@ elif configure[0]['environment'] == "120":
     mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
     mongo_dic = configure[1]['mongodb_config']
     mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
+elif configure[0]['environment'] == "extranet":
+    mysql_dic = configure[1]['mysql_extranet']
+    mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
+    mongo_dic = configure[1]['mongodb_extranet']
+    mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
 else:
     raise AssertionError('ERROR,this environment is not available')
 
@@ -41,7 +46,7 @@ class Test_sportReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_sport, yaml_file=sport_url, new_yaml_file=sport_url_new)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new, isAll=True)[0]['request']
-    # @pytest.mark.skip(reason="调试代码,暂不执行")
+    @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-球类报表')
     def test_sportReport(self, inBody, expData, url=url_data):
@@ -109,7 +114,7 @@ class Test_sportReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_sport_m, yaml_file=sport_url_m, new_yaml_file=sport_url_new_m)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new_m, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=sport_url_new_m, isAll=True)[0]['request']
-    # @pytest.mark.skip(reason="调试代码,暂不执行")
+    @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-球类报表-盘口详情')
     def test_sportReportMarket(self, inBody, expData, url=url_data):
@@ -199,8 +204,8 @@ class Test_sportReport_ya:
                              'sr:sport:31': '羽毛球', 'sr:sport:20': '乒乓球', 'sr:sport:3': '棒球', 'sr:sport:4': '冰上曲棍球'}
         market_id_list = MysqlQuery(mysql_info, mongo_info).get_market_id_by_sportId_sportReport(sport_id=inBody['sportId'],
                                                 time=(inBody['begin'], inBody['end']), queryDateType=inBody['dateType'])
-        token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',
-                                                                          securityCode='111111', loginDiv=222333)
+        token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',securityCode='111111', loginDiv=222333)
+
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": token,
