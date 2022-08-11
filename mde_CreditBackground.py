@@ -40,8 +40,8 @@ class CreditBackGround(object):
     def __init__(self, mysql_info, mongo_info,backend_url="https://mdesearch.betf.best"):
         self.session = requests.session()
         self.auth_url = backend_url
-        self.mde_url = "https://mdesearch.betf.best"
-        self.bacekend_url = "https://mdesearch.betf.best"
+        # self.mde_url = 'https://mdesearch.betf.best'     # mde
+        self.mde_url = 'https://search.betf.best'      # 外网
         self.head = {"Authorization": ""}
         self.mysql = MysqlQuery(mysql_info,mongo_info)
         self.mg = MongoFunc(mongo_info)
@@ -51,7 +51,7 @@ class CreditBackGround(object):
         self.small_sport_id_dic = {"乒乓球": "sr:sport:20","足球": "sr:sport:1","网球": "sr:sport:5","冰上曲棍球": "sr:sport:4","刀塔2": "sr:sport:111","羽毛球": "sr:sport:31",
                                    "棒球": "sr:sport:3","美式橄榄球": "sr:sport:16","排球": "sr:sport:23","英雄联盟": "sr:sport:110","篮球": "sr:sport:2","桌球": "sr:sport:19"}
         self.sport_id_dic = {"足球": 1,"篮球": 2,"网球": 3,"排球": 4,"羽毛球": 5,"乒乓球": 6,"棒球": 7,"斯诺克": 8,"其他": 100}
-        self.thrid = Third_Merchant(mysql_info, host='http://192.168.10.11')
+        # self.thrid = Third_Merchant(mysql_info, host='http://192.168.10.11')
 
 
     @staticmethod              # 静态方法, 也就是加上@staticmethod装饰器
@@ -2884,7 +2884,11 @@ class CreditBackGround(object):
                 print("查询混合过关报表失败,原因：" + rsp.json()["message"])
             else:
                 for item in rsp.json()['data']['data']:
-                    multiterm_list.append([item['userName'] + '/' + item['loginAccount'],item['allAmount'], item['allEfficient'],item['allBackwater'],item['memberWinLose'],
+                    if not item['loginAccount']:
+                        login_account = ""
+                    else:
+                        login_account = item['loginAccount']
+                    multiterm_list.append([item['userName'] + '/' + login_account,item['allAmount'], item['allEfficient'],item['allBackwater'],item['memberWinLose'],
                                            item['memberBackwater'],item['memberFinal'],item['level3WinLose'],item['level3Backwater'],item['level3Final'],item['level2WinLose'],
                                            item['level2Backwater'],item['level2Final'],item['level1WinLose'],item['level1Backwater'],item['level1Final'],item['level0WinLose'],
                                            item['level0Backwater'],item['level0Final'], item['companyWinOrLose'],item['companyBackwaterAmount'],item['companyFinal']])
@@ -4221,7 +4225,7 @@ class CreditBackGround(object):
                         print(f"结算成功, 注单号：{order_num}, 结算结果：注单取消")
                     else:
                         print("ERR: 操作失败：" + rsp.json()["message"])
-                    print("总共【%d】个注单，已结算【%d】个注单，还剩【%d】个注单" % (run_loop, loop, run_loop - loop))
+                    print("总共【%d】个子注单，已结算【%d】个未结算子注单，还剩【%d】个未结算子注单" % (run_loop, loop, run_loop - loop))
                     loop += 1
 
         elif settleType == "未结算":
@@ -4280,7 +4284,7 @@ class CreditBackGround(object):
                         print(f"结算成功, 注单号：{order_num}, 结算结果：{result_dic[result_str]}")
                     else:
                         print("ERR: 操作失败：" + rsp.json()["message"])
-                    print("总共【%d】个注单，已结算【%d】个未结算子注单，还剩【%d】个未结算子注单" % (run_loop, loop, run_loop - loop))
+                    print("总共【%d】个子注单，已结算【%d】个未结算子注单，还剩【%d】个未结算子注单" % (run_loop, loop, run_loop - loop))
                     loop += 1
 
         else:
@@ -4430,7 +4434,7 @@ class CreditBackGround(object):
             print("ERR: 操作失败：" + rsp.json()["message"])
 
 
-    def add_user(self, agent_token, account, name, password,credits=50000,accountStatus='0'):
+    def add_user(self, agent_token, account, name, password,credits=500000,accountStatus='0',handicapType="A"):
         '''
         代理后台--登3账号新增会员                    // 修改于 2022.08.04
         :param Authorization:
@@ -4448,21 +4452,23 @@ class CreditBackGround(object):
                 "Account_Login_Identify": agent_token,
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
 
-        data = {"account":account,"creditsAmount":credits,"status":accountStatus,"exchangeRate":None,"handicapType":"A","name":name,"password":password,
-                "parentProfitLossPercentage":22,"userConfigurationParams":[{"handicapCategoryId":"1","retreatProportion":6,"singleBetLimit":10000,"singleGameBetLimit":100000,
-                "sportCategoryId":"1"},{"handicapCategoryId":"2","retreatProportion":6,"singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"1"},
-                {"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"1"},{"handicapCategoryId":"100",
-                "retreatProportion":"","singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"1"},{"handicapCategoryId":"1","retreatProportion":6,"singleBetLimit":
-                10000,"singleGameBetLimit":100000,"sportCategoryId":"2"},{"handicapCategoryId":"2","retreatProportion":6,"singleBetLimit":10000,"singleGameBetLimit":100000,
-                "sportCategoryId":"2"},{"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"2"},
-                {"handicapCategoryId":"100","retreatProportion":"","singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"2"},{"handicapCategoryId":"1",
-                "retreatProportion":6,"singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"100"},{"handicapCategoryId":"2","retreatProportion":6,
-                "singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"100"},{"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":10000,
-                "singleGameBetLimit":100000,"sportCategoryId":"100"},{"handicapCategoryId":"100","retreatProportion":"","singleBetLimit":10000,"singleGameBetLimit":100000,"sportCategoryId":"100"}]}
+        data = {"account":account,"creditsAmount":credits,"status":accountStatus,"exchangeRate":None,"handicapType":handicapType,"name":name,"password":password,"parentProfitLossPercentage":
+            18,"userConfigurationParams":[{"handicapCategoryId":"1","retreatProportion":15,"singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"1"},
+                                          {"handicapCategoryId":"2","retreatProportion":16,"singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"1"},
+                                          {"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"1"},
+                                          {"handicapCategoryId":"100","retreatProportion":"","singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"1"},
+                                          {"handicapCategoryId":"1","retreatProportion":14,"singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"2"},
+                                          {"handicapCategoryId":"2","retreatProportion":16,"singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"2"},
+                                          {"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"2"},
+                                          {"handicapCategoryId":"100","retreatProportion":"","singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"2"},
+                                          {"handicapCategoryId":"1","retreatProportion":15,"singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"100"},
+                                          {"handicapCategoryId":"2","retreatProportion":14,"singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"100"},
+                                          {"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"100"},
+                                          {"handicapCategoryId":"100","retreatProportion":"","singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"100"}]}
         rsp = self.session.post(url=url, headers=head, json=data)
 
         if rsp.json()['message'] == 'OK':
-            print(f"操作成功： 代理线新增会员账号：{account} 成功")
+            print(f"操作成功： 代理线新增会员账号：{account} 成功, 会员盘口类型：{handicapType}")
         else:
             print("ERR: 操作失败：" + rsp.json()["message"])
 
@@ -4472,12 +4478,15 @@ class CreditBackGround(object):
 if __name__ == "__main__":
 
     # mde 环境
-    mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']
-    mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
+    # mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']
+    # mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
+    mysql_info = ['34.80.33.71', 'creditnetrouser', 'XqtZYGfHKBBftu9', '3306']          # 外网正式环境
+    mongo_info = ['admin', 'LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A', '35.229.139.160', '37017']
     bg = CreditBackGround(mysql_info,mongo_info)            # 创建对象
 
-    # login_loken = bg.login_background(uname='a16', password='Bfty123456', securityCode="Agent0", loginDiv=555666)          # 登录信用网代理后台
-    login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
+    # login_loken = bg.login_background(uname='a01000000', password='Bfty123456', securityCode="Agent0", loginDiv=555666)          # 登录信用网代理后台
+    # print(login_loken)
+    # login_loken = bg.login_background(uname='Liyang02', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
     # data = bg.settleUnusualOrder(Authorization=login_loken, order_num="", date=(-60, -0), settleType='待确认', remark="脚本结算", result=None)       # 异常订单结算脚本
     # data = bg.unsettlement(Authorization=login_loken)
     # user = bg.user_management(Authorization=login_loken, userStatus='0', userName='', userAccount='', sortIndex='', sortParameter='')   # 会员管理
@@ -4504,7 +4513,7 @@ if __name__ == "__main__":
     # matchReport = bg.credit_matchReport_query(Authorization=login_loken, sportName='', matchId='', queryType='match', dateType=3,create_time=(-7, -1))
     # multitermReport = bg.credit_multitermReport_query(Authorization=login_loken, sportName='', account='', dateType=3,create_time=(-7, -1))
     # match = bg.credit_last_two_days_match_query(Authorization=login_loken)
-    data = bg.credit_unsettledOrder(inData={"account": "", "parentId":"", "userName":"a0b1b2b300"})
+    data = bg.credit_unsettledOrder(inData={"account": "", "parentId":"", "userName":"a01000000101"})
     # data = bg.credit_winLose_simple(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
     # data = bg.credit_winLose_detail(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
     # data = bg.credit_sportReport(inData={"begin":"-7", "end":"-1", "sportName":"网球","queryDateType":3 },queryType='order')
@@ -4515,40 +4524,30 @@ if __name__ == "__main__":
     # data = bg.credit_dataSourceReport(inData={"betStartTime":"-30", "betEndTime":"-0", "settlementStartTime":"-30", "settlementEndTime":"-0", "userName":"","orderNo":"",
     #                     "sportId":[], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=4)  # 总台-报表管理-数据源对账报表
     # daily_report = bg.credit_dailyReport(Authorization=login_loken, create_time=(-6,0), queryType=2)           # 总台-报表管理-每日盈亏
-    # data = bg.credit_terminalReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "terminal":"","sortIndex":"","sortParameter":"","page":1,"limit":200 },queryType=2)       # 总台-报表管理-客户端盈亏
+    # data = bg.credit_terminalReport(inData={"startCreateTime":"-30", "endCreateTime":"-1", "terminal":"","sortIndex":"","sortParameter":"","page":1,"limit":200 },queryType=2)       # 总台-报表管理-客户端盈亏
     # data = bg.credit_sportsReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200 }, queryType=1)    # 总台-报表管理-体育项盈亏
     # data = bg.credit_rebateReport(inData={"startCreateTime":"-7", "endCreateTime":"-1", "sortIndex":"","sortParameter":"","page":1,"limit":200 }, queryType=2)   # 总台-报表管理-返水报表
     # data = bg.credit_uncheckList(inData={"accountStatus": 0, "searchAccountName": "",  "page": 1,"limit": 200})  # 总台-总代结账
     # data = bg.credit_mainBet(inData={"matchId": "", "sportId": ""}, quert_type=1)  # 总投注-让球/大小/独赢/滚球
     # data = bg.credit_mixBet(inData={"account":""}, quert_type=2)     # 总投注-混合串关
-
+    print(data)
     # login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE1NTUwNjk5MjgyNDcxMDc1ODUiLCJleHAiOjE2NTk1OTk4OTEsInVzZXJuYW1lIjoiYTE2MDAwMDAwIn0.swtiEzP3CE3IoMy46WLXsd3qwvNdBVU-ZWiNxpcvveM"
     # data = bg.addAgentLine(Authorization=login_loken, account='a16', name='test', password='Bfty123456', securityCode='Agent0', credits=100000000,accountStatus="0")  # 新增登0
     # data = bg.addAgent1(agent_token=login_loken, account='a1600', name='test', password='Bfty123456',securityCode='Agent0', credits=10000000, accountStatus=0)  # 新增登1
     # data = bg.addAgent2(agent_token=login_loken, account='a160000', name='test', password='Bfty123456',securityCode='Agent0', credits=2000000, accountStatus=0)  # 新增登2
     # data = bg.addAgent3(agent_token=login_loken, account='a16000000', name='test', password='Bfty123456',securityCode='Agent0', credits=1000000, accountStatus=0)  # 新增登3
-    # for number in range(100,110):
-    #     account = "a16000000" + str(number)           # "a16000000":  登3账号
-    #     data = bg.add_user(agent_token=login_loken, account=account, name='test', password='Bfty123456', credits=50000, accountStatus='0')  # 新增登0
-    print(data)
-
-
 
     # 后台注册会员
-    # for uname in range(7,8):
-    #     accountName = ("Testuser00" + str(uname))
-    #     username = ("测试账号0" + str(uname))
-    #     percentage = random.randint(7,21)
+    # login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE1NTc1NjM2NjU3MjIzMTA2NTciLCJleHAiOjE2NjAxOTQzODcsInVzZXJuYW1lIjoiYTAxMDEwMTAxIn0.OGwHFko6tQW8j2TU91Zyy4es6LTFT9QzjxT8ZbAD_eU"
+    # for number in range(100,121):
+    #     account = "a01010101" + str(number)           # "a01000000":  登3账号
+    #     name = "user" + str(number)
     #     handicaptype = random.choice(['A','B','C','D'])
-    #     token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE0NzI4NDkwODAzMzcxNDU4NTgiLCJleHAiOjE2NDMwMDg3MTgsInVzZXJuYW1lIjoiVGV0ZXN0QWRtaW4wMSJ9.QiKUv2pP1aehbJ08gUaGVydWoHWKnCtsmUvKHvupTpg'
-    #     register = bg.user_register(token= token,account=accountName, name=username, password='Bfty123456', creditsAmount=100000, Percentage=percentage, handicapType=handicaptype)
-    #
-    #     content =bg.cm.write_to_local_file(content=f"{accountName}\n",file_name='C:/Users/USER/Desktop/balance.txt', mode='a',)
+    #     data = bg.add_user(agent_token=login_loken, account=account, name=name, password='Bfty123456', credits=10000, accountStatus='0',handicapType=handicaptype)  # 登3账号新增会员
 
     # changeRecord = bg.credit_userAccountChangeRecord_query(Authorization=login_loken)
     # AgentLine = bg.credit_agentLineManagementList(Authorization=login_loken)
     # print(AgentLine)
-
 
     # token = bg.get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
     # print(token)

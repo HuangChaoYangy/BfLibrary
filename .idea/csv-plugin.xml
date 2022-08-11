@@ -3,6 +3,13 @@
   <component name="CsvFileAttributes">
     <option name="attributeMap">
       <map>
+        <entry key="\credit_data_new\AgentManagement\uncheck.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\credit_data_new\AgentReport\bill.csv">
           <value>
             <Attribute>
@@ -115,6 +122,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\credit_data_new\AgentReport\winLoseSimple.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\credit_data_new\AgentReport\winLoseSimple_d.csv">
           <value>
             <Attribute>
@@ -185,6 +199,27 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\credit_data_new\ReportManagement\dataSource.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\credit_data_new\ReportManagement\dataSource_b.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\credit_data_new\ReportManagement\dataSource_t.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\credit_data_new\ReportManagement\sports.csv">
           <value>
             <Attribute>
@@ -206,7 +241,42 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\credit_data_new\TotalBet\mainBet_d.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\credit_data_new\TotalBet\mixBet.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\credit_data_new\TotalBet\mixBetOrder.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\credit_data_new\dataSource.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\credit_data_new\totalBet\mainBet.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="\dataSource.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

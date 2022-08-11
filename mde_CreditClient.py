@@ -44,7 +44,8 @@ class Credit_Client(object):
                              "羽毛球": "sr:sport:31", "乒乓球": "sr:sport:20",
                              "棒球": "sr:sport:3", "斯诺克": "sr:sport:19", "冰上曲棍球": "sr:sport:4"}
         self.auth_url = 'http://192.168.10.120'
-        self.mde_url = 'https://mdesearch.betf.io'
+        # self.mde_url = 'https://mdesearch.betf.io'     # mde
+        self.mde_url = 'https://search.betf.io'      # 外网
         self.session = requests.session()
         self.ms = MysqlFunc(mysql_info, mongo_info, merchant_url)
         self.my = MysqlQuery(mysql_info, mongo_info)
@@ -156,6 +157,7 @@ class Credit_Client(object):
         :return:
         '''
         url = self.mde_url + '/creditUser/creditUserLogIn'
+        # loginUrl = 'https://mdesf.betf.io'
         loginUrl = 'https://mdesf.betf.io'
         head = {"lang": "ZH",
                 "Accept-Encoding": "gzip, deflate",
@@ -742,7 +744,7 @@ class Credit_Client(object):
             rtn = list(self.ms.query_data(sql_str, database_name))
             new_list = [list(item) for item in rtn]        #  查询出来的原始数据 [['A', Decimal('1.32'), 8], ['B', Decimal('1.33'), 7], ['C', Decimal('1.34'), 6], ['D', Decimal('1.35'), 5]]
 
-            # 对查询出来的原始数据进行赔率+1,盘口减值/100处理
+            # 设置的赔率为亚洲赔,对查询出来的原始数据进行赔率+1,盘口减值/100处理
             for item in new_list:
                 if item[0] != "A":       # A盘口在后台配置成原始赔率
                     item[1] += 1
@@ -759,10 +761,10 @@ class Credit_Client(object):
                         j = float(j)
                     new_data_list.append(j)
                 new_data_list.insert(0, item[0])
-                match_info_list.append(new_data_list)
+                match_info_list.append(new_data_list)   # [['A', 0.0, 0.0], ['B', 2.33, 0.07], ['C', 2.34, 0.06], ['D', 2.35, 0.05]]
 
             # 将盘口类型和赔率/盘口减值添加到字典
-            handcip_management = {'A': [], 'B': [], 'C': [], 'D': []}
+            handcip_management = {'A': [], 'B': [], 'C': [], 'D': []}    # {'A': [0.0, 0.0], 'B': [2.33, 0.07], 'C': [2.34, 0.06], 'D': [2.35, 0.05]}
             for item in match_info_list:
                 for type in item:
                     if type == 'A':
@@ -1131,8 +1133,8 @@ class Credit_Client(object):
 
         outcome_info_list = []
         match_info_list = self.get_match_list(sport_name, token, event_type=event_type, odds_type=odds_type)[0]
+        # match_info_list = ["sr:match:35124401","sr:match:31524895"]
         [outcome_info_list.append(self.get_match_all_outcome(item, token, sport_name, odds_Type=odds_type)) for item in match_info_list]
-        # print(outcome_info_list)
 
         if not IsRandom:
             for item in outcome_info_list:  # 在outcome_list循环，去除列表为空的元素
@@ -1147,7 +1149,7 @@ class Credit_Client(object):
             sub_order_no_list = []
             loop = 1
             for run_loop in range(run_loop_num):
-                bet_amount = random.randint(10, 30)
+                bet_amount = random.randint(10, 20)
                 selection_list = []
                 start_index = run_loop * bet_type
                 mixedNum = "%s_1_0_%s" % (bet_type, str(bet_amount))
@@ -1217,7 +1219,7 @@ class Credit_Client(object):
                 sub_order_no_list = []
                 loop = 1
                 for run_loop in range(run_loop_num):
-                    bet_amount = random.randint(10, 30)
+                    bet_amount = random.randint(10, 20)
                     selection_list = []
                     start_index = run_loop * bet_type
                     mixedNum = "%s_1_0_%s" % (bet_type, str(bet_amount))
@@ -1458,10 +1460,11 @@ class Credit_Client(object):
     def get_all_match_outcome(self, token, sport_name="", event_type='INPLAY', odds_Type=1, handicap=False):
         '''
         PC端,通过比赛ID获取该比赛所有盘口                /// 修改于2022.08.06
-        :param token:
+        :param sport_name:
+        :param event_type:
         :param event_type:
         :param odds_Type:     ['足球', '篮球', '网球', '排球', '羽毛球', '乒乓球', '棒球', '冰上曲棍球']
-        :param handicap:  默认为false,为True时获取让球/大小/独赢盘口    用户后台查询
+        :param handicap:  默认为false,为True时获取让球/大小/独赢盘口    用于后台查询
         :return:
         '''
         match_info_list = []
@@ -1472,8 +1475,7 @@ class Credit_Client(object):
         else:
             match_id_list =self.get_match_list(sport_name=sport_name, token=token, event_type=event_type, odds_type=odds_Type)[0]
             match_info_list.extend(match_id_list)
-        # print(match_info_list)
-        # print(1111111111111111111111111111111)
+
         url = self.mde_url + '/creditMatchPC/totalMarketList'
         handicap_list = ["1", "16", "18", "219", "223", "225", "60", "66", "68", "186", "188", "314", "237", "238", "251", "256", "258"]
         sport_id_dic = {"足球": "sr:sport:1", "篮球": "sr:sport:2", "网球": "sr:sport:5", "排球": "sr:sport:23",
@@ -1486,7 +1488,7 @@ class Credit_Client(object):
                 "Connection": "keep-alive",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                               "Chrome/85.0.4183.102 Safari/537.36"}
-        # match_info_list = ["sr:match:35176177"]
+        # match_info_list = ["sr:match:31999847"]
         outcome_info_list = []
         if handicap == False:
             for match_id in match_info_list:
@@ -1497,7 +1499,6 @@ class Credit_Client(object):
                 sport_id = sport_id_dic[sport_name]
                 try:
                     marketList = rsp.json()["data"]["marketList"]
-                    # print(marketList)
                     for market in marketList:
                         market_id = market["marketId"]
                         is_live = market["isLive"]
@@ -1513,10 +1514,13 @@ class Credit_Client(object):
                                 outcome_info_list.append((market_id, outcome_dic))
                                 outcomeid = outcome_detail['outcomeId']
                                 outcome_id_list.append(outcomeid)
+
+                # except Exception as e:
+                #     print(f'当前接口调用失败,message：{e}')
+
                 except:
+                    print(11111111111111111111111111111111111)
                     marketList = rsp.json()["data"]["marketList"]
-                    # print(111111111111111111111111111111111111111111111)
-                    # print(marketList)
                     for market in marketList:
                         market_id = market["marketId"]
                         is_live = market["isLive"]
@@ -1533,7 +1537,7 @@ class Credit_Client(object):
                                 outcome_info_list.append((market_id, outcome_dic))
                                 outcomeid = outcome_detail['outcomeId']
                                 outcome_id_list.append(outcomeid)
-            # print(outcome_info_list)
+
             return outcome_info_list
 
         else:
@@ -1544,22 +1548,46 @@ class Credit_Client(object):
                 # market
                 # sport_id = rsp.json()["data"]["tournamentSportId"]
                 sport_id = sport_id_dic[sport_name]
-                for market in rsp.json()["data"]["marketList"]:
-                    market_str = market["marketId"]              # market_str="sr:match:31801861_24"
-                    market_obeject = re.search("_(\d+)", market_str)
-                    market_simple_id = market_obeject.group(1)
-                    is_live = market["isLive"]
-                    if market_simple_id in handicap_list:
+                try:
+                    for market in rsp.json()["data"]["marketList"]:
+                        market_str = market["marketId"]              # market_str="sr:match:31801861_24"
+                        market_obeject = re.search("_(\d+)", market_str)
+                        market_simple_id = market_obeject.group(1)
+                        is_live = market["isLive"]
+                        if market_simple_id in handicap_list:
+                            for outcome in market["outcomeList"]:
+                                for outcome_detail in outcome:
+                                    outcome_dic = {"market_id": market_str,
+                                                   "specifier": outcome_detail["specifier"],
+                                                   "outcome_id": outcome_detail["outcomeId"],
+                                                   "oddsType": outcome_detail["oddsType"],
+                                                   "odds": outcome_detail["odds"],
+                                                   "islive": is_live,
+                                                   "sport_category_id": sport_id}
+                                    outcome_info_list.append((market_str, outcome_dic))
+                                    outcomeid = outcome_detail['outcomeId']
+                                    outcome_id_list.append(outcomeid)
+
+                # except Exception as e:
+                #     print(f'当前接口调用失败,message：{e}')
+
+                except:
+                    print(rsp.json()["data"]["marketList"])
+                    marketList = rsp.json()["data"]["marketList"]
+                    for market in marketList:
+                        market_id = market["marketId"]
+                        is_live = market["isLive"]
                         for outcome in market["outcomeList"]:
-                            for outcome_detail in outcome:
-                                outcome_dic = {"market_id": market_str,
+                            outCome = eval(outcome)
+                            for outcome_detail in outCome:
+                                outcome_dic = {"market_id": market_id,
                                                "specifier": outcome_detail["specifier"],
                                                "outcome_id": outcome_detail["outcomeId"],
                                                "oddsType": outcome_detail["oddsType"],
                                                "odds": outcome_detail["odds"],
                                                "islive": is_live,
                                                "sport_category_id": sport_id}
-                                outcome_info_list.append((market_str, outcome_dic))
+                                outcome_info_list.append((market_id, outcome_dic))
                                 outcomeid = outcome_detail['outcomeId']
                                 outcome_id_list.append(outcomeid)
 
@@ -1576,7 +1604,7 @@ class Credit_Client(object):
         :param handicap:  默认为false,为True时只投注让球/大小/独赢盘口
         :return:
         '''
-        print("Thread {} run, info: {}".format('当前子线程', threading.current_thread()))
+        # print("Thread {} run, info: {}".format('当前子线程', threading.current_thread()))
 
         type_dic = {'INPLAY':'滚盘', 'TODAY':'今日', 'EARLY':'早盘'}
         terminal_list = ['pc','H5-IOS','H5-android','APP-android','APP-IOS']
@@ -1614,7 +1642,7 @@ class Credit_Client(object):
                 terminal = random.choice(terminal_list)   # 随机客户端
                 data = {"mixedNum": [mixedNum],
                         "betId": 1632573273553,
-                        "betIp": 'mde.betf.io',
+                        "betIp": 'betf.io',     # "betIp": 'mde.betf.io',
                         "browserFingerprintId": "2b0148c380e1e7daee36c6752532f33f",
                         "selections": [outcomeid],
                         "oddsChangeType": 1,      # 1 自动接受任意赔率    2 不接受任意赔率
@@ -1672,12 +1700,12 @@ class Credit_Client(object):
             sub_order_no_list = []
             loop = 1
             for outcomeid in selection_list:
-                bet_amount = random.randint(10, 1000)
+                bet_amount = random.randint(10, 200)
                 mixedNum = "1_1_0_%s" % (str(bet_amount))
                 terminal = random.choice(terminal_list)
                 data = {"mixedNum": [mixedNum],
                         "betId": 1632573273553,
-                        "betIp": 'mde.betf.io',
+                        "betIp": 'betf.io',
                         "browserFingerprintId": "2b0148c380e1e7daee36c6752532f33f",
                         "selections": [outcomeid],
                         "oddsChangeType": odds_type,
@@ -2447,7 +2475,7 @@ class MyThread(threading.Thread):
         super(MyThread, self).__init__()
         self.bfc = Credit_Client(mysql_info, mongo_info)
 
-    def thread_submit(self, bet_type=1, sport_name=None, event_type=None, odds_type=1, IsRandom='',handicap=False, complex='multi', complex_number=2):
+    def thread_submit(self, bet_type=1, sport_name="", event_type=None, odds_type=1, IsRandom='',handicap=False, complex='multi', complex_number=2):
         '''
         多线程投注
         :param bet_type:    投注类型
@@ -2462,39 +2490,49 @@ class MyThread(threading.Thread):
         '''
         token_list = self.bfc.get_client_user_token()
         type_list = ['INPLAY', 'EARLY', 'TODAY']
-        sport_name_list = ['足球', '篮球', '网球', '排球', '羽毛球',  '兵乓球', '棒球', '冰球']
+        sport_name_list = ['足球', '篮球', '网球', '排球', '羽毛球',  '兵乓球', '棒球', '冰上曲棍球']
         bet_type_dic = {1:"单注", 2:"串关", 3:"复式串关"}
         if event_type == None:
             eventType = random.choice(type_list)
         else:
             eventType = event_type
-        if sport_name == None:
+        if sport_name == "":
             sportName = random.choice(sport_name_list)
         else:
             sportName = sport_name
 
-        for token_str in token_list:
-            if bet_type_dic[bet_type] == "单注":
-                sub_thread = threading.Thread(target=self.bfc.submit_all_match, args=(f'{token_str}', sportName, f'{eventType}', odds_type, IsRandom, handicap))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
-                sub_thread.start()          # 通过start()方法手动来启动线程
-                # work_thread = threading.Thread(target=self.bfc.submit_all_match, daemon=True)
-                # print(threading.current_thread())
+        for index in range(1,2):
+            try:
+                for token_str in token_list:
+                    if bet_type_dic[bet_type] == "单注":
+                        sub_thread = threading.Thread(target=self.bfc.submit_all_match, args=(f'{token_str}', sportName, f'{eventType}', odds_type, IsRandom, handicap))     # 单注投注：创建线程,所有比赛随机投注,target为线程执行的目标方法
+                        sub_thread.start()          # 通过start()方法手动来启动线程
+                        # work_thread = threading.Thread(target=self.bfc.submit_all_match, daemon=True)
+                        # print(threading.current_thread())
 
-            elif bet_type_dic[bet_type] == "串关":
-                for betType in range(3, 15):
-                    sub_thread = threading.Thread(target=self.bfc.submit_all_outcomes, args=(sportName, token_str, betType,
-                                              eventType, odds_type, IsRandom))
-                    sub_thread.start()
+                    elif bet_type_dic[bet_type] == "串关":
+                        for betType in range(3, 15):
+                            sub_thread = threading.Thread(target=self.bfc.submit_all_outcomes, args=(sportName, token_str, betType,
+                                                      eventType, odds_type, IsRandom))
+                            sub_thread.start()
 
-            elif bet_type_dic[bet_type] == "复式串关":
-                for betType in range(3, 7):
-                    sub_thread = threading.Thread(target=self.bfc.submit_all_complex, args=(sportName, token_str, betType, eventType,
-                                              odds_type, 1, complex, complex_number))
-                    sub_thread.start()
-            else:
-                raise AssertionError('ERROR,暂不支持该投注类型')
+                    elif bet_type_dic[bet_type] == "复式串关":
+                        for betType in range(3, 7):
+                            sub_thread = threading.Thread(target=self.bfc.submit_all_complex, args=(sportName, token_str, betType, eventType,
+                                                      odds_type, 1, complex, complex_number))
+                            sub_thread.start()
+                    else:
+                        raise AssertionError('ERROR,暂不支持该投注类型')
 
-    def thread_pool_submit(self, bet_type=1, sport_name=None, event_type=None, odds_type=1, IsRandom='', handicap=False,complex='multi', complex_number=2):
+            except ConnectionError:
+                time.sleep(2)
+                continue
+
+            except Exception as e:
+                raise AssertionError(f'投注失败, 失败信息：{e}')
+
+
+    def thread_pool_submit(self, bet_type=1, sport_name="", event_type=None, odds_type=1, IsRandom='', handicap=False,complex='multi', complex_number=2):
         '''
         线程池的方式进行多线程投注
         :param bet_type:    投注类型
@@ -2509,13 +2547,13 @@ class MyThread(threading.Thread):
         '''
         token_list = self.bfc.get_client_user_token()
         type_list = ['INPLAY', 'EARLY', 'TODAY']
-        sport_name_list = ['足球', '篮球', '网球', '排球', '羽毛球',  '兵乓球', '棒球', '冰球']
+        sport_name_list = ['足球', '篮球', '网球', '排球', '羽毛球',  '兵乓球', '棒球', '冰上曲棍球']
         bet_type_dic = {1:"单注", 2:"串关", 3:"复式串关"}
         if event_type == None:
             eventType = random.choice(type_list)
         else:
             eventType = event_type
-        if sport_name == None:
+        if sport_name == "":
             sportName = random.choice(sport_name_list)
         else:
             sportName = sport_name
@@ -2523,7 +2561,7 @@ class MyThread(threading.Thread):
         with ThreadPoolExecutor(max_workers=50) as task:
             for token_str in token_list:
                 if bet_type_dic[bet_type] == "单注":
-                    sub_thread1 = task.submit(self.bfc.submit_all_match, token_str, eventType, odds_type, IsRandom, handicap)
+                    sub_thread1 = task.submit(self.bfc.submit_all_match, token_str,sportName, eventType, odds_type, IsRandom, handicap)
 
                 elif bet_type_dic[bet_type] == "串关":
                     for betType in range(3,15):
@@ -2541,17 +2579,19 @@ class MyThread(threading.Thread):
 
 if __name__ == "__main__":
 
-    mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']          # 外网mde测试环境
-    mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
+    # mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']          # 外网mde测试环境
+    # mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
+    mysql_info = ['34.80.33.71', 'creditnetrouser', 'XqtZYGfHKBBftu9', '3306']          # 外网正式环境
+    mongo_info = ['admin', 'LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A', '35.229.139.160', '37017']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    MyThread().thread_submit(bet_type=1, sport_name="", event_type="TODAY", odds_type=2, IsRandom='3',handicap=False, complex='multi', complex_number=2)
-    # MyThread().thread_pool_submit(bet_type=1,  sport_name=None, event_type=None, odds_type=1, IsRandom='30', handicap=False, complex='multi', complex_number=2)
+    # MyThread().thread_submit(bet_type=1, sport_name="足球", event_type="TODAY", odds_type=2, IsRandom='3',handicap=True, complex='multi', complex_number=2)
+    MyThread().thread_pool_submit(bet_type=1,  sport_name="", event_type="TODAY", odds_type=2, IsRandom='1', handicap=True, complex='multi', complex_number=2)
 
-    # token_list = ['ebeea5ec69b54c039225a39aea437759','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
+    # token_list = ['c1e4d5b6bed0432aa17140b7ec531d3d','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
 
     # for item in ['Testuser001','Testuser002','Testuser003','Testuser004']:
-    # token = bf.login_client(username='a16000000109', password='Bfty123456')
+    # token = bf.login_client(username='a01000000001', password='Bfty123456')
     # print(token)
     #     data = bf.cm.write_to_local_file(content=token+'\n', file_name='C:/Users/USER/Desktop/testToken.txt',mode='a')
 
@@ -2580,10 +2620,10 @@ if __name__ == "__main__":
 
     # 所有比赛随机投注
     # token_list = bf.get_client_user_token()
-    # bf.get_all_match_outcome(token=token_list[0], sport_name="足球", event_type='TODAY', odds_Type=1, handicap=False)
+    # # print(bf.get_all_match_outcome(token=token_list[0], sport_name="足球", event_type='TODAY', odds_Type=1, handicap=False))
     # for token in token_list:
     #     # for type in ['INPLAY', 'TODAY', 'EARLY']:
-    # bf.submit_all_match(token=f'{token}', event_type='TODAY', odds_type=2, IsRandom='10', handicap=False)
+    #     bf.submit_all_match(token=f'{token_list[0]}', sport_name="足球", event_type='TODAY', odds_type=2, IsRandom='3', handicap=False)
 
         # 单注投注
     # match_info_list = []
@@ -2591,7 +2631,7 @@ if __name__ == "__main__":
     #     match_id_list = bf.get_match_list(sport_name=sport_name, token=token_list[0], event_type='INPLAY', odds_type=1)[0]
     #     match_info_list.extend(match_id_list)
     # for match_id in match_info_list:
-    # bf.submit_all_outcome(match_id=match_id, sport_name=sport_name, token=token_list[0], odds_type=1, IsRandom='5')
+    #     bf.submit_all_outcome(match_id=match_id, sport_name=sport_name, token=token_list[0], odds_type=1, IsRandom='5')
     # 非复式串关投注
     # for bet_type in range(3,15):
     #     bf.submit_all_outcomes(sport_name='足球', token=token_list[0], bet_type=bet_type, event_type='TODAY', IsRandom='10')
@@ -2603,13 +2643,13 @@ if __name__ == "__main__":
     # outcome = bf.get_match_all_outcome(match_id="sr:match:28503692", token=token_list[0], sport_name="冰上曲棍球", odds_Type=1)   # 获取所有玩法
 
     # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
-    # match_list = bf.get_match_list(sport_name='篮球', token=token_list[0], terminal='h5', event_type="EARLY", sort= 2, odds_type=1)              # 检测比赛数量是否一致
+    # match_list = bf.get_match_list(sport_name='足球', token=token_list[0], terminal='pc', event_type="EARLY", sort= 2, odds_type=1)              # 检测比赛数量是否一致
     # outcome_detail = bf.get_match_all_outcomes_detail(token=token_list[0],sport_name='网球',event_type="INPLAY", sort=1, odds_type=1)              # 检测比赛下注项数量是否一致
     # tournament = bf.get_choose_tourment_list(sport_name='足球', token=token_list[0], matchCategory="today", highlight="false")     # 选择联赛列表数量是否一致
 
     # credits_odds = bf.get_credit_outcomes_odds(sport_name='棒球', event_type="INPLAY", sort=1, odds_type=1)         # 获取接口中ABCD盘口的信用网赔率
     # check_odds = bf.check_credit_outcomes_odds(token=token_list[0], sport_name='羽毛球', handicap_type='B', event_type="TODAY", sort=1, odds_type=2)  # 验证ABCD盘口的信用网赔率
-    # credits_odds = bf.get_credit_expect_outcomes_odds(token=token_list[0], sport_name='棒球', event_type="INPLAY", sort=1,odds_type=1,handicap_type='B')
+    # credits_odds = bf.get_credit_expect_outcomes_odds(token=token_list[0], sport_name='篮球', event_type="TODAY", sort=1,odds_type=1,handicap_type='B')
     # print(credits_odds)
     # print(len(credits_odds))
     # match_result = bf.get_h5_credit_match_result(token=token_list[0], sportName='篮球', offset='-1')      # 信用网-h5端,新赛果查询

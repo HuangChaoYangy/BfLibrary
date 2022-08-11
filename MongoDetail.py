@@ -384,18 +384,20 @@ class DbDetialQuery(object):
         return match_list,abnormal_match_list
 
 
-    def get_match_list_sql(self, sport_name, sort=1, dateOff=0, matchCategory='live'):
+    def get_match_list_sql(self, sport_name, sortType=1, dateOff=0, matchCategory='live'):
         '''
-        从数据库获取客户端滚球赛事比赛数据；查询比赛支持转滚球，比赛开始后，matchStatus = live，isLive = true，滚球要查markets为空     /// 修改于2022.02.21
+        从数据库获取客户端滚球赛事比赛数据；查询比赛支持转滚球，比赛开始后，matchStatus = live，isLive = true，滚球要查markets为空     /// 修改于2022.08.09
         :param sport_name:
         :param sort:  1时间排序,2联赛排序
+        :param dateOff:  时间参数
         :param matchCategory:
         :return:
         '''
         Categrory = {'live': '滚球', 'today': '今日', 'early': '早盘'}
+        sort_type = {"时间排序":1 , "联赛排序":2}
         sportId = self.get_sportId_sql(sport_name)
         if matchCategory == 'live':
-            if sort == 1:
+            if sortType == sort_type['时间排序']:
                 select_dic = {"_id": 1,
                               "matchScheduled": 1,
                               "tournamentCateoryName": 1,
@@ -433,7 +435,7 @@ class DbDetialQuery(object):
                 except Exception as e:
                     return e
 
-            elif sort == 2:
+            elif sortType == sort_type['联赛排序']:
                 create_time = self.get_current_time_for_client(time_type="begin", day_diff=0)
                 create_time = datetime.datetime.strptime(create_time, "%Y-%m-%d %H:%M:%S")  # 将字符串转换成datetime时间格式
                 end_time = self.get_current_time_for_client(time_type="end", day_diff=+1)  # 将字符串转换成datetime时间格式
@@ -471,7 +473,7 @@ class DbDetialQuery(object):
                 raise AssertionError('传入参数错误,请检查传入的参数')
 
         elif matchCategory == 'today':
-            if sort == 1:
+            if sortType == sort_type['时间排序']:
                 create_time = self.get_current_time_for_client(time_type="current_time", day_diff=dateOff)   # 获取当前时间
                 create_time = datetime.datetime.strptime(create_time, "%Y-%m-%d %H:%M:%S")  # 将字符串转换成datetime时间格式
                 ctime = (create_time + datetime.timedelta(hours=-7)).strftime("%Y-%m-%d %H:%M:%S")  # 将datetime格式减去xx个小时再转换成字符串格式
@@ -542,7 +544,7 @@ class DbDetialQuery(object):
                 except Exception as e:
                     return e
 
-            elif sort == 2:
+            elif sortType == sort_type['联赛排序']:
                 create_time = self.get_current_time_for_client(time_type="current_time", day_diff=dateOff)
                 create_time = datetime.datetime.strptime(create_time, "%Y-%m-%d %H:%M:%S")
                 ctime = (create_time + datetime.timedelta(hours=-7)).strftime("%Y-%m-%d %H:%M:%S")  # 将datetime格式减去xx个小时再转换成字符串格式
@@ -625,7 +627,7 @@ class DbDetialQuery(object):
                 raise AssertionError('传入参数错误,请检查传入的参数')
 
         elif matchCategory == 'early':
-            if sort == 1:
+            if sortType == sort_type['时间排序']:
                 start_time = self.get_current_time_for_client(time_type="begin", day_diff=dateOff)
                 start_time = datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")  # 将字符串转换成datetime时间格式
                 select_dic = {"_id": 1,
@@ -695,7 +697,7 @@ class DbDetialQuery(object):
                 except Exception as e:
                     return None
 
-            elif sort == 2:
+            elif sortType == sort_type['联赛排序']:
                 start_time = self.get_current_time_for_client(time_type="begin", day_diff=dateOff + 1)
                 start_time = datetime.datetime.strptime(start_time, "%Y-%m-%d %H:%M:%S")  # 将字符串转换成datetime时间格式
                 select_dic = {"_id": 1,
@@ -987,11 +989,11 @@ if __name__ == "__main__":
 
     # data = db.get_match_result_sql(offset=-1)
     # data = db.get_Client_orderNo_match_result_sql(user_name='USD_TEST02',offset=-3)
-    score_data = db.get_match_result_by_order(user_name='',order_no='XNwZLkk7NwFf', offset=())
-    print(score_data)
+    # score_data = db.get_match_result_by_order(user_name='',order_no='XNwZLkk7NwFf', offset=())
+    # print(score_data)
     # match_data = db.get_match_status_sql()
     # score = db.get_match_score_statistics_sql()
 
     # for sport_name in ["足球", "篮球", "网球", "排球", "羽毛球", "乒乓球", "棒球", "冰上曲棍球"]:
-    # match_list = db.get_match_list_sql(sport_name="棒球", sort=1, dateOff=0, matchCategory='live')[1]
-    # print(match_list)
+    match_list = db.get_match_list_sql(sport_name="排球", sortType=1, dateOff=0, matchCategory='live')[1]
+    print(match_list)

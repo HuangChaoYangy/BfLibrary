@@ -33,15 +33,15 @@ class MysqlFunc(object):
         cursor.executeXXX方法执行SQL语句，cursor.fetchXXX获取查询结果等
         调用close方法关闭游标cursor和数据库连接
         :param mysql_info:
-        :param mongo_info:
+        :param mongo_info:  business_order
         :param args:
         :param kwargs:
         '''
         self.connect = pymysql.connect(host=mysql_info[0], user=mysql_info[1], password=mysql_info[2],
-                                       database='business_order', charset='utf8',
+                                       database='bfty_credit', charset='utf8',
                                        port=int(mysql_info[3]), autocommit=True)
 
-        self.tm = Third_Merchant(mysql_info, host='http://192.168.10.11')
+        # self.tm = Third_Merchant(mysql_info, host='http://192.168.10.11')
         self.mg = MongoFunc(mongo_info)
         self.db = DbQuery(mongo_info)
         self.cursor = self.connect.cursor()
@@ -7758,7 +7758,7 @@ class MysqlQuery(MysqlFunc):
             if parent_level == '登0':   # 登0查询登1
                 sql_str = f"SELECT CONCAT(a.account,'/',IFNULL(a.login_account,'')) as '账号/登入账号',a.`name` '代理线名称',(case when role_id=0 then '登0' when role_id=1 then '登1' " \
                           f"when role_id=2 then '登2' when role_id=3 then '登3' end) '等级',b.currency '货币',COUNT(1) '注单数量',sum(bet_amount) '总投注额'," \
-                          f"sum(ROUND(bet_amount*company_actual_percentage,2)) '公司占成',sum(ROUND(bet_amount*level0_actual_percentage,2)) '总代理占成' FROM `m_account` a JOIN " \
+                          f"sum(ROUND(bet_amount*level0_actual_percentage,2)) '总代理占成',sum(ROUND(bet_amount*company_actual_percentage,2)) '公司占成' FROM `m_account` a JOIN " \
                           f"m_account_credits b ON a.id = b.account_id LEFT JOIN o_account_order c ON a.id = c.proxy1_id WHERE a.role_id= 1 AND c.proxy0_id=(SELECT id FROM m_account " \
                           f"WHERE account='{resp['parentId']}') AND c.`status` in (1,2) AND c.award_time is NULL {account} GROUP BY CONCAT(a.account,'/',IFNULL(a.login_account,'')),a.`name`,role_id," \
                           f"b.currency,a.create_time ORDER BY a.create_time DESC"
