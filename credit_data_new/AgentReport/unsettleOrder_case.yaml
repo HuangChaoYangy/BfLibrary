@@ -22,12 +22,12 @@
     page: 1
     limit: 200
     account: ''
-    parentId: 'a0'
+    parentId: 'a01'
     userName: ''
-    title: 总台-代理报表-总代未完成交易,根据登0账号'a0'查询所有数据
+    title: 总台-代理报表-总代未完成交易,根据登0账号'a01'查询所有数据
   resp:
     account: ''
-    parentId: 'a0'
+    parentId: 'a01'
     userName: ''
 
 - request:
@@ -38,12 +38,12 @@
     page: 1
     limit: 200
     account: ''
-    parentId: 'a0b1'
+    parentId: 'a0100'
     userName: ''
-    title: 总台-代理报表-总代未完成交易,根据登1账号'a0b1'查询所有数据
+    title: 总台-代理报表-总代未完成交易,根据登1账号'a0100'查询所有数据
   resp:
     account: ''
-    parentId: 'a0b1'
+    parentId: 'a0100'
     userName: ''
 
 - request:
@@ -54,12 +54,12 @@
     page: 1
     limit: 200
     account: ''
-    parentId: 'a0b1b2'
+    parentId: 'a010000'
     userName: ''
-    title: 总台-代理报表-总代未完成交易,根据登2账号'a0b1b2'查询所有数据
+    title: 总台-代理报表-总代未完成交易,根据登2账号'a010000'查询所有数据
   resp:
     account: ''
-    parentId: 'a0b1b2'
+    parentId: 'a010000'
     userName: ''
 
 - request:
@@ -70,11 +70,11 @@
     page: 1
     limit: 200
     account: ''
-    parentId: 'a0b1b2b3'
+    parentId: 'a01000000'
     userName: ''
-    title: 总台-代理报表-总代未完成交易,根据登3账号'a0b1b2b3'查询所有数据
+    title: 总台-代理报表-总代未完成交易,根据登3账号'a01000000'查询所有数据
   resp:
     account: ''
-    parentId: 'a0b1b2b3'
+    parentId: 'a01000000'
     userName: ''
 
