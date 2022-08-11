@@ -40,14 +40,14 @@
     method: POST
   data:
     account: ''
-    parentId: 'a0'
+    parentId: 'a01'
     userName: ''
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(详情),根据登0账号'a0'查询所有登1数据
+    title: 总台-代理报表-总代盈亏(详情),根据登0账号'a01'查询所有登1数据
   resp:
     account: ''
-    parentId: 'a0'
+    parentId: 'a01'
     userName: ''
     ctime: '-7'
     etime: '-1'
@@ -58,14 +58,14 @@
     method: POST
   data:
     account: ''
-    parentId: 'a0b1'
+    parentId: 'a0100'
     userName: ''
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(详情),根据登1账号'a0b1'查询所有登2数据
+    title: 总台-代理报表-总代盈亏(详情),根据登1账号'a0100'查询所有登2数据
   resp:
     account: ''
-    parentId: 'a0b1'
+    parentId: 'a0100'
     userName: ''
     ctime: '-7'
     etime: '-1'
@@ -76,14 +76,14 @@
     method: POST
   data:
     account: ''
-    parentId: 'a0b1b2'
+    parentId: 'a010000'
     userName: ''
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(详情),根据登2账号'a0b1b2'查询所有登3数据
+    title: 总台-代理报表-总代盈亏(详情),根据登2账号'a010000'查询所有登3数据
   resp:
     account: ''
-    parentId: 'a0b1b2'
+    parentId: 'a010000'
     userName: ''
     ctime: '-7'
     etime: '-1'
@@ -94,14 +94,14 @@
     method: POST
   data:
     account: ''
-    parentId: 'a0b1b2b3'
+    parentId: 'a01000000'
     userName: ''
     begin: '-7'
     end: '-1'
-    title: 总台-代理报表-总代盈亏(详情),根据登3账号'a0b1b2b3'查询所有会员数据
+    title: 总台-代理报表-总代盈亏(详情),根据登3账号'a01000000'查询所有会员数据
   resp:
     account: ''
-    parentId: 'a0b1b2b3'
+    parentId: 'a01000000'
     userName: ''
     ctime: '-7'
     etime: '-1'
