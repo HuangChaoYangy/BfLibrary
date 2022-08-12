@@ -16,8 +16,8 @@ from log import Bf_log
 from base_dir import *
 from tools.yamlControl import Yaml_data,YamlFileData
 
-# 获取环境配置
-dataBase_configure = CommonFunc().get_environment_config()
+# 获取数据库环境配置
+dataBase_configure = CommonFunc().get_dataBase_environment_config()
 mysql_info = dataBase_configure[0]
 mongo_info = dataBase_configure[1]
 

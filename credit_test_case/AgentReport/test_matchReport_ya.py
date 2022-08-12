@@ -16,8 +16,8 @@ from log import Bf_log
 from base_dir import *
 from tools.yamlControl import Yaml_data,YamlFileData
 
-# 获取环境配置
-dataBase_configure = CommonFunc().get_environment_config()
+# 获取数据库环境配置
+dataBase_configure = CommonFunc().get_dataBase_environment_config()
 mysql_info = dataBase_configure[0]
 mongo_info = dataBase_configure[1]
 
@@ -496,11 +496,7 @@ class Test_matchReport_ya:
                                      item[41], item[42], item[43], item[44], item[45], item[46], item[47],item[48], item[49]])
 
             expect_result = CommonFunc().merge_compelx_02(new_lList=expectResult)
-        # print(actual_result)
-        # print(1111111111111111)
-        #
-        # print(expect_result)
-        # print(222222222222222222222)
+
         # 校验接口数据和SQL数据的长度
         if len(actual_result) == len(expect_result):
             if actual_result != [] or expect_result != []:
@@ -553,5 +549,5 @@ class Test_matchReport_ya:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_matchReport_ya.py", '-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  # '--clean-alluredir', '-n=4'
+    pytest.main(["test_matchReport_ya.py", '-vs', '-q', '--alluredir', '../report/tmp','-n=auto','--clean-alluredir'])  # '--clean-alluredir', '-n=4'
     os.system("allure serve ../report/tmp")
