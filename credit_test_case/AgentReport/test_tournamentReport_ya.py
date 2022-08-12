@@ -46,7 +46,7 @@ class Test_tournamentReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_tournament, yaml_file=tournament_url, new_yaml_file=tournament_url_new)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=tournament_url_new, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=tournament_url_new, isAll=True)[0]['request']
-    # @pytest.mark.skip(reason="调试代码,暂不执行")
+    @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-联赛报表-联赛详情')
     def test_tournamentReport(self, inBody, expData, url=url_data):
@@ -429,5 +429,5 @@ class Test_tournamentReport_ya:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_tournamentReport_ya.py", '-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  # '--clean-alluredir', '-n=4'
+    pytest.main(["test_tournamentReport_ya.py", '-vs', '-q', '--alluredir', '../report/tmp','-n=auto','--clean-alluredir'])  # '--clean-alluredir', '-n=4'
     os.system("allure serve ../report/tmp")

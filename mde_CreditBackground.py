@@ -4486,8 +4486,8 @@ if __name__ == "__main__":
 
     # login_loken = bg.login_background(uname='a01000000', password='Bfty123456', securityCode="Agent0", loginDiv=555666)          # 登录信用网代理后台
     # print(login_loken)
-    # login_loken = bg.login_background(uname='Liyang02', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
-    # data = bg.settleUnusualOrder(Authorization=login_loken, order_num="", date=(-60, -0), settleType='待确认', remark="脚本结算", result=None)       # 异常订单结算脚本
+    login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
+    data = bg.settleUnusualOrder(Authorization=login_loken, order_num="", date=(-60, -0), settleType='待确认', remark="脚本结算", result=None)       # 异常订单结算脚本
     # data = bg.unsettlement(Authorization=login_loken)
     # user = bg.user_management(Authorization=login_loken, userStatus='0', userName='', userAccount='', sortIndex='', sortParameter='')   # 会员管理
     # match = bg.credit_match_result_query(Authorization=login_loken, sportName='足球', tournamentName='', teamName='',offset='0')    # 新赛果查询
@@ -4513,7 +4513,7 @@ if __name__ == "__main__":
     # matchReport = bg.credit_matchReport_query(Authorization=login_loken, sportName='', matchId='', queryType='match', dateType=3,create_time=(-7, -1))
     # multitermReport = bg.credit_multitermReport_query(Authorization=login_loken, sportName='', account='', dateType=3,create_time=(-7, -1))
     # match = bg.credit_last_two_days_match_query(Authorization=login_loken)
-    data = bg.credit_unsettledOrder(inData={"account": "", "parentId":"", "userName":"a01000000101"})
+    # data = bg.credit_unsettledOrder(inData={"account": "", "parentId":"", "userName":"a01000000101"})
     # data = bg.credit_winLose_simple(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
     # data = bg.credit_winLose_detail(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
     # data = bg.credit_sportReport(inData={"begin":"-7", "end":"-1", "sportName":"网球","queryDateType":3 },queryType='order')
@@ -4530,7 +4530,7 @@ if __name__ == "__main__":
     # data = bg.credit_uncheckList(inData={"accountStatus": 0, "searchAccountName": "",  "page": 1,"limit": 200})  # 总台-总代结账
     # data = bg.credit_mainBet(inData={"matchId": "", "sportId": ""}, quert_type=1)  # 总投注-让球/大小/独赢/滚球
     # data = bg.credit_mixBet(inData={"account":""}, quert_type=2)     # 总投注-混合串关
-    print(data)
+    # print(data)
     # login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE1NTUwNjk5MjgyNDcxMDc1ODUiLCJleHAiOjE2NTk1OTk4OTEsInVzZXJuYW1lIjoiYTE2MDAwMDAwIn0.swtiEzP3CE3IoMy46WLXsd3qwvNdBVU-ZWiNxpcvveM"
     # data = bg.addAgentLine(Authorization=login_loken, account='a16', name='test', password='Bfty123456', securityCode='Agent0', credits=100000000,accountStatus="0")  # 新增登0
     # data = bg.addAgent1(agent_token=login_loken, account='a1600', name='test', password='Bfty123456',securityCode='Agent0', credits=10000000, accountStatus=0)  # 新增登1

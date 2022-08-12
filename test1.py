@@ -879,3 +879,37 @@ x=3222.25233333333
 print(len(str(x)))      # 总长度
 print(str(x).find("."))    # 整数位长度
 print(len(str(x))-str(x).find("."))   # 小数位长度
+
+import datetime
+import calendar
+import time
+
+now = datetime.datetime.now()
+year = now.year
+month = now.month
+last_day = calendar.monthrange(year,month)[1]
+start = datetime.date(year,month,1).strftime("%Y-%m-%d")
+end = datetime.date(year,month,last_day).strftime("%Y-%m-%d")
+
+# print(last_day)
+# print(start)
+# print(end)
+
+list1 = [24525.00,1083.00,0.00,0.00,920.00,2098.00,18678.00,8567.00,13643.00,120.00,13548.00,84540.00,2991.00,29440.00,101358.00,21530.00,0.00,22309.00,23834.00,26286.00,34674.00,46896.00,440.00,0.00,17593.00,1926.00,28391.00,9572.00,28481.00,19507.00,2390.00]
+list2 = [20893.99,914.23,0.00,0.00,663.30,879.40,3618.98,7312.74,11323.59,80.20,9865.77,52162.97,2117.00,20966.71,56084.52,13976.91,0.00,14747.56,16272.09,15440.08,27155.67,30552.26,306.00,0.00,13288.42,1349.46,11151.65,7062.61,23127.24,11419.29,1275.00]
+length = len(list1)
+new_list = [[list1[i],list2[i]] for i in range(length)]
+print(new_list)
+
+
+# for i in range(30):
+#     print(str(i).rjust(2,"0"))
+
+
+lisr1 = [{'date': '2022-08-05', 'winloseAmount': ('393.70'), 'winloseBalance': ('5464.99'), 'commissionAmount': ('-12.77'), 'commissionBalance': ('5300.22')}, {'create_time': '2022-08-05 02:05:32', 'operation_desc': '与下级结账，【下级账号：a16】', 'check_amount': 402.57, 'settleBalance': ('4897.65'), 'remark': '测试结账 昨日余额为负'}, {'create_time': '2022-08-05 02:21:30', 'operation_desc': '与下级结账，【下级账号：xf1】', 'check_amount': -435.97, 'settleBalance': ('5333.62'), 'remark': '测试结账 昨日余额为正'}, {'create_time': '2022-08-05 02:40:11', 'operation_desc': '与下级结账，【下级账号：sh/sh】', 'check_amount': 117.14, 'settleBalance': ('5216.48'), 'remark': '2022-8-5'}, {'create_time': '2022-08-05 02:51:13', 'operation_desc': '与下级结账，【下级账号：t0/t0】', 'check_amount': 37.6, 'settleBalance': ('5178.88'), 'remark': '2022-8-5'}, {'create_time': '2022-08-05 04:01:17', 'operation_desc': '与下级结账，【下级账号：jc/jc】', 'check_amount': -12829.87, 'settleBalance': ('18008.75'), 'remark': None}, {'create_time': '2022-08-05 04:43:42', 'operation_desc': '与下级结账，【下级账号：jy1】', 'check_amount': 186.94, 'settleBalance': ('17821.81'), 'remark': None}]
+lisr2 = [{'date': '2022-08-05', 'winloseAmount': 393.7, 'winloseBalance': 5464.99, 'commissionAmount': -12.77, 'commissionBalance': 5300.22}, {'create_time': '2022-08-05 02:05:32', 'operation_desc': '与下级结账，【下级账号：a16】', 'check_amount': -402.57, 'settleBalance': 4897.65, 'remark': '测试结账 昨日余额为负'}, {'create_time': '2022-08-05 02:21:30', 'operation_desc': '与下级结账，【下级账号：xf1】', 'check_amount': 435.97, 'settleBalance': 5333.62, 'remark': '测试结账 昨日余额为正'}, {'create_time': '2022-08-05 02:40:11', 'operation_desc': '与下级结账，【下级账号：sh/sh】', 'check_amount': -117.14, 'settleBalance': 5216.48, 'remark': '2022-8-5'}, {'create_time': '2022-08-05 02:51:13', 'operation_desc': '与下级结账，【下级账号：t0/t0】', 'check_amount': -37.6, 'settleBalance': 5178.88, 'remark': '2022-8-5'}, {'create_time': '2022-08-05 04:01:17', 'operation_desc': '与下级结账，【下级账号：jc/jc】', 'check_amount': 12829.87, 'settleBalance': 18008.75, 'remark': None}, {'create_time': '2022-08-05 04:43:42', 'operation_desc': '与下级结账，【下级账号：jy1】', 'check_amount': -186.94, 'settleBalance': 17821.81, 'remark': None}]
+for index1, item1 in enumerate(actualResult):
+    print(item1)
+    for index2, item2 in enumerate(expectResult):
+        print(item2)
+        # if list(item1.values())[0] == list(item2.values())[0]:

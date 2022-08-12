@@ -1519,7 +1519,6 @@ class Credit_Client(object):
                 #     print(f'当前接口调用失败,message：{e}')
 
                 except:
-                    print(11111111111111111111111111111111111)
                     marketList = rsp.json()["data"]["marketList"]
                     for market in marketList:
                         market_id = market["marketId"]
@@ -2424,7 +2423,7 @@ class Credit_Client(object):
                 return token_list
 
 
-    def get_client_user_token(self, request_method='get', request_url='https://mdesearch.betf.io/creditUser/getUserAmount', request_body={}):
+    def get_client_user_token(self, request_method='get', request_url='https://search.betf.io/creditUser/getUserAmount', request_body={}):
         '''
         使用token通过调接口判断token是否过期，若过期则获取新的token   方法二
         :param request_method:
@@ -2468,6 +2467,57 @@ class Credit_Client(object):
 
             return token_list
 
+    def client_user_token(self, request_method='get', request_url='https://search.betf.io/creditUser/getUserAmount', request_body={}):
+        '''
+        使用token通过调接口判断token是否过期，若过期则获取新的token   方法三：直接传登3账号 获取所有会员token
+        :param request_method:
+        :param request_url:
+        :param request_body:
+        :return:
+        '''
+        try:
+            tokenList = self.ya.read_yaml_file(yaml_file=userToken_url)
+            token_list = []
+            for item in tokenList:
+                token_list.append(item['token'])
+
+            for token in token_list:
+                head = {"Accept-Encoding": "gzip, deflate",
+                    "Accept-Language": "zh-CN,zh;q=0.9",
+                    "Connection": "keep-alive",
+                    "accessCode": token,
+                    "lang": "ZH",
+                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"}
+                self.bf_request(method=request_method, url=request_url,head=head, data=request_body).json()
+            print(f"token未过期,直接取yaml文件的token：{token_list}")
+
+            return token_list
+        except:
+            # token过期,清除文件后重新获取token并写入yaml文件
+            Yaml_data().clear_yaml_file(yaml_file=userToken_url)
+
+            Level3_account = self.ya.read_yaml_file(yaml_file=clientData_url)     # 读取yaml文件获取到登3代理
+            account = Level3_account[0]['account']
+            sql_str = f"SELECT account FROM u_user WHERE proxy3_id=(SELECT id FROM m_account WHERE account='{account}')"
+            rtn = self.ms.query_data(sql=sql_str, db_name='bfty_credit')
+            new_list = [list(item) for item in rtn]
+            user_list = []
+            for item in new_list:
+                for detail in item:
+                    user_list.append(detail)
+            for username in user_list:
+                token_str = self.login_client(username=username, password='Bfty123456')
+                Yaml_data().write_yaml_file(yaml_file=userToken_url, data=[{'token': f'{token_str}'}])
+
+            # 再读取yaml文件中的token
+            new_list = Yaml_data().read_yaml_file(yaml_file=userToken_url)
+            token_list = []
+            for item in new_list:
+                token_list.append(item['token'])
+
+            print(f'赔率已过期,获取新token列表:{token_list}')
+
+            return token_list
 
 class MyThread(threading.Thread):
 
@@ -2545,7 +2595,8 @@ class MyThread(threading.Thread):
         :param complex_number:   single:复式n串1
         :return:
         '''
-        token_list = self.bfc.get_client_user_token()
+        # token_list = self.bfc.get_client_user_token()
+        token_list = self.bfc.client_user_token()
         type_list = ['INPLAY', 'EARLY', 'TODAY']
         sport_name_list = ['足球', '篮球', '网球', '排球', '羽毛球',  '兵乓球', '棒球', '冰上曲棍球']
         bet_type_dic = {1:"单注", 2:"串关", 3:"复式串关"}
@@ -2558,7 +2609,7 @@ class MyThread(threading.Thread):
         else:
             sportName = sport_name
 
-        with ThreadPoolExecutor(max_workers=50) as task:
+        with ThreadPoolExecutor(max_workers=100) as task:
             for token_str in token_list:
                 if bet_type_dic[bet_type] == "单注":
                     sub_thread1 = task.submit(self.bfc.submit_all_match, token_str,sportName, eventType, odds_type, IsRandom, handicap)
@@ -2586,9 +2637,9 @@ if __name__ == "__main__":
     bf = Credit_Client(mysql_info, mongo_info)
 
     # MyThread().thread_submit(bet_type=1, sport_name="足球", event_type="TODAY", odds_type=2, IsRandom='3',handicap=True, complex='multi', complex_number=2)
-    MyThread().thread_pool_submit(bet_type=1,  sport_name="", event_type="TODAY", odds_type=2, IsRandom='1', handicap=True, complex='multi', complex_number=2)
-
-    # token_list = ['c1e4d5b6bed0432aa17140b7ec531d3d','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
+    MyThread().thread_pool_submit(bet_type=3,  sport_name="冰上曲棍球", event_type="TODAY", odds_type=2, IsRandom='1', handicap=False, complex='single', complex_number=2)
+    # bf.client_user_token()
+    # token_list = ['3b717d0e52664344a756b8934b26c472','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
 
     # for item in ['Testuser001','Testuser002','Testuser003','Testuser004']:
     # token = bf.login_client(username='a01000000001', password='Bfty123456')
@@ -2623,7 +2674,7 @@ if __name__ == "__main__":
     # # print(bf.get_all_match_outcome(token=token_list[0], sport_name="足球", event_type='TODAY', odds_Type=1, handicap=False))
     # for token in token_list:
     #     # for type in ['INPLAY', 'TODAY', 'EARLY']:
-    #     bf.submit_all_match(token=f'{token_list[0]}', sport_name="足球", event_type='TODAY', odds_type=2, IsRandom='3', handicap=False)
+    #     bf.submit_all_match(token=token, sport_name="乒乓球", event_type='TODAY', odds_type=2, IsRandom='3', handicap=False)
 
         # 单注投注
     # match_info_list = []
