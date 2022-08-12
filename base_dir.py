@@ -29,6 +29,11 @@ test_data_path = os.path.join(excel_dir,'test_data','test_oddsData.yaml')
 # 客户端账号
 client_token_url = os.path.join(excel_dir,'client_data','client_token.yaml')
 client_user_url = os.path.join(excel_dir,'client_data','client_user.yaml')
+userToken_url = os.path.join(excel_dir,'client_data','user_token.yaml')
+clientData_url = os.path.join(excel_dir,'client_data','client_data.yaml')
+
+# 信用网客户端账号
+user_url_c = os.path.join(excel_dir,'credit_data_new\CreditClient','user.yaml')
 
                                         # [ 总台-首页 ]
 f_winlose_url = os.path.join(excel_dir,'credit_data_new\FrontPage','f_win_or_lose.yaml')
@@ -139,6 +144,8 @@ csv_url_unsettle_d = os.path.join(excel_dir,'credit_data_new\AgentReport','unset
 unsettle_url_d = os.path.join(excel_dir,'credit_data_new\AgentReport','unsettleOrder_d.yaml')
 unsettle_url_new_d = os.path.join(excel_dir,'credit_data_new\AgentReport','unsettleOrder_case_d.yaml')
 
+unsettleUrl = os.path.join(excel_dir,'credit_data_new\AgentReport','unsettle.yaml')
+
 # 总代盈亏(简易)
 csv_url_winlose_simple = os.path.join(excel_dir,'credit_data_new\AgentReport','winloseSimple.csv')
 winlose_simple_url = os.path.join(excel_dir,'credit_data_new\AgentReport','winloseSimple.yaml')
@@ -147,6 +154,9 @@ winlose_simple_url_new = os.path.join(excel_dir,'credit_data_new\AgentReport','w
 csv_url_winlose_simple_d = os.path.join(excel_dir,'credit_data_new\AgentReport','winloseSimple_d.csv')
 winlose_simple_url_d = os.path.join(excel_dir,'credit_data_new\AgentReport','winloseSimple_d.yaml')
 winlose_simple_url_new_d = os.path.join(excel_dir,'credit_data_new\AgentReport','winloseSimple_case_d.yaml')
+
+simpleUrl = os.path.join(excel_dir,'credit_data_new\AgentReport','simple.yaml')
+DetailUrl = os.path.join(excel_dir,'credit_data_new\AgentReport','detail.yaml')
 
 # 总代盈亏(详情)
 csv_url_winlose_detail = os.path.join(excel_dir,'credit_data_new\AgentReport','winloseDetail.csv')
