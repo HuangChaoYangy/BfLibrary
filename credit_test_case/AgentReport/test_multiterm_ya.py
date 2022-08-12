@@ -30,6 +30,11 @@ elif configure[0]['environment'] == "120":
     mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
     mongo_dic = configure[1]['mongodb_config']
     mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
+elif configure[0]['environment'] == "extranet":
+    mysql_dic = configure[1]['mysql_extranet']
+    mysql_info.extend([mysql_dic['host'], mysql_dic['user'], mysql_dic['password'], mysql_dic['port']])
+    mongo_dic = configure[1]['mongodb_extranet']
+    mongo_info.extend([mongo_dic['user'], mongo_dic['password'], mongo_dic['host'], mongo_dic['port']])
 else:
     raise AssertionError('ERROR,this environment is not available')
 
