@@ -52,3 +52,219 @@
     sportName: '冰上曲棍球'
     matchId: ''
 
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/match
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 3
+    sportName: '篮球'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏,默认按照结算时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 3
+    sportName: '篮球'
+    matchId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/match
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 2
+    sportName: '篮球'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏,默认按照赛事时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 2
+    sportName: '篮球'
+    matchId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/match
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 1
+    sportName: '篮球'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏,默认按照投注时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 1
+    sportName: '篮球'
+    matchId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/match
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 3
+    sportName: '足球'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏,默认按照结算时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 3
+    sportName: '足球'
+    matchId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/match
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 2
+    sportName: '足球'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏,默认按照赛事时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 2
+    sportName: '足球'
+    matchId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/match
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 1
+    sportName: '足球'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏,默认按照投注时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 1
+    sportName: '足球'
+    matchId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/match
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 3
+    sportName: '网球'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏,默认按照结算时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 3
+    sportName: '网球'
+    matchId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/match
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 2
+    sportName: '网球'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏,默认按照赛事时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 2
+    sportName: '网球'
+    matchId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/match
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 1
+    sportName: '网球'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏,默认按照投注时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 1
+    sportName: '网球'
+    matchId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/match
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 3
+    sportName: '乒乓球'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏,默认按照结算时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 3
+    sportName: '乒乓球'
+    matchId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/match
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 2
+    sportName: '乒乓球'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏,默认按照赛事时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 2
+    sportName: '乒乓球'
+    matchId: ''
+
+- request:
+    mde_ip: https://mdesearch.betf.best
+    url: /winOrLost/match
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    queryDateType: 1
+    sportName: '乒乓球'
+    matchId: ''
+    title: 总台-代理报表-赛事盈亏,默认按照投注时间查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    queryDateType: 1
+    sportName: '乒乓球'
+    matchId: ''
+
