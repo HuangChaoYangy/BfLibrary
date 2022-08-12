@@ -1,5 +1,5 @@
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/order/details
     method: post
   data:
@@ -15,7 +15,7 @@
     sportId: 'sr:sport:4'
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/order/details
     method: post
   data:
@@ -31,7 +31,7 @@
     sportId: 'sr:sport:2'
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/order/details
     method: post
   data:
@@ -47,7 +47,7 @@
     sportId: 'sr:sport:1'
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/order/details
     method: post
   data:

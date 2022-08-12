@@ -1,5 +1,5 @@
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/market
     method: POST
   data:
@@ -17,7 +17,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/market
     method: POST
   data:
@@ -35,7 +35,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/market
     method: POST
   data:
@@ -53,7 +53,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/market
     method: POST
   data:
@@ -71,7 +71,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/market
     method: POST
   data:
@@ -89,7 +89,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/market
     method: POST
   data:
