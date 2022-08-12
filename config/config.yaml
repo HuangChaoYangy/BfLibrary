@@ -62,3 +62,19 @@
     password: "LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A"
     port: 37017
     describe: 'mde环境mongodb配置'
+
+
+# 正式环境IP配置
+  extranet_url:
+    client_url: "https://search.betf.io"
+    backend_url: "https://search.betf.best"
+
+# mde环境IP配置
+  mde_url:
+    client_url: "https://mdesearch.betf.io"
+    backend_url: "https://mdesearch.betf.best"
+
+# mde环境IP配置
+  120_url:
+    client_url: "192.168.10.120:6210"
+    backend_url: "192.168.10.120:7210"
