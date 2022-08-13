@@ -1,5 +1,5 @@
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/proxy/bill
     method: POST
   data:
@@ -15,7 +15,7 @@
     ctime: 0
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/proxy/bill
     method: POST
   data:
@@ -31,7 +31,7 @@
     ctime: 1
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/proxy/bill
     method: POST
   data:
@@ -47,7 +47,7 @@
     ctime: 2
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/proxy/bill
     method: POST
   data:
@@ -63,7 +63,7 @@
     ctime: 3
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/proxy/bill
     method: POST
   data:
@@ -79,7 +79,7 @@
     ctime: 4
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/proxy/bill
     method: POST
   data:
@@ -95,7 +95,7 @@
     ctime: 5
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/proxy/bill
     method: POST
   data:

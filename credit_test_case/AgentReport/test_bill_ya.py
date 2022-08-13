@@ -158,5 +158,5 @@ class Test_bill_yaml(object):
 
 if __name__ == "__main__":
 
-    pytest.main(["test_bill_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','-n=auto','--clean-alluredir'])  # '--clean-alluredir'
+    pytest.main(["test_bill_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  # '--clean-alluredir'
     os.system("allure serve ../report/tmp")

@@ -8655,17 +8655,18 @@ class MysqlQuery(MysqlFunc):
                   f"'赔率',match_time '赛事时间',if(odds_type=1,'欧洲盘','香港盘') '盘口类型',bet_amount '投注金额',CONCAT(bet_ip,' / ',ip_address) 'IP地址' FROM o_account_order a JOIN " \
                   f"o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON (a.order_no=c.order_no AND b.match_id=c.match_id) JOIN u_user d ON " \
                   f"a.user_id=d.id WHERE a.`status`=3 AND DATE_FORMAT(award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {account} ORDER BY a.create_time DESC"
+        print(sql_str)
         rtn = list(self.query_data(sql_str, database_name))
         cancelledOrder = []
         for item in rtn:
-            account_str = self.remove_special_symbols(data_str=item[0])
+            # account_str = self.remove_special_symbols(data_str=item[0])
             order_num = item[1]
             odds = self.get_odds_by_orderNum(orderNo=order_num)
             bet_time = item[2]
             betTime = bet_time.strftime("%Y-%m-%d %H:%M:%S")
             match_time = item[10]
             matchTime = match_time.strftime("%Y-%m-%d %H:%M:%S")
-            cancelledOrder.append([account_str, item[1], betTime, [item[3], item[4], item[5], item[6], item[7], item[8],
+            cancelledOrder.append([item[0], item[1], betTime, [item[3], item[4], item[5], item[6], item[7], item[8],
                                   float(item[9]), matchTime, item[11]], float(odds), float(item[12]), item[13]])
 
         expectResult = self.cf.merge_compelx_01(new_lList=cancelledOrder)
@@ -10354,10 +10355,10 @@ if __name__ == "__main__":
     # data = mysql.credit_tournamentReport_query(expData={"ctime":-9, "etime":-3, "sportName":'羽毛球',"queryDateType":3 },queryType='detail')[0]
     # data = mysql.credit_matchReport_query(expData={"ctime": -7, "etime": -1, "sportName": '冰上曲棍球',"matchId":'', "queryDateType": 3}, queryType='match')[0]
     # data = mysql.credit_multitermReport_query(expData={"ctime":-6, "etime":-0, "sportName":'',"searchAccount":"", "queryDateType":3 },queryType='detail')[0]
-    # data = mysql.credit_cancelledOrder_query(expData={"ctime": "-7", "etime": "-1", "account": ''})[0]
+    data = mysql.credit_cancelledOrder_query(expData={"ctime": "-7", "etime": "-1", "account": ''})[0]
     # data = mysql.credit_bill_query(expData={"begin": '-4', "end": '-4', "ctime":4 },query_type=1)[0]
     # data = mysql.credit_mixBetOrder_query(expData={"account": 'jcj1j2j3jc2'}, query_type=2)[0]
-    # print(data)
+    print(data)
     # print(len(data))
 
 
@@ -10365,7 +10366,7 @@ if __name__ == "__main__":
     # odds_list = [1.88, 1.81, 1.74, 1.81]
     # data = mysql.get_all_odds(odds_list=odds_list, bet_type=4)
     # print(data)
-    odds = mysql.get_odds_by_orderNum(orderNo='XPNdFzaxHqc9', query_type='actual')          #   通过注单号查询注单的最大总赔率和注单结算后的实际总赔率
+    # odds = mysql.get_odds_by_orderNum(orderNo='XPNdFzaxHqc9', query_type='actual')          #   通过注单号查询注单的最大总赔率和注单结算后的实际总赔率
     # odds = mysql.get_float_length(num=0.22222222222)
     # print(odds)
     # N1 = list(combinations(a, 2))
