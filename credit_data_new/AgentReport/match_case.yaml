@@ -1,5 +1,5 @@
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -8,7 +8,7 @@
     queryDateType: 3
     sportName: '冰上曲棍球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照结算时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照结算时间,根据球类'冰上曲棍球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'
@@ -17,7 +17,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -26,7 +26,7 @@
     queryDateType: 2
     sportName: '冰上曲棍球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照赛事时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照赛事时间,根据球类'冰上曲棍球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'
@@ -35,7 +35,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -44,7 +44,7 @@
     queryDateType: 1
     sportName: '冰上曲棍球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照投注时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照投注时间,根据球类'冰上曲棍球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'
@@ -53,7 +53,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -62,7 +62,7 @@
     queryDateType: 3
     sportName: '篮球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照结算时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照结算时间,根据球类'篮球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'
@@ -71,7 +71,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -80,7 +80,7 @@
     queryDateType: 2
     sportName: '篮球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照赛事时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照赛事时间,根据球类'篮球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'
@@ -89,7 +89,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -98,7 +98,7 @@
     queryDateType: 1
     sportName: '篮球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照投注时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照投注时间,根据球类'篮球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'
@@ -107,7 +107,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -116,7 +116,7 @@
     queryDateType: 3
     sportName: '足球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照结算时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照结算时间,根据球类'足球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'
@@ -125,7 +125,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -134,7 +134,7 @@
     queryDateType: 2
     sportName: '足球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照赛事时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照赛事时间,根据球类'足球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'
@@ -143,7 +143,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -152,7 +152,7 @@
     queryDateType: 1
     sportName: '足球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照投注时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照投注时间,根据球类'足球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'
@@ -161,7 +161,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -170,7 +170,7 @@
     queryDateType: 3
     sportName: '网球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照结算时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照结算时间,根据球类'网球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'
@@ -179,7 +179,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -188,7 +188,7 @@
     queryDateType: 2
     sportName: '网球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照赛事时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照赛事时间,根据球类'网球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'
@@ -197,7 +197,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -206,7 +206,7 @@
     queryDateType: 1
     sportName: '网球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照投注时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照投注时间,根据球类'网球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'
@@ -215,7 +215,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -224,7 +224,7 @@
     queryDateType: 3
     sportName: '乒乓球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照结算时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照结算时间,根据球类'乒乓球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'
@@ -233,7 +233,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -242,7 +242,7 @@
     queryDateType: 2
     sportName: '乒乓球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照赛事时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照赛事时间,根据球类'乒乓球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'
@@ -251,7 +251,7 @@
     matchId: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/match
     method: POST
   data:
@@ -260,7 +260,7 @@
     queryDateType: 1
     sportName: '乒乓球'
     matchId: ''
-    title: 总台-代理报表-赛事盈亏,默认按照投注时间查询近7天数据
+    title: 总台-代理报表-赛事盈亏,默认按照投注时间,根据球类'乒乓球'查询近7天数据
   resp:
     ctime: '-7'
     etime: '-1'

@@ -98,7 +98,7 @@ class Test_matchReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_match_m, yaml_file=match_url_m, new_yaml_file=match_url_new_m)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=match_url_new_m, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=match_url_new_m, isAll=True)[0]['request']
-    # @pytest.mark.skip(reason="调试代码,暂不执行")
+    @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-比赛报表-盘口详情')
     def test_matchReportMarket(self, inBody, expData, request=url_data):
@@ -118,8 +118,10 @@ class Test_matchReport_ya:
                       'sr:sport:31': '羽毛球', 'sr:sport:20': '乒乓球', 'sr:sport:3': '棒球', 'sr:sport:4': '冰上曲棍球'}
         match_id_list = MysqlQuery(mysql_info, mongo_info).get_matchId_by_sportId_matchReport(sport_id=inBody['sportId'],
                             time=(int(inBody['begin']), int(inBody['end'])), queryDateType=inBody['dateType'])
-        token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',
-                                                                          securityCode='111111', loginDiv=222333)
+        # token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',
+        #                                                                   securityCode='111111', loginDiv=222333)
+        token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method='post', request_url='https://search.betf.best/winOrLost/proxy/bill',
+                                  request_body={"type": "", "begin": "2022-07-12", "end": "2022-07-12", "page": 1,"limit": 50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": token,
@@ -230,7 +232,7 @@ class Test_matchReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_match_d, yaml_file=match_url_d, new_yaml_file=match_url_new_d)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=match_url_new_d, isAll=False)
     request_data = Yaml_data().read_yaml_file(yaml_file=match_url_new_d, isAll=True)[0]['request']
-    # @pytest.mark.skip(reason="调试代码,暂不执行")
+    @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-比赛报表-注单详情')
     def test_matchReportOrder(self, inBody, expData, request=request_data):
@@ -251,8 +253,10 @@ class Test_matchReport_ya:
 
         match_id_list = MysqlQuery(mysql_info, mongo_info).get_match_id_by_sportId_matchReport(sport_id=inBody['sportId'],
                         time=(inBody['begin'], inBody['end']), queryDateType=inBody['dateType'])
-        token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',
-                                                                          securityCode='111111', loginDiv=222333)
+        # token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',
+        #                                                                   securityCode='111111', loginDiv=222333)
+        token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method='post', request_url='https://search.betf.best/winOrLost/proxy/bill',
+                                  request_body={"type": "", "begin": "2022-07-12", "end": "2022-07-12", "page": 1,"limit": 50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": token,
@@ -549,5 +553,5 @@ class Test_matchReport_ya:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_matchReport_ya.py", '-vs', '-q', '--alluredir', '../report/tmp','-n=auto','--clean-alluredir'])  # '--clean-alluredir', '-n=4'
+    pytest.main(["test_matchReport_ya.py", '-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  # '--clean-alluredir', '-n=4'
     os.system("allure serve ../report/tmp")
