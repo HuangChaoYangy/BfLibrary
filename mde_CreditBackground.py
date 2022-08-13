@@ -2939,8 +2939,8 @@ class CreditBackGround(object):
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
         try:
             data = {"account":account,"begin":ctime,"end":etime,"page":1,"limit":200}
-            print(data)
-            print(url)
+            # print(data)
+            # print(url)
             rsp = self.session.post(url, headers=head, json=data)
             if rsp.json()['message'] != 'OK':
                 print("查询已取消注单失败,原因：" + rsp.json()["message"])
@@ -2955,7 +2955,7 @@ class CreditBackGround(object):
                                                item['odds'],item['betAmount'], item['betIp'] + ' / ' + item['betIpAddress']])
 
                 actualResult = self.cm.merge_compelx_01(new_lList=cancelledOrder)
-                print(len(actualResult))
+
                 return actualResult
 
         except Exception as e:
