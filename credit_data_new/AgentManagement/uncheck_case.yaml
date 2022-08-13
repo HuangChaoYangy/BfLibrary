@@ -1,5 +1,5 @@
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /mainstation/generalAgentManagement/unCheck/list
     method: get
   data:
@@ -13,7 +13,7 @@
     searchAccountName: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /mainstation/generalAgentManagement/unCheck/list
     method: get
   data:
@@ -27,7 +27,7 @@
     searchAccountName: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /mainstation/generalAgentManagement/unCheck/list
     method: get
   data:
@@ -41,7 +41,7 @@
     searchAccountName: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /mainstation/generalAgentManagement/unCheck/list
     method: get
   data:
@@ -55,7 +55,7 @@
     searchAccountName: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /mainstation/generalAgentManagement/unCheck/list
     method: get
   data:
@@ -69,7 +69,7 @@
     searchAccountName: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /mainstation/generalAgentManagement/unCheck/list
     method: get
   data:
