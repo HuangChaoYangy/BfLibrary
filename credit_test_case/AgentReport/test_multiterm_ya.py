@@ -97,7 +97,7 @@ class Test_multitermReport:
     YamlFileData().get_testcase_params(csv_path=csv_url_multiterm_d, yaml_file=multiterm_url_d, new_yaml_file=multiterm_url_new_d)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=multiterm_url_new_d, isAll=False)
     request_data = Yaml_data().read_yaml_file(yaml_file=multiterm_url_new_d, isAll=True)[0]['request']
-    @pytest.mark.skip(reason="调试代码,暂不执行")
+    # @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-混合过关-注单详情')
     def test_multitermReportDetail(self, inBody, expData, request=request_data):
@@ -123,8 +123,10 @@ class Test_multitermReport:
         account_id_list = MysqlQuery(mysql_info, mongo_info).get_account_id_by_matchId_multitermReport(account_id=inBody['account'], sport_id=inBody['sportId'],
             time=(inBody['begin'], inBody['end']), queryDateType=inBody['dateType'])
 
-        token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',
-                                                                          securityCode='111111', loginDiv=222333)
+        # token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',
+        #                                                                   securityCode='111111', loginDiv=222333)
+        token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method='post', request_url='https://search.betf.best/winOrLost/proxy/bill',
+                                  request_body={"type": "", "begin": "2022-07-12", "end": "2022-07-12", "page": 1,"limit": 50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": token,
@@ -275,5 +277,5 @@ class Test_multitermReport:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_multiterm_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  #  '--clean-alluredir', '-n=4'
+    pytest.main(["test_multiterm_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','-n=auto','--clean-alluredir'])  #  '--clean-alluredir', '-n=4'
     os.system("allure serve ../report/tmp")

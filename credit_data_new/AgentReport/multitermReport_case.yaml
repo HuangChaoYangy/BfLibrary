@@ -1,5 +1,5 @@
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/multiterm
     method: POST
   data:
@@ -17,7 +17,7 @@
     sportName: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/multiterm
     method: POST
   data:
@@ -35,7 +35,7 @@
     sportName: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/multiterm
     method: POST
   data:
@@ -53,7 +53,7 @@
     sportName: ''
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/multiterm
     method: POST
   data:
@@ -71,7 +71,7 @@
     sportName: '×ãÇò'
 
 - request:
-    mde_ip: https://mdesearch.betf.best
+    mde_ip: https://search.betf.best
     url: /winOrLost/multiterm
     method: POST
   data:
