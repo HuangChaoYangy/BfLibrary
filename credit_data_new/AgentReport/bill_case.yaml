@@ -6,12 +6,12 @@
     page: 1
     limit: 200
     type: ''
-    begin: '-0'
-    end: '-0'
-    title: 总台-代理报表-账目,美东时区已跨天,默认查询今日数据
+    begin: '-1'
+    end: '-1'
+    title: 总台-代理报表-账目,美东时区未跨天,默认查询今日数据
   resp:
-    begin: '-0'
-    end: '-0'
+    begin: '-1'
+    end: '-1'
     ctime: 0
 
 - request:
@@ -22,12 +22,12 @@
     page: 1
     limit: 200
     type: ''
-    begin: '-1'
-    end: '-1'
-    title: 总台-代理报表-账目,美东时区已跨天,默认查询前1天数据
+    begin: '-2'
+    end: '-2'
+    title: 总台-代理报表-账目,美东时区未跨天,默认查询前1天数据
   resp:
-    begin: '-1'
-    end: '-1'
+    begin: '-2'
+    end: '-2'
     ctime: 1
 
 - request:
@@ -38,12 +38,12 @@
     page: 1
     limit: 200
     type: ''
-    begin: '-2'
-    end: '-2'
-    title: 总台-代理报表-账目,美东时区已跨天,默认查询前2天数据
+    begin: '-3'
+    end: '-3'
+    title: 总台-代理报表-账目,美东时区未跨天,默认查询前2天数据
   resp:
-    begin: '-2'
-    end: '-2'
+    begin: '-3'
+    end: '-3'
     ctime: 2
 
 - request:
@@ -54,12 +54,12 @@
     page: 1
     limit: 200
     type: ''
-    begin: '-3'
-    end: '-3'
-    title: 总台-代理报表-账目,美东时区已跨天,默认查询前3天数据
+    begin: '-4'
+    end: '-4'
+    title: 总台-代理报表-账目,美东时区未跨天,默认查询前3天数据
   resp:
-    begin: '-3'
-    end: '-3'
+    begin: '-4'
+    end: '-4'
     ctime: 3
 
 - request:
@@ -70,12 +70,12 @@
     page: 1
     limit: 200
     type: ''
-    begin: '-4'
-    end: '-4'
-    title: 总台-代理报表-账目,美东时区已跨天,默认查询前4天数据
+    begin: '-5'
+    end: '-5'
+    title: 总台-代理报表-账目,美东时区未跨天,默认查询前4天数据
   resp:
-    begin: '-4'
-    end: '-4'
+    begin: '-5'
+    end: '-5'
     ctime: 4
 
 - request:
@@ -86,12 +86,12 @@
     page: 1
     limit: 200
     type: ''
-    begin: '-5'
-    end: '-5'
-    title: 总台-代理报表-账目,美东时区已跨天,默认查询前5天数据
+    begin: '-6'
+    end: '-6'
+    title: 总台-代理报表-账目,美东时区未跨天,默认查询前5天数据
   resp:
-    begin: '-5'
-    end: '-5'
+    begin: '-6'
+    end: '-6'
     ctime: 5
 
 - request:
@@ -102,11 +102,11 @@
     page: 1
     limit: 200
     type: ''
-    begin: '-6'
-    end: '-6'
-    title: 总台-代理报表-账目,美东时区已跨天,默认查询前6天数据
+    begin: '-7'
+    end: '-7'
+    title: 总台-代理报表-账目,美东时区未跨天,默认查询前6天数据
   resp:
-    begin: '-6'
-    end: '-6'
+    begin: '-7'
+    end: '-7'
     ctime: 6
 
