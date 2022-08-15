@@ -3088,8 +3088,6 @@ class CreditBackGround(object):
                                  item['memberWinOrLose'], item['memberCommissionRatio'], item['memberCommission'],item['memberTotal']])
 
                     actualResult = self.cm.merge_compelx_02(new_lList=billOrder)
-                    print(actualResult)
-                    print(len(actualResult))
 
                     return actualResult
 
@@ -4522,9 +4520,9 @@ if __name__ == "__main__":
     # data = bg.credit_winLose_detail(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
     # data = bg.credit_sportReport(inData={"begin":"-7", "end":"-1", "sportName":"网球","queryDateType":3 },queryType='order')
     # data = bg.credit_multitermReport(inData={"begin":"-7", "end":"-1", "sportName":'',"searchAccount":'', "queryDateType":3 })[0]
-    data = bg.credit_cancelledOrder(inData={"begin": "-7", "end": "-1", "account": ''})
+    # data = bg.credit_cancelledOrder(inData={"begin": "-7", "end": "-1", "account": ''})
     # print(data)
-    # data = bg.credit_bill(inData={"begin": "-1", "end": "-1"},query_type=2)
+    data = bg.credit_bill(inData={"begin": "-6", "end": "-6"},query_type=2)
     # data_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=1)   # 总台-报表管理-数据源对账报表
     # data = bg.credit_dataSourceReport(inData={"betStartTime":"-30", "betEndTime":"-0", "settlementStartTime":"-30", "settlementEndTime":"-0", "userName":"","orderNo":"",
     #                     "sportId":[], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=4)  # 总台-报表管理-数据源对账报表
@@ -4535,7 +4533,7 @@ if __name__ == "__main__":
     # data = bg.credit_uncheckList(inData={"accountStatus": 0, "searchAccountName": "",  "page": 1,"limit": 200})  # 总台-总代结账
     # data = bg.credit_mainBet(inData={"matchId": "", "sportId": ""}, quert_type=1)  # 总投注-让球/大小/独赢/滚球
     # data = bg.credit_mixBet(inData={"account":""}, quert_type=2)     # 总投注-混合串关
-    # print(data)
+    print(data)
     # login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE1NTUwNjk5MjgyNDcxMDc1ODUiLCJleHAiOjE2NTk1OTk4OTEsInVzZXJuYW1lIjoiYTE2MDAwMDAwIn0.swtiEzP3CE3IoMy46WLXsd3qwvNdBVU-ZWiNxpcvveM"
     # data = bg.addAgentLine(Authorization=login_loken, account='a16', name='test', password='Bfty123456', securityCode='Agent0', credits=100000000,accountStatus="0")  # 新增登0
     # data = bg.addAgent1(agent_token=login_loken, account='a1600', name='test', password='Bfty123456',securityCode='Agent0', credits=10000000, accountStatus=0)  # 新增登1

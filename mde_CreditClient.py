@@ -209,7 +209,6 @@ class Credit_Client(object):
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Connection": "keep-alive",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36"}
-
         if terminal == 'pc':
             if event_type == "INPLAY":
                 data = {"highlight": "false",
@@ -1112,7 +1111,7 @@ class Credit_Client(object):
             print('注单号列表: %s' % (sub_order_no_list))
 
 
-    def  submit_all_outcomes(self, sport_name, token, bet_type, event_type='TODAY', odds_type=1, oddsChangeType=1, IsRandom=''):
+    def submit_all_outcomes(self, sport_name, token, bet_type, event_type='TODAY', odds_type=1, oddsChangeType=1, IsRandom=''):
         '''
         投注串关，从串关接口种获取比赛和所有下注项                 /// 修改于2022.05.31
         :param match_id:
@@ -1470,6 +1469,7 @@ class Credit_Client(object):
         match_info_list = []
         if sport_name == "":
             sport_name_list = self.get_client_sport(token=token, event_type=event_type)
+            print(sport_name_list)
             for sport_name in sport_name_list:
                 match_id_list = self.get_match_list(sport_name=sport_name, token=token,event_type=event_type, odds_type=odds_Type)[0]
                 match_info_list.extend(match_id_list)
@@ -2691,7 +2691,7 @@ if __name__ == "__main__":
     mongo_info = ['admin', 'LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A', '35.229.139.160', '37017']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    MyThread().thread_submit(bet_type=1, sport_name="", event_type="", odds_type=2, IsRandom='3',handicap=True, complex='multi', complex_number=2)
+    MyThread().thread_submit(bet_type=2, sport_name="足球", event_type="TODAY", odds_type=2, IsRandom='1',handicap=True, complex='multi', complex_number=2)
     # MyThread().thread_pool_submit(bet_type=1,  sport_name="", event_type="EARLY", odds_type=2, IsRandom='1', handicap=True, complex='single', complex_number=2)
 
     # token_list = ['41fd9c2003c540dfb3f7959fe8e6023a','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
