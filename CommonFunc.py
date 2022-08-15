@@ -851,15 +851,24 @@ class CommonFunc(object):
         else:
             expect_list = expect_list
 
+        # news_targets = []
+        # news_targets.append(expect_list[0])
+        # platenolist = []
+        # for item in expect_list:
+        #     plateno = item[2]
+        #     for new_item in news_targets:
+        #         platenolist.append(new_item[2])
+        #         if plateno not in platenolist:
+        #             news_targets.append(item)
+        #
+        # return news_targets
+
         news_targets = []
-        news_targets.append(expect_list[0])
-        platenolist = []
-        for item in expect_list:
-            plateno = item[2]
-            for new_item in news_targets:
-                platenolist.append(new_item[2])
-                if plateno not in platenolist:
-                    news_targets.append(item)
+        for elt, items in groupby(expect_list, itemgetter(2)):
+            veh_count = 0
+            for i in items:
+                veh_count = veh_count + 1
+            news_targets.append(i)
 
         return news_targets
 

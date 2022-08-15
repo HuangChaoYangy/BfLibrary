@@ -8655,7 +8655,7 @@ class MysqlQuery(MysqlFunc):
                   f"'赔率',match_time '赛事时间',if(odds_type=1,'欧洲盘','香港盘') '盘口类型',bet_amount '投注金额',CONCAT(bet_ip,' / ',ip_address) 'IP地址' FROM o_account_order a JOIN " \
                   f"o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON (a.order_no=c.order_no AND b.match_id=c.match_id) JOIN u_user d ON " \
                   f"a.user_id=d.id WHERE a.`status`=3 AND DATE_FORMAT(award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {account} ORDER BY a.create_time DESC"
-        print(sql_str)
+        # print(sql_str)
         rtn = list(self.query_data(sql_str, database_name))
         cancelledOrder = []
         for item in rtn:

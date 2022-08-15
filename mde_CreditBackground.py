@@ -2939,8 +2939,6 @@ class CreditBackGround(object):
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
         try:
             data = {"account":account,"begin":ctime,"end":etime,"page":1,"limit":200}
-            # print(data)
-            # print(url)
             rsp = self.session.post(url, headers=head, json=data)
             if rsp.json()['message'] != 'OK':
                 print("查询已取消注单失败,原因：" + rsp.json()["message"])
@@ -2949,9 +2947,13 @@ class CreditBackGround(object):
                 for item in rsp.json()['data']['data']['data']:
                     for detail in item['options']:
                         odds_type = odds_dic[detail['oddsType']]
+                        if detail['specifier'] == None:
+                            specifier = ""
+                        else:
+                            specifier = detail['specifier']
                         cancelledOrder.append([item['account'], item['orderNo'], item['betTime'],
                                                [detail['tournamentName'],detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'], detail['marketName'],
-                                                detail['specifier'],detail['outcomeName'], detail['odds'], detail['matchTime'],odds_type],
+                                                specifier,detail['outcomeName'], detail['odds'], detail['matchTime'],odds_type],
                                                item['odds'],item['betAmount'], item['betIp'] + ' / ' + item['betIpAddress']])
 
                 actualResult = self.cm.merge_compelx_01(new_lList=cancelledOrder)
@@ -4521,7 +4523,7 @@ if __name__ == "__main__":
     # data = bg.credit_sportReport(inData={"begin":"-7", "end":"-1", "sportName":"网球","queryDateType":3 },queryType='order')
     # data = bg.credit_multitermReport(inData={"begin":"-7", "end":"-1", "sportName":'',"searchAccount":'', "queryDateType":3 })[0]
     data = bg.credit_cancelledOrder(inData={"begin": "-7", "end": "-1", "account": ''})
-    print(data)
+    # print(data)
     # data = bg.credit_bill(inData={"begin": "-1", "end": "-1"},query_type=2)
     # data_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=1)   # 总台-报表管理-数据源对账报表
     # data = bg.credit_dataSourceReport(inData={"betStartTime":"-30", "betEndTime":"-0", "settlementStartTime":"-30", "settlementEndTime":"-0", "userName":"","orderNo":"",
