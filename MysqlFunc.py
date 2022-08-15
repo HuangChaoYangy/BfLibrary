@@ -8688,14 +8688,16 @@ class MysqlQuery(MysqlFunc):
         if query_type == 1:     # 通过查询结账记录表判断周期内是否有结账记录
             sql_str1 = f"SELECT create_time,operation_desc,check_amount,remark FROM `m_account_checked_history` WHERE `account_id`='0' AND DATE_FORMAT(create_time,'%Y-%m-%d') " \
                        f"BETWEEN '{ctime}' and '{etime}' ORDER BY `create_time` ASC"
+            print(sql_str1)
             rtn = list(self.query_data(sql_str1, database_name))
             if rtn == []:
                 print("SQL：当前查询日期范围内暂无结账")
-                sql_str = f"SELECT b.`日期`,`赢亏金额`,`赢亏现金余额`,`佣金金额`,`佣金现金余额`,`结账金额`,`佣金现金余额` as '结账现金余额' FROM (SELECT IFNULL(DATE_FORMAT(any_value(a.award_time),'%Y-%m-%d')," \
+                sql_str = f"SELECT b.`日期`,IFNULL(`赢亏金额`,0) '赢亏金额',IFNULL(`赢亏现金余额`,0) '赢亏现金余额',IFNULL(`佣金金额`,0) '佣金金额',IFNULL(`佣金现金余额`,0) '佣金现金余额'," \
+                          f"IFNULL(`结账金额`,0) '结账金额',IFNULL(`佣金现金余额`,0) '结账现金余额' FROM (SELECT IFNULL(DATE_FORMAT(any_value(a.award_time),'%Y-%m-%d')," \
                           f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d') )'date' ,ifnull(SUM(company_win_or_lose-company_backwater_amount),0)'赢亏金额'," \
                           f"ifnull(SUM(company_backwater_amount),0)'佣金金额',0 '结账金额' FROM o_account_order a  WHERE `status` = 2  and  DATE_FORMAT(a.award_time ,'%Y-%m-%d') = " \
                           f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d') GROUP BY IFNULL(DATE_FORMAT(any_value(a.award_time),'%Y-%m-%d')," \
-                          f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d'))) a JOIN (SELECT DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00')," \
+                          f"DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'), interval {time} day) ,'%Y-%m-%d'))) a RIGHT JOIN (SELECT DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00')," \
                           f"INTERVAL {time} DAY),'%Y-%m-%d') '日期',(`当日结账赢亏现金余额`+`截至当日未结账赢亏现金余额`) '赢亏现金余额',(`当日结账佣金现金余额`+`截至当日未账佣金现金余额`) '佣金现金余额' FROM " \
                           f"(SELECT sum(IF (DATE_FORMAT(b.checkout_time,'%Y-%m-%d')=DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d')," \
                           f"(a.company_win_or_lose-a.company_backwater_amount),0)) '当日结账赢亏现金余额',sum(IF (b.payment_status=0,(a.company_win_or_lose-a.company_backwater_amount),0)) " \
@@ -8703,6 +8705,7 @@ class MysqlQuery(MysqlFunc):
                           f"a.company_win_or_lose,0)) '当日结账佣金现金余额',sum(IF (b.payment_status=0,a.company_win_or_lose,0)) '截至当日未账佣金现金余额' FROM o_account_order a LEFT JOIN " \
                           f"m_account_unsettlement_amount_record b ON a.order_no=b.order_no AND a.proxy0_id=b.account_id AND b.role_id=0 WHERE a.`status`=2 AND " \
                           f"DATE_FORMAT(a.award_time,'%Y-%m-%d')<=DATE_FORMAT(date_sub(CONVERT_TZ(NOW(),'+00:00','-04:00'),INTERVAL {time} DAY),'%Y-%m-%d')) a ) b ON a.date=b.`日期`"
+                print(sql_str)
                 rtn = list(self.query_data(sql_str, database_name))
                 billOrder = [list(item) for item in rtn][0]
                 expect_result = []
@@ -10355,8 +10358,8 @@ if __name__ == "__main__":
     # data = mysql.credit_tournamentReport_query(expData={"ctime":-9, "etime":-3, "sportName":'羽毛球',"queryDateType":3 },queryType='detail')[0]
     # data = mysql.credit_matchReport_query(expData={"ctime": -7, "etime": -1, "sportName": '冰上曲棍球',"matchId":'', "queryDateType": 3}, queryType='match')[0]
     # data = mysql.credit_multitermReport_query(expData={"ctime":-6, "etime":-0, "sportName":'',"searchAccount":"", "queryDateType":3 },queryType='detail')[0]
-    data = mysql.credit_cancelledOrder_query(expData={"ctime": "-7", "etime": "-1", "account": ''})[0]
-    # data = mysql.credit_bill_query(expData={"begin": '-4', "end": '-4', "ctime":4 },query_type=1)[0]
+    # data = mysql.credit_cancelledOrder_query(expData={"ctime": "-7", "etime": "-1", "account": ''})[0]
+    data = mysql.credit_bill_query(expData={"begin": '-6', "end": '-6', "ctime":6 },query_type=1)[0]
     # data = mysql.credit_mixBetOrder_query(expData={"account": 'jcj1j2j3jc2'}, query_type=2)[0]
     print(data)
     # print(len(data))
