@@ -1010,6 +1010,8 @@ class CommonFunc(object):
             else:
                 continue
 
+        return new_list
+
 
     def tuple_to_list(self, tuple_in, *agrs): #  *agrs指的是输入的数据类型为元组
         '''
