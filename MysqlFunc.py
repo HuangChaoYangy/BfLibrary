@@ -5878,6 +5878,43 @@ class MysqlQuery(MysqlFunc):
         return bet_type
 
 
+    def get_bet_type_by_ordernum_for_client(self, order_no):
+        '''
+        用于客户端,根据注单号获取注单的注单类型          // 修改于2022.08.17
+        :param order_no:
+        :return:
+        '''
+        database_name = "bfty_credit"
+        sql_str = f"SELECT order_no,bet_type,mix_num FROM `o_account_order` WHERE `order_no` = '{order_no}'"
+        data = list(self.query_data(sql_str, db_name=database_name))
+
+        bet_type = ''
+        type_dic = {'3_4_1': '复式3串4', '4_11_1': '复式4串11', '5_26_1': '复式5串26', '6_57_1': '复式6串57'}
+        if data[0][1] == 1:
+            bet_type = '单关'
+        elif data[0][1] == 2:
+            typeString = data[0][2]
+            type_start = re.search("^(\d+)",typeString)
+            type_end = re.search("_(\d)", typeString)
+            type = str(type_start.group()) + '串' + str(type_end.group(1))
+            bet_type = '串关 ' + type
+        elif data[0][1] == 3:
+            typeString = data[0][2]
+            if typeString in type_dic:
+                type_start = re.search("^(\d)",typeString)
+                type_end = re.search("_(\d+)", typeString)
+                type = str(type_start.group()) + '串' + str(type_end.group(1))
+                bet_type = '复式 ' + type
+            else:
+                type_start = re.search("^(\d)", typeString)
+                type_end = re.search("_(\d+)", typeString)
+                # type = str(type_start.group()) + f'串1*{type_end.group(1)}'
+                type = str(type_start.group()) + f'串1'
+                bet_type = '复式' + type
+
+        return bet_type
+
+
     def check_order_no_settlement_result(self, bet_type=1, user_name='', order_no='', createDate=(), awardDate=()):
         '''
         计算注单的结算结果
@@ -8850,10 +8887,139 @@ class MysqlQuery(MysqlFunc):
             raise AssertionError('ERROE,暂不支持该类型')
 
 
+    def query_client_betting_record_sql(self, expData, query_type="unsettle"):
+        '''
+        获取信用网客户端-投注记录/未结算注单/已结算注单/已结算注单详情 sql
+        :param expData:
+        :param query_type:
+        :return:
+        '''
+        resp = expData
+        if resp['sportName']:
+            sportId = self.db.get_sportId_sql(sportName=resp['sportName'])
+            sport_id = f"AND a.sport_id = '{sportId}'"
+        else:
+            sport_id = ""
+        userAccount = resp['account']
+        if resp['offset']:
+            begin = self.get_current_time_for_client(time_type="ctime", day_diff=resp['offset'])
+            end = self.get_current_time_for_client(time_type="ctime", day_diff=resp['offset'])
 
+        ctime = self.get_current_time_for_client(time_type="ctime", day_diff=resp['dateParams'][0])
+        etime = self.get_current_time_for_client(time_type="ctime", day_diff=resp['dateParams'][1])
+        database_name = "bfty_credit"
 
+        # 所有球类的让球盘口,单独处理,从outcome_name_dic中去取值,其它盘口直接取outcome_name
+        handicap_market_id_list = ["16", "66", "165", "176", "117", "120", "303", "188", "187", "237",
+                                   "246", "256", "410", "460"]
 
+        if query_type == "unsettle":
+            sql_str = f"SELECT a.create_time,a.order_no,(CASE WHEN a.sport_category_id= 1 then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN " \
+                      f"'网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id" \
+                      f" = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰球' END) sport_name,tournament_name_dic,CONCAT(home_team_name,' VS ',away_team_name) team_name,I" \
+                      f"F(is_live=3,'早盘','滚球盘') match_type,market_name,outcome_name_dic,odds,if(odds_type=1,'欧洲盘','香港盘') market_type,IFNULL(bet_score,'') bet_score," \
+                      f"(case when `sub_order_status` in (0,1) then '未结算' when `sub_order_status`=2 AND c.settlement_result=1 then '赢' when `sub_order_status`=2 AND" \
+                      f" c.settlement_result=2 then '输' when `sub_order_status`=2 AND c.settlement_result=3 then '半赢' when `sub_order_status`=2 AND c.settlement_result=4 then " \
+                      f"'半输' when `sub_order_status`=2 AND c.settlement_result=5 then '平局' when `sub_order_status`=5 AND c.settlement_result=6 then '取消' end) outComeResult," \
+                      f"c.match_result,bet_amount FROM o_account_order a JOIN o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON " \
+                      f"(a.order_no=c.order_no AND b.match_id=c.match_id) WHERE a.`status` in (0,1) and a.user_name = '{userAccount}' ORDER BY a.create_time DESC"
+            rtn = list(self.query_data(sql_str, database_name))
+            new_list = [list(item) for item in rtn]
+            order_list = []
+            for item in new_list:
+                bet_time = item[0]
+                create_time = bet_time.strftime("%Y-%m-%d %H:%M:%S")
+                order_num = item[1]
+                bet_type = self.get_bet_type_by_ordernum_for_client(order_no=order_num)
+                tournament_str = item[3]
+                tournament_dic = eval(tournament_str)     # 将字符串转成字典
+                tournamentName = tournament_dic['zh']
+                outcome_str = item[7]   # {"en":"Ha Yeon, Sung (+6.5)","id":"sr:match:35394431_187_hcp=6.5_1714","in":"Ha Yeon, Sung (+6.5)","ind":"Ha Yeon, Sung (+6.5)","ja":"ハ・ユン・ソン (+6.5)","ko":"하연, 숭 (+6.5)","name":"宋河妍 (+6.5)","th":"Ha Yeon, Sung (+6.5)","vi":"Ha Yeon, Sung (+6.5)","zh":"宋河妍 (+6.5)","zht":"宋海永 (+6.5)"}
+                outcome_dic = eval(outcome_str)
+                outcomeName = outcome_dic['zh']
+                order_list.append({'betTime': create_time, 'orderNo':order_num, 'sportName':item[2], 'outcomeList':[{'tournamentName':tournamentName, 'TeamName':item[4],
+                                   'match_type':item[5], 'marketName':item[6],'outcomeName':outcomeName, 'odds':float(item[8]), 'oddsType':item[9], 'betScore':item[10],
+                                   'outcomeWinOrLoseName':item[11], 'outcomeResult':item[12]}], 'betAmount':float(item[13]), 'betTypeName':bet_type})
 
+            expect_result = self.cf.merge_compelx_03(new_lList=order_list)
+            print(expect_result)
+
+            return expect_result,sql_str
+
+        elif query_type == "settled":
+            sql_str = f"SELECT a.`day`,bet_amount,efficient_amount,backwater_amount,win_or_lose FROM s_day a LEFT JOIN (SELECT DATE_FORMAT( award_time, '%Y-%m-%d' ) 'date'," \
+                      f"sum(bet_amount) bet_amount,sum(efficient_amount) efficient_amount,sum(backwater_amount) backwater_amount,sum(handicap_final_win_or_lose) as win_or_lose " \
+                      f"FROM o_account_order WHERE `status` in (2,3) AND award_time is NOT NULL AND user_name='{userAccount}' GROUP BY DATE_FORMAT( award_time, '%Y-%m-%d' )) b " \
+                      f"ON a.`day`=b.date WHERE a.`day` BETWEEN '{ctime}' AND '{etime}' ORDER BY a.`day` DESC"
+            rtn = list(self.query_data(sql_str, database_name))
+            new_list = [list(item) for item in rtn]
+            order_list = []
+            for item in new_list:
+                bet_time = item[0]
+                create_time = bet_time.strftime("%Y-%m-%d")
+                if not item[1]:
+                    betAmount = None
+                else:
+                    betAmount = float(item[1])
+                if not item[2]:
+                    effectiveAmount = None
+                else:
+                    effectiveAmount = float(item[2])
+                if not item[3]:
+                    backwaterAmount = None
+                else:
+                    backwaterAmount = float(item[3])
+                if not item[4]:
+                    profitAmount = None
+                else:
+                    profitAmount = float(item[4])
+                order_list.append({'date':create_time, 'betAmount':betAmount, 'effectiveAmount':effectiveAmount,
+                                 'backwaterAmount':backwaterAmount,'profitAmount':profitAmount})
+
+            print(order_list)
+
+        elif query_type == "detail":
+            sql_str = f"SELECT a.create_time,a.order_no,(CASE WHEN a.sport_category_id= 1 then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN " \
+                      f"'网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 THEN '羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id" \
+                      f" = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰球' END) sport_name,tournament_name_dic,CONCAT(home_team_name,' VS ',away_team_name) team_name," \
+                      f"IF(is_live=3,'早盘','滚球盘') match_type,market_name,outcome_name_dic,odds,if(odds_type=1,'欧洲盘','香港盘') market_type,IFNULL(bet_score,'') bet_score," \
+                      f"(case when `sub_order_status` in (0,1) then '未结算' when `sub_order_status`=2 AND c.settlement_result=1 then '赢' when `sub_order_status`=2 AND " \
+                      f"c.settlement_result=2 then '输' when `sub_order_status`=2 AND c.settlement_result=3 then '半赢' when `sub_order_status`=2 AND c.settlement_result=4 then " \
+                      f"'半输' when `sub_order_status`=2 AND c.settlement_result=5 then '平局' when `sub_order_status`=5 AND c.settlement_result=6 then '取消' end) outComeResult," \
+                      f"c.match_result,bet_amount,handicap_win_or_lose,backwater_amount,handicap_final_win_or_lose+bet_amount as 'rebateAmount',outcome_name,market_id FROM " \
+                      f"o_account_order a JOIN o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON (a.order_no=c.order_no AND b.match_id=" \
+                      f"c.match_id) WHERE a.`status` in (2,3) AND award_time is not null AND DATE_FORMAT( a.award_time, '%Y-%m-%d' ) BETWEEN '{begin}' AND '{end}' AND a.user_name" \
+                      f"= '{userAccount}' {sport_id} ORDER BY a.create_time DESC"
+            rtn = list(self.query_data(sql_str, database_name))
+            new_list = [list(item) for item in rtn]
+            order_list = []
+            for item in new_list:
+                bet_time = item[0]
+                create_time = bet_time.strftime("%Y-%m-%d %H:%M:%S")
+                order_num = item[1]
+                bet_type = self.get_bet_type_by_ordernum_for_client(order_no=order_num)
+                tournament_str = item[3]
+                tournament_dic = eval(tournament_str)
+                tournamentName = tournament_dic['zh']
+                outcome = item[17]
+                market_id = item[18]
+                # if market_id in handicap_market_id_list:
+                outcome_str = item[7]
+                outcome_dic = eval(outcome_str)
+                outcomeName = outcome_dic['zh']
+                # else:
+                #     outcomeName = outcome
+                order_list.append({'betTime': create_time, 'orderNo': order_num, 'sportName': item[2],'outcomeList': [{'tournamentName': tournamentName, 'TeamName': item[4],
+                                    'match_type': item[5], 'marketName': item[6], 'outcomeName': outcomeName, 'odds': float(item[8]),'oddsType': item[9], 'betScore': item[10],
+                                    'outcomeWinOrLoseName': item[11], 'outcomeResult': item[12]}],'betAmount': float(item[13]),'profitAmount': float(item[14]),
+                                    'backwaterAmount': float(item[15]),'resultAmount': float(item[16]), 'betTypeName': bet_type})
+            expect_result = self.cf.merge_compelx_03(new_lList=order_list)
+            print(expect_result)
+
+            return expect_result,sql_str
+
+        else:
+            raise AssertionError('ERROE,暂不支持该类型')
 
 
     def get_incorrectScore_order_detail(self, order_no):
@@ -10183,12 +10349,12 @@ class MysqlQuery(MysqlFunc):
 
 
 
-    def queryUnusualOrderList(self, order_num="", date=(-30,0)):
+    def queryUnusualOrderList(self, order_num="", queryType="待确认", date=(-30,0)):
         '''
         查询异常注单列表
         :param order_num:
         :param date:
-        :param status:  1:     0: 待确认的异常注单,只能进行退款操作
+        :param queryType:    "待确认"   "未结算"
         :return:  confirmed_order 待确认的异常注单,只能进行退款操作       unsettled_order 未结算的异常注单,可以进行结算操作
         '''
         database_name = "bfty_credit"
@@ -10198,23 +10364,26 @@ class MysqlQuery(MysqlFunc):
             order_str = f"and a.order_no='{order_num}'"
         else:
             order_str = ""
-        sql_str = f"SELECT a.order_no '注单号',any_value(b.id) '子注单主键ID',b.market_id '盘口ID',a.`status` '注单状态',c.`sub_order_status` '子注单状态' FROM o_account_order a " \
-                  f"JOIN o_account_order_match b ON a.order_no=b.order_no JOIN o_account_order_match_update c ON (a.order_no=c.order_no AND b.match_id=c.match_id) WHERE a.`status` " \
-                  f"in (0,1) AND c.`sub_order_status` in (0,1) AND date_add( b.match_time,INTERVAL 150 MINUTE ) < CONVERT_TZ(CURRENT_TIMESTAMP(), '+00:00', '-04:00' ) AND " \
-                  f"DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {order_str} ORDER BY a.create_time DESC"
-        result = list(self.query_data(sql_str, database_name))
-        result_data = [list(item) for item in result]
+        if queryType == "待确认":
+            sql_str = f"SELECT a.order_no '注单号',any_value(b.id) '子注单主键ID',any_value(b.market_id) '盘口ID',any_value(a.`status`) '注单状态',any_value(c.`sub_order_status`)" \
+                      f" '子注单状态' FROM o_account_order a JOIN o_account_order_match b ON a.order_no=b.order_no JOIN o_account_order_match_update c ON (a.order_no=c.order_no " \
+                      f"AND b.match_id=c.match_id) WHERE a.`status` in (0) AND c.`sub_order_status` in (0) AND date_add( b.match_time,INTERVAL 150 MINUTE ) < CONVERT_TZ" \
+                      f"(CURRENT_TIMESTAMP(), '+00:00', '-04:00' ) AND DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {order_str} GROUP BY a.order_no"
+            result = list(self.query_data(sql_str, database_name))
+            result_data = [list(item) for item in result]
 
-        confirmed_order = []
-        unsettled_order = []
-        for item_list in result_data:
-            if item_list[3] == 0:
-                confirmed_order.append(item_list[0:3])
-            else:
-                unsettled_order.append(item_list[0:3])
+            return result_data
 
-        return confirmed_order,unsettled_order
+        elif queryType == "未结算":
+            sql_str = f"SELECT any_value (a.order_no) '注单号',b.id '子注单主键ID',b.market_id '盘口ID',any_value (a.`status`) '注单状态',any_value (c.`sub_order_status`) '子注单状态',bet_type " \
+                      f"FROM o_account_order a JOIN o_account_order_match b ON a.order_no=b.order_no JOIN o_account_order_match_update c ON (a.order_no=c.order_no AND b.match_id=" \
+                      f"c.match_id AND c.`sub_order_status`=1) JOIN v_order_match_min d ON a.order_no=d.order_no WHERE a.`status` IN (1) AND date_add((d.match_time),INTERVAL 150 " \
+                      f"MINUTE)< CONVERT_TZ(CURRENT_TIMESTAMP (),'+00:00','-04:00') AND DATE_FORMAT(a.create_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {order_str}" \
+                      f" GROUP BY b.id,b.market_id,bet_type"
+            result = list(self.query_data(sql_str, database_name))
+            result_data = [list(item) for item in result]
 
+            return result_data
 
     def remove_special_symbols(self, data_str):
         '''
@@ -10239,6 +10408,9 @@ if __name__ == "__main__":
     # mongo_info = ['app', '123456', '192.168.10.120', '27017']               # 内网MongoDB
     mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']          # 外网mde测试环境
     mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
+
+    # mysql_info = ['34.80.33.71', 'creditnetrouser', 'XqtZYGfHKBBftu9', '3306']          # 外网正式环境
+    # mongo_info = ['admin', 'LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A', '35.229.139.160', '37017']
 
     mysql = MysqlQuery(mysql_info, mongo_info)
 
@@ -10357,12 +10529,9 @@ if __name__ == "__main__":
     # data = mysql.credit_matchReport_query(expData={"ctime": -7, "etime": -1, "sportName": '冰上曲棍球',"matchId":'', "queryDateType": 3}, queryType='match')[0]
     # data = mysql.credit_multitermReport_query(expData={"ctime":-6, "etime":-0, "sportName":'',"searchAccount":"", "queryDateType":3 },queryType='detail')[0]
     # data = mysql.credit_cancelledOrder_query(expData={"ctime": "-7", "etime": "-1", "account": ''})[0]
-    data = mysql.credit_bill_query(expData={"begin": '-6', "end": '-6', "ctime":6 },query_type=1)[0]
+    # data = mysql.credit_bill_query(expData={"begin": '-6', "end": '-6', "ctime":6 },query_type=1)[0]
     # data = mysql.credit_mixBetOrder_query(expData={"account": 'jcj1j2j3jc2'}, query_type=2)[0]
-    print(data)
     # print(len(data))
-
-
 
     # odds_list = [1.88, 1.81, 1.74, 1.81]
     # data = mysql.get_all_odds(odds_list=odds_list, bet_type=4)
@@ -10391,10 +10560,10 @@ if __name__ == "__main__":
     # data = mysql.get_mainBetReport_query(expData={'sportName':'足球'})
     # data = mysql.get_sportName_mainBetReport()
 
-    # data = mysql.queryUnusualOrderList(order_num="XPuvXSpW5n3u",date=(-39,0))[0]
+    data = mysql.queryUnusualOrderList(order_num="", queryType="未结算", date=(-39,0))
     # data = mysql.remove_special_symbols(data_str="jcj1j2j3jc2/")
-    # print(data)
 
+    # data = mysql.query_client_betting_record_sql(expData={"dateParams": (-30, 0), "sportName": "", "offset": -1, "account": "a01000000100"}, query_type="detail")
 
 
                                                                               # 【反波胆-客户端】
