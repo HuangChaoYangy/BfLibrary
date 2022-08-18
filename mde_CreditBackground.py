@@ -4204,14 +4204,15 @@ class CreditBackGround(object):
         :param result:  ["赢", "输", "半赢", "半输", "注单平局", "注单取消"]
         :return:
         '''
-        url = self.mde_url + '/order/settleSingleByhand'
+        singele_url = self.mde_url + '/order/settleSingleByhand'
+        multi_url = self.mde_url + '/order/settleSingleByhand'
         head = {"LoginDiv": '222333',
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": Authorization,
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
 
         if settleType == "待确认":
-            order_info_list = self.mysql.queryUnusualOrderList(order_num=order_num,date=date)[0]
+            order_info_list = self.mysql.queryUnusualOrderList(order_num=order_num, queryType=settleType, date=date)
             if order_info_list == []:
                 raise AssertionError('ERROR,查询范围内暂无异常订单')
             else:
@@ -4221,23 +4222,21 @@ class CreditBackGround(object):
                     order_num = order_item[0]
                     sub_id = order_item[1]
                     data = {"orderNo":order_num,"subId":sub_id,"subSettlementResult":"6","settlementRemark":"","whetherToRefund":"1"}
-                    rsp = self.session.post(url=url, headers=head, json=data)
+                    rsp = self.session.post(url=singele_url, headers=head, json=data)
                     run_loop = len(order_info_list)
                     if rsp.json()['message'] == 'OK':
                         print(f"结算成功, 注单号：{order_num}, 结算结果：注单取消")
                     else:
                         print("ERR: 操作失败：" + rsp.json()["message"])
-                    print("总共【%d】个子注单，已结算【%d】个未结算子注单，还剩【%d】个未结算子注单" % (run_loop, loop, run_loop - loop))
+                    print("总共【%d】个注单，已结算【%d】个未结算注单，还剩【%d】个未结算注单" % (run_loop, loop, run_loop - loop))
                     loop += 1
 
         elif settleType == "未结算":
-            print(date)
-            order_info_list = self.mysql.queryUnusualOrderList(order_num=order_num,date=date)[1]
-            print(order_info_list)
+            order_info_list = self.mysql.queryUnusualOrderList(order_num=order_num, queryType=settleType, date=date)
             if order_info_list == []:
                 raise AssertionError('ERROR,查询范围内暂无异常订单')
             else:
-                print(order_info_list)
+                order_info_list = [['XRiSkFrWt8yP', '1559388414569984002', '69', 1, 1, 3]]
                 loop = 1
                 # 让球大小盘口,才有"输","赢","赢一半","输一半","走盘",'取消'这6种结果
                 market_id_list = ["16", "18", "66", "68", "223", "225", "188", "314", "237", "238", "256", "258"]
@@ -4245,6 +4244,7 @@ class CreditBackGround(object):
                     order_num = order_item[0]
                     sub_id = order_item[1]
                     market_id = order_item[2]
+                    bet_type = order_item[5]
                     result_dic = {"1": "赢", "2": "输", "3": "半赢", "4": "半输", "5": "注单平局", "6": "注单取消"}
                     if market_id not in market_id_list:
                         if result == None:
@@ -4279,15 +4279,29 @@ class CreditBackGround(object):
                             else:
                                 raise AssertionError("Result 输入的值错误。")
 
-                    data = {"orderNo":order_num,"subId":sub_id,"subSettlementResult":result_str,"settlementRemark":remark}
-                    rsp = self.session.post(url=url, headers=head, json=data)
-                    run_loop = len(order_info_list)
-                    if rsp.json()['message'] == 'OK':
-                        print(f"结算成功, 注单号：{order_num}, 结算结果：{result_dic[result_str]}")
-                    else:
-                        print("ERR: 操作失败：" + rsp.json()["message"])
-                    print("总共【%d】个子注单，已结算【%d】个未结算子注单，还剩【%d】个未结算子注单" % (run_loop, loop, run_loop - loop))
-                    loop += 1
+                    if bet_type == 1:
+                        data = {"orderNo":order_num,"subId":sub_id,"subSettlementResult":result_str,"settlementRemark":remark}
+                        print(data)
+                        rsp = self.session.post(url=singele_url, headers=head, json=data)
+                        run_loop = len(order_info_list)
+                        if rsp.json()['message'] == 'OK':
+                            print(f"结算成功, 注单号：{order_num}, 结算结果：{result_dic[result_str]}")
+                        else:
+                            print("ERR: 操作失败：" + rsp.json()["message"])
+                        print("总共【%d】个单注注单，已结算【%d】个未结算注单，还剩【%d】个未结算注单" % (run_loop, loop, run_loop - loop))
+                        loop += 1
+
+                    elif bet_type > 1:
+                        data = {"orderNo":order_num,"subId":sub_id,"subSettlementResult":result_str,"settlementRemark":remark}
+                        print(data)
+                        rsp = self.session.post(url=multi_url, headers=head, json=data)
+                        run_loop = len(order_info_list)
+                        if rsp.json()['message'] == 'OK':
+                            print(f"结算成功, 注单号：{order_num}, 结算结果：{result_dic[result_str]}")
+                        else:
+                            print("ERR: 操作失败：" + rsp.json()["message"])
+                        print("总共【%d】个串关注单，已结算【%d】个未结算子注单，还剩【%d】个未结算子注单" % (run_loop, loop, run_loop - loop))
+                        loop += 1
 
         else:
             print("ERR: 暂不支持该类型")
@@ -4479,18 +4493,16 @@ class CreditBackGround(object):
 
 if __name__ == "__main__":
 
-    # mde 环境
-    # mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']
-    # mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
-    mysql_info = ['34.80.33.71', 'creditnetrouser', 'XqtZYGfHKBBftu9', '3306']          # 外网正式环境
-    mongo_info = ['admin', 'LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A', '35.229.139.160', '37017']
+    mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']                # mde 环境
+    mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
+    # mysql_info = ['34.80.33.71', 'creditnetrouser', 'XqtZYGfHKBBftu9', '3306']          # 外网正式环境
+    # mongo_info = ['admin', 'LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A', '35.229.139.160', '37017']
     bg = CreditBackGround(mysql_info,mongo_info)            # 创建对象
 
     # login_loken = bg.login_background(uname='a01000000', password='Bfty123456', securityCode="Agent0", loginDiv=555666)          # 登录信用网代理后台
     # print(login_loken)
-    # login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
-    # data = bg.settleUnusualOrder(Authorization=login_loken, order_num="", date=(-60, -0), settleType='待确认', remark="脚本结算", result=None)       # 异常订单结算脚本
-    # data = bg.unsettlement(Authorization=login_loken)
+    login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
+    data = bg.settleUnusualOrder(Authorization=login_loken, order_num="", date=(-60, -0), settleType='未结算', remark="脚本结算", result=None)       # 异常订单结算脚本
     # user = bg.user_management(Authorization=login_loken, userStatus='0', userName='', userAccount='', sortIndex='', sortParameter='')   # 会员管理
     # match = bg.credit_match_result_query(Authorization=login_loken, sportName='足球', tournamentName='', teamName='',offset='0')    # 新赛果查询
 
@@ -4520,9 +4532,9 @@ if __name__ == "__main__":
     # data = bg.credit_winLose_detail(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
     # data = bg.credit_sportReport(inData={"begin":"-7", "end":"-1", "sportName":"网球","queryDateType":3 },queryType='order')
     # data = bg.credit_multitermReport(inData={"begin":"-7", "end":"-1", "sportName":'',"searchAccount":'', "queryDateType":3 })[0]
-    # data = bg.credit_cancelledOrder(inData={"begin": "-7", "end": "-1", "account": ''})
+    data = bg.credit_cancelledOrder(inData={"begin": "-7", "end": "-1", "account": ''})
     # print(data)
-    data = bg.credit_bill(inData={"begin": "-6", "end": "-6"},query_type=2)
+    # data = bg.credit_bill(inData={"begin": "-6", "end": "-6"},query_type=2)
     # data_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=1)   # 总台-报表管理-数据源对账报表
     # data = bg.credit_dataSourceReport(inData={"betStartTime":"-30", "betEndTime":"-0", "settlementStartTime":"-30", "settlementEndTime":"-0", "userName":"","orderNo":"",
     #                     "sportId":[], "settlementResult":[], "status":[], "betType":"", "sortBy":"","sortParameter":""}, queryType=4)  # 总台-报表管理-数据源对账报表
@@ -4533,7 +4545,7 @@ if __name__ == "__main__":
     # data = bg.credit_uncheckList(inData={"accountStatus": 0, "searchAccountName": "",  "page": 1,"limit": 200})  # 总台-总代结账
     # data = bg.credit_mainBet(inData={"matchId": "", "sportId": ""}, quert_type=1)  # 总投注-让球/大小/独赢/滚球
     # data = bg.credit_mixBet(inData={"account":""}, quert_type=2)     # 总投注-混合串关
-    print(data)
+    # print(data)
     # login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE1NTUwNjk5MjgyNDcxMDc1ODUiLCJleHAiOjE2NTk1OTk4OTEsInVzZXJuYW1lIjoiYTE2MDAwMDAwIn0.swtiEzP3CE3IoMy46WLXsd3qwvNdBVU-ZWiNxpcvveM"
     # data = bg.addAgentLine(Authorization=login_loken, account='a16', name='test', password='Bfty123456', securityCode='Agent0', credits=100000000,accountStatus="0")  # 新增登0
     # data = bg.addAgent1(agent_token=login_loken, account='a1600', name='test', password='Bfty123456',securityCode='Agent0', credits=10000000, accountStatus=0)  # 新增登1
