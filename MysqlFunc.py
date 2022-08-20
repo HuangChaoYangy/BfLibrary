@@ -5897,7 +5897,7 @@ class MysqlQuery(MysqlFunc):
             type_start = re.search("^(\d+)",typeString)
             type_end = re.search("_(\d)", typeString)
             type = str(type_start.group()) + '串' + str(type_end.group(1))
-            bet_type = '串关 ' + type
+            bet_type = '' + type
         elif data[0][1] == 3:
             typeString = data[0][2]
             if typeString in type_dic:
@@ -8921,7 +8921,7 @@ class MysqlQuery(MysqlFunc):
                       f"(case when `sub_order_status` in (0,1) then '未结算' when `sub_order_status`=2 AND c.settlement_result=1 then '赢' when `sub_order_status`=2 AND" \
                       f" c.settlement_result=2 then '输' when `sub_order_status`=2 AND c.settlement_result=3 then '半赢' when `sub_order_status`=2 AND c.settlement_result=4 then " \
                       f"'半输' when `sub_order_status`=2 AND c.settlement_result=5 then '平局' when `sub_order_status`=5 AND c.settlement_result=6 then '取消' end) outComeResult," \
-                      f"c.match_result,bet_amount FROM o_account_order a JOIN o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON " \
+                      f"c.match_result,bet_amount,outcome_name,market_id FROM o_account_order a JOIN o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON " \
                       f"(a.order_no=c.order_no AND b.match_id=c.match_id) WHERE a.`status` in (0,1) and a.user_name = '{userAccount}' ORDER BY a.create_time DESC"
             rtn = list(self.query_data(sql_str, database_name))
             new_list = [list(item) for item in rtn]
@@ -8932,18 +8932,22 @@ class MysqlQuery(MysqlFunc):
                 order_num = item[1]
                 bet_type = self.get_bet_type_by_ordernum_for_client(order_no=order_num)
                 tournament_str = item[3]
+                outcome = item[14]
+                market_id = item[15]
                 tournament_dic = eval(tournament_str)     # 将字符串转成字典
                 tournamentName = tournament_dic['zh']
-                outcome_str = item[7]   # {"en":"Ha Yeon, Sung (+6.5)","id":"sr:match:35394431_187_hcp=6.5_1714","in":"Ha Yeon, Sung (+6.5)","ind":"Ha Yeon, Sung (+6.5)","ja":"ハ・ユン・ソン (+6.5)","ko":"하연, 숭 (+6.5)","name":"宋河妍 (+6.5)","th":"Ha Yeon, Sung (+6.5)","vi":"Ha Yeon, Sung (+6.5)","zh":"宋河妍 (+6.5)","zht":"宋海永 (+6.5)"}
-                outcome_dic = eval(outcome_str)
-                outcomeName = outcome_dic['zh']
+                if market_id in handicap_market_id_list:
+                    outcome_str = item[7]   # {"en":"Ha Yeon, Sung (+6.5)","id":"sr:match:35394431_187_hcp=6.5_1714","in":"Ha Yeon, Sung (+6.5)","ind":"Ha Yeon, Sung (+6.5)","ja":"ハ・ユン・ソン (+6.5)","ko":"하연, 숭 (+6.5)","name":"宋河妍 (+6.5)","th":"Ha Yeon, Sung (+6.5)","vi":"Ha Yeon, Sung (+6.5)","zh":"宋河妍 (+6.5)","zht":"宋海永 (+6.5)"}
+                    outcome_dic = eval(outcome_str)
+                    outcomeName = outcome_dic['zh']
+                else:
+                    outcomeName = outcome
                 order_list.append({'betTime': create_time, 'orderNo':order_num, 'sportName':item[2], 'outcomeList':[{'tournamentName':tournamentName, 'TeamName':item[4],
                                    'match_type':item[5], 'marketName':item[6],'outcomeName':outcomeName, 'odds':float(item[8]), 'oddsType':item[9], 'betScore':item[10],
                                    'outcomeWinOrLoseName':item[11], 'outcomeResult':item[12]}], 'betAmount':float(item[13]), 'betTypeName':bet_type})
 
             expect_result = self.cf.merge_compelx_03(new_lList=order_list)
             print(expect_result)
-
             return expect_result,sql_str
 
         elif query_type == "settled":
@@ -8976,7 +8980,7 @@ class MysqlQuery(MysqlFunc):
                 order_list.append({'date':create_time, 'betAmount':betAmount, 'effectiveAmount':effectiveAmount,
                                  'backwaterAmount':backwaterAmount,'profitAmount':profitAmount})
 
-            print(order_list)
+            return order_list,sql_str
 
         elif query_type == "detail":
             sql_str = f"SELECT a.create_time,a.order_no,(CASE WHEN a.sport_category_id= 1 then '足球' WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN " \
@@ -9003,18 +9007,17 @@ class MysqlQuery(MysqlFunc):
                 tournamentName = tournament_dic['zh']
                 outcome = item[17]
                 market_id = item[18]
-                # if market_id in handicap_market_id_list:
-                outcome_str = item[7]
-                outcome_dic = eval(outcome_str)
-                outcomeName = outcome_dic['zh']
-                # else:
-                #     outcomeName = outcome
+                if market_id in handicap_market_id_list:
+                    outcome_str = item[7]
+                    outcome_dic = eval(outcome_str)
+                    outcomeName = outcome_dic['zh']
+                else:
+                    outcomeName = outcome
                 order_list.append({'betTime': create_time, 'orderNo': order_num, 'sportName': item[2],'outcomeList': [{'tournamentName': tournamentName, 'TeamName': item[4],
                                     'match_type': item[5], 'marketName': item[6], 'outcomeName': outcomeName, 'odds': float(item[8]),'oddsType': item[9], 'betScore': item[10],
                                     'outcomeWinOrLoseName': item[11], 'outcomeResult': item[12]}],'betAmount': float(item[13]),'profitAmount': float(item[14]),
                                     'backwaterAmount': float(item[15]),'resultAmount': float(item[16]), 'betTypeName': bet_type})
             expect_result = self.cf.merge_compelx_03(new_lList=order_list)
-            print(expect_result)
 
             return expect_result,sql_str
 
@@ -10406,11 +10409,11 @@ if __name__ == "__main__":
 
     # mysql_info = ['192.168.10.121', 'root', 's3CDfgfbFZcFEaczstX1VQrdfRFEaXTc', '3306']    # 内网mysql   # 8.07 最新
     # mongo_info = ['app', '123456', '192.168.10.120', '27017']               # 内网MongoDB
-    mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']          # 外网mde测试环境
-    mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
+    # mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']          # 外网mde测试环境
+    # mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
 
-    # mysql_info = ['34.80.33.71', 'creditnetrouser', 'XqtZYGfHKBBftu9', '3306']          # 外网正式环境
-    # mongo_info = ['admin', 'LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A', '35.229.139.160', '37017']
+    mysql_info = ['34.80.33.71', 'creditnetrouser', 'XqtZYGfHKBBftu9', '3306']          # 外网正式环境
+    mongo_info = ['admin', 'LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A', '35.229.139.160', '37017']
 
     mysql = MysqlQuery(mysql_info, mongo_info)
 
@@ -10560,10 +10563,15 @@ if __name__ == "__main__":
     # data = mysql.get_mainBetReport_query(expData={'sportName':'足球'})
     # data = mysql.get_sportName_mainBetReport()
 
-    data = mysql.queryUnusualOrderList(order_num="", queryType="未结算", date=(-39,0))
+    # data = mysql.queryUnusualOrderList(order_num="", queryType="未结算", date=(-39,0))
     # data = mysql.remove_special_symbols(data_str="jcj1j2j3jc2/")
 
-    # data = mysql.query_client_betting_record_sql(expData={"dateParams": (-30, 0), "sportName": "", "offset": -1, "account": "a01000000100"}, query_type="detail")
+
+
+    data = mysql.query_client_betting_record_sql(expData={"dateParams": (-30, 0), "sportName": "", "offset": -1, "account": "a01000000101"}, query_type="unsettle")   # 客户端-投注记录
+
+
+
 
 
                                                                               # 【反波胆-客户端】

@@ -1129,7 +1129,11 @@ class Credit_Client(object):
                 "Connection": "keep-alive",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                               "Chrome/85.0.4183.102 Safari/537.36"}
-
+        if self.mde_url == "https://search.betf.io":
+            betIp = "betf.io"
+        else:
+            betIp = "mde.betf.io"
+        terminal_list = ['pc', 'H5-IOS', 'H5-android', 'APP-android', 'APP-IOS']
         outcome_info_list = []
         match_info_list = self.get_match_list(sport_name, token, event_type=event_type, odds_type=odds_type)[0]
         # match_info_list = ["sr:match:35124401","sr:match:31524895"]
@@ -1140,7 +1144,7 @@ class Credit_Client(object):
                 if not item:
                     outcome_info_list.remove(item)
 
-            run_loop_num = len(outcome_info_list) // bet_type
+            run_loop_num = len(outcome_info_list) // bet_type         # 用总投注数除以投注类型,获取循环的次数
             print("投注球类：%s, 投注赛事类型：%s, 总投注数为: %d, 投注的类型是：%d 串 1 " % (sport_name,event_type,run_loop_num, bet_type))
 
             random.shuffle(outcome_info_list)  # 将outcome_list列表中的元素随机打乱
@@ -1152,6 +1156,7 @@ class Credit_Client(object):
                 selection_list = []
                 start_index = run_loop * bet_type
                 mixedNum = "%s_1_0_%s" % (bet_type, str(bet_amount))
+                terminal = random.choice(terminal_list)
                 for item in range(bet_type):
                     outcome_len = len(outcome_info_list[start_index:][item])
                     index = random.choice([i for i in range(outcome_len)])
@@ -1166,11 +1171,11 @@ class Credit_Client(object):
 
                 data = {"mixedNum": [mixedNum],
                         "betId": 1632901840437,
-                        "betIp": "192.168.10.120",
+                        "betIp": betIp,  # betf.io   /  'mde.betf.io'
                         "browserFingerprintId": "2b0148c380e1e7daee36c6752532f33f",
                         "oddsChangeType": oddsChangeType,  # 0:不接受任何赔率变化,1:接受任意赔率变化,2:接受较佳赔率变化
                         "selections": selection_list,
-                        "terminal": "H5-android"}
+                        "terminal": terminal}
                 rsp = self.session.post(url, json=data, headers=head)
                 # print(selection_list)
                 if rsp.json()['message'] != "OK":
@@ -1222,11 +1227,13 @@ class Credit_Client(object):
                     selection_list = []
                     start_index = run_loop * bet_type
                     mixedNum = "%s_1_0_%s" % (bet_type, str(bet_amount))
+                    terminal = random.choice(terminal_list)
                     for item in range(bet_type):
                         outcome_len = len(outcome_info_list[start_index:][item])
                         index = random.choice([i for i in range(outcome_len)])
                         outcome_detail = outcome_info_list[start_index:][item][index][1]
                         credit_impairment = 0.05
+                        terminal = random.choice(terminal_list)
                         selection_list.append({
                             "isLive": outcome_detail['islive'],
                             "creditOdds": round(outcome_detail['odds'] * 0.85, 2) - credit_impairment,  # 通过原赔率计算信用网赔率
@@ -1236,11 +1243,11 @@ class Credit_Client(object):
 
                     data = {"mixedNum": [mixedNum],
                             "betId": 1632901840437,
-                            "betIp": "192.168.10.120",
+                            "betIp": betIp,  # betf.io   /  'mde.betf.io'
                             "browserFingerprintId": "2b0148c380e1e7daee36c6752532f33f",
                             "oddsChangeType": oddsChangeType,  # 0:不接受任何赔率变化,1:接受任意赔率变化,2:接受较佳赔率变化
                             "selections": selection_list,
-                            "terminal": "pc"}
+                            "terminal": terminal}
                     rsp = self.session.post(url, json=data, headers=head)
 
                     if rsp.json()['message'] != "OK":
@@ -1278,6 +1285,11 @@ class Credit_Client(object):
         :param complex_number:  single:复式n串1
         :return:
         '''
+        if self.mde_url == "https://search.betf.io":
+            betIp = "betf.io"
+        else:
+            betIp = "mde.betf.io"
+        terminal_list = ['pc', 'H5-IOS', 'H5-android', 'APP-android', 'APP-IOS']
         url = self.mde_url + "/creditBet/submit"
         head = {"accessCode": token,
                 "Accept-Encoding": "gzip, deflate",
@@ -1348,6 +1360,7 @@ class Credit_Client(object):
                 selection_list = []
                 start_index = run_loop * bet_type
                 mixedNum = "%s_%s_0_%s" % (complex_num, value, str(bet_amount))
+                terminal = random.choice(terminal_list)
                 for item in range(bet_type):
                     outcome_len = len(outcome_info_list[start_index:][item])
                     index = random.choice([i for i in range(outcome_len)])
@@ -1361,11 +1374,11 @@ class Credit_Client(object):
                         "outcomeId": outcome_detail['outcome_id']})
                 data = {"mixedNum": [mixedNum],
                         "betId": 1641795071506,
-                        "betIp": "192.168.10.120",
+                        "betIp": betIp,
                         "browserFingerprintId": "2b0148c380e1e7daee36c6752532f33f",
                         "oddsChangeType": oddsChangeType,
                         "selections": selection_list,
-                        "terminal": "pc"}
+                        "terminal": terminal}
                 # print(data)
                 rsp = self.session.post(url, json=data, headers=head)
 
@@ -1416,6 +1429,7 @@ class Credit_Client(object):
                 selection_list = []
                 start_index = run_loop * bet_type
                 mixedNum = "%s_%s_1_%s" % (bet_type, value, str(bet_amount))
+                terminal = random.choice(terminal_list)
                 for item in range(bet_type):
                     outcome_len = len(outcome_info_list[start_index:][item])
                     index = random.choice([i for i in range(outcome_len)])
@@ -1429,11 +1443,11 @@ class Credit_Client(object):
                         "outcomeId": outcome_detail['outcome_id']})
                 data = {"mixedNum": [mixedNum],
                         "betId": 1641795071506,
-                        "betIp": "192.168.10.120",
+                        "betIp": betIp,
                         "browserFingerprintId": "2b0148c380e1e7daee36c6752532f33f",
                         "oddsChangeType": oddsChangeType,
                         "selections": selection_list,
-                        "terminal": "pc"}
+                        "terminal": terminal}
                 rsp = self.session.post(url, json=data, headers=head)
                 if rsp.json()['message'] != "OK":
                     print("投注失败,原因：" + rsp.json()["message"])
@@ -1469,7 +1483,6 @@ class Credit_Client(object):
         match_info_list = []
         if sport_name == "":
             sport_name_list = self.get_client_sport(token=token, event_type=event_type)
-            print(sport_name_list)
             for sport_name in sport_name_list:
                 match_id_list = self.get_match_list(sport_name=sport_name, token=token,event_type=event_type, odds_type=odds_Type)[0]
                 match_info_list.extend(match_id_list)
@@ -1615,6 +1628,10 @@ class Credit_Client(object):
                 "Connection": "keep-alive",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                               "Chrome/85.0.4183.102 Safari/537.36"}
+        if self.mde_url == "https://search.betf.io":
+            betIp = "betf.io"
+        else:
+            betIp = "mde.betf.io"
 
         outcome_info_list = self.get_all_match_outcome(token, sport_name=sport_name, event_type=event_type, odds_Type=odds_type, handicap=handicap)  # 指定盘口类型，1是欧洲盘，2是香港盘，3是马来盘，4是印尼盘
         random.shuffle(outcome_info_list)
@@ -1643,7 +1660,7 @@ class Credit_Client(object):
                 terminal = random.choice(terminal_list)   # 随机客户端
                 data = {"mixedNum": [mixedNum],
                         "betId": 1632573273553,
-                        "betIp": 'betf.io',     # "betIp": 'mde.betf.io',
+                        "betIp": betIp,     # "betIp": 'mde.betf.io',
                         "browserFingerprintId": "2b0148c380e1e7daee36c6752532f33f",
                         "selections": [outcomeid],
                         "oddsChangeType": 1,      # 1 自动接受任意赔率    2 不接受任意赔率
@@ -1706,7 +1723,7 @@ class Credit_Client(object):
                 terminal = random.choice(terminal_list)
                 data = {"mixedNum": [mixedNum],
                         "betId": 1632573273553,
-                        "betIp": 'betf.io',
+                        "betIp": betIp,
                         "browserFingerprintId": "2b0148c380e1e7daee36c6752532f33f",
                         "selections": [outcomeid],
                         "oddsChangeType": odds_type,
@@ -2139,17 +2156,26 @@ class Credit_Client(object):
         return accountHistoryStatistics
 
 
-    def get_accountHistoryDetail(self, token, dateoffset='-1', sportName=''):
+    def get_client_betting_record(self, token, inData, query_type="unsettle"):
         '''
-        获取信用网-已结算注单详情                    修改于 2022.06.17
+        获取信用网客户端-投注记录/未结算注单/已结算注单/已结算注单详情                    修改于 2022.08.16
         :param token:
-        :param starttime:
-        :param endtime:
+        :param inData:  , dateParams=(-30,-0), offset=-1, sportName=""
+        :param query_type:
         :return:
         '''
-        sport_id = self.db.get_sportId_sql(sportName=sportName)
-        # ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(dateoffset))
-        url = self.mde_url + "/creditPCOrder/settledRecord"
+        if inData['sportName']:
+            sport_id = self.db.get_sportId_sql(sportName=inData['sportName'])
+        else:
+            sport_id = ""
+        offset = inData['offset']
+        ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(inData['dateParams'][0]))
+        etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(inData['dateParams'][1]))
+
+        unsettle_url = self.mde_url + "/creditPCOrder/unsettledRecord"
+        settled_url = self.mde_url + "/creditPCOrder/accountHistoryStatistics"
+        detail_url = self.mde_url + "/creditPCOrder/settledRecord"
+
         head = {"Accept-Encoding": "gzip, deflate",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Connection": "keep-alive",
@@ -2157,54 +2183,81 @@ class Credit_Client(object):
                 "lang": "ZH",
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
                               "Chrome/85.0.4183.102 Safari/537.36"}
-        data = {"offset":dateoffset, "sportId":sport_id, "limit":100, "page":1}
-        rsp = self.session.post(url, headers=head, json=data)
-        # print(rsp.json()['data']['orderList'])
-        if rsp.json()['message'] != "OK":
-            print("查询已结算注单数据失败,原因：" + rsp.json()["message"])
-
-        order_list_Detail = []
-        for orderDetail in rsp.json()['data']['orderList']:
-            for item in orderDetail['outcomeList']:
-                order_list_Detail.append({'betTime':orderDetail['betTime'], 'orderNo':orderDetail['orderNo'], 'sportName':orderDetail['sportName'],
-                                          'outcomeList': [{'tournamentName':item['tournamentName'], 'TeamName':item['homeTeamName'] + 'Vs' + item['awayTeamName'],
-                                          'betScore':item['betScore'], 'marketName':item['marketName'],'outcomeName':item['outcomeName'],'oddsType':item['oddsType'],
-                                          'odds':item['odds'],'outcomeWinOrLoseName':item['outcomeWinOrLoseName']}],
-                                          'betAmount':orderDetail['betAmount'], 'profitAmount':orderDetail['profitAmount'],
-                                          'backwaterAmount':orderDetail['backwaterAmount'], 'resultAmount':orderDetail['resultAmount']})
-        new_list = []
-        count_i = 0
-        count_j = 1
-        for i in range(0, len(order_list_Detail)):
-            if i == count_i:
-                orderNo_list = []
-                new_list.append(order_list_Detail[i])
-                for j in range(count_j, len(order_list_Detail)):
-                    if j == count_j:
-                        if order_list_Detail[i]['orderNo'] == order_list_Detail[j]['orderNo']:
-                            orderNo_list.append(order_list_Detail[i]['outcomeList'][0])
-                            orderNo_list.append(order_list_Detail[j]['outcomeList'][0])
-                            count_j = count_j + 1
-                            count_i = count_i + 1
-                            for k in range(count_j, len(order_list_Detail)):
-                                if order_list_Detail[i]['orderNo'] == order_list_Detail[k]['orderNo']:
-                                    orderNo_list.append(order_list_Detail[k]['outcomeList'][0])
-                                    count_j = count_j + 1
-                                    count_i = count_i + 1
-                                else:
-                                    new_list[-1]['outcomeList'] = orderNo_list
-                                    count_j = count_j + 1
-                                    count_i = count_i + 1
-                                    break
-                        else:
-                            count_j = count_j + 1
-                            count_i = count_i + 1
+        producer_dic = {1:"滚球盘", 3:"早盘"}
+        odds_dic = {1: "欧洲盘", 2: "香港盘"}
+        if query_type == "unsettle":
+            data = {"limit":100,"page":1}
+            rsp = self.session.post(unsettle_url, headers=head, json=data)
+            if rsp.json()['message'] != "OK":
+                print("查询未结算注单-查询失败,原因：" + rsp.json()["message"])
+            order_list = []
+            for orderDetail in rsp.json()['data']['orderList']:
+                for item in orderDetail['outcomeList']:
+                    if item['betScore'] == None:
+                        betScore = ""
                     else:
-                        continue
-            else:
-                continue
+                        betScore = item['betScore']
+                    if item['outcomeResult'] == "--":
+                        outcomeResult = None
+                    else:
+                        outcomeResult = item['outcomeResult']
+                    if " SRL" in item['outcomeName']:
+                        outcomeName = item['outcomeName'].replace(" SRL", "")
+                    else:
+                        outcomeName = item['outcomeName']
+                    order_list.append({'betTime':orderDetail['betTime'], 'orderNo':orderDetail['orderNo'], 'sportName':orderDetail['sportName'],
+                                      'outcomeList': [{'tournamentName':item['tournamentName'], 'TeamName':item['homeTeamName'] + ' VS ' + item['awayTeamName'],
+                                      'match_type':producer_dic[item['producer']], 'marketName':item['marketName'],'outcomeName':outcomeName,'odds':item['odds'],
+                                      'oddsType':odds_dic[item['oddsType']], 'betScore':betScore, 'outcomeWinOrLoseName':item['outcomeWinOrLoseName'],
+                                      'outcomeResult':outcomeResult}], 'betAmount':orderDetail['betAmount'],'betTypeName':orderDetail['betTypeName']})
 
-        return new_list
+            actual_result = self.cm.merge_compelx_03(new_lList=order_list)
+            print(actual_result)
+            return actual_result
+
+        elif query_type == "settled":
+            data = {"createDay":ctime, "endDay":etime}
+            rsp = self.session.post(settled_url, headers=head, json=data)
+            if rsp.json()['message'] != "OK":
+                print("查询已结算注单-外层详情失败,原因：" + rsp.json()["message"])
+            order_list = []
+            for item in rsp.json()['data']:
+                order_list.append({'date':item['date'], 'betAmount':item['betAmount'], 'effectiveAmount':item['effectiveAmount'],
+                                 'backwaterAmount':item['backwaterAmount'],'profitAmount':item['profitAmount']})
+
+            print(order_list)
+            return order_list
+
+        elif query_type == "detail":
+            data = {"offset":offset, "sportId":sport_id, "limit":100, "page":1}
+            rsp = self.session.post(detail_url, headers=head, json=data)
+            if rsp.json()['message'] != "OK":
+                print("查询已结算注单-注单详情失败,原因：" + rsp.json()["message"])
+            order_list = []
+            for orderDetail in rsp.json()['data']['orderList']:
+                for item in orderDetail['outcomeList']:
+                    if item['betScore'] == None:
+                        betScore = ""
+                    else:
+                        betScore = item['betScore']
+                    if item['outcomeResult'] == "--":
+                        outcomeResult = None
+                    else:
+                        outcomeResult = item['outcomeResult']
+                    order_list.append({'betTime':orderDetail['betTime'], 'orderNo':orderDetail['orderNo'], 'sportName':orderDetail['sportName'],
+                                      'outcomeList': [{'tournamentName':item['tournamentName'], 'TeamName':item['homeTeamName'] + 'VS' + item['awayTeamName'],
+                                      'match_type':producer_dic[item['producer']], 'marketName':item['marketName'],'outcomeName':item['outcomeName'],'odds':item['odds'],
+                                      'oddsType':odds_dic[item['oddsType']], 'betScore':betScore, 'outcomeWinOrLoseName':item['outcomeWinOrLoseName'],
+                                      'outcomeResult':outcomeResult}], 'betAmount':orderDetail['betAmount'],'profitAmount':orderDetail['profitAmount'],
+                                      'backwaterAmount':orderDetail['backwaterAmount'],'resultAmount':orderDetail['resultAmount'],'betTypeName':orderDetail['betTypeName']})
+
+            actual_result = self.cm.merge_compelx_03(new_lList=order_list)
+            print(actual_result)
+            return actual_result
+
+        else:
+            raise AssertionError('ERROE,暂不支持该类型')
+
 
     def threading_pool(self):
         return None
@@ -2691,10 +2744,10 @@ if __name__ == "__main__":
     mongo_info = ['admin', 'LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A', '35.229.139.160', '37017']
     bf = Credit_Client(mysql_info, mongo_info)
 
-    MyThread().thread_submit(bet_type=2, sport_name="足球", event_type="TODAY", odds_type=2, IsRandom='1',handicap=True, complex='multi', complex_number=2)
-    # MyThread().thread_pool_submit(bet_type=1,  sport_name="", event_type="EARLY", odds_type=2, IsRandom='1', handicap=True, complex='single', complex_number=2)
+    # MyThread().thread_submit(bet_type=1, sport_name="", event_type="EARLY", odds_type=2, IsRandom='1',handicap=False, complex='multi', complex_number=2)   # 投注
+    # MyThread().thread_pool_submit(bet_type=1,  sport_name="", event_type="EARLY", odds_type=2, IsRandom='1', handicap=True, complex='single', complex_number=2)   # 投注
 
-    # token_list = ['41fd9c2003c540dfb3f7959fe8e6023a','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
+    token_list = ['bce545a6ad004523b1fa6a0fad99d54d','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
     # bf.get_client_sport(token=token_list[0], event_type="TODAY")
     # for item in ['Testuser001','Testuser002','Testuser003','Testuser004']:
     # token = bf.login_client(username='a01000000001', password='Bfty123456')
@@ -2762,7 +2815,7 @@ if __name__ == "__main__":
     # searchName = bf.get_search_matchName_list(token=token_list[0], sport_name='足球', teamName='蒂安')
 
 
-    # settled = bf.get_accountHistoryDetail(token=token_list[0], dateoffset='-0', sportName='')
+    settled = bf.get_client_betting_record(token=token_list[0], inData={"dateParams":(-30,0), "sportName":"", "offset":-1}, query_type="unsettle")
     # print(settled)
 
 
