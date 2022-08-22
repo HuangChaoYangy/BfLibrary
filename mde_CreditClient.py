@@ -35,6 +35,9 @@ except ImportError:
     from .CommonFunc import CommonFunc
     from .H5_BfClient import H5_BfClient
 
+# 获取基础路径配置
+url_configure = CommonFunc().get_BaseUrl_environment_config()  # 获取配置文件中后台的ip
+ip_address = url_configure[1]
 
 class Credit_Client(object):
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
@@ -2441,7 +2444,7 @@ class Credit_Client(object):
                         else:
                             pass
 
-    def get_user_token_list(self, request_method='get', request_url='https://mdesearch.betf.io/creditUser/getUserAmount', request_body={}):
+    def get_user_token_list(self, request_method='get', request_url=ip_address + '/creditUser/getUserAmount', request_body={}):
         '''
         使用token通过调接口判断token是否过期，若过期则获取新的token   方法一
         :param request_method:
@@ -2485,7 +2488,7 @@ class Credit_Client(object):
                 return token_list
 
 
-    def get_client_user_token(self, request_method='get', request_url='https://search.betf.io/creditUser/getUserAmount', request_body={}):
+    def get_client_user_token(self, request_method='get', request_url=ip_address + '/creditUser/getUserAmount', request_body={}):
         '''
         使用token通过调接口判断token是否过期，若过期则获取新的token   方法二
         :param request_method:
@@ -2529,7 +2532,7 @@ class Credit_Client(object):
 
             return token_list
 
-    def client_user_token(self, request_method='get', request_url='https://search.betf.io/creditUser/getUserAmount', request_body={}):
+    def client_user_token(self, request_method='get', request_url=ip_address + '/creditUser/getUserAmount', request_body={}):
         '''
         使用token通过调接口判断token是否过期，若过期则获取新的token   方法三：直接传登3账号 获取所有会员token
         :param request_method:

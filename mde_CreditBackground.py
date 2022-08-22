@@ -32,6 +32,9 @@ except ModuleNotFoundError or ImportError:
     from .MongoFunc import MongoFunc, DbQuery
     from .CommonFunc import CommonFunc
 
+# 获取基础路径配置
+url_configure = CommonFunc().get_BaseUrl_environment_config()  # 获取配置文件中后台的ip
+ip_address = url_configure[1]
 
 class CreditBackGround(object):
     ROBOT_LIBRARY_SCOPE = 'GLOBAL'
@@ -44,7 +47,6 @@ class CreditBackGround(object):
         # self.mde_url = 'https://search.betf.best'      # 外网
         url_configure = CommonFunc().get_BaseUrl_environment_config()       # 获取配置文件中后台的ip
         self.mde_url = url_configure[1]
-        print(self.mde_url)
         self.head = {"Authorization": ""}
         self.mysql = MysqlQuery(mysql_info,mongo_info)
         self.mg = MongoFunc(mongo_info)
