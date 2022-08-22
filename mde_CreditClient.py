@@ -2169,8 +2169,13 @@ class Credit_Client(object):
         else:
             sport_id = ""
         offset = inData['offset']
-        ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(inData['dateParams'][0]))
-        etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(inData['dateParams'][1]))
+        if isinstance(inData['dateParams'],tuple):        # 判断传入的数据类型是否为元组,不是元组的话用eval函数将字符串转成元组
+            dateoffset = inData['dateParams']
+        else:
+            dateoffset = eval(inData['dateParams'])
+            
+        ctime = self.get_current_time_for_client(time_type="ctime", day_diff=int(dateoffset[0]))
+        etime = self.get_current_time_for_client(time_type="ctime", day_diff=int(dateoffset[1]))
 
         unsettle_url = self.mde_url + "/creditPCOrder/unsettledRecord"
         settled_url = self.mde_url + "/creditPCOrder/accountHistoryStatistics"
@@ -2212,7 +2217,7 @@ class Credit_Client(object):
                                       'outcomeResult':outcomeResult}], 'betAmount':orderDetail['betAmount'],'betTypeName':orderDetail['betTypeName']})
 
             actual_result = self.cm.merge_compelx_03(new_lList=order_list)
-            print(actual_result)
+
             return actual_result
 
         elif query_type == "settled":

@@ -262,21 +262,7 @@
             </Attribute>
           </value>
         </entry>
-        <entry key="\credit_data_new\dataSource.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
         <entry key="\credit_data_new\totalBet\mainBet.csv">
-          <value>
-            <Attribute>
-              <option name="separator" value="," />
-            </Attribute>
-          </value>
-        </entry>
-        <entry key="\dataSource.csv">
           <value>
             <Attribute>
               <option name="separator" value="," />

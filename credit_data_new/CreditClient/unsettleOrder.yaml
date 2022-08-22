@@ -1,0 +1,16 @@
+- request:
+    mde_ip: https://search.betf.best
+    url: /creditPCOrder/unsettledRecord
+    method: post
+  data:
+    page: 1
+    limit: 200
+    sportName: ""
+    offset: 0
+    dateParams: (-30,0)
+    account: ""
+  resp:
+    sportName: ""
+    offset: 0
+    dateParams: (-30, 0)
+    account: "a01000000101"

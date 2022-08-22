@@ -913,3 +913,66 @@ for index1, item1 in enumerate(actualResult):
     for index2, item2 in enumerate(expectResult):
         print(item2)
         # if list(item1.values())[0] == list(item2.values())[0]:
+
+
+yyds_list=[{'betTime': '2022-08-16 01:52:59', 'orderNo': 'XRjApMinqzmG', 'sportName': '篮球', 'outcomeList': [{'tournamentName': '篮球世界友谊赛', 'TeamName': '黑山VS北马其顿', 'match_type': '早盘', 'marketName': '让球', 'outcomeName': '黑山 (-21.5)', 'odds': 0.88, 'oddsType': 2, 'betScore': None, 'outcomeWinOrLoseName': '未结算', 'outcomeResult': '--'}], 'betAmount': 10.0}, {'betTime': '2022-08-16 01:52:59', 'orderNo': 'XRjApMinqzmG', 'sportName': '篮球', 'outcomeList': [{'tournamentName': '印尼篮球联赛', 'TeamName': 'NSH蒂米卡山金VS梭罗西匪', 'match_type': '早盘', 'marketName': '第1节 - 单/双', 'outcomeName': '单', 'odds': 1.85, 'oddsType': 1, 'betScore': None, 'outcomeWinOrLoseName': '未结算', 'outcomeResult': '--'}], 'betAmount': 10.0}, {'betTime': '2022-08-16 01:52:59', 'orderNo': 'XRjApMinqzmG', 'sportName': '篮球', 'outcomeList': [{'tournamentName': '篮球世界友谊赛', 'TeamName': '法国VS意大利', 'match_type': '早盘', 'marketName': '第1节 - 让球', 'outcomeName': '法国 (-2.0)', 'odds': 0.92, 'oddsType': 2, 'betScore': None, 'outcomeWinOrLoseName': '未结算', 'outcomeResult': '--'}], 'betAmount': 10.0}, {'betTime': '2022-08-16 01:52:59', 'orderNo': 'XRjApMinqzmG', 'sportName': '篮球', 'outcomeList': [{'tournamentName': '篮球世界友谊赛', 'TeamName': '西班牙VS立陶宛', 'match_type': '早盘', 'marketName': '第1节 - 让球', 'outcomeName': '立陶宛 (+0.5)', 'odds': 0.89, 'oddsType': 2, 'betScore': None, 'outcomeWinOrLoseName': '未结算', 'outcomeResult': '--'}], 'betAmount': 10.0}, {'betTime': '2022-08-16 01:52:59', 'orderNo': 'XRjApMinqzmG', 'sportName': '篮球', 'outcomeList': [{'tournamentName': '委内瑞拉超级联赛', 'TeamName': '陶里诺斯阿拉瓜队VS科科德里洛斯', 'match_type': '早盘', 'marketName': '独赢', 'outcomeName': '陶里诺斯阿拉瓜队', 'odds': 4.1, 'oddsType': 1, 'betScore': None, 'outcomeWinOrLoseName': '未结算', 'outcomeResult': '--'}], 'betAmount': 10.0}, {'betTime': '2022-08-16 01:52:59', 'orderNo': 'XRjApMinqzmG', 'sportName': '篮球', 'outcomeList': [{'tournamentName': '篮球世界友谊赛', 'TeamName': '以色列VS罗马尼亚', 'match_type': '早盘', 'marketName': '上半场 - 大/小', 'outcomeName': '小80', 'odds': 0.83, 'oddsType': 2, 'betScore': None, 'outcomeWinOrLoseName': '未结算', 'outcomeResult': '--'}], 'betAmount': 10.0}, {'betTime': '2022-08-16 01:52:57', 'orderNo': 'XRjApdSJpLUy', 'sportName': '篮球', 'outcomeList': [{'tournamentName': '印尼篮球联赛', 'TeamName': 'NSH蒂米卡山金VS梭罗西匪', 'match_type': '早盘', 'marketName': '大/小', 'outcomeName': '小128', 'odds': 0.85, 'oddsType': 2, 'betScore': None, 'outcomeWinOrLoseName': '未结算', 'outcomeResult': '--'}], 'betAmount': 16.0}, {'betTime': '2022-08-16 01:52:57', 'orderNo': 'XRjApdSJpLUy', 'sportName': '篮球', 'outcomeList': [{'tournamentName': '篮球世界友谊赛', 'TeamName': '以色列VS罗马尼亚', 'match_type': '早盘', 'marketName': '大/小', 'outcomeName': '大159.5', 'odds': 0.83, 'oddsType': 2, 'betScore': None, 'outcomeWinOrLoseName': '未结算', 'outcomeResult': '--'}], 'betAmount': 16.0}, {'betTime': '2022-08-16 01:52:57', 'orderNo': 'XRjApdSJpLUy', 'sportName': '篮球', 'outcomeList': [{'tournamentName': '印尼篮球联赛', 'TeamName': '佩利塔贾亚巴克里雅加达VSRans Pik篮球', 'match_type': '早盘', 'marketName': '独赢', 'outcomeName': '蓝壁篮球俱乐部', 'odds': 3.25, 'oddsType': 1, 'betScore': None, 'outcomeWinOrLoseName': '输', 'outcomeResult': '全场比分 : 93 - 86'}], 'betAmount': 16.0}, {'betTime': '2022-08-16 01:52:57', 'orderNo': 'XRjApdSJpLUy', 'sportName': '篮球', 'outcomeList': [{'tournamentName': '委内瑞拉超级联赛', 'TeamName': '陶里诺斯阿拉瓜队VS科科德里洛斯', 'match_type': '早盘', 'marketName': '单/双', 'outcomeName': '单', 'odds': 1.84, 'oddsType': 1, 'betScore': None, 'outcomeWinOrLoseName': '未结算', 'outcomeResult': '--'}], 'betAmount': 16.0}, {'betTime': '2022-08-16 01:52:57', 'orderNo': 'XRjApdSJpLUy', 'sportName': '篮球', 'outcomeList': [{'tournamentName': '印尼篮球联赛', 'TeamName': '万隆普拉维拉VS泗水德瓦联', 'match_type': '早盘', 'marketName': '大/小', 'outcomeName': '小141.5', 'odds': 0.84, 'oddsType': 2, 'betScore': None, 'outcomeWinOrLoseName': '赢', 'outcomeResult': '全场比分 : 69 - 65'}], 'betAmount': 16.0}, {'betTime': '2022-08-16 01:52:57', 'orderNo': 'XRjApdSJpLUy', 'sportName': '篮球', 'outcomeList': [{'tournamentName': '篮球世界友谊赛', 'TeamName': '西班牙VS立陶宛', 'match_type': '早盘', 'marketName': '单/双', 'outcomeName': '单', 'odds': 1.83, 'oddsType': 1, 'betScore': None, 'outcomeWinOrLoseName': '未结算', 'outcomeResult': '--'}], 'betAmount': 16.0}, {'betTime': '2022-08-16 01:52:57', 'orderNo': 'XRjApdSJpLUy', 'sportName': '篮球', 'outcomeList': [{'tournamentName': '篮球世界友谊赛', 'TeamName': '法国VS意大利', 'match_type': '早盘', 'marketName': '上半场 - 大/小', 'outcomeName': '大76.5', 'odds': 0.84, 'oddsType': 2, 'betScore': None, 'outcomeWinOrLoseName': '未结算', 'outcomeResult': '--'}], 'betAmount': 16.0}, {'betTime': '2022-08-16 01:52:57', 'orderNo': 'XRjApdSJpLUy', 'sportName': '篮球', 'outcomeList': [{'tournamentName': '篮球世界友谊赛', 'TeamName': '黑山VS北马其顿', 'match_type': '早盘', 'marketName': '让球', 'outcomeName': '北马其顿 (+21.5)', 'odds': 0.88, 'oddsType': 2, 'betScore': None, 'outcomeWinOrLoseName': '未结算', 'outcomeResult': '--'}], 'betAmount': 16.0}]
+orderNo_list=[]
+new_list=[]
+count_i = 0
+count_j = 1
+count=0
+for i in range(0, len(yyds_list)):
+    # print("i循环:",i,count_i)
+    if i==count_i:
+        orderNo_list = []
+        for j in range(count_j, len(yyds_list)):
+            # print("j循环:",j,count_j)
+            if j == count_j:
+                new_list.append(yyds_list[i])
+                if yyds_list[i]['orderNo']==yyds_list[j]['orderNo']:
+                    # print(yyds_list[i]['orderNo'],yyds_list[j]['orderNo'])
+                    orderNo_list.append(yyds_list[i]['outcomeList'][0])
+                    orderNo_list.append(yyds_list[j]['outcomeList'][0])
+                    count_j = count_j + 1
+                    count_i = count_i + 1
+                    if j==len(yyds_list) - 1:
+                        new_list[-1]['outcomeList'] = orderNo_list
+                        # print(f"第{count}次,{count_i},{count_j}")
+                    else:
+                        for k in range(count_j,len(yyds_list)):
+                            # print(yyds_list[i]['orderNo'],yyds_list[k]['orderNo'])
+                            if yyds_list[i]['orderNo'] == yyds_list[k]['orderNo']:
+                                if k == len(yyds_list) - 1:
+                                    count = count + 1
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                                    new_list[-1]['outcomeList'] = orderNo_list
+                                    # print(f"第{count}次,{count_i},{count_j}")
+                                else:
+                                    orderNo_list.append(yyds_list[k]['outcomeList'][0])
+                                    count_j = count_j + 1
+                                    count_i = count_i + 1
+                            else:
+                                new_list[-1]['outcomeList']=orderNo_list
+                                count_j = count_j + 1
+                                count_i = count_i + 1
+                                count = count + 1
+                                # print(f"第{count}次,{count_i},{count_j}")
+                                break
+                else:
+                    count_i = count_i + 1
+                    count_j = count_j + 1
+                    count=count+1
+                    break
+            else:
+                break
+    else:
+        continue
+# print(new_list)
+
+tet_dic = {'date': '2022-08-15', 'betAmount': ('344.00'), 'effectiveAmount': ('332.80'), 'backwaterAmount': ('5.29'), 'profitAmount': ('-285.91')}
+for key,value in tet_dic.items():
+    if key != "date":
+        value=float(value)
+        print(value)
+print(tet_dic)

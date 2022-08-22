@@ -47,6 +47,7 @@ class CtrlIoDocs(object):
         self.dbq = DbQuery(mysql_info, mongo_info)
         self.mysql = MysqlQuery(mysql_info,mongo_info)
         self.blog = Bf_log(name='leeyang')
+        self.cm = CommonFunc
         # self.ya = Yaml_data()
 
     def query_match_all_logs(self, event_id):
@@ -1275,6 +1276,11 @@ if __name__ == "__main__":
         mysql_info.extend([mysql_dic['host'],mysql_dic['user'],mysql_dic['password'],mysql_dic['port']])
         mongo_dic = result[1]['mongodb_config']
         mongo_info.extend([mongo_dic['user'],mongo_dic['password'],mongo_dic['host'],mongo_dic['port']])
+    elif result[0]['environment'] == "extranet":
+        mysql_dic = result[1]['mysql_extranet']
+        mysql_info.extend([mysql_dic['host'],mysql_dic['user'],mysql_dic['password'],mysql_dic['port']])
+        mongo_dic = result[1]['mongodb_extranet']
+        mongo_info.extend([mongo_dic['user'],mongo_dic['password'],mongo_dic['host'],mongo_dic['port']])
     else:
         raise AssertionError('ERROR')
 
@@ -1304,12 +1310,12 @@ if __name__ == "__main__":
     # settled_by_markets = bc.generate_settlement_str_by_order(match_id='30389377', outcome_info=outcome_info, certainty='2', producer='', result="输")
     # print(settled_by_markets)
 
-    # settlement_by_outcomeId = bc.generate_settlement_str_by_outcomeId(outcomeId='sr:match:31482103_18_total=2.25_13', result='赢')    # 生成单投注项的结算(取消)指令
-    # print(settlement_by_outcomeId)
+    settlement_by_outcomeId = bc.generate_settlement_str_by_outcomeId(outcomeId='sr:match:33839521_18_total=2.25_12', result='取消')    # 生成单投注项的结算(取消)指令
+    print(settlement_by_outcomeId)
 
-    # settlement_by_orderNo = bc.generate_settlement_str_by_orderNo(order_no='XCMMRnQ7dJVK', sort=0, certainty='2', result=None)       #根据注单号进行生成结算指令
+    # settlement_by_orderNo = bc.generate_settlement_str_by_orderNo(order_no='XRkbUsci6d64', sort=0, certainty='2', result="赢")       #根据注单号进行生成结算指令
     # print(settlement_by_orderNo)
-    send = bc.send_message_to_datasourse(login_account='',order_no='XNZTeEdUi4W2', certainty='2', result='赢一半')        # 生成结算指令+注单结算
+    # send = bc.send_message_to_datasourse(login_account='',order_no='XNZTeEdUi4W2', certainty='2', result='赢一半')        # 生成结算指令+注单结算
 
     # data = bc.generate_rollback_bet_cancel_str(match_id='31975607',start_stamp="1641713763000", end_stamp="1649489763000")      # 取消回滚指令
     # print(data)

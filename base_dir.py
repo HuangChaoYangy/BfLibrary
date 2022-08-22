@@ -32,6 +32,10 @@ client_user_url = os.path.join(excel_dir,'client_data','client_user.yaml')
 userToken_url = os.path.join(excel_dir,'client_data','user_token.yaml')
 clientData_url = os.path.join(excel_dir,'client_data','client_data.yaml')
 
+# 客户端投注记录
+unsettleOrder = os.path.join(excel_dir,'credit_data_new\CreditClient','unsettleOrder.yaml')
+
+
 # 信用网客户端账号
 user_url_c = os.path.join(excel_dir,'credit_data_new\CreditClient','user.yaml')
 

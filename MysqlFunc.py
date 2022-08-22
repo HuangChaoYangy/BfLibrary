@@ -8905,8 +8905,13 @@ class MysqlQuery(MysqlFunc):
             begin = self.get_current_time_for_client(time_type="ctime", day_diff=resp['offset'])
             end = self.get_current_time_for_client(time_type="ctime", day_diff=resp['offset'])
 
-        ctime = self.get_current_time_for_client(time_type="ctime", day_diff=resp['dateParams'][0])
-        etime = self.get_current_time_for_client(time_type="ctime", day_diff=resp['dateParams'][1])
+        if isinstance(resp['dateParams'],tuple):     # # 判断传入的数据类型是否为元组,不是元组的话用eval函数将字符串转成元组
+            dateoffset = resp['dateParams']
+        else:
+            dateoffset = eval(resp['dateParams'])
+
+        ctime = self.get_current_time_for_client(time_type="ctime", day_diff=dateoffset[0])
+        etime = self.get_current_time_for_client(time_type="ctime", day_diff=dateoffset[1])
         database_name = "bfty_credit"
 
         # 所有球类的让球盘口,单独处理,从outcome_name_dic中去取值,其它盘口直接取outcome_name
@@ -8921,7 +8926,7 @@ class MysqlQuery(MysqlFunc):
                       f"(case when `sub_order_status` in (0,1) then '未结算' when `sub_order_status`=2 AND c.settlement_result=1 then '赢' when `sub_order_status`=2 AND" \
                       f" c.settlement_result=2 then '输' when `sub_order_status`=2 AND c.settlement_result=3 then '半赢' when `sub_order_status`=2 AND c.settlement_result=4 then " \
                       f"'半输' when `sub_order_status`=2 AND c.settlement_result=5 then '平局' when `sub_order_status`=5 AND c.settlement_result=6 then '取消' end) outComeResult," \
-                      f"c.match_result,bet_amount,outcome_name,market_id FROM o_account_order a JOIN o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON " \
+                      f"if(sub_order_status>1,c.match_result,'') match_result,bet_amount,outcome_name,market_id FROM o_account_order a JOIN o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON " \
                       f"(a.order_no=c.order_no AND b.match_id=c.match_id) WHERE a.`status` in (0,1) and a.user_name = '{userAccount}' ORDER BY a.create_time DESC"
             rtn = list(self.query_data(sql_str, database_name))
             new_list = [list(item) for item in rtn]
@@ -8947,7 +8952,7 @@ class MysqlQuery(MysqlFunc):
                                    'outcomeWinOrLoseName':item[11], 'outcomeResult':item[12]}], 'betAmount':float(item[13]), 'betTypeName':bet_type})
 
             expect_result = self.cf.merge_compelx_03(new_lList=order_list)
-            print(expect_result)
+
             return expect_result,sql_str
 
         elif query_type == "settled":
@@ -8990,7 +8995,7 @@ class MysqlQuery(MysqlFunc):
                       f"(case when `sub_order_status` in (0,1) then '未结算' when `sub_order_status`=2 AND c.settlement_result=1 then '赢' when `sub_order_status`=2 AND " \
                       f"c.settlement_result=2 then '输' when `sub_order_status`=2 AND c.settlement_result=3 then '半赢' when `sub_order_status`=2 AND c.settlement_result=4 then " \
                       f"'半输' when `sub_order_status`=2 AND c.settlement_result=5 then '平局' when `sub_order_status`=5 AND c.settlement_result=6 then '取消' end) outComeResult," \
-                      f"c.match_result,bet_amount,handicap_win_or_lose,backwater_amount,handicap_final_win_or_lose+bet_amount as 'rebateAmount',outcome_name,market_id FROM " \
+                      f"if(sub_order_status>1,c.match_result,'') match_result,bet_amount,handicap_win_or_lose,backwater_amount,handicap_final_win_or_lose+bet_amount as 'rebateAmount',outcome_name,market_id FROM " \
                       f"o_account_order a JOIN o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON (a.order_no=c.order_no AND b.match_id=" \
                       f"c.match_id) WHERE a.`status` in (2,3) AND award_time is not null AND DATE_FORMAT( a.award_time, '%Y-%m-%d' ) BETWEEN '{begin}' AND '{end}' AND a.user_name" \
                       f"= '{userAccount}' {sport_id} ORDER BY a.create_time DESC"
