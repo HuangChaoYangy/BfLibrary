@@ -14,6 +14,7 @@ import datetime
 import arrow
 import os
 import configparser
+from base_dir import *
 from arrow import arrow
 from config import ControlFile
 from tools.yamlControl import Yaml_data
@@ -1262,27 +1263,12 @@ class BetController(object):
 
 if __name__ == "__main__":
 
-    ya = Yaml_data()
-    result = ya.get_yaml_data(fileDir='D:\project\BfLibrary\config\config.yaml', isAll=True)
-    mysql_info = []          #读取yaml文件,获取mysql和MongoDB配置
-    mongo_info = []
-    if result[0]['environment'] == "mde":
-        mysql_dic = result[1]['mysql_mde']
-        mysql_info.extend([mysql_dic['host'],mysql_dic['user'],mysql_dic['password'],mysql_dic['port']])
-        mongo_dic = result[1]['mongodb_mde']
-        mongo_info.extend([mongo_dic['user'],mongo_dic['password'],mongo_dic['host'],mongo_dic['port']])
-    elif result[0]['environment'] == "120":
-        mysql_dic = result[1]['mysql_config']
-        mysql_info.extend([mysql_dic['host'],mysql_dic['user'],mysql_dic['password'],mysql_dic['port']])
-        mongo_dic = result[1]['mongodb_config']
-        mongo_info.extend([mongo_dic['user'],mongo_dic['password'],mongo_dic['host'],mongo_dic['port']])
-    elif result[0]['environment'] == "extranet":
-        mysql_dic = result[1]['mysql_extranet']
-        mysql_info.extend([mysql_dic['host'],mysql_dic['user'],mysql_dic['password'],mysql_dic['port']])
-        mongo_dic = result[1]['mongodb_extranet']
-        mongo_info.extend([mongo_dic['user'],mongo_dic['password'],mongo_dic['host'],mongo_dic['port']])
-    else:
-        raise AssertionError('ERROR')
+    dataBase_configure = CommonFunc().get_dataBase_environment_config()
+    mysql_info = dataBase_configure[0]
+    mongo_info = dataBase_configure[1]
+    configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
+    environment = configure[0]['environment']
+    print(f'--- 当前系统环境为：{environment} ---')
 
     # mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']
     # mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']

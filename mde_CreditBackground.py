@@ -41,7 +41,10 @@ class CreditBackGround(object):
         self.session = requests.session()
         self.auth_url = backend_url
         # self.mde_url = 'https://mdesearch.betf.best'     # mde
-        self.mde_url = 'https://search.betf.best'      # 外网
+        # self.mde_url = 'https://search.betf.best'      # 外网
+        url_configure = CommonFunc().get_BaseUrl_environment_config()       # 获取配置文件中后台的ip
+        self.mde_url = url_configure[1]
+        print(self.mde_url)
         self.head = {"Authorization": ""}
         self.mysql = MysqlQuery(mysql_info,mongo_info)
         self.mg = MongoFunc(mongo_info)
@@ -4493,16 +4496,24 @@ class CreditBackGround(object):
 
 if __name__ == "__main__":
 
-    mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']                # mde 环境
-    mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
+    # mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']                # mde 环境
+    # mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
     # mysql_info = ['34.80.33.71', 'creditnetrouser', 'XqtZYGfHKBBftu9', '3306']          # 外网正式环境
     # mongo_info = ['admin', 'LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A', '35.229.139.160', '37017']
+
+    dataBase_configure = CommonFunc().get_dataBase_environment_config()
+    mysql_info = dataBase_configure[0]
+    mongo_info = dataBase_configure[1]
+    configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
+    environment = configure[0]['environment']
+    print(f'--- 当前系统环境为：{environment} ---')
+
     bg = CreditBackGround(mysql_info,mongo_info)            # 创建对象
 
     # login_loken = bg.login_background(uname='a01000000', password='Bfty123456', securityCode="Agent0", loginDiv=555666)          # 登录信用网代理后台
     # print(login_loken)
-    login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
-    data = bg.settleUnusualOrder(Authorization=login_loken, order_num="", date=(-60, -0), settleType='未结算', remark="脚本结算", result=None)       # 异常订单结算脚本
+    # login_loken = bg.login_background(uname='Liyang01', password='Bfty123456', securityCode="111111" , loginDiv=222333)             # 登录信用网总台
+    # data = bg.settleUnusualOrder(Authorization=login_loken, order_num="", date=(-60, -0), settleType='未结算', remark="脚本结算", result=None)       # 异常订单结算脚本
     # user = bg.user_management(Authorization=login_loken, userStatus='0', userName='', userAccount='', sortIndex='', sortParameter='')   # 会员管理
     # match = bg.credit_match_result_query(Authorization=login_loken, sportName='足球', tournamentName='', teamName='',offset='0')    # 新赛果查询
 

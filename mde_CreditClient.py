@@ -45,7 +45,9 @@ class Credit_Client(object):
                              "棒球": "sr:sport:3", "斯诺克": "sr:sport:19", "冰上曲棍球": "sr:sport:4"}
         self.auth_url = 'http://192.168.10.120'
         # self.mde_url = 'https://mdesearch.betf.io'     # mde
-        self.mde_url = 'https://search.betf.io'      # 外网
+        # self.mde_url = 'https://search.betf.io'      # 外网
+        url_configure = CommonFunc().get_BaseUrl_environment_config()       # 获取配置文件中客户端的ip
+        self.mde_url = url_configure[0]
         self.session = requests.session()
         self.ms = MysqlFunc(mysql_info, mongo_info, merchant_url)
         self.my = MysqlQuery(mysql_info, mongo_info)
@@ -2745,14 +2747,22 @@ if __name__ == "__main__":
 
     # mysql_info = ['35.194.233.30', 'root', 'BB#gCmqf3gTO5b*', '3306']          # 外网mde测试环境
     # mongo_info = ['sport_test', 'BB#gCmqf3gTO5777', '35.194.233.30', '27017']
-    mysql_info = ['34.80.33.71', 'creditnetrouser', 'XqtZYGfHKBBftu9', '3306']          # 外网正式环境
-    mongo_info = ['admin', 'LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A', '35.229.139.160', '37017']
+    # mysql_info = ['34.80.33.71', 'creditnetrouser', 'XqtZYGfHKBBftu9', '3306']          # 外网正式环境
+    # mongo_info = ['admin', 'LLAt{FaKpuC)ncivEiN<Id}vQMgt(M4A', '35.229.139.160', '37017']
+
+    dataBase_configure = CommonFunc().get_dataBase_environment_config()
+    mysql_info = dataBase_configure[0]
+    mongo_info = dataBase_configure[1]
+    configure = Yaml_data().get_yaml_data(fileDir=config_url, isAll=True)
+    environment = configure[0]['environment']
+    print(f'--- 当前系统环境为：{environment} ---')
+
     bf = Credit_Client(mysql_info, mongo_info)
 
     # MyThread().thread_submit(bet_type=1, sport_name="", event_type="EARLY", odds_type=2, IsRandom='1',handicap=False, complex='multi', complex_number=2)   # 投注
     # MyThread().thread_pool_submit(bet_type=1,  sport_name="", event_type="EARLY", odds_type=2, IsRandom='1', handicap=True, complex='single', complex_number=2)   # 投注
 
-    token_list = ['bce545a6ad004523b1fa6a0fad99d54d','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
+    token_list = ['01adb6b99438412395592bd19b027e47','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
     # bf.get_client_sport(token=token_list[0], event_type="TODAY")
     # for item in ['Testuser001','Testuser002','Testuser003','Testuser004']:
     # token = bf.login_client(username='a01000000001', password='Bfty123456')
