@@ -14,3 +14,371 @@
     dateType: 3
     sportId: 'sr:sport:5'
 
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 2
+    sportId: 'sr:sport:5'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照赛事时间根据球类'网球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 2
+    sportId: 'sr:sport:5'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 1
+    sportId: 'sr:sport:5'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照投注时间根据球类'网球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 1
+    sportId: 'sr:sport:5'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 3
+    sportId: 'sr:sport:1'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照结算时间根据球类'足球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 3
+    sportId: 'sr:sport:1'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 2
+    sportId: 'sr:sport:1'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照赛事时间根据球类'足球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 2
+    sportId: 'sr:sport:1'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 1
+    sportId: 'sr:sport:1'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照投注时间根据球类'足球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 1
+    sportId: 'sr:sport:1'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 3
+    sportId: 'sr:sport:2'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照结算时间根据球类'篮球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 3
+    sportId: 'sr:sport:2'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 2
+    sportId: 'sr:sport:2'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照赛事时间根据球类'篮球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 2
+    sportId: 'sr:sport:2'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 1
+    sportId: 'sr:sport:2'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照投注时间根据球类'篮球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 1
+    sportId: 'sr:sport:2'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 3
+    sportId: 'sr:sport:23'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照结算时间根据球类'排球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 3
+    sportId: 'sr:sport:23'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 2
+    sportId: 'sr:sport:23'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照赛事时间根据球类'排球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 2
+    sportId: 'sr:sport:23'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 1
+    sportId: 'sr:sport:23'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照投注时间根据球类'排球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 1
+    sportId: 'sr:sport:23'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 3
+    sportId: 'sr:sport:31'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照结算时间根据球类'羽毛球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 3
+    sportId: 'sr:sport:31'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 2
+    sportId: 'sr:sport:31'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照赛事时间根据球类'羽毛球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 2
+    sportId: 'sr:sport:31'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 1
+    sportId: 'sr:sport:31'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照投注时间根据球类'羽毛球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 1
+    sportId: 'sr:sport:31'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 3
+    sportId: 'sr:sport:20'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照结算时间根据球类'乒乓球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 3
+    sportId: 'sr:sport:20'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 2
+    sportId: 'sr:sport:20'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照赛事时间根据球类'乒乓球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 2
+    sportId: 'sr:sport:20'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 1
+    sportId: 'sr:sport:20'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照投注时间根据球类'乒乓球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 1
+    sportId: 'sr:sport:20'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 3
+    sportId: 'sr:sport:3'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照结算时间根据球类'棒球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 3
+    sportId: 'sr:sport:3'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 2
+    sportId: 'sr:sport:3'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照赛事时间根据球类'棒球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 2
+    sportId: 'sr:sport:3'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 1
+    sportId: 'sr:sport:3'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照投注时间根据球类'棒球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 1
+    sportId: 'sr:sport:3'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 3
+    sportId: 'sr:sport:4'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照结算时间根据球类'冰上曲棍球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 3
+    sportId: 'sr:sport:4'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 2
+    sportId: 'sr:sport:4'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照赛事时间根据球类'冰上曲棍球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 2
+    sportId: 'sr:sport:4'
+
+- request:
+    mde_ip: https://search.betf.best
+    url: /winOrLost/order/details
+    method: POST
+  data:
+    begin: '-7'
+    end: '-1'
+    dateType: 1
+    sportId: 'sr:sport:4'
+    title: 总台-代理报表-球类报表-根据盘口查看注单详情,按照投注时间根据球类'冰上曲棍球'查询近7天数据
+  resp:
+    ctime: '-7'
+    etime: '-1'
+    dateType: 1
+    sportId: 'sr:sport:4'
+
