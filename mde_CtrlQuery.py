@@ -44,7 +44,7 @@ class CtrlIoDocs(object):
         self.ctrl_host='https://stgapi.betradar.com/v1/'
         self.head = {"acctoken": ""}
         self.session = requests.session()
-        self.api_key = 'p5cb4BenaHxKRM3kUO'
+        self.api_key = 'VgLAttYUTGLXtUeduG'
         self.dbq = DbQuery(mysql_info, mongo_info)
         self.mysql = MysqlQuery(mysql_info,mongo_info)
         self.blog = Bf_log(name='leeyang')
