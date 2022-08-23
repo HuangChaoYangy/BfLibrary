@@ -20,15 +20,19 @@ dataBase_configure = CommonFunc().get_dataBase_environment_config()
 mysql_info = dataBase_configure[0]
 mongo_info = dataBase_configure[1]
 
+# 获取基础路径配置
+url_configure = CommonFunc().get_BaseUrl_environment_config()    # 获取配置文件中后台的ip
+ip_address = url_configure[1]
+
 # 测试用例失败重跑,作用于类下面的所有用例
-# @pytest.mark.flaky(reruns=3, reruns_delay=10)
+@pytest.mark.flaky(reruns=3, reruns_delay=10)
 @allure.feature('总台-报表管理-总代盈亏(详情)')
 class Test_winLoseSimple_yaml(object):
 
     YamlFileData().get_testcase_params(csv_path=csv_url_winlose_detail, yaml_file=winlose_detail_url, new_yaml_file=winlose_detail_url_new)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=winlose_detail_url_new, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=winlose_detail_url_new, isAll=True)[0]['request']
-    @pytest.mark.skip(reason="调试代码,暂不执行")
+    # @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('报表管理-总代盈亏(详情)')
     def test_winLoseDetail(self, inBody, expData, url=url_data):
@@ -43,7 +47,7 @@ class Test_winLoseSimple_yaml(object):
 
         with allure.step(f"执行测试用例:{inBody['title']}"):
             Bf_log('winLoseDetail').info(f"----------------开始执行:{inBody['title']}------------------------")
-        url = url['mde_ip'] + url['url']
+        url = ip_address + url['url']
         with allure.step(f"请求地址 {url}"):
             Bf_log('winLoseDetail').info(f'请求地址为:{url}')
 
@@ -187,11 +191,11 @@ class Test_winLoseSimple_yaml(object):
         '''
         betType_dic = {'1':'单注', '2':'串关', '3':'复式串关'}
         odds_dic = {"1": '欧洲盘', "2": '香港盘'}
-        ip = request['mde_ip']
         url = request['url']
         method = request['method']
-        request_url = ip + url
-        token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method='post', request_url='https://search.betf.best/winOrLost/proxy/bill',
+        request_url = ip_address + url
+
+        token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method='post', request_url=ip_address + '/winOrLost/proxy/bill',
                                   request_body={"type": "", "begin": "2022-07-12", "end": "2022-07-12", "page": 1,"limit": 50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
