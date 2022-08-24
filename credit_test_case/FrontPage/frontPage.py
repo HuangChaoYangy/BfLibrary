@@ -21,8 +21,12 @@ dataBase_configure = CommonFunc().get_dataBase_environment_config()
 mysql_info = dataBase_configure[0]
 mongo_info = dataBase_configure[1]
 
+# 获取基础路径配置
+url_configure = CommonFunc().get_BaseUrl_environment_config()    # 获取配置文件中后台的ip
+ip_address = url_configure[1]
+
 # 测试用例失败重跑,作用于类下面的所有用例
-# @pytest.mark.flaky(reruns=3, reruns_delay=10)
+@pytest.mark.flaky(reruns=3, reruns_delay=10)
 @allure.feature('总台-首页')
 class Test_frontPage_yaml(object):
 
@@ -38,11 +42,11 @@ class Test_frontPage_yaml(object):
         :param expData:
         :return:
         '''
-        ip = request['mde_ip']
         url = request['url']
-        request_url = ip + url
+        request_url = ip_address + url
         request_body = {}
-        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
+        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url=ip_address + '/winOrLost/proxy/bill',
+                                                                       request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": token,
@@ -89,6 +93,7 @@ class Test_frontPage_yaml(object):
         else:
             raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actualResult)},sql为{len(expectResult)}")
 
+
     yaml_data = Yaml_data().read_yaml_file(yaml_file=f_credit_url, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=f_credit_url, isAll=True)[0]['request']
     # @pytest.mark.skip(reason="不执行该用例！！因为已经执行通过！！")
@@ -101,11 +106,11 @@ class Test_frontPage_yaml(object):
         :param expData:
         :return:
         '''
-        ip = request['mde_ip']
         url = request['url']
-        request_url = ip + url
+        request_url = ip_address + url
         request_body = {}
-        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
+        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url=ip_address + '/winOrLost/proxy/bill',
+                                                                       request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": token,
@@ -151,11 +156,11 @@ class Test_frontPage_yaml(object):
         :param expData:
         :return:
         '''
-        ip = request['mde_ip']
         url = request['url']
-        request_url = ip + url
+        request_url = ip_address + url
         request_body = {}
-        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
+        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url=ip_address + '/winOrLost/proxy/bill',
+                                                                       request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": token,
@@ -224,11 +229,11 @@ class Test_frontPage_yaml(object):
         :param expData:
         :return:
         '''
-        ip = request['mde_ip']
         url = request['url']
-        request_url = ip + url
+        request_url = ip_address + url
         request_body = {}
-        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
+        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url=ip_address + '/winOrLost/proxy/bill',
+                                                                       request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": token,
@@ -290,13 +295,13 @@ class Test_frontPage_yaml(object):
         :param expData:
         :return:
         '''
-        ip = request['mde_ip']
         url = request['url']
-        request_url = ip + url
+        request_url = ip_address + url
         date_str1 = MysqlQuery(mysql_info, mongo_info).get_current_time_for_client(time_type="month", day_diff=inBody["chooseTime"])
         date_str2 = MysqlQuery(mysql_info, mongo_info).get_current_time_for_client(time_type="month", day_diff=expData["chooseTime"])
         request_body = {"chooseTime": date_str1}
-        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
+        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url=ip_address + '/winOrLost/proxy/bill',
+                                                                       request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": token,
@@ -374,13 +379,13 @@ class Test_frontPage_yaml(object):
         :param expData:
         :return:
         '''
-        ip = request['mde_ip']
         url = request['url']
-        request_url = ip + url
+        request_url = ip_address + url
         date_str1 = MysqlQuery(mysql_info, mongo_info).get_current_time_for_client(time_type="month", day_diff=inBody["chooseTime"])
         date_str2 = MysqlQuery(mysql_info, mongo_info).get_current_time_for_client(time_type="month", day_diff=expData["chooseTime"])
         request_body = {"chooseTime": date_str1}
-        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
+        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url=ip_address + '/winOrLost/proxy/bill',
+                                                                       request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": token,
@@ -455,13 +460,14 @@ class Test_frontPage_yaml(object):
         :param expData:
         :return:
         '''
-        ip = request['mde_ip']
         url = request['url']
-        request_url = ip + url
+        request_url = ip_address + url
         date_str1 = MysqlQuery(mysql_info, mongo_info).get_current_time_for_client(time_type="month", day_diff=inBody["chooseTime"])
         date_str2 = MysqlQuery(mysql_info, mongo_info).get_current_time_for_client(time_type="month", day_diff=expData["chooseTime"])
         request_body = {"chooseTime": date_str1}
-        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
+
+        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url=ip_address + '/winOrLost/proxy/bill',
+                                                                       request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": token,
@@ -536,13 +542,14 @@ class Test_frontPage_yaml(object):
         :param expData:
         :return:
         '''
-        ip = request['mde_ip']
         url = request['url']
-        request_url = ip + url
+        request_url = ip_address + url
         date_str1 = MysqlQuery(mysql_info, mongo_info).get_current_time_for_client(time_type="month", day_diff=inBody["chooseTime"])
         date_str2 = MysqlQuery(mysql_info, mongo_info).get_current_time_for_client(time_type="month", day_diff=expData["chooseTime"])
         request_body = {"chooseTime": date_str1}
-        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
+
+        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url=ip_address + '/winOrLost/proxy/bill',
+                                                                       request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": token,
