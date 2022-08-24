@@ -21,6 +21,10 @@ dataBase_configure = CommonFunc().get_dataBase_environment_config()
 mysql_info = dataBase_configure[0]
 mongo_info = dataBase_configure[1]
 
+# 获取基础路径配置
+url_configure = CommonFunc().get_BaseUrl_environment_config()    # 获取配置文件中后台的ip
+ip_address = url_configure[1]
+
 # 测试用例失败重跑,作用于类下面的所有用例
 # @pytest.mark.flaky(reruns=3, reruns_delay=10)
 @allure.feature('总台-代理报表-比赛报表')
@@ -44,7 +48,7 @@ class Test_matchReport_ya:
 
         with allure.step(f"执行测试用例:{inBody['title']}"):
             Bf_log('matchReport').info(f"----------------开始执行:{inBody['title']}------------------------")
-        url = url['mde_ip'] + url['url']
+        url = ip_address + url['url']
         with allure.step(f"请求地址 {url}"):
             Bf_log('matchReport').info(f'请求地址为:{url}')
 
@@ -98,7 +102,7 @@ class Test_matchReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_match_m, yaml_file=match_url_m, new_yaml_file=match_url_new_m)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=match_url_new_m, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=match_url_new_m, isAll=True)[0]['request']
-    @pytest.mark.skip(reason="调试代码,暂不执行")
+    # @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-比赛报表-盘口详情')
     def test_matchReportMarket(self, inBody, expData, request=url_data):
@@ -108,19 +112,17 @@ class Test_matchReport_ya:
         :param sport_params: excel中的参数化数据
         :return:
         '''
-        ip = request['mde_ip']
         url = request['url']
         method = request['method']
-        request_url = ip + url
+        request_url = ip_address + url
         dateType_dic = {1: '投注时间', 2: '赛事时间', 3: '结算时间'}
         odds_dic = {"1": '欧洲盘', "2": '香港盘'}
         sport_name = {'sr:sport:1': '足球', 'sr:sport:2': '篮球', 'sr:sport:5': '网球', 'sr:sport:23': '排球',
                       'sr:sport:31': '羽毛球', 'sr:sport:20': '乒乓球', 'sr:sport:3': '棒球', 'sr:sport:4': '冰上曲棍球'}
         match_id_list = MysqlQuery(mysql_info, mongo_info).get_matchId_by_sportId_matchReport(sport_id=inBody['sportId'],
                             time=(int(inBody['begin']), int(inBody['end'])), queryDateType=inBody['dateType'])
-        # token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',
-        #                                                                   securityCode='111111', loginDiv=222333)
-        token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method='post', request_url='https://search.betf.best/winOrLost/proxy/bill',
+
+        token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method='post', request_url=ip_address + '/winOrLost/proxy/bill',
                                   request_body={"type": "", "begin": "2022-07-12", "end": "2022-07-12", "page": 1,"limit": 50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
@@ -232,7 +234,7 @@ class Test_matchReport_ya:
     YamlFileData().get_testcase_params(csv_path=csv_url_match_d, yaml_file=match_url_d, new_yaml_file=match_url_new_d)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=match_url_new_d, isAll=False)
     request_data = Yaml_data().read_yaml_file(yaml_file=match_url_new_d, isAll=True)[0]['request']
-    @pytest.mark.skip(reason="调试代码,暂不执行")
+    # @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('总台-代理报表-比赛报表-注单详情')
     def test_matchReportOrder(self, inBody, expData, request=request_data):
@@ -242,10 +244,9 @@ class Test_matchReport_ya:
         :param sport_params: excel中的参数化数据
         :return:
         '''
-        ip = request['mde_ip']
         url = request['url']
         method = request['method']
-        request_url = ip + url
+        request_url = ip_address + url
         dateType_dic = {1: '投注时间', 2: '赛事时间', 3: '结算时间'}
         odds_dic = {"1": '欧洲盘', "2": '香港盘'}
         sport_name = {'sr:sport:1': '足球', 'sr:sport:2': '篮球', 'sr:sport:5': '网球', 'sr:sport:23': '排球',
@@ -253,9 +254,8 @@ class Test_matchReport_ya:
 
         match_id_list = MysqlQuery(mysql_info, mongo_info).get_match_id_by_sportId_matchReport(sport_id=inBody['sportId'],
                         time=(inBody['begin'], inBody['end']), queryDateType=inBody['dateType'])
-        # token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',
-        #                                                                   securityCode='111111', loginDiv=222333)
-        token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method='post', request_url='https://search.betf.best/winOrLost/proxy/bill',
+
+        token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method='post', request_url=ip_address + '/winOrLost/proxy/bill',
                                   request_body={"type": "", "begin": "2022-07-12", "end": "2022-07-12", "page": 1,"limit": 50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
@@ -290,10 +290,18 @@ class Test_matchReport_ya:
                     for item in APIResult_list:
                         for detail in item['options']:
                             odds_type = odds_dic[detail['oddsType']]
+                            if item['betIpAddress'] == None:
+                                betIpAddress = ""
+                            else:
+                                betIpAddress = item['betIpAddress']
+                            if item['betIp'] == None:
+                                betIp = ""
+                            else:
+                                betIp = item['betIp']
                             actualResult.append([item['account'], item['name'], item['orderNo'], item['betTime'], item['sportType'],item['betType'],
                                                  [detail['tournamentName'], detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'], detail['marketName'],
                                                  detail['specifier'], detail['outcomeName'], detail['odds'], odds_type,detail['matchTime']],
-                                                 item['settlementTime'], item['betResult'], item['betIp'] + ' / ' + item['betIpAddress'],item['odds'], item['betAmount'], item['winOrLose'],
+                                                 item['settlementTime'], item['betResult'], betIp + ' / ' + betIpAddress,item['odds'], item['betAmount'], item['winOrLose'],
                                                  item['validAmount'], item['companyPercentage'], item['companyWinOrLose'],item['companyCommissionRatio'], item['companyCommission'],
                                                  item['companyTotal'], item['level0Percentage'], item['level0WinOrLose'],item['level0CommissionRatio'], item['level0Commission'],
                                                  item['level0Total'], item['level1Percentage'], item['level1WinOrLose'],item['level1CommissionRatio'], item['level1Commission'],
@@ -419,7 +427,7 @@ class Test_matchReport_ya:
                 f"查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
         with allure.step(f"执行测试用例:{title}"):
             Bf_log('matchReport').info(f"----------------开始执行:{title}------------------------")
-        request_url = ip + url
+        request_url = ip_address + url
         with allure.step(f"请求地址： {request_url}"):
             Bf_log('matchReport').info(f'请求地址为：{request_url}')
 
@@ -433,10 +441,18 @@ class Test_matchReport_ya:
             for item in APIResult_list:
                 for detail in item['options']:
                     odds_type = odds_dic[detail['oddsType']]
+                    if item['betIpAddress'] == None:
+                        betIpAddress = ""
+                    else:
+                        betIpAddress = item['betIpAddress']
+                    if item['betIp'] == None:
+                        betIp = ""
+                    else:
+                        betIp = item['betIp']
                     actualResult.append([item['account'], item['name'], item['orderNo'], item['betTime'], item['sportType'],item['betType'],
                          [detail['tournamentName'], detail['homeTeamName'] + ' Vs ' + detail['awayTeamName'],detail['matchType'], detail['marketName'],
                           detail['specifier'], detail['outcomeName'], detail['odds'], odds_type,detail['matchTime']],
-                         item['settlementTime'], item['betResult'],item['betIp'] + ' / ' + item['betIpAddress'], item['odds'], item['betAmount'], item['winOrLose'],
+                         item['settlementTime'], item['betResult'],betIp + ' / ' + betIpAddress, item['odds'], item['betAmount'], item['winOrLose'],
                          item['validAmount'], item['companyPercentage'], item['companyWinOrLose'],item['companyCommissionRatio'], item['companyCommission'],
                          item['companyTotal'], item['level0Percentage'], item['level0WinOrLose'],item['level0CommissionRatio'], item['level0Commission'],
                          item['level0Total'], item['level1Percentage'], item['level1WinOrLose'],item['level1CommissionRatio'], item['level1Commission'],
