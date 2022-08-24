@@ -20,8 +20,12 @@ dataBase_configure = CommonFunc().get_dataBase_environment_config()
 mysql_info = dataBase_configure[0]
 mongo_info = dataBase_configure[1]
 
+# 获取基础路径配置
+url_configure = CommonFunc().get_BaseUrl_environment_config()    # 获取配置文件中后台的ip
+ip_address = url_configure[1]
+
 # 测试用例失败重跑,作用于类下面的所有用例
-# @pytest.mark.flaky(reruns=3, reruns_delay=10)
+@pytest.mark.flaky(reruns=3, reruns_delay=10)
 @allure.feature('总台-报表管理-球类盈亏')
 class Test_clientReport_yaml(object):
 
@@ -43,7 +47,7 @@ class Test_clientReport_yaml(object):
         actualResult = CreditBackGround(mysql_info,mongo_info).credit_sportsReport(inData=inBody,queryType=1)
         with allure.step(f"执行测试用例:{inBody['title']}"):
             Bf_log('sportsReport').info(f"----------------开始执行:{inBody['title']}------------------------")
-        url = url['mde_ip'] + url['url']
+        url = ip_address + url['url']
         with allure.step(f"请求地址 {url}"):
             Bf_log('sportsReport').info(f'请求地址为:{url}')
 
@@ -51,7 +55,7 @@ class Test_clientReport_yaml(object):
         with allure.step(f'查询SQL:{sql}'):
             Bf_log('sportsReport').info(f'执行sql:{sql}')
         expectResult = MysqlQuery(mysql_info, mongo_info).credit_sportsReport_query(expData=expData, queryType=1)[0]
-        # print(expectResult)
+
         if len(actualResult) == len(expectResult):
             if actualResult != [] or expectResult != []:
                 for index1, item1 in enumerate(actualResult):
@@ -112,7 +116,7 @@ class Test_clientReport_yaml(object):
         actualResult = CreditBackGround(mysql_info,mongo_info).credit_sportsReport(inData=inBody,queryType=2)
         with allure.step(f"执行测试用例:{inBody['title']}"):
             Bf_log('sportsReport').info(f"----------------开始执行:{inBody['title']}------------------------")
-        url = url['mde_ip'] + url['url']
+        url = ip_address + url['url']
         with allure.step(f"请求地址 {url}"):
             Bf_log('sportsReport').info(f'请求地址为:{url}')
 
@@ -174,7 +178,7 @@ class Test_clientReport_yaml(object):
         actualResult = CreditBackGround(mysql_info,mongo_info).credit_sportsReport(inData=inBody,queryType=3)
         with allure.step(f"执行测试用例:{inBody['title']}"):
             Bf_log('sportsReport').info(f"----------------开始执行:{inBody['title']}------------------------")
-        url = url['mde_ip'] + url['url']
+        url = ip_address + url['url']
         with allure.step(f"请求地址 {url}"):
             Bf_log('sportsReport').info(f'请求地址为:{url}')
 
