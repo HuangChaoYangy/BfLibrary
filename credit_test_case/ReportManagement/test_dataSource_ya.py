@@ -21,15 +21,19 @@ dataBase_configure = CommonFunc().get_dataBase_environment_config()
 mysql_info = dataBase_configure[0]
 mongo_info = dataBase_configure[1]
 
+# 获取基础路径配置
+url_configure = CommonFunc().get_BaseUrl_environment_config()    # 获取配置文件中后台的ip
+ip_address = url_configure[1]
+
 # 测试用例失败重跑,作用于类下面的所有用例
-# @pytest.mark.flaky(reruns=3, reruns_delay=10)
+@pytest.mark.flaky(reruns=3, reruns_delay=10)
 @allure.feature('总台-报表管理-数据源对账报表')
 class Test_dataSource_yaml(object):
 
     YamlFileData().get_testcase_params(csv_path=csv_url_data, yaml_file=data_source_url, new_yaml_file=data_source_url_new)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=data_source_url_new, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=data_source_url_new, isAll=True)[0]['request']
-    @pytest.mark.skip(reason="调试代码,暂不执行")
+    # @pytest.mark.skip(reason="调试代码,暂不执行")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('数据源对账报表-列表详情')
     def test_dataSource(self, inBody, expData, url=url_data):
@@ -44,7 +48,7 @@ class Test_dataSource_yaml(object):
         actualResult = CreditBackGround(mysql_info,mongo_info).credit_dataSourceReport(inData=inBody,queryType=1)
         with allure.step(f"执行测试用例:{inBody['title']}"):
             Bf_log('dataSource').info(f"----------------开始执行:{inBody['title']}------------------------")
-        url = url['mde_ip'] + url['url']
+        url = ip_address + url['url']
         with allure.step(f"请求地址 {url}"):
             Bf_log('dataSource').info(f'请求地址为:{url}')
 
@@ -106,7 +110,7 @@ class Test_dataSource_yaml(object):
     YamlFileData().get_testcase_params(csv_path=csv_url_data_t, yaml_file=data_source_url_t, new_yaml_file=data_source_url_new_t)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=data_source_url_new_t, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=data_source_url_new_t, isAll=True)[0]['request']
-    @pytest.mark.skip(reason="不执行该用例！！因为已经执行通过！！")
+    # @pytest.mark.skip(reason="不执行该用例！！因为已经执行通过！！")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('数据源对账报表-底部总计')
     def test_dataSourceTotal(self, inBody,expData, url=url_data):
@@ -121,7 +125,7 @@ class Test_dataSource_yaml(object):
         actualResult = CreditBackGround(mysql_info,mongo_info).credit_dataSourceReport(inData=inBody,queryType=2)
         with allure.step(f"执行测试用例:{inBody['title']}"):
             Bf_log('dataSource').info(f"----------------开始执行:{inBody['title']}------------------------")
-        url = url['mde_ip'] + url['url']
+        url = ip_address + url['url']
         with allure.step(f"请求地址 {url}"):
             Bf_log('dataSource').info(f'请求地址为:{url}')
 
@@ -172,7 +176,7 @@ class Test_dataSource_yaml(object):
     YamlFileData().get_testcase_params(csv_path=csv_url_data_b, yaml_file=data_source_url_b, new_yaml_file=data_source_url_new_b)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=data_source_url_new_b, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=data_source_url_new_b, isAll=True)[0]['request']
-    @pytest.mark.skip(reason="不执行该用例！！因为已经执行通过！！")
+    # @pytest.mark.skip(reason="不执行该用例！！因为已经执行通过！！")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('数据源对账报表-顶部banner合计')
     def test_dataSourceBanner(self, inBody,expData, url=url_data):
@@ -187,7 +191,7 @@ class Test_dataSource_yaml(object):
         actualResult = CreditBackGround(mysql_info,mongo_info).credit_dataSourceReport(inData=inBody,queryType=3)
         with allure.step(f"执行测试用例:{inBody['title']}"):
             Bf_log('dataSource').info(f"----------------开始执行:{inBody['title']}------------------------")
-        url = url['mde_ip'] + url['url']
+        url = ip_address + url['url']
         with allure.step(f"请求地址 {url}"):
             Bf_log('dataSource').info(f'请求地址为:{url}')
 
@@ -235,23 +239,22 @@ class Test_dataSource_yaml(object):
                 raise AssertionError(f"接口查询的结果与数据库查询长度不一致!接口为{len(actualResult)},sql为{len(expectResult)}")
 
 
-    # YamlFileData().get_testcase_params(csv_path=csv_url_data_b, yaml_file=data_source_url_b, new_yaml_file=data_source_url_new_b)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=data_source_url_d, isAll=False)
     url_data = Yaml_data().read_yaml_file(yaml_file=data_source_url_d, isAll=True)[0]['request']
-    # @pytest.mark.skip(reason="不执行该用例！！因为已经执行通过！！")
+    @pytest.mark.skip(reason="不执行该用例！！因为已经执行通过！！")
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     @allure.story('数据源对账报表-查看注单详情')
-    def test_dataSourceBanner(self, inBody, expData, request=url_data):
+    def test_dataSourceOrder(self, inBody, expData, request=url_data):
         '''
         管理后台-数据源对账报表-查看注单详情
         :param inBody:
         :param expData:
         :return:
         '''
-        ip = request['mde_ip']
         url = request['url']
-        request_url = ip + url
-        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
+        request_url = ip_address + url
+        token = CreditBackGround(mysql_info,mongo_info).get_user_token(request_method='post', request_url=ip_address + '/winOrLost/proxy/bill',
+                                                                       request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
                 "Account_Login_Identify": token,

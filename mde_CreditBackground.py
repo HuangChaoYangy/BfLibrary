@@ -3216,8 +3216,8 @@ class CreditBackGround(object):
         :param queryType: 1 列表 / 2 底部总计 /3 顶部总计
         :return:
         '''
-        login_loken = self.get_user_token(request_method='post', request_url='https://mdesearch.betf.best/winOrLost/proxy/bill', request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
-        # login_loken = self.login_background(uname='Liyang01', password='Bfty123456', securityCode="", loginDiv=222333)
+        login_loken = self.get_user_token(request_method='post', request_url=ip_address + '/winOrLost/proxy/bill',
+                                          request_body={"type":"","begin":"2022-07-12","end":"2022-07-12","page":1,"limit":50})
 
         resp = inData
         if resp['betStartTime']:
@@ -3289,7 +3289,11 @@ class CreditBackGround(object):
                         data = rsp.json()['data']
                         orderTotal_list.append([data['betAmount'],data['accountFinalWinOrLose'],data['handicapFinalWinOrLose']])
 
-                    return orderTotal_list
+                        if orderTotal_list == [[None, None, None]]:
+                            orderTotal = []
+                        else:
+                            orderTotal = orderTotal_list
+                    return orderTotal
 
             elif queryType == 3:
                 data = {"betType":betType, "orderNo":orderNo, "settlementResult":result, "sportId":sportId, "status":status, "userName":userName,
