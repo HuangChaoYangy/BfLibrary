@@ -21,6 +21,10 @@ dataBase_configure = CommonFunc().get_dataBase_environment_config()
 mysql_info = dataBase_configure[0]
 mongo_info = dataBase_configure[1]
 
+# 获取基础路径配置
+url_configure = CommonFunc().get_BaseUrl_environment_config()    # 获取配置文件中后台的ip
+ip_address = url_configure[1]
+
 # 测试用例失败重跑,作用于类下面的所有用例
 # @pytest.mark.flaky(reruns=3, reruns_delay=10)
 @allure.feature('总台-代理报表-混合过关')
@@ -44,7 +48,7 @@ class Test_multitermReport:
 
         with allure.step(f"执行测试用例:{inBody['title']}"):
             Bf_log('multitermReport').info(f"----------------开始执行:{inBody['title']}------------------------")
-        url = url['mde_ip'] + url['url']
+        url = ip_address + url['url']
         with allure.step(f"请求地址 {url}"):
             Bf_log('multitermReport').info(f'请求地址为:{url}')
 
@@ -107,7 +111,6 @@ class Test_multitermReport:
         :param sport_params: excel中的参数化数据
         :return:
         '''
-        ip = request['mde_ip']
         url = request['url']
         method = request['method']
         dateType_dic = {1: '投注时间', 2: '赛事时间', 3: '结算时间'}
@@ -123,9 +126,7 @@ class Test_multitermReport:
         account_id_list = MysqlQuery(mysql_info, mongo_info).get_account_id_by_matchId_multitermReport(account_id=inBody['account'], sport_id=inBody['sportId'],
             time=(inBody['begin'], inBody['end']), queryDateType=inBody['dateType'])
 
-        # token = CreditBackGround(mysql_info, mongo_info).login_background(uname='Liyang01', password='Bfty123456',
-        #                                                                   securityCode='111111', loginDiv=222333)
-        token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method='post', request_url='https://search.betf.best/winOrLost/proxy/bill',
+        token = CreditBackGround(mysql_info, mongo_info).get_user_token(request_method='post', request_url=ip_address + '/winOrLost/proxy/bill',
                                   request_body={"type": "", "begin": "2022-07-12", "end": "2022-07-12", "page": 1,"limit": 50})
         head = {"LoginDiv": "222333",
                 "Accept-Language": "zh-CN,zh;q=0.9",
@@ -142,7 +143,7 @@ class Test_multitermReport:
             title = f"根据会员账号：'{account}', 体育类型'{sport_name_dic[inBody['sportId']]}', 查看注单详情, 查询日期：'{begin} -- {end}', 日期类型：{dateType_dic[inBody['dateType']]}"
             with allure.step(f"执行测试用例:{title}"):
                 Bf_log('multitermOrder_d').info(f"----------------开始执行:{title}------------------------")
-            request_url = ip + url
+            request_url = ip_address + url
             with allure.step(f"请求地址： {request_url}"):
                 Bf_log('multitermOrder_d').info(f'请求地址为：{request_url}')
 
@@ -277,5 +278,5 @@ class Test_multitermReport:
 
 if __name__ == "__main__":
 
-    pytest.main(["test_multiterm_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','-n=auto','--clean-alluredir'])  #  '--clean-alluredir', '-n=4'
+    pytest.main(["test_multiterm_ya.py",'-vs', '-q', '--alluredir', '../report/tmp','--clean-alluredir'])  #  '--clean-alluredir', '-n=4'
     os.system("allure serve ../report/tmp")
