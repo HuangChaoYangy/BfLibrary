@@ -21,6 +21,10 @@ dataBase_configure = CommonFunc().get_dataBase_environment_config()
 mysql_info = dataBase_configure[0]
 mongo_info = dataBase_configure[1]
 
+# 获取基础路径配置
+url_configure = CommonFunc().get_BaseUrl_environment_config()    # 获取配置文件中后台的ip
+ip_address = url_configure[1]
+
 # 测试用例失败重跑,作用于类下面的所有用例
 # @pytest.mark.flaky(reruns=3, reruns_delay=10)
 @allure.feature('总台-总投注')
@@ -39,10 +43,9 @@ class Test_mainBetReport:
         :param sport_params: excel中的参数化数据
         :return:
         '''
-        ip = request['mde_ip']
         url = request['url']
         method = request['method']
-        request_url = ip + url
+        request_url = ip_address + url
         producer_dic = {"1": "滚球", "3": ""}
         sport_id_dic = {"足球": "sr:sport:1", "篮球": "sr:sport:2", "网球": "sr:sport:5", "排球": "sr:sport:23", "羽毛球": "sr:sport:31", "乒乓球": "sr:sport:20",
                         "冰球": "sr:sport:4", "棒球": "sr:sport:3"}
@@ -139,7 +142,6 @@ class Test_mainBetReport:
 
     YamlFileData().get_testcase_params(csv_path=csv_url_mainBet_d, yaml_file=mainBet_url_d, new_yaml_file=mainBet_url_new_d)
     yaml_data = Yaml_data().read_yaml_file(yaml_file=mainBet_url_new_d, isAll=False)
-    # print(yaml_data)
     url_data = Yaml_data().read_yaml_file(yaml_file=mainBet_url_new_d, isAll=True)[0]['request']
     @pytest.mark.parametrize('inBody, expData', yaml_data)
     # @pytest.mark.skip(reason='调试代码,暂不执行')
@@ -151,10 +153,9 @@ class Test_mainBetReport:
         :param sport_params: excel中的参数化数据
         :return:
         '''
-        ip = request['mde_ip']
         url = request['url']
         request_method = request['method']
-        request_url = ip + url
+        request_url = ip_address + url
         sportName_dic = {"sr:sport:1": "足球", "sr:sport:2": "篮球", "sr:sport:5": "网球", "sr:sport:23": "排球", "sr:sport:31": "羽毛球", "sr:sport:20": "乒乓球",
                         "sr:sport:4": "冰上曲棍球", "sr:sport:3": "棒球"}
         # sport_list = MysqlQuery(mysql_info, mongo_info).get_sportName_mainBetReport()
@@ -218,16 +219,28 @@ class Test_mainBetReport:
                         bet_score = None
                     else:
                         bet_score = item['betScore']
-                    actualResult.append([item['userId'] + '/' + item['loginAccount'], item['orderNo'], item['betTime'],item['sportName'], item['betType'],
+                    if item['betIp'] == None:
+                        betIp = ""
+                    else:
+                        betIp = item['betIp']
+                    if item['ipAddress'] == None:
+                        betIpAddress = ""
+                    else:
+                        betIpAddress = item['ipAddress']
+                    if item['loginAccount'] == None:
+                        loginAccount = ""
+                    else:
+                        loginAccount = item['loginAccount']
+                    actualResult.append([item['userId'] + '/' + loginAccount, item['orderNo'], item['betTime'],item['sportName'], item['betType'],
                                          item['tournamentName'], item['homeTeamName'] + ' Vs ' + item['awayTeamName'],producer_dic[item['producer']],
                                          item['marketName'], specifier, item['outComeName'], item['odds'],bet_score, odds_dic[item['oddsType']], item['matchStartTime'],
-                                         item['orderResultName'], item['betIp'] + ' / ' + item['ipAddress'],item['betAmount'], item['companyActualPercentage'],
+                                         item['orderResultName'], betIp + ' / ' + betIpAddress,item['betAmount'], item['companyActualPercentage'],
                                          item['level0ActualPercentage'], item['level0RetreatProportion'],item['level1ActualPercentage'], item['level1RetreatProportion'],
                                          item['level2ActualPercentage'], item['level2RetreatProportion'],item['level3ActualPercentage'], item['level3RetreatProportion'],
                                          item['userRetreatProportion']])
 
             # 执行SQL,SQL写法f{"参数"}
-            sql_str = f"SELECT CONCAT(d.account,'/',d.login_account) as '账号/登入账号',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id= 1 then '足球' " \
+            sql_str = f"SELECT CONCAT(d.account,'/',ifnull(d.login_account,'')) as '账号/登入账号',a.order_no as '注单号',a.create_time as '投注时间',(CASE WHEN a.sport_category_id= 1 then '足球' " \
                       f"WHEN a.sport_category_id = 2 THEN '篮球' WHEN a.sport_category_id = 3 THEN '网球' WHEN a.sport_category_id = 4 THEN '排球' WHEN a.sport_category_id = 5 THEN " \
                       f"'羽毛球' WHEN a.sport_category_id = 6 THEN '乒乓球' WHEN a.sport_category_id = 7 THEN '棒球' WHEN a.sport_category_id = 100 THEN '冰球' END)as '球类',(case " \
                       f"when a.bet_type=1 then '单注' when a.bet_type=2 then '串关' when a.bet_type=3 then '复式串关' end ) as '注单类型',tournament_name '联赛名称',CONCAT( home_team_name," \
