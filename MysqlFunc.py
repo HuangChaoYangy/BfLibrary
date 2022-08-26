@@ -7499,7 +7499,7 @@ class MysqlQuery(MysqlFunc):
                 item[1] = match_time
                 if item[n] == " " or item[n] == "":
                     item[n] = 0
-
+        print(new_list)
         # 将字符串转成数字
         match_info_list = []
         for index1, item in enumerate(new_list):
@@ -8688,7 +8688,7 @@ class MysqlQuery(MysqlFunc):
 
         database_name = "bfty_credit"
         sql_str = f"SELECT CONCAT(d.account,'/',IFNULL(a.login_account,'')) '账号/登入账号',a.order_no '注单号',a.create_time '投注时间',tournament_name '联赛名称',CONCAT( home_team_name, ' Vs '," \
-                  f" away_team_name ) '赛事名称',IF(is_live=3,'早盘','滚球盘') '赛事类型',market_name  '盘口名称',specifier '亚盘口',outcome_name  '投注项名称',cast(credit_odds as char) " \
+                  f" away_team_name ) '赛事名称',IF(is_live=3,'早盘','滚球盘') '赛事类型',market_name  '盘口名称',hcp_for_the_rest '亚盘口',outcome_name  '投注项名称',cast(credit_odds as char) " \
                   f"'赔率',match_time '赛事时间',if(odds_type=1,'欧洲盘','香港盘') '盘口类型',bet_amount '投注金额',CONCAT(bet_ip,' / ',ip_address) 'IP地址' FROM o_account_order a JOIN " \
                   f"o_account_order_match b ON a.order_no = b.order_no JOIN o_account_order_match_update c ON (a.order_no=c.order_no AND b.match_id=c.match_id) JOIN u_user d ON " \
                   f"a.user_id=d.id WHERE a.`status`=3 AND DATE_FORMAT(award_time,'%Y-%m-%d') BETWEEN '{ctime}' AND '{etime}' {account} ORDER BY a.create_time DESC"
@@ -8703,7 +8703,11 @@ class MysqlQuery(MysqlFunc):
             betTime = bet_time.strftime("%Y-%m-%d %H:%M:%S")
             match_time = item[10]
             matchTime = match_time.strftime("%Y-%m-%d %H:%M:%S")
-            cancelledOrder.append([item[0], item[1], betTime, [item[3], item[4], item[5], item[6], item[7], item[8],
+            if item[7] == None:
+                specifier = ""
+            else:
+                specifier = item[7]
+            cancelledOrder.append([item[0], item[1], betTime, [item[3], item[4], item[5], item[6], specifier, item[8],
                                   float(item[9]), matchTime, item[11]], float(odds), float(item[12]), item[13]])
 
         expectResult = self.cf.merge_compelx_01(new_lList=cancelledOrder)
@@ -10564,7 +10568,7 @@ if __name__ == "__main__":
     # data = mysql.get_order_num_by_mainBetReport()
     # data = mysql.get_matchId_by_sportName_mainBetReport(sport_name='足球')
     # data = mysql.get_outcomeId_by_marketId_mainBetReport(sport_name='足球', match_id='sr:match:32225939', market_id='16')
-    # data = mysql.get_matchdata_mainBetReport(sportName='足球')
+    data = mysql.get_matchdata_mainBetReport(sportName='足球')
     # data = mysql.get_mainBetReport_query(expData={'sportName':'足球'})
     # data = mysql.get_sportName_mainBetReport()
 
@@ -10573,7 +10577,7 @@ if __name__ == "__main__":
 
 
 
-    data = mysql.query_client_betting_record_sql(expData={"dateParams": (-30, 0), "sportName": "", "offset": -1, "account": "a01000000101"}, query_type="unsettle")   # 客户端-投注记录
+    # data = mysql.query_client_betting_record_sql(expData={"dateParams": (-30, 0), "sportName": "", "offset": -1, "account": "a01000000101"}, query_type="unsettle")   # 客户端-投注记录
 
 
 

@@ -241,6 +241,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="\credit_data_new\TotalBet\mainBet.csv">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="\credit_data_new\TotalBet\mainBet_d.csv">
           <value>
             <Attribute>
