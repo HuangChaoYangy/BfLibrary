@@ -976,3 +976,12 @@ for key,value in tet_dic.items():
         value=float(value)
         print(value)
 print(tet_dic)
+
+
+sting = "艾沙赫 (+1.0)"
+da = re.findall("[-+]?[0-9]*\.?[0-9]+", sting)[0]
+print(da)
+
+sting1= "hcp=1.75"
+da1 = re.search("[-+]?[0-9]*\.?[0-9]+",sting1)
+print(da1.group())

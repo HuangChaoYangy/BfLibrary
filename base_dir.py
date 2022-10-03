@@ -7,7 +7,8 @@
 import os
 # 项目的路径
 # base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-base_dir = 'D:\project\BfLibrary'
+# base_dir = 'D:\project\BfLibrary'
+base_dir = r'D:\testCode\BfLibrary'
 # 日志地址
 log_dir = os.path.join(base_dir,'log')
 # print(base_dir)
@@ -15,7 +16,8 @@ log_dir = os.path.join(base_dir,'log')
 base_conf_dir =os.path.join(base_dir,'bfty_config','base_conf.ini')
 
 #用例excel 地址
-excel_dir = r'D:\project\BfLibrary'
+# excel_dir = r'D:\project\BfLibrary'
+excel_dir = r'D:\testCode\BfLibrary'
 owner_backer_path  = os.path.join(excel_dir,'test_data','代理报表-测试用例.xlsx')
 agent_management_path  = os.path.join(excel_dir,'test_data','代理管理测试用例.xlsx')
 main_station_report_path  = os.path.join(excel_dir,'test_data','报表管理测试用例.xlsx')

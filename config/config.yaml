@@ -5,7 +5,7 @@
 # @Software: PyCharm
 
 -
-  environment: "extranet"
+  environment: "mde"
 
 -
 # 测试环境mysql配置
