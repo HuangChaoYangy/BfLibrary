@@ -4571,7 +4571,7 @@ if __name__ == "__main__":
     # data = bg.addAgent3(agent_token=login_loken, account='a16000000', name='test', password='Bfty123456',securityCode='Agent0', credits=1000000, accountStatus=0)  # 新增登3
 
     # 后台注册会员
-    login_loken = "eyJ0eXiOiJIUzI1NiJ9QzMjg0NDkiLCJleHAiOjE2NjUzOTI2NTcsInVzZXJuYW1lIjoiYTAxMDAwMDAxIn0.TGRaANh3H7UjJBzBOrq2w6l7vFrm7o7tPPXq1iaqa0U"
+    login_loken = "eyJ0eXiOiJIUzIMDAwMDAxIn0.TGRaANh3H7UjJBzBOrq2w6l7vFrm7o7tPPXq1iaqa0U"
     for number in range(122,141):
         account = "a01000001" + str(number)           # "a01000000":  登3账号
         name = "user" + str(number)
