@@ -4477,19 +4477,20 @@ class CreditBackGround(object):
                 "Account_Login_Identify": agent_token,
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
 
-        data = {"account":account,"creditsAmount":credits,"status":accountStatus,"exchangeRate":None,"handicapType":handicapType,"name":name,"password":password,"parentProfitLossPercentage":
-            18,"userConfigurationParams":[{"handicapCategoryId":"1","retreatProportion":15,"singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"1"},
-                                          {"handicapCategoryId":"2","retreatProportion":16,"singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"1"},
-                                          {"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"1"},
-                                          {"handicapCategoryId":"100","retreatProportion":"","singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"1"},
-                                          {"handicapCategoryId":"1","retreatProportion":14,"singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"2"},
-                                          {"handicapCategoryId":"2","retreatProportion":16,"singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"2"},
-                                          {"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"2"},
-                                          {"handicapCategoryId":"100","retreatProportion":"","singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"2"},
-                                          {"handicapCategoryId":"1","retreatProportion":15,"singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"100"},
-                                          {"handicapCategoryId":"2","retreatProportion":14,"singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"100"},
-                                          {"handicapCategoryId":"3","retreatProportion":"","singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"100"},
-                                          {"handicapCategoryId":"100","retreatProportion":"","singleBetLimit":100000,"singleGameBetLimit":10000000,"sportCategoryId":"100"}]}
+        data = {"account":account,"creditsAmount":credits,"status":accountStatus,"exchangeRate":None,"handicapType":handicapType,"name":name,
+                "password":password,"parentProfitLossPercentage":17,"userConfigurationParams":[{"handicapCategoryId":"1","retreatProportion":17,
+                "singleBetLimit":10000,"singleGameBetLimit":1000000,"sportCategoryId":"1"},{"handicapCategoryId":"2","retreatProportion":17,
+                "singleBetLimit":10000,"singleGameBetLimit":1000000,"sportCategoryId":"1"},{"handicapCategoryId":"3","retreatProportion":"",
+                "singleBetLimit":10000,"singleGameBetLimit":1000000,"sportCategoryId":"1"},{"handicapCategoryId":"100","retreatProportion":"",
+                "singleBetLimit":10000,"singleGameBetLimit":1000000,"sportCategoryId":"1"},{"handicapCategoryId":"1","retreatProportion":17,
+                "singleBetLimit":10000,"singleGameBetLimit":1000000,"sportCategoryId":"2"},{"handicapCategoryId":"2","retreatProportion":17,
+                "singleBetLimit":10000,"singleGameBetLimit":1000000,"sportCategoryId":"2"},{"handicapCategoryId":"3","retreatProportion":"",
+                "singleBetLimit":10000,"singleGameBetLimit":1000000,"sportCategoryId":"2"},{"handicapCategoryId":"100","retreatProportion":"",
+                "singleBetLimit":10000,"singleGameBetLimit":1000000,"sportCategoryId":"2"},{"handicapCategoryId":"1","retreatProportion":17,
+                "singleBetLimit":10000,"singleGameBetLimit":1000000,"sportCategoryId":"100"},{"handicapCategoryId":"2","retreatProportion":17,
+                "singleBetLimit":10000,"singleGameBetLimit":1000000,"sportCategoryId":"100"},{"handicapCategoryId":"3","retreatProportion":"",
+                "singleBetLimit":10000,"singleGameBetLimit":1000000,"sportCategoryId":"100"},{"handicapCategoryId":"100","retreatProportion":"",
+                "singleBetLimit":10000,"singleGameBetLimit":1000000,"sportCategoryId":"100"}]}
         rsp = self.session.post(url=url, headers=head, json=data)
 
         if rsp.json()['message'] == 'OK':
@@ -4549,7 +4550,7 @@ if __name__ == "__main__":
     # data = bg.credit_winLose_detail(inData={"account": "", "parentId":"a0b1b2b3", "userName":"","begin": "-7", "end":"-1"})
     # data = bg.credit_sportReport(inData={"begin":"-7", "end":"-1", "sportName":"网球","queryDateType":3 },queryType='order')
     # data = bg.credit_multitermReport(inData={"begin":"-7", "end":"-1", "sportName":'',"searchAccount":'', "queryDateType":3 })[0]
-    data = bg.credit_cancelledOrder(inData={"begin": "-7", "end": "-1", "account": ''})
+    # data = bg.credit_cancelledOrder(inData={"begin": "-7", "end": "-1", "account": ''})
     # print(data)
     # data = bg.credit_bill(inData={"begin": "-6", "end": "-6"},query_type=2)
     # data_report = bg.credit_dataSourceReport_query(Authorization=login_loken, queryType=1)   # 总台-报表管理-数据源对账报表
@@ -4570,12 +4571,12 @@ if __name__ == "__main__":
     # data = bg.addAgent3(agent_token=login_loken, account='a16000000', name='test', password='Bfty123456',securityCode='Agent0', credits=1000000, accountStatus=0)  # 新增登3
 
     # 后台注册会员
-    # login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE1NTc1NjM2NjU3MjIzMTA2NTciLCJleHAiOjE2NjAxOTQzODcsInVzZXJuYW1lIjoiYTAxMDEwMTAxIn0.OGwHFko6tQW8j2TU91Zyy4es6LTFT9QzjxT8ZbAD_eU"
-    # for number in range(100,121):
-    #     account = "a01010101" + str(number)           # "a01000000":  登3账号
-    #     name = "user" + str(number)
-    #     handicaptype = random.choice(['A','B','C','D'])
-    #     data = bg.add_user(agent_token=login_loken, account=account, name=name, password='Bfty123456', credits=10000, accountStatus='0',handicapType=handicaptype)  # 登3账号新增会员
+    login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE1NzkzNjY4OTAwMDQzMjg0NDkiLCJleHAiOjE2NjUzOTI2NTcsInVzZXJuYW1lIjoiYTAxMDAwMDAxIn0.TGRaANh3H7UjJBzBOrq2w6l7vFrm7o7tPPXq1iaqa0U"
+    for number in range(122,141):
+        account = "a01000001" + str(number)           # "a01000000":  登3账号
+        name = "user" + str(number)
+        handicaptype = random.choice(['A','B','C','D'])
+        data = bg.add_user(agent_token=login_loken, account=account, name=name, password='Bfty123456', credits=100000, accountStatus='0',handicapType=handicaptype)  # 登3账号新增会员
 
     # changeRecord = bg.credit_userAccountChangeRecord_query(Authorization=login_loken)
     # AgentLine = bg.credit_agentLineManagementList(Authorization=login_loken)
