@@ -25,7 +25,7 @@ url_configure = CommonFunc().get_BaseUrl_environment_config()    # 获取配置�
 ip_address = url_configure[1]
 
 # 测试用例失败重跑,作用于类下面的所有用例
-@pytest.mark.flaky(reruns=3, reruns_delay=10)
+# @pytest.mark.flaky(reruns=3, reruns_delay=10)
 @allure.feature('总台-总代结账')
 class Test_uncheckList:
 
