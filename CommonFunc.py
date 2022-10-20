@@ -1122,6 +1122,115 @@ class CommonFunc(object):
 
         return client_url,backend_url
 
+    def up_rounding(self, num):
+        """
+        小数向上取整
+        :param num:
+        :return:
+        """
+        if '.' in str(num):
+            return int(str(num).split('.')[0]) + 1
+        else:
+            return int(num)
+
+
+class round(object):
+
+    #返回浮点数类型的值
+    def roundFloat(self, value, digit):
+        result = str(value)
+        if (float(value) < 0):
+            result = result[1:]
+            if (result != ''):
+                indexDec = result.find('.')
+                if (indexDec > 0):
+                    decimal = result[indexDec + 1:]
+                    decimalCount = len(decimal)
+                    if (decimalCount > digit):
+                        xiaoshu = result[indexDec + digit + 1]  # 第digit+1位小数
+                        if (int(xiaoshu) > 4):
+                            result = str(float(value) * -1 + pow(10, digit * -1))
+                            # 存在进位的可能，小数点会移位
+                            indexDec = result.find('.')
+                            result = result[:indexDec + digit + 1]
+                        else:
+                            result = result[:indexDec + digit + 1]
+                    else:
+                        lens = digit - len(result[indexDec:]) + 1
+                        for i in range(lens):
+                            result += '0'
+            result = float(result) * -1
+            return result
+        else:
+            if (result != ''):
+                indexDec = result.find('.')
+                if (indexDec > 0):
+                    decimal = result[indexDec + 1:]
+                    decimalCount = len(decimal)
+                    if (decimalCount > digit):
+                        xiaoshu = result[indexDec + digit + 1]  # 第digit+1位小数
+                        if (int(xiaoshu) > 4):
+                            result = str(float(value) + pow(10, digit * -1))
+                            # 存在进位的可能，小数点会移位
+                            indexDec = result.find('.')
+                            result = result[:indexDec + digit + 1]
+                        else:
+                            result = result[:indexDec + digit + 1]
+                    else:
+                        lens = digit - len(result[indexDec:]) + 1
+                        for i in range(lens):
+                            result += '0'
+            return float(result)
+
+    #返回字符串类型的值
+    def roundStr(self,value, digit):
+        result = str(value)
+        if (float(value) < 0):
+            result = result[1:]
+            if (result != ''):
+                indexDec = result.find('.')
+                if (indexDec > 0):
+                    decimal = result[indexDec + 1:]
+                    decimalCount = len(decimal)
+                    if (decimalCount > digit):
+                        xiaoshu = result[indexDec + digit + 1]  # 第digit+1位小数
+                        if (int(xiaoshu) > 4):
+                            result = str(float(value) * -1 + pow(10, digit * -1))
+                            # 存在进位的可能，小数点会移位
+                            indexDec = result.find('.')
+                            result = result[:indexDec + digit + 1]
+                        else:
+                            result = result[:indexDec + digit + 1]
+                    else:
+                        lens = digit - len(result[indexDec:]) + 1
+                        for i in range(lens):
+                            result += '0'
+            # result = float(result) * -1
+            return '-'+result
+        else:
+            if (result != ''):
+                indexDec = result.find('.')
+                if (indexDec > 0):
+                    decimal = result[indexDec + 1:]
+                    decimalCount = len(decimal)
+                    if (decimalCount > digit):
+                        xiaoshu = result[indexDec + digit + 1]  # 第digit+1位小数
+                        if (int(xiaoshu) > 4):
+                            dg=pow(10, digit * -1)
+                            result = str(float(value) +dg )
+                            # 存在进位的可能，小数点会移位
+                            indexDec = result.find('.')
+                            result = result[:indexDec + digit + 1]
+                        else:
+                            result = result[:indexDec + digit + 1]
+                    else:
+                        lens = digit - len(result[indexDec:]) + 1
+                        for i in range(lens):
+                            result += '0'
+            return result
+
+
+
 
 
 if __name__ == "__main__":
@@ -1153,8 +1262,8 @@ if __name__ == "__main__":
     # cf.timer_APScheduler(function=cf.job, trigger='interval', stime='2022-06-08 15:00:00', etime='2022-06-08 18:40:00',args=['text1'])
     # print(cf.get_current_time_for_client(time_type="month_days", day_diff=20))
     # mysql_info,mongo_info = cf.get_dataBase_environment_config()
-    data = cf.get_BaseUrl_environment_config()
-    print(data)
+    # data = cf.get_BaseUrl_environment_config()
+    # print(data)
     # int_data = [['足球', 4398.0, 2665.7, 0.74, 1232.75, 0.02, 1232.77, -254.53, 0.26, -254.27, -237.94, 1.05, -236.89, -246.52, -0.09, -246.61, -246.52, -0.5, -247.02, -247.24, -0.74, -247.98], ['冰球', 1318.0, 1015.93, 2.08, 532.7, 0.0, 532.7, -129.48, 0.69, -128.79, -106.47, 3.56, -102.91, -106.47, -0.35, -106.82, -106.47, -1.82, -108.29, -83.81, -2.08, -85.89], ['乒乓球', 2992.0, 2771.65, 1.0, 780.35, 0.11, 780.46, -177.34, 2.11, -175.23, -17.87, 0.0, -17.87, -181.37, -0.69, -182.06, -206.67, -0.53, -207.2, -197.1, -1.0, -198.1], ['羽毛球', 1142.0, 951.32, 0.66, -438.68, 0.06, -438.62, 167.34, 1.28, 168.62, 87.76, 0.23, 87.99, 74.76, -0.44, 74.32, 61.76, -0.47, 61.29, 47.06, -0.66, 46.4], ['排球', 900.0, 588.0, 0.84, -12.0, 0.08, -11.92, 5.4, 1.76, 7.16, 2.4, 0.0, 2.4, 1.8, -0.57, 1.23, 1.2, -0.43, 0.77, 1.2, -0.84, 0.36], ['网球', 935.0, 743.83, 1.72, -120.0, 0.0, -120.0, 17.24, 0.51, 17.75, 24.04, 2.4, 26.44, 24.04, -0.2, 23.84, 24.04, -0.99, 23.05, 30.64, -1.72, 28.92], ['篮球', 568.0, 385.23, 0.78, 224.23, 0.03, 224.26, -10.3, 0.26, -10.04, -44.81, 1.24, -43.57, -44.81, -0.14, -44.95, -44.81, -0.61, -45.42, -79.5, -0.78, -80.28]]
     # sql_data = [['足球', ('4398.00'), ('2665.70'), ('0.74'), ('1232.75'), ('0.02'), ('1232.77'), ('-254.53'), ('0.26'), ('-254.27'), ('-237.94'), ('1.05'), ('-236.89'), ('-246.52'), ('-0.09'), ('-246.61'), ('-246.52'), ('-0.50'), ('-247.02'), ('-247.24'), ('-0.74'), ('-247.98')], ['冰球', ('1318.00'), ('1015.93'), ('2.08'), ('532.70'), ('0.00'), ('532.70'), ('-129.48'), ('0.69'), ('-128.79'), ('-106.47'), ('3.56'), ('-102.91'), ('-106.47'), ('-0.35'), ('-106.82'), ('-106.47'), ('-1.82'), ('-108.29'), ('-83.81'), ('-2.08'), ('-85.89')], ['篮球', ('568.00'), ('385.23'), ('0.78'), ('224.23'), ('0.03'), ('224.26'), ('-10.30'), ('0.26'), ('-10.04'), ('-44.81'), ('1.24'), ('-43.57'), ('-44.81'), ('-0.14'), ('-44.95'), ('-44.81'), ('-0.61'), ('-45.42'), ('-79.50'), ('-0.78'), ('-80.28')], ['网球', ('935.00'), ('743.83'), ('1.72'), ('-120.00'), ('0.00'), ('-120.00'), ('17.24'), ('0.51'), ('17.75'), ('24.04'), ('2.40'), ('26.44'), ('24.04'), ('-0.20'), ('23.84'), ('24.04'), ('-0.99'), ('23.05'), ('30.64'), ('-1.72'), ('28.92')], ['排球', ('900.00'), ('588.00'), ('0.84'), ('-12.00'), ('0.08'), ('-11.92'), ('5.40'), ('1.76'), ('7.16'), ('2.40'), ('0.00'), ('2.40'), ('1.80'), ('-0.57'), ('1.23'), ('1.20'), ('-0.43'), ('0.77'), ('1.20'), ('-0.84'), ('0.36')], ['羽毛球', ('1173.00'), ('968.07'), ('0.66'), ('-453.93'), ('0.06'), ('-453.87'), ('170.24'), ('1.28'), ('171.52'), ('90.81'), ('0.23'), ('91.04'), ('77.81'), ('-0.44'), ('77.37'), ('64.81'), ('-0.47'), ('64.34'), ('50.26'), ('-0.66'), ('49.60')], ['乒乓球', ('2992.00'), ('2771.65'), ('1.00'), ('780.35'), ('0.11'), ('780.46'), ('-177.34'), ('2.11'), ('-175.23'), ('-17.87'), ('0.00'), ('-17.87'), ('-181.37'), ('-0.69'), ('-182.06'), ('-206.67'), ('-0.53'), ('-207.20'), ('-197.10'), ('-1.00'), ('-198.10')]]
     # cf.check_two_list(actualResult=int_data, expectResult=sql_data)
@@ -1166,3 +1275,7 @@ if __name__ == "__main__":
 
     # list_data = [['t0t1t2t3y4/y4', 'y4', 'XMqWr374u44B', '2022-07-22 04:35:41', '冰球', '串关', ['澳大利亚冰球联盟', '堪培拉勇士 Vs 纽卡斯尔北极星', '早盘', '让球', '-2.5', '堪培拉勇士 ', 1.99, '欧洲盘', '2022-07-24 03:00:00'], '2022-07-22 04:36:39', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 3.28, 80.0, -80.0, 80.0, 0.29, 23.2, 0, 0.0, 23.2, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.11, 8.8, 0.0, 0.0, 8.8, -80.0, 0.0, 0.0, -80.0], ['t0t1t2t3y4/y4', 'y4', 'XMqWr374u44B', '2022-07-22 04:35:41', '冰球', '串关', ['澳大利亚冰球联盟', '墨尔本野马 Vs 墨尔本冰', '早盘', '让球', '+3.5', '墨尔本冰 ', 1.65, '欧洲盘', '2022-07-23 03:00:00'], '2022-07-22 04:36:39', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 3.28, 80.0, -80.0, 80.0, 0.29, 23.2, 0, 0.0, 23.2, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.11, 8.8, 0.0, 0.0, 8.8, -80.0, 0.0, 0.0, -80.0]]
     # print(cf.merge_compelx_02(new_lList=list_data))
+
+
+    number = round().roundStr(2346.23602, 2)
+    print(number)
