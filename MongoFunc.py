@@ -27,6 +27,14 @@ class MongoFunc(object):
     def mg_select(self, table, condition_sql, choose_sql=None, sort=None):
         return self.my_db[table].find(condition_sql, projection=choose_sql, sort=sort)
 
+    def mg_aggregate(self, table, sql):
+        """
+        mongo 聚合查询
+        :param table:
+        :param sql:
+        :return:
+        """
+        return list(self.my_db[table].aggregate(sql))
 
 class DbQuery(object):
     def __init__(self, mongo_info, *args, **kwargs):
