@@ -1133,11 +1133,51 @@ class CommonFunc(object):
         else:
             return int(num)
 
+    def get_float_length(self, num, query_type='float'):
+        '''
+        获取浮点数小数位后长度, 先将浮点数转化为字符串，然后截取小数点右边的字符，在使用len函数。
+        :param num:
+        :param query_type:  float/int/total 获取小数位/整数位/总长度
+        :return:
+        '''
+        if query_type == 'float':
+            length = len(str(num).split(".")[1])
+            # length = len(str(num)) - str(num).find(".")
+        elif query_type == 'int':
+            length = str(num).find(".")
+        elif query_type == 'total':
+            length = len(str(num))
+        else:
+            raise AssertionError('ERROR,暂不支持此参数类型')
+
+        return length
+
+    def new_round(self, num):
+        '''
+        保留整数四舍五入,遇六进一进行四舍五入
+        :param num:
+        :return:
+        '''
+        if '.' in str(num):
+            n_list = str(num).split('.')
+            print(n_list)
+            if int(n_list[1][0]) >= 5:
+                return int(n_list[0]) + 1
+            else:
+                return int(n_list[0])
+        else:
+            return int(num)
+
 
 class round(object):
 
     #返回浮点数类型的值
     def roundFloat(self, value, digit):
+        '''
+        保留小数四舍五入,遇六进一进行四舍五入
+        :param value:
+        :param digit:
+        '''
         result = str(value)
         if (float(value) < 0):
             result = result[1:]
@@ -1184,6 +1224,11 @@ class round(object):
 
     #返回字符串类型的值
     def roundStr(self,value, digit):
+        '''
+        保留小数四舍五入,遇六进一进行四舍五入
+        :param value:
+        :param digit:
+        '''
         result = str(value)
         if (float(value) < 0):
             result = result[1:]
@@ -1276,6 +1321,6 @@ if __name__ == "__main__":
     # list_data = [['t0t1t2t3y4/y4', 'y4', 'XMqWr374u44B', '2022-07-22 04:35:41', '冰球', '串关', ['澳大利亚冰球联盟', '堪培拉勇士 Vs 纽卡斯尔北极星', '早盘', '让球', '-2.5', '堪培拉勇士 ', 1.99, '欧洲盘', '2022-07-24 03:00:00'], '2022-07-22 04:36:39', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 3.28, 80.0, -80.0, 80.0, 0.29, 23.2, 0, 0.0, 23.2, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.11, 8.8, 0.0, 0.0, 8.8, -80.0, 0.0, 0.0, -80.0], ['t0t1t2t3y4/y4', 'y4', 'XMqWr374u44B', '2022-07-22 04:35:41', '冰球', '串关', ['澳大利亚冰球联盟', '墨尔本野马 Vs 墨尔本冰', '早盘', '让球', '+3.5', '墨尔本冰 ', 1.65, '欧洲盘', '2022-07-23 03:00:00'], '2022-07-22 04:36:39', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 3.28, 80.0, -80.0, 80.0, 0.29, 23.2, 0, 0.0, 23.2, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.11, 8.8, 0.0, 0.0, 8.8, -80.0, 0.0, 0.0, -80.0]]
     # print(cf.merge_compelx_02(new_lList=list_data))
 
-
-    number = round().roundStr(2346.23602, 2)
+    number = cf.new_round(num=2346.23602)
+    # number = round().roundStr(2346.23602, 2)
     print(number)
