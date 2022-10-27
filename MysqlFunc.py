@@ -10516,7 +10516,7 @@ if __name__ == "__main__":
     # data = mysql.get_orderNo_effectAmount_and_commission(user_name='', order_no='XFB6FPtyXDyB', createDate=(), awardDate=())[1]
     # print(data)
 
-    # commission = mysql.get_order_no_commission(order_no='XFB74wbGYMe5')            # 会员及代理佣金
+    commission = mysql.get_order_no_commission(order_no='XFB74wbGYMe5')            # 会员及代理佣金
     # order = mysql.get_order_by_account(account='a2')
     # total = mysql.get_account_totalCommission(account="a0")
 

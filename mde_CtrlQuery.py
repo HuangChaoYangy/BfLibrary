@@ -8,7 +8,7 @@ import requests
 import json
 import re
 import time
-import xmltodict
+# import xmltodict
 import random
 import datetime
 import arrow
@@ -182,7 +182,7 @@ class BetController(object):
         模拟ctrl给我司推送数据
         """
         self.ya = Yaml_data()
-        result = self.ya.get_yaml_data(fileDir='D:\project\BfLibrary\config\config.yaml', isAll=True)
+        result = self.ya.get_yaml_data(fileDir='D:\\testCode\BfLibrary\config\config.yaml', isAll=True)
         if environment == 'mde':
             self.bc_host = f"{result[1]['mock_config_mde']['mock_url']}"
         elif environment == "120":
@@ -1296,12 +1296,12 @@ if __name__ == "__main__":
     # settled_by_markets = bc.generate_settlement_str_by_order(match_id='30389377', outcome_info=outcome_info, certainty='2', producer='', result="输")
     # print(settled_by_markets)
 
-    settlement_by_outcomeId = bc.generate_settlement_str_by_outcomeId(outcomeId='sr:match:33839521_18_total=2.25_12', result='取消')    # 生成单投注项的结算(取消)指令
-    print(settlement_by_outcomeId)
+    # settlement_by_outcomeId = bc.generate_settlement_str_by_outcomeId(outcomeId='sr:match:33839521_18_total=2.25_12', result='取消')    # 生成单投注项的结算(取消)指令
+    # print(settlement_by_outcomeId)
 
-    # settlement_by_orderNo = bc.generate_settlement_str_by_orderNo(order_no='XRkbUsci6d64', sort=0, certainty='2', result="赢")       #根据注单号进行生成结算指令
+    # settlement_by_orderNo = bc.generate_settlement_str_by_orderNo(order_no='Y3wBGWcJKtsX', sort=0, certainty='2', result="赢")       #根据注单号进行生成结算指令
     # print(settlement_by_orderNo)
-    # send = bc.send_message_to_datasourse(login_account='',order_no='XNZTeEdUi4W2', certainty='2', result='赢一半')        # 生成结算指令+注单结算
+    send = bc.send_message_to_datasourse(login_account='',order_no='Y3wBGWcJKtsX', certainty='2', result='赢')        # 生成结算指令+注单结算
 
     # data = bc.generate_rollback_bet_cancel_str(match_id='31975607',start_stamp="1641713763000", end_stamp="1649489763000")      # 取消回滚指令
     # print(data)

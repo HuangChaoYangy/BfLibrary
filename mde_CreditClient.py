@@ -1047,9 +1047,9 @@ class Credit_Client(object):
                 else:
                     run_loop = len(outcome_info_list)
                     sub_order_no = rsp.json()['data']['orderNo']
-                    content = self.cm.write_to_local_file(content=f"{sub_order_no}\n",
-                                                          file_name='C:/Users/USER/Desktop/test.txt', mode='a',
-                                                          )
+                    # content = self.cm.write_to_local_file(content=f"{sub_order_no}\n",
+                    #                                       file_name='C:/Users/USER/Desktop/test.txt', mode='a',
+                    #                                       )
                     time.sleep(3)  # 等待3秒
                     if sub_order_no:
                         sub_order_no_list.append(str(sub_order_no))
@@ -1102,9 +1102,9 @@ class Credit_Client(object):
                     raise AssertionError('【ERROR】返回数据为空')
                 else:
                     sub_order_no = rsp.json()['data']['orderNo']
-                    content = self.cm.write_to_local_file(content=f"{sub_order_no}\n",
-                                                          file_name='C:/Users/USER/Desktop/orderNo.txt', mode='a',
-                                                            )
+                    # content = self.cm.write_to_local_file(content=f"{sub_order_no}\n",
+                    #                                       file_name='C:/Users/USER/Desktop/orderNo.txt', mode='a',
+                    #                                         )
                     time.sleep(3)
                     if sub_order_no:
                         sub_order_no_list.append(str(sub_order_no))
@@ -1679,8 +1679,8 @@ class Credit_Client(object):
                     run_loop = len(outcome_info_list)
                     sub_order_no = rsp.json()['data']['orderNo']
                     # matchInfo = rsp.json()['data']['selections']
-                    content = self.cm.write_to_local_file(content=f"{sub_order_no}\n",
-                                                          file_name='C:/Users/USER/Desktop/test.txt', mode='a',)
+                    # content = self.cm.write_to_local_file(content=f"{sub_order_no}\n",
+                    #                                       file_name='C:/Users/USER/Desktop/test.txt', mode='a',)
                     time.sleep(3)  # 等待3秒
                     if sub_order_no:
                         sub_order_no_list.append(str(sub_order_no))
@@ -1740,8 +1740,8 @@ class Credit_Client(object):
                     raise AssertionError('【ERROR】返回数据为空')
                 else:
                     sub_order_no = rsp.json()['data']['orderNo']
-                    content = self.cm.write_to_local_file(content=f"{sub_order_no}\n",
-                                                          file_name='C:/Users/USER/Desktop/test.txt', mode='a',)
+                    # content = self.cm.write_to_local_file(content=f"{sub_order_no}\n",
+                    #                                       file_name='C:/Users/USER/Desktop/test.txt', mode='a',)
                     time.sleep(3)
                     if sub_order_no:
                         sub_order_no_list.append(str(sub_order_no))
@@ -1784,8 +1784,8 @@ class Credit_Client(object):
         balance_list = []
         balance_list.append((balance,winLoseAmount,frozenAmount,creditsAmount))
 
-        content =self.cm.write_to_local_file(content=f"{balance},{winLoseAmount},,{frozenAmount},{creditsAmount}\n",
-                                             file_name='C:/Users/USER/Desktop/balance.txt', mode='a',)
+        # content =self.cm.write_to_local_file(content=f"{balance},{winLoseAmount},,{frozenAmount},{creditsAmount}\n",
+        #                                      file_name='C:/Users/USER/Desktop/balance.txt', mode='a',)
 
         return balance_list
 
@@ -2762,7 +2762,7 @@ if __name__ == "__main__":
 
     bf = Credit_Client(mysql_info, mongo_info)
 
-    MyThread().thread_submit(bet_type=1, sport_name="足球", event_type="EARLY", odds_type=2, IsRandom='2',handicap=False, complex='multi', complex_number=2)   # 投注
+    MyThread().thread_submit(bet_type=1, sport_name="篮球", event_type="EARLY", odds_type=2, IsRandom='2',handicap=False, complex='multi', complex_number=2)   # 投注
     # MyThread().thread_pool_submit(bet_type=1,  sport_name="", event_type="EARLY", odds_type=2, IsRandom='1', handicap=True, complex='single', complex_number=2)   # 投注
 
     token_list = ['01adb6b99438412395592bd19b027e47','049c921d834d4199991c178d4e1a9584','d945a4d54581419486391c8d2eb2725d']
