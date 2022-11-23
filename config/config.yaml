@@ -28,7 +28,8 @@
 
 # mde环境mysql配置
   mysql_mde:
-    host: '35.194.233.30'
+#    host: '35.194.233.30'
+    host: '34.80.16.33'
     user: 'root'
     password: "BB#gCmqf3gTO5b*"
     port: 3306
@@ -38,7 +39,8 @@
     mock_url: 'http://35.185.159.184:31101/mock/message'
 # mde环境mongodb配置
   mongodb_mde:
-    host: '35.194.233.30'
+#    host: '35.194.233.30'
+    host: '34.80.16.33'
     user: 'sport_test'
     password: "BB#gCmqf3gTO5777"
     port: 27017
