@@ -259,7 +259,7 @@ class BetController(object):
         :param match_id:
         :param certainty:
         :param producer:
-        :param void_reason:  3\5\7\9\10\11\12\13
+        :param void_reason:  结算取消参数，若为空则正常结算，若有值，则为结算取消  3\5\7\9\10\11\12\13
         :return:
         """
         producer = self.dbq.get_match_data(match_id, "producer") if not producer else producer
@@ -431,6 +431,7 @@ class BetController(object):
         query_data = list(self.my.query_data(sql=sql_str, db_name='bfty_credit'))
         outcomeInfo = query_data[sort][0]
         match_id, mark_id, specifiers, outcome_id = self.split_outcome_id(outcome_info=outcomeInfo)
+        # print(mark_id)
         outcome_list=[]
         outcome_list.extend([match_id, mark_id, specifiers, outcome_id])
         match_num = len(query_data)
@@ -448,6 +449,7 @@ class BetController(object):
             if result==None:
                 result_list = ["输","赢","赢一半","输一半","走盘",'取消']
                 result = random.choice(result_list)
+                print(result)
             if result == "输":
                 result_str = 'result=\"0\"'
             elif result == "赢":
@@ -464,6 +466,7 @@ class BetController(object):
             if result==None:
                 result_list = ["输","赢",'取消']
                 result = random.choice(result_list)
+                print(result)
             if result == "输":
                 result_str = 'result=\"0\"'
             elif result == "赢":
@@ -1225,6 +1228,7 @@ class BetController(object):
                         sort_num_list.append(num)
                     for sort in sort_num_list:
                         message = bc.generate_settlement_str_by_orderNo(order_no=order, sort=int(sort), certainty=certainty,result=result)
+                        print(message)
                         if not message:
                             raise AssertionError("Notice: 未找到对应的比赛。")
                         loop += 1
@@ -1247,6 +1251,7 @@ class BetController(object):
                     sort_num_list.append(num)
                 for sort in sort_num_list:
                     message = bc.generate_settlement_str_by_orderNo(order_no=order_no, sort=int(sort), certainty=certainty,result=result)
+                    print(message)
                     if not message:
                         raise AssertionError("Notice: 未找到对应的比赛。")
                     print("返回结果为: %s" % self.data_post(data=message))
@@ -1289,19 +1294,20 @@ if __name__ == "__main__":
     # print(soccer_score)
     # match_list = ['27576380', '27576382', '27576376', '27576378', '30178569', '30178723', '30178493', '30178727', '30178725', '30178719', '27975056', '27975070', '27975078', '27975072', '27975074', '27975086', '30178721', '27975066', '27975054', '27975060', '27975058', '27975062', '27975068']
     # for matchId in match_list:
-    # settled_message = bc.generate_settlement_str(match_id='33536569',certainty='1', producer='3',) # 生成单注结算指令
+    # settled_message = bc.generate_settlement_str(match_id='37539815',certainty='1', producer='3',void_reason='10') # 生成单注结算指令
     # print(settled_message)
 
     # outcome_info = ['sr:match:31372249', {'outcome_id':'sr:match:31372249_18_total=2.5_12','specifier':'total=2.5','outcome_id_simple':12}]
     # settled_by_markets = bc.generate_settlement_str_by_order(match_id='30389377', outcome_info=outcome_info, certainty='2', producer='', result="输")
     # print(settled_by_markets)
 
-    # settlement_by_outcomeId = bc.generate_settlement_str_by_outcomeId(outcomeId='sr:match:33839521_18_total=2.25_12', result='取消')    # 生成单投注项的结算(取消)指令
+    # settlement_by_outcomeId = bc.generate_settlement_str_by_outcomeId(outcomeId='sr:match:37539815_16_hcp=-0.5_1714', result='取消')    # 生成单投注项的结算(取消)指令
     # print(settlement_by_outcomeId)
 
-    # settlement_by_orderNo = bc.generate_settlement_str_by_orderNo(order_no='Y3wBGWcJKtsX', sort=0, certainty='2', result="赢")       #根据注单号进行生成结算指令
+    # settlement_by_orderNo = bc.generate_settlement_str_by_orderNo(order_no='YaTUnCL9v3t7', sort=0, certainty='2', result="赢一半")       #根据注单号进行生成结算指令
     # print(settlement_by_orderNo)
-    send = bc.send_message_to_datasourse(login_account='',order_no='Y3wBGWcJKtsX', certainty='2', result='赢')        # 生成结算指令+注单结算
+
+    send = bc.send_message_to_datasourse(login_account='',order_no='YbQALaHsqPQJ', certainty='2', result="赢")        # 生成结算指令+注单结算（包含结算取消）
 
     # data = bc.generate_rollback_bet_cancel_str(match_id='31975607',start_stamp="1641713763000", end_stamp="1649489763000")      # 取消回滚指令
     # print(data)
@@ -1309,7 +1315,7 @@ if __name__ == "__main__":
     # cannel_all = bc.generate_bet_cancel_str(match_id='32398927', cancel_all="是", producer="3", start_stamp="", end_stamp="",reason="12")   # 注单取消指令(取消比赛全盘口)
     # print(cannel_all)
 
-    # cannel_by_outcomeId = bc.generate_bet_cancel_str_by_outcomeId(outcomeId='sr:match:32180441_225_total=168.5_12')   # 注单取消指令(取消单个投注项)
+    # cannel_by_outcomeId = bc.generate_bet_cancel_str_by_outcomeId(outcomeId='sr:match:37638511_18_total=2_12')   # 注单取消指令(取消单个投注项)
     # print(cannel_by_outcomeId)
 
     # bet_stop = bc.generate_bet_stop_str( match_id='28469492', producer='3', market_set='all', market_status='暂停') # 关闭盘口指令

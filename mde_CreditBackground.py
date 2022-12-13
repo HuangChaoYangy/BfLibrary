@@ -4477,20 +4477,53 @@ class CreditBackGround(object):
                 "Account_Login_Identify": agent_token,
                 "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36"}
 
-        data = {"account":account,"creditsAmount":credits,"status":accountStatus,"exchangeRate":None,"handicapType":handicapType,"name":name,"password":password,"parentProfitLossPercentage":14,
-                "userConfigurationParams":[{"handicapCategoryId":"1","retreatProportion":16,"retreatProportionValue":1.5,"singleBetLimit":10000,"singleGameBetLimit":1000000,
-                "sportCategoryId":"1","userId":"1580932092762443777"},{"handicapCategoryId":"2","retreatProportion":15,"retreatProportionValue":1.3,"singleBetLimit":10000,"singleGameBetLimit":1000000,
-                "sportCategoryId":"1","userId":"1580932092762443777"},{"handicapCategoryId":"3","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":10000,"singleGameBetLimit":1000000,
-                "sportCategoryId":"1","userId":"1580932092762443777"},{"handicapCategoryId":"100","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":10000,"singleGameBetLimit":1000000,
-                "sportCategoryId":"1","userId":"1580932092762443777"},{"handicapCategoryId":"1","retreatProportion":15,"retreatProportionValue":1.3,"singleBetLimit":10000,"singleGameBetLimit":1000000,
-                "sportCategoryId":"2","userId":"1580932092762443777"},{"handicapCategoryId":"2","retreatProportion":15,"retreatProportionValue":1.3,"singleBetLimit":10000,"singleGameBetLimit":1000000,
-                "sportCategoryId":"2","userId":"1580932092762443777"},{"handicapCategoryId":"3","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":10000,"singleGameBetLimit":1000000,
-                "sportCategoryId":"2","userId":"1580932092762443777"},{"handicapCategoryId":"100","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":10000,"singleGameBetLimit":1000000,
-                "sportCategoryId":"2","userId":"1580932092762443777"},{"handicapCategoryId":"1","retreatProportion":16,"retreatProportionValue":1.5,"singleBetLimit":10000,"singleGameBetLimit":1000000,
-                "sportCategoryId":"100","userId":"1580932092762443777"},{"handicapCategoryId":"2","retreatProportion":16,"retreatProportionValue":1.5,"singleBetLimit":10000,"singleGameBetLimit":1000000,
-                "sportCategoryId":"100","userId":"1580932092762443777"},{"handicapCategoryId":"3","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":10000,"singleGameBetLimit":1000000,
-                "sportCategoryId":"100","userId":"1580932092762443777"},{"handicapCategoryId":"100","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":10000,"singleGameBetLimit":1000000,
-                "sportCategoryId":"100","userId":"1580932092762443777"}]}
+        # data = {"account":account,"creditsAmount":credits,"status":accountStatus,"exchangeRate":None,"handicapType":handicapType,"name":name,"password":password,"parentProfitLossPercentage":14,
+        #         "userConfigurationParams":[{"handicapCategoryId":"1","retreatProportion":16,"retreatProportionValue":1.5,"singleBetLimit":10000,"singleGameBetLimit":1000000,
+        #         "sportCategoryId":"1","userId":"1580932092762443777"},{"handicapCategoryId":"2","retreatProportion":15,"retreatProportionValue":1.3,"singleBetLimit":10000,"singleGameBetLimit":1000000,
+        #         "sportCategoryId":"1","userId":"1580932092762443777"},{"handicapCategoryId":"3","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":10000,"singleGameBetLimit":1000000,
+        #         "sportCategoryId":"1","userId":"1580932092762443777"},{"handicapCategoryId":"100","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":10000,"singleGameBetLimit":1000000,
+        #         "sportCategoryId":"1","userId":"1580932092762443777"},{"handicapCategoryId":"1","retreatProportion":15,"retreatProportionValue":1.3,"singleBetLimit":10000,"singleGameBetLimit":1000000,
+        #         "sportCategoryId":"2","userId":"1580932092762443777"},{"handicapCategoryId":"2","retreatProportion":15,"retreatProportionValue":1.3,"singleBetLimit":10000,"singleGameBetLimit":1000000,
+        #         "sportCategoryId":"2","userId":"1580932092762443777"},{"handicapCategoryId":"3","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":10000,"singleGameBetLimit":1000000,
+        #         "sportCategoryId":"2","userId":"1580932092762443777"},{"handicapCategoryId":"100","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":10000,"singleGameBetLimit":1000000,
+        #         "sportCategoryId":"2","userId":"1580932092762443777"},{"handicapCategoryId":"1","retreatProportion":16,"retreatProportionValue":1.5,"singleBetLimit":10000,"singleGameBetLimit":1000000,
+        #         "sportCategoryId":"100","userId":"1580932092762443777"},{"handicapCategoryId":"2","retreatProportion":16,"retreatProportionValue":1.5,"singleBetLimit":10000,"singleGameBetLimit":1000000,
+        #         "sportCategoryId":"100","userId":"1580932092762443777"},{"handicapCategoryId":"3","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":10000,"singleGameBetLimit":1000000,
+        #         "sportCategoryId":"100","userId":"1580932092762443777"},{"handicapCategoryId":"100","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":10000,"singleGameBetLimit":1000000,
+        #         "sportCategoryId":"100","userId":"1580932092762443777"}]}
+
+        # data = {"account":account,"creditsAmount":credits,"status":accountStatus,"exchangeRate":None,"handicapType":handicapType,"name":name,"password":password,
+        #         "parentProfitLossPercentage":8,"userConfigurationParams":[{"handicapCategoryId":"1","retreatProportion":83,"retreatProportionValue":0.82,
+        #         "singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"1","userId":"1595672538303881218"},{"handicapCategoryId":"2",
+        #         "retreatProportion":85,"retreatProportionValue":0.84,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"1",
+        #         "userId":"1595672538303881218"},{"handicapCategoryId":"3","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":999999,
+        #         "singleGameBetLimit":999999,"sportCategoryId":"1","userId":"1595672538303881218"},{"handicapCategoryId":"100","retreatProportion":None,
+        #         "retreatProportionValue":0,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"1","userId":"1595672538303881218"},
+        #         {"handicapCategoryId":"1","retreatProportion":84,"retreatProportionValue":0.83,"singleBetLimit":999999,"singleGameBetLimit":999999,
+        #         "sportCategoryId":"2","userId":"1595672538303881218"},{"handicapCategoryId":"2","retreatProportion":69,"retreatProportionValue":0.68,
+        #         "singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"2","userId":"1595672538303881218"},{"handicapCategoryId":"3",
+        #         "retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"2",
+        #         "userId":"1595672538303881218"},{"handicapCategoryId":"100","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":999999,
+        #         "singleGameBetLimit":999999,"sportCategoryId":"2","userId":"1595672538303881218"},{"handicapCategoryId":"1","retreatProportion":69,
+        #         "retreatProportionValue":0.68,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"100","userId":"1595672538303881218"},
+        #         {"handicapCategoryId":"2","retreatProportion":64,"retreatProportionValue":0.63,"singleBetLimit":999999,"singleGameBetLimit":999999,
+        #         "sportCategoryId":"100","userId":"1595672538303881218"},{"handicapCategoryId":"3","retreatProportion":None,"retreatProportionValue":0,
+        #         "singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"100","userId":"1595672538303881218"},{"handicapCategoryId":"100",
+        #         "retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"100","userId":"1595672538303881218"}]}
+
+        data = {"account":account,"creditsAmount":credits,"status":accountStatus,"exchangeRate":None,"handicapType":handicapType,"name":name,"password":password,"parentProfitLossPercentage":10,
+                "userConfigurationParams":[{"handicapCategoryId":"1","retreatProportion":83,"retreatProportionValue":0.82,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"1","userId":"1595674305632591873"},
+                                           {"handicapCategoryId":"2","retreatProportion":85,"retreatProportionValue":0.84,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"1","userId":"1595674305632591873"},
+                                           {"handicapCategoryId":"3","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"1","userId":"1595674305632591873"},
+                                           {"handicapCategoryId":"100","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"1","userId":"1595674305632591873"},
+                                           {"handicapCategoryId":"1","retreatProportion":84,"retreatProportionValue":0.83,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"2","userId":"1595674305632591873"},
+                                           {"handicapCategoryId":"2","retreatProportion":69,"retreatProportionValue":0.68,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"2","userId":"1595674305632591873"},
+                                           {"handicapCategoryId":"3","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"2","userId":"1595674305632591873"},
+                                           {"handicapCategoryId":"100","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"2","userId":"1595674305632591873"},
+                                           {"handicapCategoryId":"1","retreatProportion":69,"retreatProportionValue":0.68,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"100","userId":"1595674305632591873"},
+                                           {"handicapCategoryId":"2","retreatProportion":64,"retreatProportionValue":0.63,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"100","userId":"1595674305632591873"},
+                                           {"handicapCategoryId":"3","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"100","userId":"1595674305632591873"},
+                                           {"handicapCategoryId":"100","retreatProportion":None,"retreatProportionValue":0,"singleBetLimit":999999,"singleGameBetLimit":999999,"sportCategoryId":"100","userId":"1595674305632591873"}]}
         rsp = self.session.post(url=url, headers=head, json=data)
 
         if rsp.json()['message'] == 'OK':
@@ -4571,9 +4604,10 @@ if __name__ == "__main__":
     # data = bg.addAgent3(agent_token=login_loken, account='a16000000', name='test', password='Bfty123456',securityCode='Agent0', credits=1000000, accountStatus=0)  # 新增登3
 
     # 后台注册会员
-    login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE1ODAyMTIxNjQxMzIxNDMxMDUiLCJleHAiOjE2NjYwNjc3MjIsInVzZXJuYW1lIjoiYTAxMDEwMTAxIn0.FuEolFUMkeWP3juOIxIMNQx53Cxx7kJxqzKJkcoMSl8"
+    login_loken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE1OTU2NzIyMTk0MTUxNDI0MDIiLCJleHAiOjE2Njk2MjY2ODIsInVzZXJuYW1lIjoieXkzMDAwMDAwIn0.10krvvsPKE41MEwV2FBtUydzgoc3ZNxdL5rRg_NfIm0"
     for number in range(100,121):
-        account = "a01010101" + str(number)           # "a01000000":  登3账号
+        account = "yy3000000" + str(number)           # "a01000000":  登3账号
+        print(account)
         name = "user" + str(number)
         handicaptype = random.choice(['A','B','C','D'])
         data = bg.add_user(agent_token=login_loken, account=account, name=name, password='Bfty123456', credits=10000, accountStatus='0',handicapType=handicaptype)  # 登3账号新增会员
