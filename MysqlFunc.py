@@ -10068,7 +10068,7 @@ class MysqlQuery(MysqlFunc):
 
     def getBackendMatchList_sql(self, ctime='0', etime='2', expData={"match_id":"", "tournament_name":"", "teamName":""}):
         '''
-        总台--赛事列表sql     ///    修改于2021.12.15
+        反波胆-总台--赛事列表sql     ///    修改于2021.12.15
         :param ctime: 开始时间
         :param etime: 结束时间,默认查最近3天
         :param expData: 默认查询50条数据
@@ -10176,7 +10176,7 @@ class MysqlQuery(MysqlFunc):
 
     def get_proxy_members(self,user):
         """
-        根据当前会员查询等级查询下面6级所有会员
+        反波胆-根据当前会员查询等级查询下面6级所有会员
         ：retrun 所有下6级字典
         """
 
@@ -10198,7 +10198,7 @@ class MysqlQuery(MysqlFunc):
 
     def get_dict_value_member(self,dict_f,user):
         """
-        根据user查询关联的6级下级
+        反波胆-根据user查询关联的6级下级
         """
 
         key_list = []
@@ -10228,7 +10228,7 @@ class MysqlQuery(MysqlFunc):
 
     def user_level_commission(self, user, owner_account):
         '''
-        根据当前会员查询下属6级会员
+        反波胆-根据当前会员查询下属6级会员
         :param user: 会员账号
         :param owner_account: 业主账号
         :return:
@@ -10279,7 +10279,7 @@ class MysqlQuery(MysqlFunc):
 
     def get_userAgent_commission(self, expData={}):
         '''
-        获取代理会员佣金         ///    修改于2021.12.24
+        反波胆-获取代理会员佣金         ///    修改于2021.12.24
         :param expData: user_name, owner_account, dateoffset=''
         :return:
         '''
@@ -10588,11 +10588,11 @@ if __name__ == "__main__":
     # orderDetail = mysql.get_incorrectScore_order_detail(order_no='X7CvQEXhrFfK')
     # balance = mysql.get_incorrectScore_user_balance(account='testuser02')
     # print(balance)
-
+    #
     # report = mysql.getBackendMatchList_sql(expData={"match_id":"", "tournament_name":"", "teamName":""})
     # print(report)
 
-    # data = mysql.get_proxy_members(user='testuser002')
-    # data1 = mysql.get_dict_value_member(dict_f=data, user='testuser002')
-    # data = mysql.get_userAgent_commission(user_name='testuser0041', owner_account='TestAgent01')
+    data = mysql.get_proxy_members(user='testuser002')
+    data1 = mysql.get_dict_value_member(dict_f=data, user='testuser002')
+    data = mysql.get_userAgent_commission(user_name='testuser0041', owner_account='TestAgent01')
     # print(data)
