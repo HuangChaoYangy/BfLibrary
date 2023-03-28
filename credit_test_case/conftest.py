@@ -20,3 +20,20 @@ def start_running():
 
 
 # 自动化测试止执行后 -- 数据清除操作
+
+
+
+@pytest.fixture(scope="session",autouse=False)
+def connetion_mysql():
+    print(f'--- 马上开始执行自动化测试, 当前环境为：{environment} ---')
+    yield   # 通过yield来唤醒teardown执行
+    print('\n---自动化测试完成,开始处理本次测试数据---')
+
+
+# 在测试用例中手动调用 connetion_mysql 该方法
+
+
+def test_case1(self, connetion_mysql):
+    url = ""
+    data = ""
+    return None
