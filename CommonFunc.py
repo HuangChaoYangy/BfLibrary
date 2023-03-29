@@ -58,6 +58,24 @@ class CommonFunc(object):
 
         return md5.hexdigest()
 
+    def base64_encode(self, agrs):
+        '''
+        # base64加密
+        : param agrs:
+        '''
+        agrs = str(agrs).encode("utf-8")
+        # base64加密
+        base64_value = base64.b64encode(agrs).decode(encoding="utf-8")
+        return base64_value
+
+    def get_random_num(self, length):
+        '''
+        #随机数
+        : param length:
+        '''
+        return str(int(time.time()))[:length]
+
+
     def get_md_search_time(self, diff=0):
         """
         对应客户端的今日早盘滚球的搜索，获取美东的一天对应的UTC的开始和结束时间
@@ -1321,6 +1339,9 @@ if __name__ == "__main__":
     # list_data = [['t0t1t2t3y4/y4', 'y4', 'XMqWr374u44B', '2022-07-22 04:35:41', '冰球', '串关', ['澳大利亚冰球联盟', '堪培拉勇士 Vs 纽卡斯尔北极星', '早盘', '让球', '-2.5', '堪培拉勇士 ', 1.99, '欧洲盘', '2022-07-24 03:00:00'], '2022-07-22 04:36:39', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 3.28, 80.0, -80.0, 80.0, 0.29, 23.2, 0, 0.0, 23.2, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.11, 8.8, 0.0, 0.0, 8.8, -80.0, 0.0, 0.0, -80.0], ['t0t1t2t3y4/y4', 'y4', 'XMqWr374u44B', '2022-07-22 04:35:41', '冰球', '串关', ['澳大利亚冰球联盟', '墨尔本野马 Vs 墨尔本冰', '早盘', '让球', '+3.5', '墨尔本冰 ', 1.65, '欧洲盘', '2022-07-23 03:00:00'], '2022-07-22 04:36:39', '输', 'mde.betf.io / 台湾省彰化县Google云计算数据中心', 3.28, 80.0, -80.0, 80.0, 0.29, 23.2, 0, 0.0, 23.2, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.2, 16.0, 0.0, 0.0, 16.0, 0.11, 8.8, 0.0, 0.0, 8.8, -80.0, 0.0, 0.0, -80.0]]
     # print(cf.merge_compelx_02(new_lList=list_data))
 
-    number = cf.new_round(num=2346.23602)
-    # number = round().roundStr(2346.23602, 2)
-    print(number)
+    # number = cf.new_round(num=2346.23602)
+    # # number = round().roundStr(2346.23602, 2)
+    # print(number)
+
+    ra = cf.get_random_num(length=2)
+    print(ra)
