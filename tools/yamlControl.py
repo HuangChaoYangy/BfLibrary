@@ -11,6 +11,7 @@ import copy
 from copy import deepcopy
 from contextlib import ExitStack
 import csv
+import os
 
 class Yaml_data(object):
 
@@ -69,6 +70,15 @@ class Yaml_data(object):
 
         else:
             raise AssertionError('ERROR,参数错误')
+
+    def read_yaml(self, key):
+        '''
+        热加载   2023.04.17
+        '''
+        with open(os.getcwd() + '/extract.yaml', encoding='utf-8', mode='r') as f:
+            value = yaml.load(stream=f, Loader=yaml.FullLoader)
+
+            return value[key]
 
     def read_yaml_file(self, yaml_file, isAll=True):
         '''
